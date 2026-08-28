@@ -1,0 +1,76 @@
+.section {
+  padding: 8rem 0;
+  background-color: #050505;
+  color: var(--text-primary);
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+  overflow: hidden;
+}
+
+.quoteContainer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.goldQuoteIcon {
+  font-family: var(--font-playfair), serif;
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--accent-gold);
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+}
+
+.quoteText {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+  font-weight: 300;
+  line-height: 1.4;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin-bottom: 2.5rem;
+  font-style: italic;
+}
+
+.quoteHighlight {
+  color: var(--accent-gold);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.authorWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.authorName {
+  font-family: var(--font-inter);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.authorRole {
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 5rem 0;
+  }
+}

@@ -1,0 +1,409 @@
+.section {
+  padding: var(--section-padding-y) 0;
+  /* Premium Dark Background to merge seamlessly with the OLED banner */
+  background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+
+/* Subtle luxurious gold ambient glow in the background */
+.section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(194, 165, 126, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: flex-start;
+}
+
+.aboutCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  
+  background: linear-gradient(to right, var(--text-primary), var(--accent-gold));
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 8s linear infinite;
+}
+
+.divider {
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(to right, var(--accent-gold), transparent);
+  margin-bottom: 2rem;
+}
+
+.paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+}
+
+.socialGroup {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.socialCard {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 2.5rem;
+  border-radius: 0;
+  
+  /* Minimalist Apple/Tesla Dark */
+  background: #111111;
+  border: 1px solid #222222;
+  
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Premium Light Reflection Sweep on Hover */
+.socialCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.04), transparent);
+  transform: skewX(-25deg);
+  transition: left 0.7s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.socialCard:hover::before {
+  left: 200%;
+}
+
+.socialCard::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent-gold);
+  transition: width 0.4s ease;
+  z-index: 2;
+}
+
+.socialCard:hover::after {
+  width: 100%;
+}
+
+.socialCard:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(194, 165, 126, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.icon {
+  color: var(--accent-gold);
+  opacity: 0.8;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+}
+
+.socialCard:hover .icon {
+  opacity: 1;
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 15px rgba(194, 165, 126, 0.4));
+}
+
+.socialText {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+.socialCount {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.1;
+  transition: text-shadow 0.3s ease;
+}
+
+.socialCard:hover .socialCount {
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.socialLabel {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.socialCard:hover .socialLabel {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Right Column (Stats) */
+.statsCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.demoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.darkCard {
+  background: #111111;
+  border: 1px solid #222222;
+  color: #fff;
+  padding: 2.5rem 1rem;
+  border-radius: 4px; /* Slight rounding for Apple feel, or 0 for Tesla. Let's use 0 for Tesla edge */
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.darkCard::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent-gold);
+  transition: width 0.4s ease;
+  z-index: 2;
+}
+
+.darkCard:hover::after {
+  width: 100%;
+}
+
+.darkCard:hover {
+  transform: translateY(-4px);
+  background: #161616;
+  border-color: rgba(194, 165, 126, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.statIcon {
+  width: 32px;
+  height: 32px;
+  color: var(--accent-gold);
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 2;
+  transition: all 0.5s ease;
+}
+
+.darkCard:hover .statIcon {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 15px rgba(194, 165, 126, 0.5));
+}
+
+.statValue {
+  font-family: var(--font-playfair), serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 10px rgba(255,255,255,0.1);
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.6);
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.darkCard:hover .statLabel {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.mt4 {
+  margin-top: 2rem;
+}
+
+.reachBubbles {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.bubbleMain {
+  /* Premium sweeping gold reflection animation */
+  background: linear-gradient(135deg, #9C7846 0%, #C6A363 30%, #FFF2CC 50%, #C6A363 70%, #9C7846 100%);
+  background-size: 300% 300%;
+  animation: premiumCardShine 8s ease-in-out infinite;
+  color: #fff;
+  padding: 4.5rem 3rem;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(194, 165, 126, 0.2);
+  transition: transform 0.5s ease;
+}
+
+.bubbleMain:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(194, 165, 126, 0.4);
+}
+
+@keyframes premiumCardShine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.bubbleIcon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 1.25rem;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+}
+
+.bubbleValue {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 1rem;
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Aesthetic bold shadow */
+  letter-spacing: 0.02em;
+}
+
+.bubbleLabel {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em; /* Wide luxury tracking */
+  font-weight: 600;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.bubbleSmallGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.bubbleSmall {
+  background: #111111;
+  border: 1px solid #222222;
+  padding: 2.5rem 1rem;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.bubbleSmall:hover {
+  transform: translateY(-4px);
+  background: #161616;
+  border-color: rgba(194, 165, 126, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.bSmallVal {
+  font-family: var(--font-playfair), serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 2px 10px rgba(255,255,255,0.1);
+}
+
+.bSmallLab {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--section-padding-y-mobile) 0;
+  }
+
+  .demoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bubbleSmallGrid {
+    grid-template-columns: 1fr;
+  }
+}

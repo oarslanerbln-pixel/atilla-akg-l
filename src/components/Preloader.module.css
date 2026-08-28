@@ -1,0 +1,116 @@
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.brandName {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+  
+  /* Abstract Gold/Silver/Light Gold Shimmer */
+  background: linear-gradient(
+    110deg,
+    #111111 0%,
+    #444444 15%,
+    #e6e6e6 30%,
+    #f8e4b7 45%, /* Light Gold */
+    var(--accent-gold) 60%,
+    #111111 80%,
+    #000000 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.subtitle {
+  margin-top: 1.5rem;
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  opacity: 0;
+  animation: fadeIn 1s ease 1s forwards;
+}
+
+.progressContainer {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeIn 1s ease 0.5s forwards;
+}
+
+.progressText {
+  font-family: var(--font-inter);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: #666;
+}
+
+.progressBar {
+  width: 120px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--accent-gold);
+  animation: fillBar 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 200% center;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    background-position: -200% center;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fillBar {
+  0% { width: 0%; }
+  40% { width: 70%; }
+  100% { width: 100%; }
+}

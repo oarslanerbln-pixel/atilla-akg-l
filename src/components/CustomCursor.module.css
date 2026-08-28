@@ -1,0 +1,67 @@
+.cursorDot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+
+.cursorRing {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(194, 165, 126, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99997;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              background-color 0.3s ease,
+              transform 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursorHover .cursorRing {
+  width: 64px;
+  height: 64px;
+  border-color: rgba(194, 165, 126, 0.8);
+  background-color: rgba(194, 165, 126, 0.08);
+}
+
+.cursorHover .cursorDot {
+  opacity: 0.2;
+}
+
+.cursorText {
+  font-family: var(--font-inter);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.cursorHover .cursorText {
+  opacity: 1;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .cursorDot,
+  .cursorRing {
+    display: none !important;
+  }
+}

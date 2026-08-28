@@ -1,0 +1,182 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  transition: all 0.3s ease;
+}
+
+.scrolled {
+  background: rgba(0, 0, 0, 0.95);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.navContainer {
+  max-width: 1600px; /* Wider for more breathing room */
+  margin: 0 auto;
+  padding: 1.5rem 3rem; /* More vertical and horizontal spacing */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-inter);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.goldDot {
+  color: var(--accent-gold);
+  font-size: 0.75rem;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 3.5rem; /* Significantly more space between menu items */
+  list-style: none;
+}
+
+.navItem a {
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.3s ease;
+  position: relative;
+  padding: 0.25rem 0;
+}
+
+.navItem a:hover {
+  color: #ffffff;
+}
+
+.navItem a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--accent-gold);
+  transition: width 0.3s ease;
+}
+
+.navItem a:hover::after {
+  width: 100%;
+}
+
+.statusWrapper {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem; /* More space between clock, language and status */
+}
+
+.liveClock {
+  font-family: var(--font-inter);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.timeDigits {
+  color: var(--accent-gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-inter);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.4rem 0.8rem;
+}
+
+.pulseDot {
+  width: 6px;
+  height: 6px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.5;
+  }
+}
+
+.langSwitcher {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-inter);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.langActive {
+  color: var(--accent-gold);
+}
+
+.langItem {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.langItem:hover {
+  color: #fff;
+}
+
+.langSep {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 1024px) {
+  .navLinks {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .liveClock {
+    display: none;
+  }
+  
+  .navContainer {
+    padding: 0.9rem 1.25rem;
+  }
+}
