@@ -1,10 +1,9 @@
 .section {
   padding: var(--section-padding-y) 0;
-  /* Premium Dark Background to merge seamlessly with the OLED banner */
-  background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+  background: transparent;
   position: relative;
   overflow: hidden;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 /* Subtle luxurious gold ambient glow in the background */
@@ -39,7 +38,7 @@
 
 .subtitle {
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.25em;
   color: var(--accent-gold);
@@ -48,7 +47,7 @@
 }
 
 .title {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(3rem, 5vw, 4.5rem);
   margin-bottom: 1.5rem;
   font-weight: 500;
   
@@ -73,7 +72,7 @@
   gap: 1.25rem;
   color: var(--text-secondary);
   font-family: var(--font-inter), sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   line-height: 1.8;
   margin-bottom: 3rem;
 }
@@ -91,9 +90,10 @@
   padding: 3rem 2.5rem;
   border-radius: 0;
   
-  /* Minimalist Apple/Tesla Dark */
-  background: #111111;
-  border: 1px solid #222222;
+  /* Constant Premium Cappuccino state */
+  background: var(--bg-card);
+  border: 1px solid rgba(44, 30, 22, 0.2);
+  box-shadow: 0 20px 40px rgba(44, 30, 22, 0.15);
   
   transition: all 0.4s ease;
   position: relative;
@@ -124,27 +124,21 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 0;
+  width: 100%; /* always on */
   height: 2px;
   background-color: var(--accent-gold);
-  transition: width 0.4s ease;
   z-index: 2;
-}
-
-.socialCard:hover::after {
-  width: 100%;
 }
 
 .socialCard:hover {
   transform: translateY(-8px);
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(194, 165, 126, 0.2);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .icon {
   color: var(--accent-gold);
-  opacity: 0.8;
+  opacity: 1;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 15px rgba(194, 165, 126, 0.4));
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   z-index: 2;
@@ -153,9 +147,7 @@
 }
 
 .socialCard:hover .icon {
-  opacity: 1;
-  transform: scale(1.15);
-  filter: drop-shadow(0 0 15px rgba(194, 165, 126, 0.4));
+  transform: scale(1.2);
 }
 
 .socialText {
@@ -169,28 +161,23 @@
   font-family: var(--font-playfair), serif;
   font-size: clamp(2rem, 3vw, 2.5rem);
   font-weight: 400;
-  color: #ffffff;
+  color: var(--text-primary);
   line-height: 1.1;
-  transition: text-shadow 0.3s ease;
-}
-
-.socialCard:hover .socialCount {
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
+
+/* empty */
 
 .socialLabel {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-primary);
   margin-top: 0.5rem;
-  transition: color 0.3s ease;
 }
 
-.socialCard:hover .socialLabel {
-  color: rgba(255, 255, 255, 0.8);
-}
+/* empty */
 
 /* Right Column (Stats) */
 .statsCol {
@@ -206,16 +193,16 @@
 }
 
 .darkCard {
-  background: #111111;
-  border: 1px solid #222222;
-  color: #fff;
+  background: var(--bg-card);
+  border: 1px solid rgba(44, 30, 22, 0.2);
+  color: var(--text-primary);
   padding: 2.5rem 1rem;
-  border-radius: 4px; /* Slight rounding for Apple feel, or 0 for Tesla. Let's use 0 for Tesla edge */
   border-radius: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  box-shadow: 0 10px 30px rgba(44, 30, 22, 0.15);
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
@@ -226,22 +213,14 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 0;
+  width: 100%;
   height: 2px;
   background-color: var(--accent-gold);
-  transition: width 0.4s ease;
   z-index: 2;
-}
-
-.darkCard:hover::after {
-  width: 100%;
 }
 
 .darkCard:hover {
   transform: translateY(-4px);
-  background: #161616;
-  border-color: rgba(194, 165, 126, 0.4);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .statIcon {
@@ -251,12 +230,13 @@
   margin-bottom: 1.25rem;
   position: relative;
   z-index: 2;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 15px rgba(194, 165, 126, 0.5));
   transition: all 0.5s ease;
 }
 
 .darkCard:hover .statIcon {
   transform: scale(1.15);
-  filter: drop-shadow(0 0 15px rgba(194, 165, 126, 0.5));
 }
 
 .statValue {
@@ -266,22 +246,19 @@
   margin-bottom: 0.25rem;
   position: relative;
   z-index: 2;
-  text-shadow: 0 2px 10px rgba(255,255,255,0.1);
+  text-shadow: none;
 }
 
 .statLabel {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-primary);
   position: relative;
   z-index: 2;
-  transition: color 0.3s ease;
 }
 
-.darkCard:hover .statLabel {
-  color: rgba(255, 255, 255, 0.9);
-}
+/* empty */
 
 .mt4 {
   margin-top: 2rem;
@@ -295,10 +272,10 @@
 
 .bubbleMain {
   /* Premium sweeping gold reflection animation */
-  background: linear-gradient(135deg, #9C7846 0%, #C6A363 30%, #FFF2CC 50%, #C6A363 70%, #9C7846 100%);
+  background: linear-gradient(135deg, var(--accent-gold-dark) 0%, var(--accent-gold) 30%, var(--accent-gold-light) 50%, var(--accent-gold) 70%, var(--accent-gold-dark) 100%);
   background-size: 300% 300%;
   animation: premiumCardShine 8s ease-in-out infinite;
-  color: #fff;
+  color: var(--text-on-ink);
   padding: 4.5rem 3rem;
   border-radius: 0;
   display: flex;
@@ -352,8 +329,9 @@
 }
 
 .bubbleSmall {
-  background: #111111;
-  border: 1px solid #222222;
+  background: var(--bg-card);
+  border: 1px solid rgba(44, 30, 22, 0.2);
+  box-shadow: 0 10px 30px rgba(44, 30, 22, 0.15);
   padding: 2.5rem 1rem;
   border-radius: 0;
   display: flex;
@@ -365,25 +343,22 @@
 
 .bubbleSmall:hover {
   transform: translateY(-4px);
-  background: #161616;
-  border-color: rgba(194, 165, 126, 0.4);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .bSmallVal {
   font-family: var(--font-playfair), serif;
   font-size: 1.8rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.25rem;
-  text-shadow: 0 2px 10px rgba(255,255,255,0.1);
+  text-shadow: none;
 }
 
 .bSmallLab {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
 /* Mobile Adjustments */

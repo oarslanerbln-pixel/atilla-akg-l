@@ -29,27 +29,50 @@ export default function Preloader() {
       {isLoading && (
         <motion.div
           className={styles.preloader}
-          // The cinematic exit: sliding up like a curtain
+          onClick={() => setIsLoading(false)}
           initial={{ y: 0 }}
           exit={{ 
+            opacity: 0,
             y: "-100vh", 
             transition: { 
-              duration: 1.2, 
-              ease: [0.76, 0, 0.24, 1] // Premium Awwwards cinematic easing
+              duration: 1.5, 
+              ease: [0.76, 0, 0.24, 1] 
             } 
           }}
         >
-          {/* Main Shimmering Brand Text */}
-          <h1 className={styles.brandName}>BARBAROSSA</h1>
-          <div className={styles.subtitle}>Cinematic Vision</div>
+          {/* Cinematic Wrapper */}
+          <div className={styles.cinematicWrapper}>
+            <motion.div 
+              initial={{ opacity: 0, letterSpacing: "0.1em" }}
+              animate={{ opacity: 1, letterSpacing: "0.4em" }}
+              transition={{ duration: 2, ease: "easeOut" }}
+              className={styles.director}
+            >
+              A VISION BY
+            </motion.div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 2.5, ease: "easeOut", delay: 0.5 }}
+              className={styles.brandName}
+            >
+              ATILLA BARBAROSSA
+            </motion.h1>
+          </div>
           
-          {/* Progress Indicator */}
-          <div className={styles.progressContainer}>
-            <div className={styles.progressText}>LOADING</div>
+          {/* Progress / Skip Indicator */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }}
+            transition={{ duration: 1, delay: 1.5 }}
+            className={styles.skipContainer}
+          >
+            <div className={styles.skipText}>CLICK ANYWHERE TO SKIP</div>
             <div className={styles.progressBar}>
               <div className={styles.progressFill}></div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

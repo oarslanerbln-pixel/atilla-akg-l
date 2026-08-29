@@ -1,22 +1,36 @@
 :root {
-  /* Ultra-Premium System Font Stack (Apple/Tesla vibe) */
-  --font-inter: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-playfair: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  
-  --bg-primary: #000000;
-  --bg-secondary: #0a0a0a;
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  
-  --accent-gold: #c2a57e;
-  
-  --border-light: rgba(255, 255, 255, 0.05);
-  
+  /* Fonts provided by next/font/google */
+
+  /* Cappuccino Theme — light surfaces */
+  --bg-primary: #d5c7b8;   /* Light cappuccino base */
+  --bg-secondary: #e6dacb; /* Creamy foam */
+  --bg-card: #f4ecdf;      /* Card surface — brightest cream, sits above bg-primary */
+  --text-primary: #2c1e16; /* Deep espresso brown */
+  --text-secondary: #5c483a; /* Muted espresso/mocha */
+
+  /* Gold accent — one hue, three weights. Every "gold" in the site should
+     resolve to one of these three, never a one-off hex. */
+  --accent-gold: #b38b59;       /* Base gold */
+  --accent-gold-light: #e3c896; /* Highlight / shimmer peak */
+  --accent-gold-dark: #8a6a41;  /* Shadow / depth stop */
+  --champagne-muted: #bfaea3;   /* Desaturated gold for recessed/background text */
+
+  --border-light: rgba(44, 30, 22, 0.1); /* Dark border for light mode */
+
+  /* Dark surfaces — warm espresso-black, never a neutral/pure black.
+     Used for the marquee, quote, and preloader sections so the whole
+     site reads as one warm palette instead of two competing themes. */
+  --bg-ink: #1b130d;
+  --bg-ink-soft: #2a1d12;
+  --text-on-ink: #f4ecdf;
+  --text-on-ink-muted: rgba(244, 236, 223, 0.72);
+  --border-ink: rgba(244, 236, 223, 0.12);
+
   /* Spacing & Layout */
   --max-width: 1200px;
   --section-padding-y: 6rem;
   --section-padding-y-mobile: 4rem;
-  
+
   /* Transitions */
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -32,13 +46,30 @@ html, body {
 }
 
 body {
-  color: var(--text-primary);
   background: var(--bg-primary);
-  font-family: var(--font-inter);
+  color: var(--text-primary);
   line-height: 1.6;
+  font-family: var(--font-inter), sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: none;
+}
+
+/* Premium Film Grain / Noise Overlay */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  /* Subtle SVG noise */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.05; /* Very faint */
+  mix-blend-mode: multiply; /* Blends nicely with cappuccino */
 }
 
 * {

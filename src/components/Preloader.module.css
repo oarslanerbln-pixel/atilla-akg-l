@@ -4,54 +4,60 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #000000;
+  background-color: var(--bg-ink); /* Cinematic, warm espresso-black */
   z-index: 999999;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  cursor: pointer; /* Suggests skippable */
+}
+
+.cinematicWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
 }
 
 .brandName {
-  font-family: var(--font-inter), sans-serif;
-  font-size: clamp(3rem, 10vw, 8rem);
-  font-weight: 800;
-  letter-spacing: 0.05em;
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(2rem, 6vw, 5rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   margin: 0;
   
-  /* Abstract Gold/Silver/Light Gold Shimmer */
+  /* Shimmering gold text — white specular peaks read cleanly against the
+     solid ink background, unlike on the hero's photo/glass panel. */
   background: linear-gradient(
     110deg,
-    #111111 0%,
-    #444444 15%,
-    #e6e6e6 30%,
-    #f8e4b7 45%, /* Light Gold */
+    var(--accent-gold) 0%,
+    var(--accent-gold-light) 15%,
+    #ffffff 30%,
+    var(--accent-gold-dark) 45%,
     var(--accent-gold) 60%,
-    #111111 80%,
-    #000000 100%
+    #ffffff 75%,
+    var(--accent-gold-light) 100%
   );
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: shine 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: shine 4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
-.subtitle {
-  margin-top: 1.5rem;
+.director {
   font-family: var(--font-inter);
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.4em;
   text-transform: uppercase;
-  color: var(--accent-gold);
-  opacity: 0;
-  animation: fadeIn 1s ease 1s forwards;
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.progressContainer {
+.skipContainer {
   position: absolute;
   bottom: 3rem;
   left: 50%;
@@ -60,15 +66,13 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  opacity: 0;
-  animation: fadeIn 1s ease 0.5s forwards;
 }
 
-.progressText {
+.skipText {
   font-family: var(--font-inter);
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  color: #666;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .progressBar {
@@ -85,7 +89,7 @@
   left: 0;
   height: 100%;
   width: 0%;
-  background: var(--accent-gold);
+  background: rgba(255, 255, 255, 0.6);
   animation: fillBar 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 

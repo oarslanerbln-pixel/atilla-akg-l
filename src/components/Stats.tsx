@@ -5,6 +5,7 @@ import { motion, Variants } from "framer-motion";
 import { Users, MapPin, Target, Eye } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
 import styles from "./Stats.module.css";
+import { useLanguage } from "@/context/LanguageContext";
 
 // Custom Social Icons
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -59,6 +60,7 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 );
 
 export default function Stats() {
+  const { t } = useLanguage();
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -92,29 +94,17 @@ export default function Stats() {
         {/* Left Column: About & Philosophy */}
         <div id="about" className={styles.aboutCol}>
           <motion.div variants={itemVariants}>
-            <h3 className={styles.subtitle}>Content Philosophie</h3>
+            <h3 className={styles.subtitle}>{t('stats_about_subtitle')}</h3>
             <h2 className={styles.title}>
-              Authentisches Storytelling & Visuelle Qualität
+              {t('stats_about_title')}
             </h2>
             <div className={styles.divider}></div>
           </motion.div>
 
           <motion.div variants={itemVariants} className={styles.paragraphs}>
-            <p>
-              Reisen bedeutet für mich mehr als nur das Abhaken von Orten. Es geht
-              um Kultur, Geschichte und authentische Erlebnisse. Als studierter
-              Filmemacher und Travel Content Creator liegt mein Fokus auf starkem,
-              fesselndem Storytelling.
-            </p>
-            <p>
-              Ich nehme meine kaufkräftige Community aus dem DACH-Raum mit auf
-              visuell beeindruckende Abenteuer; von historischen Bauwerken bis hin
-              zu einzigartigen Hotel-Erlebnissen.
-            </p>
-            <p>
-              Mit modernster mobiler Produktionstechnik kreiere ich nahbaren,
-              dynamischen Content, der inspiriert und bewegt.
-            </p>
+            <p>{t('stats_about_p1')}</p>
+            <p>{t('stats_about_p2')}</p>
+            <p>{t('stats_about_p3')}</p>
           </motion.div>
 
           {/* Social Links */}
@@ -131,7 +121,7 @@ export default function Stats() {
                 <span className={styles.socialCount}>
                   <AnimatedCounter to={306} suffix=" K" />
                 </span>
-                <span className={styles.socialLabel}>Follower</span>
+                <span className={styles.socialLabel}>{t('social_follower')}</span>
               </div>
             </a>
 
@@ -147,7 +137,7 @@ export default function Stats() {
                 <span className={styles.socialCount}>
                   <AnimatedCounter to={287} suffix=" K" />
                 </span>
-                <span className={styles.socialLabel}>Follower</span>
+                <span className={styles.socialLabel}>{t('social_follower')}</span>
               </div>
             </a>
 
@@ -163,7 +153,7 @@ export default function Stats() {
                 <span className={styles.socialCount}>
                   <AnimatedCounter to={20} suffix=" K" />
                 </span>
-                <span className={styles.socialLabel}>Follower</span>
+                <span className={styles.socialLabel}>{t('social_follower')}</span>
               </div>
             </a>
           </motion.div>
@@ -172,7 +162,7 @@ export default function Stats() {
         {/* Right Column: Demographics & Reach */}
         <div className={styles.statsCol}>
           <motion.div variants={itemVariants}>
-            <h3 className={styles.subtitle}>Zahlen & Demografie</h3>
+            <h3 className={styles.subtitle}>{t('stats_demo_title')}</h3>
           </motion.div>
 
           <motion.div variants={itemVariants} className={styles.demoGrid}>
@@ -181,26 +171,26 @@ export default function Stats() {
               <span className={styles.statValue}>
                 <AnimatedCounter to={83} suffix="%" />
               </span>
-              <span className={styles.statLabel}>25-54 Alter</span>
+              <span className={styles.statLabel}>{t('stat_age')}</span>
             </div>
             <div className={`${styles.statCard} ${styles.darkCard}`}>
               <MapPin className={styles.statIcon} />
               <span className={styles.statValue}>
                 <AnimatedCounter to={86} suffix="%" />
               </span>
-              <span className={styles.statLabel}>DACH-Raum</span>
+              <span className={styles.statLabel}>{t('stat_region')}</span>
             </div>
             <div className={`${styles.statCard} ${styles.darkCard}`}>
               <Target className={styles.statIcon} />
               <span className={styles.statValue}>
                 <AnimatedCounter to={55} suffix="%" />
               </span>
-              <span className={styles.statLabel}>Weiblich</span>
+              <span className={styles.statLabel}>{t('stat_gender')}</span>
             </div>
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <h3 className={`${styles.subtitle} ${styles.mt4}`}>Reichweite</h3>
+            <h3 className={`${styles.subtitle} ${styles.mt4}`}>{t('stats_reach_title')}</h3>
           </motion.div>
 
           <motion.div variants={itemVariants} className={styles.reachBubbles}>
@@ -209,26 +199,26 @@ export default function Stats() {
               <span className={styles.bubbleValue}>
                 <AnimatedCounter to={1.4} decimals={1} suffix=" MIO" />
               </span>
-              <span className={styles.bubbleLabel}>Erreichte Konten</span>
+              <span className={styles.bubbleLabel}>{t('stats_reach_accounts')}</span>
             </div>
             <div className={styles.bubbleSmallGrid}>
               <div className={styles.bubbleSmall}>
                 <span className={styles.bSmallVal}>
                   <AnimatedCounter to={60} suffix="K+" />
                 </span>
-                <span className={styles.bSmallLab}>Reels</span>
+                <span className={styles.bSmallLab}>{t('stats_reach_reels')}</span>
               </div>
               <div className={styles.bubbleSmall}>
                 <span className={styles.bSmallVal}>
                   <AnimatedCounter to={15} suffix="K+" />
                 </span>
-                <span className={styles.bSmallLab}>Story</span>
+                <span className={styles.bSmallLab}>{t('stats_reach_story')}</span>
               </div>
               <div className={styles.bubbleSmall}>
                 <span className={styles.bSmallVal}>
                   <AnimatedCounter to={20} suffix="K+" />
                 </span>
-                <span className={styles.bSmallLab}>Post</span>
+                <span className={styles.bSmallLab}>{t('stats_reach_post')}</span>
               </div>
             </div>
           </motion.div>

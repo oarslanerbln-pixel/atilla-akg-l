@@ -9,6 +9,7 @@ import FeaturedWork from "@/components/FeaturedWork";
 import CaseStudy from "@/components/CaseStudy";
 import EditorialQuote from "@/components/EditorialQuote";
 import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <CaseStudy />
       <EditorialQuote />
       <Contact />
+      <Footer />
     </main>
   );
 }

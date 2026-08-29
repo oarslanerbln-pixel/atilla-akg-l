@@ -1,9 +1,10 @@
 .section {
   padding: 8rem 0; /* Increased distance from hero and second section */
   margin: 2rem 0; /* Extra margin for breathing room */
-  background-color: #000000; /* OLED Black */
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  /* Premium deep espresso gradient background */
+  background: linear-gradient(to right, var(--bg-ink), var(--bg-ink-soft), var(--bg-ink));
+  border-top: 1px solid rgba(194, 165, 126, 0.1);
+  border-bottom: 1px solid rgba(194, 165, 126, 0.1);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -68,22 +69,22 @@
 
 /* Base layer styling */
 .silver .brandName {
-  color: #a0a0a0; /* Premium Silver Grey */
-  opacity: 0.6;
+  color: var(--champagne-muted);
+  opacity: 0.45;
 }
 
 /* Center layer styling for INTENSE gold */
 .gold .brandName {
   /* Premium Gold Gradient INSIDE the letters */
-  background: linear-gradient(to right, #C6A363, #FFDF96, #FFFFFF, #FFDF96, #C6A363);
+  background: linear-gradient(to right, var(--accent-gold), var(--accent-gold-light), #FFFFFF, var(--accent-gold-light), var(--accent-gold));
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
   animation: shine 4s linear infinite;
-  
+
   /* Extremely tight, soft inner-like glow to avoid roughness */
-  filter: drop-shadow(0 0 5px rgba(255, 223, 150, 0.2));
+  filter: drop-shadow(0 0 5px rgba(227, 200, 150, 0.2));
 }
 
 .separator {
@@ -91,16 +92,16 @@
 }
 
 .silver .separator {
-  color: #a0a0a0;
-  opacity: 0.4;
+  color: var(--champagne-muted);
+  opacity: 0.3;
 }
 
 .gold .separator {
   color: transparent;
-  background: linear-gradient(to right, #C6A363, #FFDF96, #C6A363);
+  background: linear-gradient(to right, var(--accent-gold), var(--accent-gold-light), var(--accent-gold));
   -webkit-background-clip: text;
   background-clip: text;
-  filter: drop-shadow(0 0 4px rgba(255, 223, 150, 0.3));
+  filter: drop-shadow(0 0 4px rgba(227, 200, 150, 0.3));
 }
 
 @keyframes scroll {

@@ -26,7 +26,7 @@ const projects: ProjectItem[] = [
     metric: "559.316 Accounts Erreicht",
     type: "Reels Campaign",
     poster: "https://images.pexels.com/photos/15792224/pexels-photo-15792224.jpeg?auto=compress&cs=tinysrgb&w=800&q=80",
-    videoSrc: "/herovideo.mp4.mp4",
+    videoSrc: "/hero-reel.mp4",
   },
   {
     id: "2",
@@ -36,7 +36,7 @@ const projects: ProjectItem[] = [
     metric: "1.2 MIO Video Views",
     type: "Cinematic Film",
     poster: "https://images.pexels.com/photos/3889742/pexels-photo-3889742.jpeg?auto=compress&cs=tinysrgb&w=800&q=80",
-    videoSrc: "/02---.mp4",
+    videoSrc: "/maldives-cinematic.mp4",
     playbackRate: 0.5, // Slow down the fast video
     trimEnd: 6, // Skip the last 6 seconds
   },
@@ -48,7 +48,7 @@ const projects: ProjectItem[] = [
     metric: "94.2% Engagement Rate",
     type: "Documentary",
     poster: "https://images.pexels.com/photos/3278215/pexels-photo-3278215.jpeg?auto=compress&cs=tinysrgb&w=800&q=80",
-    videoSrc: "/03---.mp4",
+    videoSrc: "/caravanserai-documentary.mp4",
   },
 ];
 

@@ -1,8 +1,7 @@
 .section {
   padding: var(--section-padding-y) 0;
-  /* Dark background to continue the premium OLED flow */
-  background: linear-gradient(to bottom, #0a0a0a, #111111);
-  color: #fff;
+  background: transparent;
+  color: var(--text-primary);
   position: relative;
   overflow: hidden;
 }
@@ -20,7 +19,7 @@
 
 .subtitle {
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.25em;
   color: var(--accent-gold);
@@ -30,11 +29,11 @@
 
 .title {
   font-family: var(--font-playfair), serif;
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-size: clamp(3rem, 5vw, 4.5rem);
   font-weight: 400;
   margin-bottom: 1.5rem;
   
-  background: linear-gradient(to right, #fff, var(--accent-gold));
+  background: linear-gradient(to right, var(--text-primary), var(--accent-gold));
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
@@ -58,39 +57,48 @@
 }
 
 .card {
-  background: #111111;
-  border: 1px solid #222222;
+  position: relative;
+  background: var(--bg-card);
   padding: 3rem 2rem;
   border-radius: 0; /* Sharp corners for luxury */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  transition: all 0.4s ease;
-  position: relative;
+  box-shadow: 0 10px 30px rgba(44, 30, 22, 0.15), 0 0 30px rgba(194, 165, 126, 0.15);
+  transition: transform 0.4s ease;
   overflow: hidden;
+  z-index: 1;
 }
 
+/* The spinning silver/gold colorful border */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(transparent, transparent 75%, #ffffff, #c0c0c0, var(--accent-gold), transparent);
+  animation: spinBorder 8s linear infinite;
+  z-index: -2;
+}
+
+/* The inner card background */
 .card::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 2px;
-  height: 0;
-  background-color: var(--accent-gold);
-  transition: height 0.4s ease;
-  z-index: 2;
-}
-
-.card:hover::after {
-  height: 100%;
+  inset: 1px; /* The thickness of the animated border */
+  background: var(--bg-card); /* Constant cappuccino */
+  z-index: -1;
 }
 
 .card:hover {
   transform: translateY(-4px);
-  background: #161616;
-  border-color: rgba(194, 165, 126, 0.4);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes spinBorder {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .iconWrapper {
@@ -98,12 +106,13 @@
   color: var(--accent-gold);
   position: relative;
   z-index: 2;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 15px rgba(194, 165, 126, 0.4));
   transition: all 0.5s ease;
 }
 
 .card:hover .iconWrapper {
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 15px rgba(194, 165, 126, 0.4));
+  transform: scale(1.15);
 }
 
 .icon {
@@ -121,7 +130,7 @@
 
 .cardDesc {
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 2.5rem;
@@ -130,9 +139,9 @@
 
 .squareButton {
   margin-top: auto;
-  background-color: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--text-primary);
+  background-color: var(--accent-gold);
+  color: #fff;
+  border: 1px solid var(--accent-gold);
   border-radius: 0; /* Sharp corners */
   padding: 0.8rem 1.5rem;
   font-family: var(--font-inter), sans-serif;
@@ -146,9 +155,8 @@
 }
 
 .card:hover .squareButton {
-  background-color: var(--accent-gold);
-  border-color: var(--accent-gold);
-  color: #fff;
+  background-color: #fff;
+  color: var(--text-primary);
 }
 
 .disclaimerWrapper {

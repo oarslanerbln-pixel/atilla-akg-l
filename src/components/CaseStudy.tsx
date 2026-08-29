@@ -63,7 +63,7 @@ export default function CaseStudy() {
             <div className={styles.videoPlaceholder} onClick={handlePlayPause}>
               <video
                 ref={videoRef}
-                src="/herovideo.mp4.mp4"
+                src="/hero-reel.mp4"
                 className={styles.image}
                 loop
                 playsInline

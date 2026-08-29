@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import styles from "./Hero.module.css";
+import { useLanguage } from "@/context/LanguageContext";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -27,62 +28,28 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 );
 
 export default function Hero() {
-  const [activeIndex, setActiveIndex] = React.useState(0);
-  const [isFading, setIsFading] = React.useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { t } = useLanguage();
   
-  const VIDEOS = [
-    { src: "/03---.mp4", start: 0, end: 2.8 }, // Ottoman caravanserai
-    { src: "/02---.mp4", start: 5.5, end: 9.5 }, // Maldives different segment
-    { src: "/herovideo.mp4.mp4", start: 12.0, end: 16.0 } // 3rd video different segment
-  ];
-
-  // Interval for changing the video
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setIsFading(true); // Fade to black
-
-      setTimeout(() => {
-        setActiveIndex((prev) => (prev + 1) % VIDEOS.length);
-        setIsFading(false); // Fade from black
-      }, 600); // match transition duration
-    }, 3500);
-    return () => clearInterval(interval);
-  }, [VIDEOS.length]);
-
-  // Update video source whenever activeIndex changes
+  // Update video source 
   React.useEffect(() => {
     if (videoRef.current) {
-      const currentVideo = VIDEOS[activeIndex];
-      videoRef.current.src = currentVideo.src;
-      videoRef.current.currentTime = currentVideo.start;
+      videoRef.current.src = "/hero-reel.mp4"; // Calm video
       videoRef.current.play().catch(err => console.log("Video Autoplay blocked: ", err));
     }
-  }, [activeIndex]);
+  }, []);
 
   return (
     <section className={styles.hero} id="home">
-      {/* Premium Video Background with bulletproof Dip-to-Black overlay */}
+      {/* Premium Video Background */}
       <div className={styles.backgroundVideoWrapper}>
         <video
           ref={videoRef}
           autoPlay
           muted
+          loop
           playsInline
           className={styles.backgroundVideo}
-          onTimeUpdate={(e) => {
-            if (e.currentTarget.currentTime >= VIDEOS[activeIndex].end) {
-              e.currentTarget.currentTime = VIDEOS[activeIndex].start;
-            }
-          }}
-        />
-
-        {/* Dip to black overlay */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isFading ? 1 : 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: '#000', pointerEvents: 'none', zIndex: 0 }}
         />
       </div>
 
@@ -96,7 +63,7 @@ export default function Hero() {
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className={styles.textContent}
         >
-          <h2 className={styles.greeting}>Willkommen</h2>
+          <h2 className={styles.greeting}>{t('hero_welcome')}</h2>
           <h1 className={styles.name}>
             <span className={styles.firstName}>Atilla</span>
             <br />
@@ -109,11 +76,11 @@ export default function Hero() {
             transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
             className={styles.subtitle}
           >
-            <span>Visual Storytelling</span>
+            <span>{t('hero_storytelling')}</span>
             <span className={styles.diamond}>✦</span>
-            <span>Digital Excellence</span>
+            <span>{t('hero_excellence')}</span>
             <span className={styles.diamond}>✦</span>
-            <span>Creative Direction</span>
+            <span>{t('hero_direction')}</span>
           </motion.div>
           
           {/* Social Icons with Premium Hover Effect */}
@@ -143,7 +110,7 @@ export default function Hero() {
         transition={{ duration: 1, delay: 1.5 }}
         className={styles.scrollIndicator}
       >
-        <span className={styles.scrollText}>Scrollen</span>
+        <span className={styles.scrollText}>{t('hero_scroll')}</span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}

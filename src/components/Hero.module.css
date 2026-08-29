@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 .backgroundVideoWrapper {
@@ -57,10 +57,12 @@
   width: 100%;
   max-width: 1000px;
   
-  /* Solid Dark Overlay (Apple/Tesla vibe) */
-  background: rgba(0, 0, 0, 0.85);
+  /* Glassmorphism Overlay */
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 4rem 5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
@@ -90,16 +92,17 @@
   margin-bottom: 2.5rem;
   text-align: center;
   
-  /* Shimmering Gold & Black Text for Ultimate Luxury Vibe */
+  /* Shimmering gold text — stays within the gold family at all times so it
+     never dips into a low-contrast dark stop against the glass panel behind it. */
   background: linear-gradient(
     110deg,
-    #cfab73 0%,
-    #f2d59f 15%,
-    #050505 30%,
-    #d4af37 45%,
-    #cfab73 60%,
-    #050505 75%,
-    #f2d59f 100%
+    var(--accent-gold) 0%,
+    var(--accent-gold-light) 15%,
+    var(--accent-gold-dark) 30%,
+    var(--accent-gold) 45%,
+    var(--accent-gold-light) 60%,
+    var(--accent-gold-dark) 75%,
+    var(--accent-gold-light) 100%
   );
   background-size: 200% auto;
   color: transparent;
@@ -226,68 +229,35 @@
 .socialIcon {
   width: 50px;
   height: 50px;
-  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #a0a0a0;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  overflow: hidden;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* One restrained, editorial treatment for all three platforms instead of
+   their saturated brand colors — keeps the hero inside the cappuccino/gold
+   palette instead of switching to a generic social-icon-row look. */
 .socialIcon svg {
-  width: 22px;
-  height: 22px;
-  z-index: 2;
-  transition: all 0.4s ease;
+  width: 28px;
+  height: 28px;
+  position: relative;
+  color: var(--text-on-ink-muted);
+  transition: transform 0.4s ease, color 0.4s ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); /* Subtle crisp shadow for legibility, not blurry */
 }
 
 /* Base hover lift */
 .socialIcon:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.1);
 }
 
-/* Instagram Luxury Ring */
-.instagram {
-  background: #050505; /* Deep luxury black */
-  background-clip: padding-box;
-  border: 1px solid rgba(214, 36, 159, 0.5); /* Subtle pinkish border */
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(214, 36, 159, 0.15);
-}
-.instagram:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(214, 36, 159, 0.6);
-}
-
-/* TikTok Luxury Ring */
-.tiktok {
-  background: #050505;
-  border: 1px solid rgba(0, 242, 254, 0.4); /* Subtle cyan border */
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 242, 254, 0.15);
-}
-/* Removed SVG drop-shadow to prevent cross-eyed/blurry effect */
-.tiktok:hover {
-  transform: translateY(-5px);
-  box-shadow: 
-    -5px 5px 15px rgba(0, 242, 254, 0.5),
-    5px -5px 15px rgba(254, 44, 85, 0.5);
-}
-
-/* YouTube Luxury Ring */
-.youtube {
-  background: #050505;
-  border: 1px solid rgba(255, 0, 0, 0.5); /* Subtle red border */
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.15);
-}
-.youtube:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(255, 0, 0, 0.6);
+.socialIcon:hover svg {
+  color: var(--accent-gold-light);
 }
 
 @keyframes shimmer {
