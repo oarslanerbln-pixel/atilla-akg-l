@@ -234,18 +234,158 @@
   color: var(--accent-gold);
 }
 
+/* --- Mobile / tablet menu trigger --- */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  width: 44px;
+  height: 44px;
+  margin: -0.5rem -0.5rem -0.5rem 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 1002;
+  flex-shrink: 0;
+}
+
+.hamburgerLine {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background-color: #fff;
+  transition: background-color 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+.scrolled .hamburgerLine {
+  background-color: var(--text-primary);
+}
+
+/* Once the panel is open the trigger always sits on the dark ink panel,
+   regardless of scroll position, so force the cream color and morph to a X. */
+.menuOpen .hamburgerLine {
+  background-color: var(--text-on-ink);
+}
+
+.menuOpen .hamburgerLine:nth-child(1) {
+  transform: translateY(7.5px) rotate(45deg);
+}
+
+.menuOpen .hamburgerLine:nth-child(2) {
+  opacity: 0;
+}
+
+.menuOpen .hamburgerLine:nth-child(3) {
+  transform: translateY(-7.5px) rotate(-45deg);
+}
+
+/* --- Full-screen mobile / tablet menu panel --- */
+.mobileMenu {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background-color: var(--bg-ink);
+  display: flex;
+  flex-direction: column;
+  padding: 7rem 2rem 3rem;
+  overflow-y: auto;
+}
+
+.mobileMenuLinks {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: auto;
+}
+
+.mobileMenuLink {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(2rem, 9vw, 2.75rem);
+  font-weight: 400;
+  color: var(--text-on-ink);
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border-ink);
+  transition: color 0.3s ease;
+}
+
+.mobileMenuLink:first-child {
+  border-top: 1px solid var(--border-ink);
+}
+
+.mobileMenuLink:hover,
+.mobileMenuLink:active {
+  color: var(--accent-gold-light);
+}
+
+.mobileMenuFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding-top: 3rem;
+}
+
+.mobileLangRow {
+  display: flex;
+  gap: 2rem;
+}
+
+.mobileLangOption {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--text-on-ink-muted);
+  background: transparent;
+  border: none;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.mobileLangOptionActive {
+  color: var(--accent-gold-light);
+}
+
+.mobileStatusRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.75rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-on-ink-muted);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-ink);
+}
+
+.mobileTime {
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 1024px) {
   .navLinks {
     display: none;
   }
+
+  .statusWrapper {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
 }
 
 @media (max-width: 768px) {
-  .liveClock {
-    display: none;
-  }
-  
   .navContainer {
     padding: 0.9rem 1.25rem;
+  }
+
+  .mobileMenu {
+    padding: 6rem 1.5rem 2.5rem;
   }
 }
