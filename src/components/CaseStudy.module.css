@@ -53,6 +53,12 @@
   align-items: flex-start;
 }
 
+/* Grid items default to min-width:auto, which lets long content force the
+   track (and the page) wider than the viewport. Let both columns shrink. */
+.contentGrid > * {
+  min-width: 0;
+}
+
 /* Left Column */
 .imageCol {
   width: 100%;

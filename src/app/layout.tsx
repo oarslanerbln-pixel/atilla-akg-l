@@ -54,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="de" className={`${inter.variable} ${playfair.variable}`}>
       <body>
         <Providers>
           {children}

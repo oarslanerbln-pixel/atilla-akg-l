@@ -56,6 +56,12 @@
   margin-bottom: 4rem;
 }
 
+/* Grid items default to min-width:auto, which lets long content force the
+   track (and the page) wider than the viewport. Let cards shrink. */
+.grid > * {
+  min-width: 0;
+}
+
 .card {
   position: relative;
   background: var(--bg-card);

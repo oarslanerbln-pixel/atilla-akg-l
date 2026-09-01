@@ -31,6 +31,12 @@
   align-items: flex-start;
 }
 
+/* Grid items default to min-width:auto, which lets long content force the
+   track (and the page) wider than the viewport. Let both columns shrink. */
+.grid > * {
+  min-width: 0;
+}
+
 .aboutCol {
   display: flex;
   flex-direction: column;

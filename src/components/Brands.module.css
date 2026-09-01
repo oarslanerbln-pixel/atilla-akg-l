@@ -1,6 +1,6 @@
 .section {
-  padding: 8rem 0; /* Increased distance from hero and second section */
-  margin: 2rem 0; /* Extra margin for breathing room */
+  padding: 2rem 0; /* Slim ticker band, not a full section */
+  margin: 1rem 0;
   /* Premium deep espresso gradient background */
   background: linear-gradient(to right, var(--bg-ink), var(--bg-ink-soft), var(--bg-ink));
   border-top: 1px solid rgba(194, 165, 126, 0.1);
@@ -117,7 +117,7 @@
 
 @media (max-width: 768px) {
   .section {
-    padding: 3rem 0;
+    padding: 1.5rem 0;
   }
   .track {
     animation: scroll 20s linear infinite;

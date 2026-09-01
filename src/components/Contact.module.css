@@ -13,6 +13,12 @@
   align-items: flex-start;
 }
 
+/* Grid items default to min-width:auto, which lets long content force the
+   track (and the page) wider than the viewport. Let both columns shrink. */
+.grid > * {
+  min-width: 0;
+}
+
 .subtitle {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.95rem;
@@ -134,7 +140,9 @@
   /* Sharp corners */
   border-radius: 0;
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.85rem;
+  /* 16px minimum — anything smaller makes iOS Safari zoom the whole page
+     in on focus, which reads as broken rather than premium. */
+  font-size: 1rem;
   color: var(--text-primary);
   outline: none;
   transition: border-color var(--transition-smooth);

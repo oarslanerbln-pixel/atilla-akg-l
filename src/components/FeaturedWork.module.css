@@ -43,6 +43,12 @@
   gap: 2rem;
 }
 
+/* Grid items default to min-width:auto, which lets long content force the
+   track (and the page) wider than the viewport. Let cards shrink. */
+.grid > * {
+  min-width: 0;
+}
+
 .workCard {
   background: var(--bg-secondary);
   border: 1px solid rgba(194, 165, 126, 0.4);

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { translations, Language, TranslationKeys } from "../i18n/translations";
 
 interface LanguageContextType {
@@ -11,8 +11,17 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+const HTML_LANG: Record<Language, string> = { DE: "de", EN: "en", TR: "tr" };
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [activeLang, setActiveLang] = useState<Language>("DE");
+
+  // Keep <html lang> in sync with the active language — screen readers need
+  // it to pronounce content correctly, and CSS `hyphens: auto` needs it to
+  // pick the right hyphenation dictionary for long German compound words.
+  useEffect(() => {
+    document.documentElement.lang = HTML_LANG[activeLang];
+  }, [activeLang]);
 
   const t = (key: TranslationKeys): string => {
     return translations[activeLang][key] || translations["DE"][key] || key;
