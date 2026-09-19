@@ -240,3 +240,95 @@
     padding: 2.5rem 1.5rem;
   }
 }
+
+/* --- Form field scaffolding -------------------------------------------- */
+/* The inputs used to carry their name in the placeholder alone, which
+   disappears the moment someone starts typing and is skipped by most screen
+   readers. Every control now owns a real <label>. */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* A border tint alone is a weak focus signal and vanishes for anyone with a
+   contrast or colour-vision impairment; keyboard users get a real ring. */
+.input:focus-visible,
+.textarea:focus-visible,
+.checkbox:focus-visible,
+.submitButton:focus-visible,
+.consentLink:focus-visible {
+  outline: 2px solid var(--accent-gold-readable);
+  outline-offset: 2px;
+}
+
+/* Off-screen rather than display:none — bots ignore hidden fields, but fill
+   anything that is technically rendered. */
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.consentRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.checkbox {
+  flex-shrink: 0;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.2rem;
+  accent-color: var(--accent-gold-readable);
+  cursor: pointer;
+}
+
+.consentLabel {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.consentLink {
+  color: var(--accent-gold-readable);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.buttonInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.statusMessage {
+  min-height: 1.4rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.errorText {
+  color: #8c2f22;
+}
+
+.successText {
+  color: var(--accent-gold-readable);
+}

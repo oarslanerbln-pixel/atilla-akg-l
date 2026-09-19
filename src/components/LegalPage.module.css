@@ -1,0 +1,90 @@
+/* Shared shell for the two legal routes. They carry dense prose rather than
+   the editorial rhythm of the landing page, so the measure is narrower and
+   the type smaller than the marketing sections. */
+
+.wrapper {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: 8rem 0 6rem;
+}
+
+.inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.back:hover {
+  color: var(--accent-gold-readable);
+}
+
+.title {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 2.5rem;
+}
+
+.content h2 {
+  font-size: 1.25rem;
+  margin: 2.5rem 0 0.75rem;
+}
+
+.content h3 {
+  font-size: 1rem;
+  margin: 1.75rem 0 0.5rem;
+}
+
+.content p,
+.content li {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.content p + p {
+  margin-top: 0.75rem;
+}
+
+.content ul {
+  margin: 0.75rem 0 0 1.25rem;
+}
+
+.content li {
+  margin-bottom: 0.4rem;
+}
+
+.content a {
+  color: var(--accent-gold-readable);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Operator data that is still missing. Deliberately conspicuous: an unfilled
+   Impressum is a legal defect, so it must not read as finished copy. */
+.todo {
+  background: #fff4e5;
+  border-left: 3px solid #b3601a;
+  padding: 0.15rem 0.5rem;
+  color: #7a3f0c;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 6rem 0 4rem;
+  }
+  .inner {
+    padding: 0 1.5rem;
+  }
+}
