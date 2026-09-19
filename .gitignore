@@ -30,26 +30,24 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files — never commit credentials; .env.example documents the variables
 .env*
+!.env.example
 
 # vercel
-.vercel
+/.vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Raw camera masters kept beside the project. hero-video.mp4.mp4 is 128 MB,
+# which GitHub rejects outright; the delivery copies under public/ are the
+# ones the site ships and they stay tracked. A blanket *.mp4 was excluding
+# those too and would have made every future clip need `git add -f`.
+/*.mp4.mp4
 /hero-video.mp4.mp4
 
-.vercel
-.env*
-
-# --- added: secrets & oversized media ---
-.env
-.env.*
-node_modules/
-.next/
-.vercel/
-.agents/
-.vscode/
-*.mp4
+# editor / agent local state
+/.vscode
+/.agents

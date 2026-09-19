@@ -14,24 +14,31 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+/**
+ * Absolute URLs in the metadata resolve against this. It was pinned to the
+ * custom domain, so every preview link from a Vercel preview or the
+ * *.vercel.app deployment pointed at a host that may not be serving this
+ * build yet. Vercel supplies the deployment host; the custom domain stays the
+ * production default.
+ */
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_ENV === "production"
+    ? "https://atillabarbarossa.com"
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "https://atillabarbarossa.com");
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://atillabarbarossa.com"),
+  metadataBase: new URL(siteUrl),
   title: "Atilla BARBAROSSA | Visual Storytelling & Creative Direction",
   description: "Global visual storyteller, creative director and premium filmmaker specializing in luxury hospitality, executive aviation, and high-end lifestyle.",
   keywords: ["Atilla Barbarossa", "Visual Storytelling", "Creative Director", "Luxury Filmmaker", "Content Creator", "DACH region"],
   openGraph: {
     title: "Atilla BARBAROSSA | Visual Storytelling",
     description: "Global visual storyteller and premium filmmaker.",
-    url: "https://atillabarbarossa.com",
+    url: siteUrl,
     siteName: "Atilla Barbarossa Portfolio",
-    images: [
-      {
-        url: "/og-image.jpg", // This would be the gold/black poster
-        width: 1200,
-        height: 630,
-        alt: "Atilla Barbarossa - Creative Direction",
-      },
-    ],
     locale: "de_DE",
     type: "website",
   },
@@ -39,7 +46,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Atilla BARBAROSSA | Visual Storytelling",
     description: "Global visual storyteller and premium filmmaker.",
-    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
