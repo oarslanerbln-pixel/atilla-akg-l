@@ -108,6 +108,15 @@ export const translations = {
     contact_sending: "SENDET...",
     contact_success: "ERFOLGREICH GESENDET",
     contact_error: "FEHLER - ERNEUT VERSUCHEN",
+    contact_consent: "Ich stimme zu, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet werden. Näheres in der {link}.",
+    contact_privacy_link: "Datenschutzerklärung",
+    contact_success_detail: "Vielen Dank — ich melde mich in der Regel innerhalb von 24 Stunden.",
+    contact_error_generic: "Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    contact_error_rate: "Zu viele Anfragen in kurzer Zeit. Bitte warten Sie einen Moment.",
+    contact_error_invalid: "Bitte prüfen Sie Name, E-Mail-Adresse und Nachricht.",
+    contact_error_consent: "Bitte bestätigen Sie die Datenschutzhinweise.",
+    contact_error_unavailable: "Der Formularversand ist derzeit gestört. Schreiben Sie mir bitte direkt an",
+    legal_back: "Zurück zur Startseite",
     
     // Footer
     footer_subtitle: "Ready for the next level?",
@@ -226,6 +235,15 @@ export const translations = {
     contact_sending: "SENDING...",
     contact_success: "SENT SUCCESSFULLY",
     contact_error: "ERROR - PLEASE RETRY",
+    contact_consent: "I agree that my details may be processed in order to handle my inquiry. See the {link} for more.",
+    contact_privacy_link: "privacy policy",
+    contact_success_detail: "Thank you — I usually reply within 24 hours.",
+    contact_error_generic: "The message could not be sent. Please try again.",
+    contact_error_rate: "Too many requests in a short time. Please wait a moment.",
+    contact_error_invalid: "Please check your name, email address and message.",
+    contact_error_consent: "Please confirm the privacy notice.",
+    contact_error_unavailable: "The form is temporarily unavailable. Please write to me directly at",
+    legal_back: "Back to the homepage",
     
     // Footer
     footer_subtitle: "Ready for the next level?",
@@ -344,6 +362,15 @@ export const translations = {
     contact_sending: "GÖNDERİLİYOR...",
     contact_success: "BAŞARIYLA GÖNDERİLDİ",
     contact_error: "HATA - TEKRAR DENEYİN",
+    contact_consent: "Talebimin işlenmesi amacıyla bilgilerimin işlenmesini kabul ediyorum. Ayrıntılar için bkz. {link}.",
+    contact_privacy_link: "Gizlilik Politikası",
+    contact_success_detail: "Teşekkürler — genellikle 24 saat içinde dönüş yapıyorum.",
+    contact_error_generic: "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+    contact_error_rate: "Kısa sürede çok fazla istek gönderildi. Lütfen biraz bekleyin.",
+    contact_error_invalid: "Lütfen ad, e-posta ve mesaj alanlarını kontrol edin.",
+    contact_error_consent: "Lütfen gizlilik bildirimini onaylayın.",
+    contact_error_unavailable: "Form gönderimi şu anda çalışmıyor. Lütfen doğrudan şu adrese yazın:",
+    legal_back: "Ana sayfaya dön",
     
     // Footer
     footer_subtitle: "Ready for the next level?",

@@ -56,15 +56,19 @@ Always utilize CSS variables defined in `src/app/globals.css`:
 ```
 src/
 ├── app/
-│   ├── globals.css          # Design tokens, base styles, reset, utility classes
-│   ├── layout.tsx           # Root layout, Google Fonts (Inter & Playfair), SEO metadata
+│   ├── globals.css          # Design tokens, z-index scale, base styles, reset
+│   ├── layout.tsx           # Root layout, self-hosted fonts, SEO metadata
 │   ├── page.tsx             # Single page landing orchestrator
-│   └── Providers.tsx        # Context providers wrapper (LanguageProvider)
+│   ├── opengraph-image.tsx  # Share card, generated at build time by next/og
+│   ├── Providers.tsx        # Context providers wrapper (LanguageProvider)
+│   ├── api/contact/route.ts # Contact form delivery (Resend)
+│   ├── impressum/           # § 5 DDG imprint
+│   └── datenschutz/         # Privacy notice
 ├── components/              # Modular UI components with *.module.css pairs
 │   ├── Preloader.tsx
 │   ├── CustomCursor.tsx
-│   ├── FilmGrain.tsx
 │   ├── Navbar.tsx
+│   ├── LiveClock.tsx
 │   ├── Hero.tsx
 │   ├── Brands.tsx
 │   ├── Stats.tsx
@@ -73,10 +77,14 @@ src/
 │   ├── CaseStudy.tsx
 │   ├── EditorialQuote.tsx
 │   ├── Contact.tsx
-│   └── Footer.tsx
+│   ├── Footer.tsx
+│   └── LegalPage.tsx        # Shell shared by the two legal routes
 ├── context/
 │   └── LanguageContext.tsx  # Language state & provider
-├── hooks/                   # Custom hooks
+├── hooks/
+│   ├── useSoundDesign.ts    # Shared AudioContext for the click sound
+│   ├── useScrollLock.ts     # Body scroll lock, counted across overlays
+│   └── usePrefersCalm.ts    # prefers-reduced-motion / -data / Save-Data
 └── i18n/
     └── translations.ts      # All translations for DE, EN, TR
 ```
@@ -87,8 +95,60 @@ src/
 - `npm run dev` - Start local development server (localhost:3000)
 - `npm run build` - Create production build
 - `npm run lint` - Run ESLint checks
+- `npx tsc --noEmit` - Type check only
+
+Run `tsc --noEmit`, `next build` and `eslint` before every push; all three are
+expected to pass with zero output.
+
+## 🔐 Environment
+`.env.example` documents the variables. Without `RESEND_API_KEY`,
+`CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` the contact endpoint answers 503
+and the form shows the direct mail address — it must never report a send it
+did not perform.
 
 ---
+
+## 🚦 Rules this project has paid for
+
+### Nothing loads from a third party at runtime
+The audience is German-speaking; a stock photo pulled from an external image
+host on every page view hands the visitor's IP to a third country before any
+consent exists, and that is the same class of defect as embedding Google
+Fonts. Three Pexels posters were removed for exactly this reason. Fonts come
+from `next/font`, which self-hosts them at build time. Videos, icons and
+images ship from `public/`. Keep it that way — and keep
+`src/app/datenschutz/page.tsx` honest if it ever changes.
+
+### The contact endpoint never fakes success
+It previously waited 1.5 s and answered "Message securely delivered." while
+sending nothing, so every inquiry was lost. A response of 200 from
+`/api/contact` means a mail provider accepted the message. Misconfiguration
+returns 503, delivery failure returns 502, and the form surfaces both.
+
+### Mobile data is the budget
+Visitors arrive from Instagram on a phone. Only the visible hero clip plays;
+the second one carries `preload="none"`. Still frames come from the clip
+itself via the `#t=0.1` fragment rather than a separate poster asset. Anything
+new and heavy loads on visibility, and `usePrefersCalm()` decides whether it
+autoplays at all.
+
+### Stacking order comes from the scale
+`--z-nav-panel` through `--z-preloader` live in `globals.css`. Raw literals
+(999, 1002, 9999, 99997, 99998, 99999, 999999) once competed with each other,
+and the lightbox ended up above the bespoke cursor — which, with
+`cursor: none` on the body, left the visitor with no pointer at all. A new
+fixed layer takes a token, or adds one.
+
+### Interactive means a real control
+`<button>`, `<a>` or a genuine form field — never a `<div>` with `onClick`.
+The project cards, the language switcher and the intro skip were all
+unreachable without a mouse. Every overlay closes with Escape and returns
+focus to whatever opened it. `:focus-visible` styling is not decoration.
+
+### Three languages, no halves
+Every new string gets a key in all three blocks of `src/i18n/translations.ts`.
+Where a sentence has to carry a link, the translation owns its position with a
+`{link}` token — word order differs across DE, EN and TR.
 
 ## 📋 Rules for Claude
 1. **Next.js 16 & React 19:**

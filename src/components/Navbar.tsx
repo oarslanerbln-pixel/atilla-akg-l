@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./Navbar.module.css";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useLanguage } from "@/context/LanguageContext";
 import { Language } from "@/i18n/translations";
+import { useScrollLock } from "@/hooks/useScrollLock";
+import LiveClock from "./LiveClock";
 
 const NAV_ITEMS = [
   { href: "#about", key: "nav_about" },
@@ -16,38 +18,21 @@ const NAV_ITEMS = [
 ] as const;
 
 export default function Navbar() {
-  const [time, setTime] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { activeLang, setActiveLang, t } = useLanguage();
   const languages: Language[] = ["DE", "EN", "TR"];
   const { playClickSound } = useSoundDesign();
+  const langWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const timeString = now.toLocaleTimeString("de-DE", {
-        timeZone: "Europe/Berlin",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      });
-      setTime(timeString);
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("scroll", handleScroll);
-    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Close the mobile menu automatically if the viewport grows back into
@@ -60,17 +45,34 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [menuOpen]);
+  useScrollLock(menuOpen);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  // The desktop language menu opened on hover alone, so it was unreachable
+  // without a pointer. It now toggles on click as well; these close it the way
+  // any menu is expected to close.
+  useEffect(() => {
+    if (!langOpen) return;
+
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setLangOpen(false);
+    };
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!langWrapperRef.current?.contains(event.target as Node)) setLangOpen(false);
+    };
+
+    window.addEventListener("keydown", handleKey);
+    window.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      window.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [langOpen]);
+
+  // Default anchor behaviour continues after the sound; the handler only
+  // closes the mobile sheet so the target section is not left behind it.
+  const handleLinkClick = () => {
     playClickSound();
     setMenuOpen(false);
-    // Allow default anchor behavior to continue after playing sound
   };
 
   return (
@@ -96,21 +98,31 @@ export default function Navbar() {
         {/* Live Status & Clock */}
         <div className={styles.statusWrapper}>
           <div
+            ref={langWrapperRef}
             className={styles.langDropdownWrapper}
             onMouseEnter={() => setLangOpen(true)}
             onMouseLeave={() => setLangOpen(false)}
           >
-            <div className={styles.langSelected}>
+            <button
+              type="button"
+              className={styles.langSelected}
+              aria-expanded={langOpen}
+              aria-haspopup="menu"
+              aria-label={`Sprache: ${activeLang}`}
+              onClick={() => setLangOpen((open) => !open)}
+            >
               {activeLang}
-              <svg className={`${styles.chevron} ${langOpen ? styles.chevronOpen : ""}`} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg className={`${styles.chevron} ${langOpen ? styles.chevronOpen : ""}`} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <path d="M6 9l6 6 6-6"/>
               </svg>
-            </div>
+            </button>
 
             {langOpen && (
-              <div className={styles.langMenu}>
+              <div className={styles.langMenu} role="menu">
                 {languages.filter(l => l !== activeLang).map(lang => (
-                  <div
+                  <button
+                    type="button"
+                    role="menuitem"
                     key={lang}
                     className={styles.langOption}
                     onClick={() => {
@@ -120,18 +132,16 @@ export default function Navbar() {
                     }}
                   >
                     {lang}
-                  </div>
+                  </button>
                 ))}
               </div>
             )}
           </div>
 
-          {time && (
-            <div className={styles.liveClock}>
-              <span>BERLIN / ISTANBUL</span>
-              <span className={styles.timeDigits}>{time}</span>
-            </div>
-          )}
+          <div className={styles.liveClock}>
+            <span>BERLIN / ISTANBUL</span>
+            <LiveClock className={styles.timeDigits} />
+          </div>
           <div className={styles.statusBadge}>
             <span className={styles.pulseDot}></span>
             <span>{t('nav_status')}</span>
@@ -206,7 +216,9 @@ export default function Navbar() {
               <div className={styles.mobileStatusRow}>
                 <span className={styles.pulseDot}></span>
                 <span>{t('nav_status')}</span>
-                {time && <span className={styles.mobileTime}>{time} · BERLIN / ISTANBUL</span>}
+                <span className={styles.mobileTime}>
+                  <LiveClock /> · BERLIN / ISTANBUL
+                </span>
               </div>
             </motion.div>
           </motion.div>

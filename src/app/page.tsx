@@ -1,7 +1,6 @@
 import Preloader from "@/components/Preloader";
 import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
-import FilmGrain from "@/components/FilmGrain";
 import Hero from "@/components/Hero";
 import Brands from "@/components/Brands";
 import Stats from "@/components/Stats";
@@ -17,7 +16,6 @@ export default function Home() {
     <main>
       <Preloader />
       <CustomCursor />
-      <FilmGrain />
       <Navbar />
       <Hero />
       <Brands />

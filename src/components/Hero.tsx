@@ -3,9 +3,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { socialProfiles } from "@/lib/site";
 import styles from "./Hero.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
+import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -28,6 +30,8 @@ const YoutubeIcon = () => (
   </svg>
 );
 
+const PLAYBACK_RATES = [0.75, 0.85] as const;
+
 export default function Hero() {
   const { t } = useLanguage();
   const { playClickSound } = useSoundDesign();
@@ -35,25 +39,38 @@ export default function Hero() {
   const videoRef1 = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
 
+  /**
+   * Both clips used to autoplay at once — 27 MB pulled down before the
+   * headline settled, two decoders running, one of them behind an opacity of
+   * zero. The audience arrives on a phone over mobile data, so: only the
+   * visible clip plays, the second one is not fetched until it is switched to,
+   * and a visitor who asked for less motion or is saving data gets the first
+   * frame as a still backdrop instead.
+   */
+  const cinematic = !usePrefersCalm();
+
   // Seamless auto-switch between the two cinematic videos every 7.5 seconds
   useEffect(() => {
+    if (!cinematic) return;
     const timer = setInterval(() => {
       setActiveVideo((prev) => (prev === 0 ? 1 : 0));
     }, 7500);
     return () => clearInterval(timer);
-  }, []);
+  }, [cinematic]);
 
-  // Ensure both videos start playing smoothly in background
+  // Play the clip on screen, hold the other one still.
   useEffect(() => {
-    if (videoRef1.current) {
-      videoRef1.current.playbackRate = 0.75;
-      videoRef1.current.play().catch(() => {});
-    }
-    if (videoRef2.current) {
-      videoRef2.current.playbackRate = 0.85;
-      videoRef2.current.play().catch(() => {});
-    }
-  }, []);
+    const videos = [videoRef1.current, videoRef2.current];
+    videos.forEach((video, index) => {
+      if (!video) return;
+      video.playbackRate = PLAYBACK_RATES[index];
+      if (cinematic && index === activeVideo) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, [activeVideo, cinematic]);
 
   const handleVideoSwitch = (index: 0 | 1) => {
     playClickSound();
@@ -66,20 +83,24 @@ export default function Hero() {
       <div className={styles.backgroundVideoWrapper}>
         <video
           ref={videoRef1}
-          src="/maldives-cinematic.mp4"
-          autoPlay
+          src="/maldives-cinematic.mp4#t=0.1"
+          preload="metadata"
           muted
           loop
           playsInline
+          aria-hidden="true"
           className={`${styles.backgroundVideo} ${activeVideo === 0 ? styles.videoActive : styles.videoHidden}`}
         />
+        {/* preload="none": the second clip costs nothing until it is switched
+            to, whether by the rotation timer or by the visitor. */}
         <video
           ref={videoRef2}
-          src="/caravanserai-documentary.mp4"
-          autoPlay
+          src="/caravanserai-documentary.mp4#t=0.1"
+          preload="none"
           muted
           loop
           playsInline
+          aria-hidden="true"
           className={`${styles.backgroundVideo} ${activeVideo === 1 ? styles.videoActive : styles.videoHidden}`}
         />
         <div className={styles.overlay}></div>
@@ -146,7 +167,7 @@ export default function Hero() {
             className={styles.socialIcons}
           >
             <a
-              href="https://instagram.com/atillabarbarossa"
+              href={socialProfiles.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialCapsule}
@@ -160,7 +181,7 @@ export default function Hero() {
               </span>
             </a>
             <a
-              href="https://www.tiktok.com/@atillabarbarossa"
+              href={socialProfiles.tiktok}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialCapsule}
@@ -174,7 +195,7 @@ export default function Hero() {
               </span>
             </a>
             <a
-              href="https://www.youtube.com/@atillabarbarossa"
+              href={socialProfiles.youtube}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialCapsule}

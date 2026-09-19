@@ -1,0 +1,32 @@
+# Until now nothing verified a push: the type check, the build and the lint
+# run only where someone remembers to run them. These three are exactly what a
+# contributor runs locally, in the same order, so a red badge means the same
+# thing on both machines.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint
+        run: npm run lint
