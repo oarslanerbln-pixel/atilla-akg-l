@@ -8,6 +8,7 @@ import styles from "./Hero.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
+import { usePosterFrame } from "@/hooks/usePosterFrame";
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -38,6 +39,10 @@ export default function Hero() {
   const [activeVideo, setActiveVideo] = useState<0 | 1>(0);
   const videoRef1 = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
+
+  // Still backdrop for anyone the rotation is held for; preload="none" on the
+  // second clip means there is no metadata to seek to until it is switched to.
+  usePosterFrame(videoRef1);
 
   /**
    * Both clips used to autoplay at once — 27 MB pulled down before the
