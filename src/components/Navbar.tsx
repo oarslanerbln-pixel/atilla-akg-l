@@ -10,8 +10,8 @@ import { Language } from "@/i18n/translations";
 const NAV_ITEMS = [
   { href: "#about", key: "nav_about" },
   { href: "#stats", key: "nav_stats" },
-  { href: "#services", key: "nav_services" },
   { href: "#work", key: "nav_work" },
+  { href: "#services", key: "nav_services" },
   { href: "#contact", key: "nav_contact" },
 ] as const;
 

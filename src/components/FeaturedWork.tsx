@@ -1,70 +1,81 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
-import { motion, Variants, useInView } from "framer-motion";
+import React, { useRef, useEffect, useState } from "react";
+import { motion, Variants, useInView, AnimatePresence } from "framer-motion";
+import { Play, X } from "lucide-react";
 import styles from "./FeaturedWork.module.css";
+import { useLanguage } from "@/context/LanguageContext";
+import { useSoundDesign } from "@/hooks/useSoundDesign";
 
 interface ProjectItem {
   id: string;
-  category: string;
-  title: string;
-  desc: string;
-  metric: string;
-  type: string;
+  categoryKey: string;
+  titleKey: string;
+  descKey: string;
+  metricKey: string;
+  typeKey: string;
   poster: string;
-  videoSrc?: string;
+  videoSrc: string;
   playbackRate?: number;
-  trimEnd?: number; // seconds to skip at the end of the video
+  trimEnd?: number;
 }
 
-const projects: ProjectItem[] = [
+const rawProjects: ProjectItem[] = [
   {
     id: "1",
-    category: "Hospitality & Resorts",
-    title: "Novotel Bosphorus Istanbul",
-    desc: "Exklusives Storytelling für das renommierte Designhotel im lebendigen Karaköy-Viertel.",
-    metric: "559.316 Accounts Erreicht",
-    type: "Reels Campaign",
+    categoryKey: "project_1_cat",
+    titleKey: "project_1_title",
+    descKey: "project_1_desc",
+    metricKey: "project_1_metric",
+    typeKey: "project_1_type",
     poster: "https://images.pexels.com/photos/15792224/pexels-photo-15792224.jpeg?auto=compress&cs=tinysrgb&w=800&q=80",
     videoSrc: "/hero-reel.mp4",
   },
   {
     id: "2",
-    category: "Luxury Travel & Culture",
-    title: "The Maldives",
-    desc: "Atmosphärische Reisedokumentationen, die unberührte Ästhetik und historische Eleganz vereinen.",
-    metric: "1.2 MIO Video Views",
-    type: "Cinematic Film",
+    categoryKey: "project_2_cat",
+    titleKey: "project_2_title",
+    descKey: "project_2_desc",
+    metricKey: "project_2_metric",
+    typeKey: "project_2_type",
     poster: "https://images.pexels.com/photos/3889742/pexels-photo-3889742.jpeg?auto=compress&cs=tinysrgb&w=800&q=80",
     videoSrc: "/maldives-cinematic.mp4",
-    playbackRate: 0.5, // Slow down the fast video
-    trimEnd: 6, // Skip the last 6 seconds
+    playbackRate: 0.7,
+    trimEnd: 4,
   },
   {
     id: "3",
-    category: "Heritage & History",
-    title: "Croatia Ottoman Caravanserai",
-    desc: "Maßgeschneiderte visuelle Kampagnen für historische Architektur und kulturelles Erbe.",
-    metric: "94.2% Engagement Rate",
-    type: "Documentary",
+    categoryKey: "project_3_cat",
+    titleKey: "project_3_title",
+    descKey: "project_3_desc",
+    metricKey: "project_3_metric",
+    typeKey: "project_3_type",
     poster: "https://images.pexels.com/photos/3278215/pexels-photo-3278215.jpeg?auto=compress&cs=tinysrgb&w=800&q=80",
     videoSrc: "/caravanserai-documentary.mp4",
   },
 ];
 
-// Reusable Video Component that plays ONLY when visible (Best practice for performance & mobile)
-function InViewVideo({ src, poster, className, playbackRate = 1.0, trimEnd }: { src?: string; poster?: string; className?: string, playbackRate?: number, trimEnd?: number }) {
+function InViewVideo({
+  src,
+  poster,
+  className,
+  playbackRate = 1.0,
+  trimEnd,
+}: {
+  src?: string;
+  poster?: string;
+  className?: string;
+  playbackRate?: number;
+  trimEnd?: number;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(videoRef, { margin: "-100px" });
 
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = playbackRate;
-      
       if (isInView) {
-        videoRef.current.play().catch(() => {
-          // Ignore autoplay policy errors
-        });
+        videoRef.current.play().catch(() => {});
       } else {
         videoRef.current.pause();
       }
@@ -85,7 +96,7 @@ function InViewVideo({ src, poster, className, playbackRate = 1.0, trimEnd }: { 
       ref={videoRef}
       src={src}
       poster={poster}
-      loop={!trimEnd} // Only use native loop if we are not custom trimming
+      loop={!trimEnd}
       muted
       playsInline
       className={className}
@@ -95,6 +106,10 @@ function InViewVideo({ src, poster, className, playbackRate = 1.0, trimEnd }: { 
 }
 
 export default function FeaturedWork() {
+  const { t } = useLanguage();
+  const { playClickSound } = useSoundDesign();
+  const [activeProject, setActiveProject] = useState<ProjectItem | null>(null);
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -110,6 +125,18 @@ export default function FeaturedWork() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
   };
 
+  const openModal = (project: ProjectItem) => {
+    playClickSound();
+    setActiveProject(project);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeModal = () => {
+    playClickSound();
+    setActiveProject(null);
+    document.body.style.overflow = "auto";
+  };
+
   return (
     <section id="work" className={styles.section}>
       <div className="container">
@@ -120,8 +147,8 @@ export default function FeaturedWork() {
           transition={{ duration: 0.8 }}
           className={styles.header}
         >
-          <h3 className={styles.subtitle}>Selected Portfolio</h3>
-          <h2 className={styles.title}>Featured Projects</h2>
+          <h3 className={styles.subtitle}>{t('work_subtitle')}</h3>
+          <h2 className={styles.title}>{t('work_title')}</h2>
           <div className={styles.divider}></div>
         </motion.div>
 
@@ -132,15 +159,16 @@ export default function FeaturedWork() {
           viewport={{ once: true, margin: "-50px" }}
           className={styles.grid}
         >
-          {projects.map((project) => (
+          {rawProjects.map((project) => (
             <motion.div
               key={project.id}
               variants={itemVariants}
               className={styles.workCard}
-              data-cursor="EXPLORE"
+              data-cursor="PLAY"
+              onClick={() => openModal(project)}
             >
               <div className={styles.mediaWrapper}>
-                <span className={styles.categoryTag}>{project.category}</span>
+                <span className={styles.categoryTag}>{t(project.categoryKey as any)}</span>
                 <InViewVideo
                   src={project.videoSrc}
                   poster={project.poster}
@@ -148,20 +176,70 @@ export default function FeaturedWork() {
                   trimEnd={project.trimEnd}
                   className={styles.mediaVideo}
                 />
+                <div className={styles.playOverlay}>
+                  <div className={styles.playBtnCircle}>
+                    <Play size={22} fill="currentColor" />
+                  </div>
+                  <span className={styles.playText}>{t('work_watch')}</span>
+                </div>
               </div>
 
               <div className={styles.cardContent}>
-                <h3 className={styles.projectTitle}>{project.title}</h3>
-                <p className={styles.projectDesc}>{project.desc}</p>
+                <h3 className={styles.projectTitle}>{t(project.titleKey as any)}</h3>
+                <p className={styles.projectDesc}>{t(project.descKey as any)}</p>
                 <div className={styles.metricBadge}>
-                  <span>{project.metric}</span>
-                  <span>{project.type}</span>
+                  <span>{t(project.metricKey as any)}</span>
+                  <span>{t(project.typeKey as any)}</span>
                 </div>
               </div>
             </motion.div>
           ))}
         </motion.div>
       </div>
+
+      {/* Interactive Lightbox Video Modal */}
+      <AnimatePresence>
+        {activeProject && (
+          <motion.div
+            className={styles.modalBackdrop}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeModal}
+          >
+            <motion.div
+              className={styles.modalContent}
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={styles.modalHeader}>
+                <h4 className={styles.modalTitle}>{t(activeProject.titleKey as any)}</h4>
+                <button
+                  type="button"
+                  className={styles.modalClose}
+                  onClick={closeModal}
+                  aria-label="Close video player"
+                >
+                  <X size={18} />
+                  <span>{t('work_close')}</span>
+                </button>
+              </div>
+              <div className={styles.modalVideoWrapper}>
+                <video
+                  src={activeProject.videoSrc}
+                  controls
+                  autoPlay
+                  playsInline
+                  className={styles.modalVideo}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

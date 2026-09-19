@@ -1,0 +1,6 @@
+# Ignore raw video in root directory
+hero-video.mp4.mp4
+*.mp4.mp4
+.git
+.vscode
+.agents

@@ -1,30 +1,28 @@
 :root {
   /* Fonts provided by next/font/google */
 
-  /* Cappuccino Theme — light surfaces */
-  --bg-primary: #d5c7b8;   /* Light cappuccino base */
-  --bg-secondary: #e6dacb; /* Creamy foam */
-  --bg-card: #f4ecdf;      /* Card surface — brightest cream, sits above bg-primary */
-  --text-primary: #2c1e16; /* Deep espresso brown */
-  --text-secondary: #5c483a; /* Muted espresso/mocha */
+  /* Elegant Editorial Luxury White Theme */
+  --bg-primary: #fcfbf9;   /* Luminous, warm gallery white */
+  --bg-secondary: #f4f1ea; /* Soft porcelain / alabaster surface */
+  --bg-card: #ffffff;      /* Pure crisp floating white surface */
+  --text-primary: #181512; /* Deep obsidian charcoal */
+  --text-secondary: #5a524a; /* Refined warm graphite */
 
-  /* Gold accent — one hue, three weights. Every "gold" in the site should
-     resolve to one of these three, never a one-off hex. */
-  --accent-gold: #b38b59;       /* Base gold */
-  --accent-gold-light: #e3c896; /* Highlight / shimmer peak */
-  --accent-gold-dark: #8a6a41;  /* Shadow / depth stop */
-  --champagne-muted: #bfaea3;   /* Desaturated gold for recessed/background text */
+  /* Gold accents */
+  --accent-gold: #b38b59;       /* Timeless luxury gold */
+  --accent-gold-light: #d8b482; /* Soft gold highlight */
+  --accent-gold-dark: #825b29;  /* Shadow / depth stop */
+  --accent-gold-readable: #7c5423; /* High-contrast accessible gold on white */
+  --champagne-muted: #8c827a;   /* Subtle muted text */
 
-  --border-light: rgba(44, 30, 22, 0.1); /* Dark border for light mode */
+  --border-light: rgba(24, 21, 18, 0.08); /* Crisp architectural border */
 
-  /* Dark surfaces — warm espresso-black, never a neutral/pure black.
-     Used for the marquee, quote, and preloader sections so the whole
-     site reads as one warm palette instead of two competing themes. */
-  --bg-ink: #1b130d;
-  --bg-ink-soft: #2a1d12;
-  --text-on-ink: #f4ecdf;
-  --text-on-ink-muted: rgba(244, 236, 223, 0.72);
-  --border-ink: rgba(244, 236, 223, 0.12);
+  /* Contrast dark surfaces for statement cards, marquee, and footer */
+  --bg-ink: #140f0a;
+  --bg-ink-soft: #221a13;
+  --text-on-ink: #fcfbf9;
+  --text-on-ink-muted: rgba(252, 251, 249, 0.75);
+  --border-ink: rgba(252, 251, 249, 0.12);
 
   /* Spacing & Layout */
   --max-width: 1200px;
@@ -53,7 +51,13 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: none;
+  cursor: default;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.has-custom-cursor {
+    cursor: none;
+  }
 }
 
 /* Premium Film Grain / Noise Overlay */
@@ -68,8 +72,8 @@ body::after {
   z-index: 9999;
   /* Subtle SVG noise */
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.05; /* Very faint */
-  mix-blend-mode: multiply; /* Blends nicely with cappuccino */
+  opacity: 0.022; /* Very faint, refined paper texture on white */
+  mix-blend-mode: multiply;
 }
 
 * {

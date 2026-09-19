@@ -4,35 +4,36 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 import { Compass, Video, PackageSearch, Copyright } from "lucide-react";
 import styles from "./Services.module.css";
-
-const services = [
-  {
-    icon: <Compass className={styles.icon} />,
-    title: "Authentische Hotel- & Destinations-Features",
-    description:
-      "Organische Einbindung und fesselndes Storytelling direkt vor Ort, um die Einzigartigkeit der Location spürbar zu machen.",
-  },
-  {
-    icon: <Video className={styles.icon} />,
-    title: "Reichweitenstarke Kampagnen",
-    description:
-      "Dedizierte Kurzvideos (Reels, TikToks & YouTube Shorts) für maximale Sichtbarkeit und Performance in der kaufkräftigen DACH-Zielgruppe.",
-  },
-  {
-    icon: <PackageSearch className={styles.icon} />,
-    title: "Organische Produktintegrationen",
-    description:
-      "Natürliche und glaubhafte Einbindung von reiseaffinen Marken, Services oder Equipment in meinen Travel-Alltag.",
-  },
-  {
-    icon: <Copyright className={styles.icon} />,
-    title: "UGC & Content-Lizenzen",
-    description:
-      "Produktion von hochwertigem, nativem Bild- und Videomaterial zur uneingeschränkten Nutzung auf den unternehmenseigenen Kanälen.",
-  },
-];
+import { useLanguage } from "@/context/LanguageContext";
+import { useSoundDesign } from "@/hooks/useSoundDesign";
 
 export default function Services() {
+  const { t } = useLanguage();
+  const { playClickSound } = useSoundDesign();
+
+  const services = [
+    {
+      icon: <Compass className={styles.icon} />,
+      titleKey: "service_1_title",
+      descKey: "service_1_desc",
+    },
+    {
+      icon: <Video className={styles.icon} />,
+      titleKey: "service_2_title",
+      descKey: "service_2_desc",
+    },
+    {
+      icon: <PackageSearch className={styles.icon} />,
+      titleKey: "service_3_title",
+      descKey: "service_3_desc",
+    },
+    {
+      icon: <Copyright className={styles.icon} />,
+      titleKey: "service_4_title",
+      descKey: "service_4_desc",
+    },
+  ];
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -59,8 +60,8 @@ export default function Services() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className={styles.header}
         >
-          <h3 className={styles.subtitle}>Dienstleistungen</h3>
-          <h2 className={styles.title}>Service Portfolio</h2>
+          <h3 className={styles.subtitle}>{t('services_subtitle')}</h3>
+          <h2 className={styles.title}>{t('services_title')}</h2>
           <div className={styles.divider}></div>
         </motion.div>
 
@@ -74,13 +75,17 @@ export default function Services() {
           {services.map((service, index) => (
             <motion.div key={index} variants={itemVariants} className={styles.card}>
               <div className={styles.iconWrapper}>{service.icon}</div>
-              <h4 className={styles.cardTitle}>{service.title}</h4>
-              <p className={styles.cardDesc}>{service.description}</p>
+              <h4 className={styles.cardTitle}>{t(service.titleKey as any)}</h4>
+              <p className={styles.cardDesc}>{t(service.descKey as any)}</p>
               
-              {/* Added a sharp square button for the luxury aesthetic as requested */}
-              <button className={styles.squareButton}>
-                MEHR ERFAHREN
-              </button>
+              <a
+                href="#contact"
+                className={styles.squareButton}
+                onClick={() => playClickSound()}
+                data-cursor="INQUIRE"
+              >
+                {t('services_btn')}
+              </a>
             </motion.div>
           ))}
         </motion.div>
@@ -93,9 +98,7 @@ export default function Services() {
           className={styles.disclaimerWrapper}
         >
           <p className={styles.disclaimer}>
-            Sämtliche Leistungen, Paketpreise und Format-Kombinationen (z. B.
-            Story-Sequenzen, begleitende YouTube-Vlogs oder exklusive TikTok-Serien)
-            werden individuell auf die Ziele der jeweiligen Kampagne abgestimmt.
+            {t('services_disclaimer')}
           </p>
         </motion.div>
       </div>

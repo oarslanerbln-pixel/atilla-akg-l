@@ -4,19 +4,27 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Preloader.module.css";
 
+import { useLanguage } from "@/context/LanguageContext";
+
 export default function Preloader() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
-    // Lock scroll while preloading
+    // Check if user already saw the preloader in this session
+    const hasSeen = sessionStorage.getItem("atilla_preloader_seen");
+    if (hasSeen) {
+      return;
+    }
+
+    setIsLoading(true);
     document.body.style.overflow = "hidden";
 
-    // Wait for the intro animation to finish (e.g., 2.8 seconds)
     const timer = setTimeout(() => {
       setIsLoading(false);
-      // Restore scroll
       document.body.style.overflow = "auto";
-    }, 2800);
+      sessionStorage.setItem("atilla_preloader_seen", "true");
+    }, 1400);
 
     return () => {
       clearTimeout(timer);
@@ -24,18 +32,24 @@ export default function Preloader() {
     };
   }, []);
 
+  const handleDismiss = () => {
+    setIsLoading(false);
+    document.body.style.overflow = "auto";
+    sessionStorage.setItem("atilla_preloader_seen", "true");
+  };
+
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
           className={styles.preloader}
-          onClick={() => setIsLoading(false)}
+          onClick={handleDismiss}
           initial={{ y: 0 }}
           exit={{ 
             opacity: 0,
             y: "-100vh", 
             transition: { 
-              duration: 1.5, 
+              duration: 0.8, 
               ease: [0.76, 0, 0.24, 1] 
             } 
           }}
@@ -44,17 +58,17 @@ export default function Preloader() {
           <div className={styles.cinematicWrapper}>
             <motion.div 
               initial={{ opacity: 0, letterSpacing: "0.1em" }}
-              animate={{ opacity: 1, letterSpacing: "0.4em" }}
-              transition={{ duration: 2, ease: "easeOut" }}
+              animate={{ opacity: 1, letterSpacing: "0.35em" }}
+              transition={{ duration: 1, ease: "easeOut" }}
               className={styles.director}
             >
-              A VISION BY
+              {t('preloader_vision')}
             </motion.div>
             
             <motion.h1 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 2.5, ease: "easeOut", delay: 0.5 }}
+              transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
               className={styles.brandName}
             >
               ATILLA BARBAROSSA
@@ -64,11 +78,11 @@ export default function Preloader() {
           {/* Progress / Skip Indicator */}
           <motion.div 
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            transition={{ duration: 1, delay: 1.5 }}
+            animate={{ opacity: 0.5 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
             className={styles.skipContainer}
           >
-            <div className={styles.skipText}>CLICK ANYWHERE TO SKIP</div>
+            <div className={styles.skipText}>{t('preloader_skip')}</div>
             <div className={styles.progressBar}>
               <div className={styles.progressFill}></div>
             </div>

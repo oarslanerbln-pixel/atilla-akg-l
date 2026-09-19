@@ -13,8 +13,6 @@
   align-items: flex-start;
 }
 
-/* Grid items default to min-width:auto, which lets long content force the
-   track (and the page) wider than the viewport. Let both columns shrink. */
 .grid > * {
   min-width: 0;
 }
@@ -68,10 +66,10 @@
 }
 
 .contactCol {
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-light);
+  background-color: #ffffff;
+  border: 1px solid rgba(24, 21, 18, 0.08);
+  box-shadow: 0 20px 50px rgba(24, 21, 18, 0.05);
   padding: 3.5rem 3rem;
-  /* Sharp corners */
   border-radius: 0;
 }
 
@@ -96,12 +94,11 @@
 .iconBox {
   width: 40px;
   height: 40px;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-light);
+  background-color: var(--bg-primary);
+  border: 1px solid rgba(24, 21, 18, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Sharp corners */
   border-radius: 0;
   transition: all var(--transition-smooth);
 }
@@ -113,7 +110,7 @@
 }
 
 .contactLink:hover {
-  color: var(--accent-gold);
+  color: var(--accent-gold-readable);
 }
 
 .contactLink:hover .iconBox {
@@ -135,13 +132,10 @@
 .textarea {
   width: 100%;
   padding: 1rem 1.25rem;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  /* Sharp corners */
+  background-color: #fcfbf9;
+  border: 1px solid rgba(24, 21, 18, 0.1);
   border-radius: 0;
   font-family: var(--font-inter), sans-serif;
-  /* 16px minimum — anything smaller makes iOS Safari zoom the whole page
-     in on focus, which reads as broken rather than premium. */
   font-size: 1rem;
   color: var(--text-primary);
   outline: none;
@@ -151,12 +145,14 @@
 .input::placeholder,
 .textarea::placeholder {
   color: var(--text-secondary);
-  letter-spacing: 0.1em;
+  opacity: 0.7;
+  letter-spacing: 0.08em;
 }
 
 .input:focus,
 .textarea:focus {
   border-color: var(--accent-gold);
+  background-color: #ffffff;
 }
 
 .textarea {
@@ -166,16 +162,15 @@
 
 .submitButton {
   background-color: var(--text-primary);
-  color: var(--bg-primary);
+  color: #ffffff;
   border: 1px solid var(--text-primary);
-  /* Sharp corners */
   border-radius: 0;
   padding: 1rem 2rem;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.4s ease;
   margin-top: 0.5rem;
@@ -201,10 +196,11 @@
 }
 
 .submitButton:hover {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(179, 139, 89, 0.3);
 }
 
 .submitButton:disabled {
@@ -216,7 +212,7 @@
 .submitButton.success {
   background: var(--accent-gold);
   border-color: var(--accent-gold);
-  color: var(--bg-ink);
+  color: #ffffff;
 }
 
 .spinIcon {

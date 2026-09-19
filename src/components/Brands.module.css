@@ -1,22 +1,39 @@
 .section {
-  padding: 2rem 0; /* Slim ticker band, not a full section */
-  margin: 1rem 0;
-  /* Premium deep espresso gradient background */
-  background: linear-gradient(to right, var(--bg-ink), var(--bg-ink-soft), var(--bg-ink));
-  border-top: 1px solid rgba(194, 165, 126, 0.1);
-  border-bottom: 1px solid rgba(194, 165, 126, 0.1);
+  padding: 2.25rem 0;
+  margin: 0;
+  /* Luminous Satin Champagne-Alabaster Silk ribbon */
+  background: linear-gradient(
+    90deg,
+    #f4f0e8 0%,
+    #ffffff 20%,
+    #ede5d8 40%,
+    #ffffff 60%,
+    #f4f0e8 80%,
+    #ffffff 100%
+  );
+  background-size: 200% 100%;
+  animation: bgSheen 20s ease infinite;
+  border-top: 1px solid rgba(179, 139, 89, 0.28);
+  border-bottom: 1px solid rgba(179, 139, 89, 0.28);
+  box-shadow: 0 6px 25px rgba(24, 21, 18, 0.03);
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
 }
 
+@keyframes bgSheen {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .edgeMask {
   width: 100%;
   position: relative;
-  /* Super soft premium fade on edges */
-  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  /* Soft smooth fade on edges */
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
 }
 
 .marquee {
@@ -34,8 +51,7 @@
   justify-content: space-around;
   gap: 4rem;
   min-width: 100%;
-  /* Hardware acceleration for ultra-smooth flow */
-  animation: scroll 30s linear infinite;
+  animation: scroll 32s linear infinite;
   transform: translateZ(0);
 }
 
@@ -46,9 +62,9 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  /* Mask to exclusively show the gold text in the dead center */
-  mask-image: linear-gradient(to right, transparent 35%, black 45%, black 55%, transparent 65%);
-  -webkit-mask-image: linear-gradient(to right, transparent 35%, black 45%, black 55%, transparent 65%);
+  /* Spotlight effect in the center */
+  mask-image: linear-gradient(to right, transparent 32%, black 45%, black 55%, transparent 68%);
+  -webkit-mask-image: linear-gradient(to right, transparent 32%, black 45%, black 55%, transparent 68%);
 }
 
 .brandItem {
@@ -59,49 +75,51 @@
 
 .brandName {
   font-family: var(--font-inter), sans-serif;
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 700;
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   white-space: nowrap;
   transition: all 0.5s ease;
 }
 
-/* Base layer styling */
+/* Base layer: elegant watermarked obsidian charcoal */
 .silver .brandName {
-  color: var(--champagne-muted);
-  opacity: 0.45;
+  color: #181512;
+  opacity: 0.18;
 }
 
-/* Center layer styling for INTENSE gold */
+/* Center layer: intense liquid bronze-gold spotlight */
 .gold .brandName {
-  /* Premium Gold Gradient INSIDE the letters */
-  background: linear-gradient(to right, var(--accent-gold), var(--accent-gold-light), #FFFFFF, var(--accent-gold-light), var(--accent-gold));
+  background: linear-gradient(
+    110deg,
+    #7c5423 0%,
+    #b38b59 20%,
+    #d8b482 40%,
+    #b38b59 60%,
+    #7c5423 80%,
+    #b38b59 100%
+  );
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
   animation: shine 4s linear infinite;
-
-  /* Extremely tight, soft inner-like glow to avoid roughness */
-  filter: drop-shadow(0 0 5px rgba(227, 200, 150, 0.2));
+  filter: drop-shadow(0 2px 10px rgba(179, 139, 89, 0.35));
 }
 
 .separator {
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
 }
 
 .silver .separator {
-  color: var(--champagne-muted);
-  opacity: 0.3;
+  color: var(--accent-gold);
+  opacity: 0.35;
 }
 
 .gold .separator {
-  color: transparent;
-  background: linear-gradient(to right, var(--accent-gold), var(--accent-gold-light), var(--accent-gold));
-  -webkit-background-clip: text;
-  background-clip: text;
-  filter: drop-shadow(0 0 4px rgba(227, 200, 150, 0.3));
+  color: var(--accent-gold);
+  filter: drop-shadow(0 0 6px rgba(179, 139, 89, 0.6));
 }
 
 @keyframes scroll {
@@ -120,6 +138,6 @@
     padding: 1.5rem 0;
   }
   .track {
-    animation: scroll 20s linear infinite;
+    animation: scroll 22s linear infinite;
   }
 }

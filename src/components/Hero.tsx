@@ -1,59 +1,89 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import styles from "./Hero.module.css";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSoundDesign } from "@/hooks/useSoundDesign";
 
-const InstagramIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+const InstagramIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
   </svg>
 );
 
-const YoutubeIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
-    <path d="m10 15 5-3-5-3z" fill="#ffffff" stroke="none" />
+const TikTokIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
   </svg>
 );
 
-const TikTokIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.23-1.13 4.39-2.88 5.76-1.68 1.3-3.9 1.72-5.95 1.18-2.14-.56-3.86-2.07-4.7-4.13-.88-2.15-.65-4.73.61-6.68 1.25-1.95 3.52-3.15 5.8-3.17V14c-1.4.03-2.73.7-3.53 1.83-.82 1.16-.94 2.74-.29 4.02.66 1.3 2.11 2.05 3.59 2.05 1.57.02 3.01-.98 3.53-2.47.16-.47.24-.97.23-1.47v-17.9z" />
+const YoutubeIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="20" height="15" x="2" y="4.5" rx="4" />
+    <polygon points="10 8.5 15 12 10 15.5 10 8.5" fill="currentColor" stroke="none" />
   </svg>
 );
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const { t } = useLanguage();
-  
-  // Update video source 
-  React.useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.src = "/hero-reel.mp4"; // Calm video
-      videoRef.current.play().catch(err => console.log("Video Autoplay blocked: ", err));
+  const { playClickSound } = useSoundDesign();
+  const [activeVideo, setActiveVideo] = useState<0 | 1>(0);
+  const videoRef1 = useRef<HTMLVideoElement>(null);
+  const videoRef2 = useRef<HTMLVideoElement>(null);
+
+  // Seamless auto-switch between the two cinematic videos every 7.5 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveVideo((prev) => (prev === 0 ? 1 : 0));
+    }, 7500);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Ensure both videos start playing smoothly in background
+  useEffect(() => {
+    if (videoRef1.current) {
+      videoRef1.current.playbackRate = 0.75;
+      videoRef1.current.play().catch(() => {});
+    }
+    if (videoRef2.current) {
+      videoRef2.current.playbackRate = 0.85;
+      videoRef2.current.play().catch(() => {});
     }
   }, []);
 
+  const handleVideoSwitch = (index: 0 | 1) => {
+    playClickSound();
+    setActiveVideo(index);
+  };
+
   return (
     <section className={styles.hero} id="home">
-      {/* Premium Video Background */}
+      {/* Dual Video Cinematic Background with crossfade */}
       <div className={styles.backgroundVideoWrapper}>
         <video
-          ref={videoRef}
+          ref={videoRef1}
+          src="/maldives-cinematic.mp4"
           autoPlay
           muted
           loop
           playsInline
-          className={styles.backgroundVideo}
+          className={`${styles.backgroundVideo} ${activeVideo === 0 ? styles.videoActive : styles.videoHidden}`}
         />
+        <video
+          ref={videoRef2}
+          src="/caravanserai-documentary.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className={`${styles.backgroundVideo} ${activeVideo === 1 ? styles.videoActive : styles.videoHidden}`}
+        />
+        <div className={styles.overlay}></div>
       </div>
-
-      <div className={styles.overlay}></div>
 
       {/* Content */}
       <div className={styles.content}>
@@ -83,24 +113,104 @@ export default function Hero() {
             <span>{t('hero_direction')}</span>
           </motion.div>
           
-          {/* Social Icons with Premium Hover Effect */}
+          {/* Premium Call to Action Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }}
+            className={styles.ctaGroup}
+          >
+            <a
+              href="#work"
+              className={styles.primaryBtn}
+              onClick={() => playClickSound()}
+              data-cursor="PORTFOLIO"
+            >
+              {t('hero_cta_projects')}
+            </a>
+            <a
+              href="#contact"
+              className={styles.secondaryBtn}
+              onClick={() => playClickSound()}
+              data-cursor="CONTACT"
+            >
+              {t('hero_cta_contact')}
+            </a>
+          </motion.div>
+          
+          {/* Social Icons with Animated Rotating Color Aura */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 1.2, ease: "easeOut" }}
+            transition={{ duration: 1, delay: 1.3, ease: "easeOut" }}
             className={styles.socialIcons}
           >
-            <a href="#" className={`${styles.socialIcon} ${styles.instagram}`}>
-              <InstagramIcon />
+            <a
+              href="https://instagram.com/atillabarbarossa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialCapsule}
+              data-cursor="INSTAGRAM"
+              onClick={() => playClickSound()}
+              aria-label="Instagram Profile"
+            >
+              <span className={styles.rotatingAura}></span>
+              <span className={styles.iconInner}>
+                <InstagramIcon />
+              </span>
             </a>
-            <a href="#" className={`${styles.socialIcon} ${styles.tiktok}`}>
-              <TikTokIcon />
+            <a
+              href="https://www.tiktok.com/@atillabarbarossa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialCapsule}
+              data-cursor="TIKTOK"
+              onClick={() => playClickSound()}
+              aria-label="TikTok Profile"
+            >
+              <span className={styles.rotatingAura}></span>
+              <span className={styles.iconInner}>
+                <TikTokIcon />
+              </span>
             </a>
-            <a href="#" className={`${styles.socialIcon} ${styles.youtube}`}>
-              <YoutubeIcon />
+            <a
+              href="https://www.youtube.com/@atillabarbarossa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialCapsule}
+              data-cursor="YOUTUBE"
+              onClick={() => playClickSound()}
+              aria-label="YouTube Channel"
+            >
+              <span className={styles.rotatingAura}></span>
+              <span className={styles.iconInner}>
+                <YoutubeIcon />
+              </span>
             </a>
           </motion.div>
         </motion.div>
+      </div>
+
+      {/* Video Switcher Indicators */}
+      <div className={styles.videoSwitcher}>
+        <button
+          type="button"
+          onClick={() => handleVideoSwitch(0)}
+          className={`${styles.switcherDot} ${activeVideo === 0 ? styles.switcherDotActive : ""}`}
+          aria-label="Video 1: Maldives Cinematic"
+        >
+          <span className={styles.dotNum}>01</span>
+          <span className={styles.dotBar}></span>
+        </button>
+        <button
+          type="button"
+          onClick={() => handleVideoSwitch(1)}
+          className={`${styles.switcherDot} ${activeVideo === 1 ? styles.switcherDotActive : ""}`}
+          aria-label="Video 2: Caravanserai Documentary"
+        >
+          <span className={styles.dotNum}>02</span>
+          <span className={styles.dotBar}></span>
+        </button>
       </div>
 
       {/* Scroll Indicator */}

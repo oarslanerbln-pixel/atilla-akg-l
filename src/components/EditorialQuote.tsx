@@ -4,7 +4,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import styles from "./EditorialQuote.module.css";
 
+import { useLanguage } from "@/context/LanguageContext";
+
 export default function EditorialQuote() {
+  const { t } = useLanguage();
+
   return (
     <section className={styles.section}>
       <motion.div
@@ -16,11 +20,11 @@ export default function EditorialQuote() {
       >
         <span className={styles.goldQuoteIcon}>“</span>
         <blockquote className={styles.quoteText}>
-          Authentisches Storytelling entsteht dort, wo <span className={styles.quoteHighlight}>visuelle Perfektion</span> auf echte menschliche Emotionen trifft.
+          {t('quote_text')}
         </blockquote>
         <div className={styles.authorWrapper}>
-          <span className={styles.authorName}>Atilla BARBAROSSA</span>
-          <span className={styles.authorRole}>CREATIVE DIRECTOR & FILMMAKER</span>
+          <span className={styles.authorName}>{t('quote_author')}</span>
+          <span className={styles.authorRole}>{t('quote_role')}</span>
         </div>
       </motion.div>
     </section>

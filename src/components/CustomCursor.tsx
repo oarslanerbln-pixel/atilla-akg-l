@@ -11,6 +11,12 @@ export default function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Only run on devices with fine pointer (mouse)
+    const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!isFinePointer) return;
+
+    document.body.classList.add("has-custom-cursor");
+
     let animationFrameId: number;
     let targetX = -100;
     let targetY = -100;
@@ -21,7 +27,7 @@ export default function CustomCursor() {
       targetX = e.clientX;
       targetY = e.clientY;
       setPos({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+      setIsVisible(true);
 
       const target = e.target as HTMLElement | null;
       if (!target) return;
@@ -65,11 +71,12 @@ export default function CustomCursor() {
     animationFrameId = requestAnimationFrame(render);
 
     return () => {
+      document.body.classList.remove("has-custom-cursor");
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isVisible]);
+  }, []);
 
   if (!isVisible) return null;
 

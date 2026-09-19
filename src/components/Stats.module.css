@@ -31,8 +31,6 @@
   align-items: flex-start;
 }
 
-/* Grid items default to min-width:auto, which lets long content force the
-   track (and the page) wider than the viewport. Let both columns shrink. */
 .grid > * {
   min-width: 0;
 }
@@ -96,10 +94,9 @@
   padding: 3rem 2.5rem;
   border-radius: 0;
   
-  /* Constant Premium Cappuccino state */
   background: var(--bg-card);
-  border: 1px solid rgba(44, 30, 22, 0.2);
-  box-shadow: 0 20px 40px rgba(44, 30, 22, 0.15);
+  border: 1px solid rgba(24, 21, 18, 0.08);
+  box-shadow: 0 15px 35px rgba(24, 21, 18, 0.05);
   
   transition: all 0.4s ease;
   position: relative;
@@ -114,7 +111,7 @@
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.04), transparent);
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
   transform: skewX(-25deg);
   transition: left 0.7s ease;
   z-index: 1;
@@ -130,14 +127,15 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%; /* always on */
+  width: 100%;
   height: 2px;
   background-color: var(--accent-gold);
   z-index: 2;
 }
 
 .socialCard:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(24, 21, 18, 0.08);
 }
 
 .icon {
@@ -166,24 +164,19 @@
 .socialCount {
   font-family: var(--font-playfair), serif;
   font-size: clamp(2rem, 3vw, 2.5rem);
-  font-weight: 400;
+  font-weight: 500;
   color: var(--text-primary);
   line-height: 1.1;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
-
-/* empty */
 
 .socialLabel {
   font-family: var(--font-inter), sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   margin-top: 0.5rem;
 }
-
-/* empty */
 
 /* Right Column (Stats) */
 .statsCol {
@@ -200,7 +193,7 @@
 
 .darkCard {
   background: var(--bg-card);
-  border: 1px solid rgba(44, 30, 22, 0.2);
+  border: 1px solid rgba(24, 21, 18, 0.08);
   color: var(--text-primary);
   padding: 2.5rem 1rem;
   border-radius: 0;
@@ -208,7 +201,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(44, 30, 22, 0.15);
+  box-shadow: 0 12px 30px rgba(24, 21, 18, 0.05);
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
@@ -227,6 +220,7 @@
 
 .darkCard:hover {
   transform: translateY(-4px);
+  box-shadow: 0 16px 35px rgba(24, 21, 18, 0.08);
 }
 
 .statIcon {
@@ -237,7 +231,7 @@
   position: relative;
   z-index: 2;
   transform: scale(1.1);
-  filter: drop-shadow(0 0 15px rgba(194, 165, 126, 0.5));
+  filter: drop-shadow(0 0 12px rgba(194, 165, 126, 0.3));
   transition: all 0.5s ease;
 }
 
@@ -248,23 +242,21 @@
 .statValue {
   font-family: var(--font-playfair), serif;
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.25rem;
   position: relative;
   z-index: 2;
-  text-shadow: none;
+  color: var(--text-primary);
 }
 
 .statLabel {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   position: relative;
   z-index: 2;
 }
-
-/* empty */
 
 .mt4 {
   margin-top: 2rem;
@@ -277,10 +269,9 @@
 }
 
 .bubbleMain {
-  /* Premium sweeping gold reflection animation */
-  background: linear-gradient(135deg, var(--accent-gold-dark) 0%, var(--accent-gold) 30%, var(--accent-gold-light) 50%, var(--accent-gold) 70%, var(--accent-gold-dark) 100%);
-  background-size: 300% 300%;
-  animation: premiumCardShine 8s ease-in-out infinite;
+  /* High-contrast deep obsidian statement card */
+  background: linear-gradient(145deg, var(--bg-ink) 0%, var(--bg-ink-soft) 60%, #2a1f15 100%);
+  border: 1px solid rgba(179, 139, 89, 0.28);
   color: var(--text-on-ink);
   padding: 4.5rem 3rem;
   border-radius: 0;
@@ -288,19 +279,26 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  box-shadow: 0 20px 40px rgba(194, 165, 126, 0.2);
-  transition: transform 0.5s ease;
+  box-shadow: 0 25px 50px rgba(24, 21, 18, 0.15);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.bubbleMain::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, transparent, var(--accent-gold-light), transparent);
 }
 
 .bubbleMain:hover {
   transform: translateY(-5px);
-  box-shadow: 0 25px 50px rgba(194, 165, 126, 0.4);
-}
-
-@keyframes premiumCardShine {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  box-shadow: 0 30px 60px rgba(24, 21, 18, 0.22);
+  border-color: rgba(179, 139, 89, 0.5);
 }
 
 .bubbleIcon {
@@ -316,16 +314,15 @@
   font-weight: 800;
   line-height: 1;
   margin-bottom: 1rem;
-  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Aesthetic bold shadow */
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   letter-spacing: 0.02em;
 }
 
 .bubbleLabel {
   font-size: 1rem;
   text-transform: uppercase;
-  letter-spacing: 0.25em; /* Wide luxury tracking */
+  letter-spacing: 0.25em;
   font-weight: 600;
-  text-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .bubbleSmallGrid {
@@ -336,8 +333,8 @@
 
 .bubbleSmall {
   background: var(--bg-card);
-  border: 1px solid rgba(44, 30, 22, 0.2);
-  box-shadow: 0 10px 30px rgba(44, 30, 22, 0.15);
+  border: 1px solid rgba(24, 21, 18, 0.08);
+  box-shadow: 0 12px 30px rgba(24, 21, 18, 0.05);
   padding: 2.5rem 1rem;
   border-radius: 0;
   display: flex;
@@ -349,6 +346,7 @@
 
 .bubbleSmall:hover {
   transform: translateY(-4px);
+  box-shadow: 0 16px 35px rgba(24, 21, 18, 0.08);
 }
 
 .bSmallVal {
@@ -357,7 +355,6 @@
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
-  text-shadow: none;
 }
 
 .bSmallLab {

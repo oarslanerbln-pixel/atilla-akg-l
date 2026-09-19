@@ -5,8 +5,10 @@ import { motion, Variants } from "framer-motion";
 import { Mail, Phone, Loader2, CheckCircle } from "lucide-react";
 import styles from "./Contact.module.css";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Contact() {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const { playClickSound } = useSoundDesign();
@@ -65,33 +67,17 @@ export default function Contact() {
           {/* Left Column: Philosophy & Process */}
           <div className={styles.infoCol}>
             <motion.div variants={itemVariants}>
-              <h3 className={styles.subtitle}>Philosophie</h3>
-              <h2 className={styles.title}>Zusammenarbeit & Ablauf</h2>
+              <h3 className={styles.subtitle}>{t('contact_subtitle')}</h3>
+              <h2 className={styles.title}>{t('contact_title')}</h2>
               <div className={styles.divider}></div>
             </motion.div>
 
             <motion.div variants={itemVariants} className={styles.paragraphs}>
-              <p>
-                Authentizität trifft auf visuelle Qualität. Meine Community schätzt
-                die ehrliche, ungefilterte Berichterstattung gepaart mit einem Auge
-                für Ästhetik. Ich setze bewusst auf ein dynamisches Setup mit dem
-                neuesten iPhone, um Content zu erschaffen, der sich nicht wie
-                distanzierte Werbung anfühlt, sondern meine Zuschauer direkt mit
-                auf die Reise nimmt – authentisch, nahbar und auf Augenhöhe.
-              </p>
-              <p>
-                Jede Destination und jedes Hotel ist einzigartig. Deshalb arbeite
-                ich nicht mit starren Standardpaketen, sondern entwickle
-                maßgeschneiderte Content-Konzepte.
-              </p>
-              <p>
-                Von der ersten Ideenfindung über die professionelle Umsetzung vor
-                Ort bis hin zum detaillierten Reporting nach der Kampagne: Mein
-                Management und ich garantieren eine absolut zuverlässige,
-                transparente und partnerschaftliche Kommunikation.
-              </p>
+              <p>{t('contact_p1')}</p>
+              <p>{t('contact_p2')}</p>
+              <p>{t('contact_p3')}</p>
               <p className={styles.closing}>
-                Ich freue mich darauf, bald mit Ihnen zusammenzuarbeiten!
+                {t('contact_closing')}
                 <br />
                 <strong>Atilla BARBAROSSA</strong>
               </p>
@@ -101,25 +87,40 @@ export default function Contact() {
           {/* Right Column: Contact Info & Form */}
           <div className={styles.contactCol}>
             <motion.div variants={itemVariants}>
-              <h3 className={styles.subtitle}>Kontakt</h3>
-              <h2 className={styles.title}>Let's Connect</h2>
+              <h3 className={styles.subtitle}>{t('contact_form_subtitle')}</h3>
+              <h2 className={styles.title}>{t('contact_form_title')}</h2>
               <div className={styles.divider}></div>
             </motion.div>
 
             <motion.div variants={itemVariants} className={styles.contactLinks}>
-              <a href="mailto:a@barbarossafilms.de" className={styles.contactLink}>
+              <a
+                href="mailto:a@barbarossafilms.de"
+                className={styles.contactLink}
+                onClick={() => playClickSound()}
+                data-cursor="EMAIL"
+              >
                 <div className={styles.iconBox}>
                   <Mail className={styles.icon} />
                 </div>
                 <span>a@barbarossafilms.de</span>
               </a>
-              <a href="mailto:lisaweber@barbarossafilms.de" className={styles.contactLink}>
+              <a
+                href="mailto:lisaweber@barbarossafilms.de"
+                className={styles.contactLink}
+                onClick={() => playClickSound()}
+                data-cursor="MANAGEMENT"
+              >
                 <div className={styles.iconBox}>
                   <Mail className={styles.icon} />
                 </div>
                 <span>lisaweber@barbarossafilms.de</span>
               </a>
-              <a href="tel:+4917672725165" className={styles.contactLink}>
+              <a
+                href="tel:+4917672725165"
+                className={styles.contactLink}
+                onClick={() => playClickSound()}
+                data-cursor="CALL"
+              >
                 <div className={styles.iconBox}>
                   <Phone className={styles.icon} />
                 </div>
@@ -130,7 +131,7 @@ export default function Contact() {
             <motion.form variants={itemVariants} className={styles.form} onSubmit={handleSubmit}>
               <input
                 type="text"
-                placeholder="NAME"
+                placeholder={t('contact_name')}
                 className={styles.input}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -139,7 +140,7 @@ export default function Contact() {
               />
               <input
                 type="email"
-                placeholder="E-MAIL"
+                placeholder={t('contact_email')}
                 className={styles.input}
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -147,7 +148,7 @@ export default function Contact() {
                 disabled={status === "loading" || status === "success"}
               />
               <textarea
-                placeholder="NACHRICHT"
+                placeholder={t('contact_message')}
                 className={styles.textarea}
                 rows={4}
                 value={formData.message}
@@ -160,19 +161,20 @@ export default function Contact() {
                 type="submit" 
                 className={`${styles.submitButton} ${status === "success" ? styles.success : ""}`}
                 disabled={status === "loading" || status === "success"}
+                data-cursor="SUBMIT"
               >
-                {status === "idle" && "ANFRAGE SENDEN"}
+                {status === "idle" && t('contact_send')}
                 {status === "loading" && (
                   <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
-                    <Loader2 className={styles.spinIcon} size={18} /> SENDET...
+                    <Loader2 className={styles.spinIcon} size={18} /> {t('contact_sending')}
                   </span>
                 )}
                 {status === "success" && (
                   <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
-                    <CheckCircle size={18} /> ERFOLGREICH GESENDET
+                    <CheckCircle size={18} /> {t('contact_success')}
                   </span>
                 )}
-                {status === "error" && "FEHLER - ERNEUT VERSUCHEN"}
+                {status === "error" && t('contact_error')}
               </button>
             </motion.form>
           </div>

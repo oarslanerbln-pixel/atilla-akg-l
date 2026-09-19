@@ -6,6 +6,7 @@ import { Users, MapPin, Target, Eye } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
 import styles from "./Stats.module.css";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSoundDesign } from "@/hooks/useSoundDesign";
 
 // Custom Social Icons
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -61,6 +62,7 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 
 export default function Stats() {
   const { t } = useLanguage();
+  const { playClickSound } = useSoundDesign();
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -115,6 +117,7 @@ export default function Stats() {
               rel="noopener noreferrer"
               className={styles.socialCard}
               data-cursor="INSTAGRAM"
+              onClick={() => playClickSound()}
             >
               <InstagramIcon className={styles.icon} />
               <div className={styles.socialText}>
@@ -131,6 +134,7 @@ export default function Stats() {
               rel="noopener noreferrer"
               className={styles.socialCard}
               data-cursor="TIKTOK"
+              onClick={() => playClickSound()}
             >
               <TikTokIcon className={styles.icon} />
               <div className={styles.socialText}>
@@ -147,6 +151,7 @@ export default function Stats() {
               rel="noopener noreferrer"
               className={styles.socialCard}
               data-cursor="YOUTUBE"
+              onClick={() => playClickSound()}
             >
               <YoutubeIcon className={styles.icon} />
               <div className={styles.socialText}>
