@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import { motion, Variants } from "framer-motion";
-import { Play, Pause, Volume2, VolumeX, Heart, MessageCircle, Send, Bookmark } from "lucide-react";
+import { Play, Volume2, VolumeX, Heart, MessageCircle, Send, Bookmark } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
 import styles from "./CaseStudy.module.css";
 import { useLanguage } from "@/context/LanguageContext";
@@ -80,15 +80,19 @@ export default function CaseStudy() {
               onClick={handlePlayPause}
               data-cursor={isPlaying ? "PAUSE" : "PLAY"}
             >
+              {/* The poster was a stock photo pulled from images.pexels.com at
+                  runtime — a third-party request on every visit, standing in for
+                  the reel it sits on top of. `#t=0.1` paints the clip's own first
+                  frame instead, and `preload="metadata"` fetches only that until
+                  the visitor presses play. */}
               <video
                 ref={videoRef}
-                src="/hero-reel.mp4"
+                src="/hero-reel.mp4#t=0.1"
+                preload="metadata"
                 className={styles.image}
                 loop
                 playsInline
                 muted={isMuted}
-                poster="https://images.pexels.com/photos/15792224/pexels-photo-15792224.jpeg?auto=compress&cs=tinysrgb&w=800&q=80"
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
               />
               {!isPlaying && (
                 <div className={styles.playButton}>

@@ -1,20 +1,21 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion, Variants, useInView, AnimatePresence } from "framer-motion";
 import { Play, X } from "lucide-react";
 import styles from "./FeaturedWork.module.css";
 import { useLanguage } from "@/context/LanguageContext";
+import type { TranslationKeys } from "@/i18n/translations";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
+import { useScrollLock } from "@/hooks/useScrollLock";
 
 interface ProjectItem {
   id: string;
-  categoryKey: string;
-  titleKey: string;
-  descKey: string;
-  metricKey: string;
-  typeKey: string;
-  poster: string;
+  categoryKey: TranslationKeys;
+  titleKey: TranslationKeys;
+  descKey: TranslationKeys;
+  metricKey: TranslationKeys;
+  typeKey: TranslationKeys;
   videoSrc: string;
   playbackRate?: number;
   trimEnd?: number;
@@ -28,7 +29,6 @@ const rawProjects: ProjectItem[] = [
     descKey: "project_1_desc",
     metricKey: "project_1_metric",
     typeKey: "project_1_type",
-    poster: "https://images.pexels.com/photos/15792224/pexels-photo-15792224.jpeg?auto=compress&cs=tinysrgb&w=800&q=80",
     videoSrc: "/hero-reel.mp4",
   },
   {
@@ -38,7 +38,6 @@ const rawProjects: ProjectItem[] = [
     descKey: "project_2_desc",
     metricKey: "project_2_metric",
     typeKey: "project_2_type",
-    poster: "https://images.pexels.com/photos/3889742/pexels-photo-3889742.jpeg?auto=compress&cs=tinysrgb&w=800&q=80",
     videoSrc: "/maldives-cinematic.mp4",
     playbackRate: 0.7,
     trimEnd: 4,
@@ -50,20 +49,28 @@ const rawProjects: ProjectItem[] = [
     descKey: "project_3_desc",
     metricKey: "project_3_metric",
     typeKey: "project_3_type",
-    poster: "https://images.pexels.com/photos/3278215/pexels-photo-3278215.jpeg?auto=compress&cs=tinysrgb&w=800&q=80",
     videoSrc: "/caravanserai-documentary.mp4",
   },
 ];
 
+/**
+ * Card preview for one project.
+ *
+ * The poster used to be a stock photo fetched from images.pexels.com on every
+ * page view — a third-party request that hands the visitor's IP to a US host
+ * before they have consented to anything, and a stock image standing in for
+ * work that is supposedly the portfolio. The still frame now comes from the
+ * clip itself: the `#t=0.1` fragment makes the browser seek to and paint that
+ * frame, and `preload="metadata"` keeps it to the header plus that one frame
+ * until the card actually scrolls into view.
+ */
 function InViewVideo({
   src,
-  poster,
   className,
   playbackRate = 1.0,
   trimEnd,
 }: {
-  src?: string;
-  poster?: string;
+  src: string;
   className?: string;
   playbackRate?: number;
   trimEnd?: number;
@@ -72,13 +79,22 @@ function InViewVideo({
   const isInView = useInView(videoRef, { margin: "-100px" });
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = playbackRate;
-      if (isInView) {
-        videoRef.current.play().catch(() => {});
-      } else {
-        videoRef.current.pause();
-      }
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Someone who asked their system for less motion did not ask for three
+    // clips looping behind the copy.
+    const wantsLessMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (wantsLessMotion) {
+      video.pause();
+      return;
+    }
+
+    video.playbackRate = playbackRate;
+    if (isInView) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
     }
   }, [isInView, playbackRate]);
 
@@ -94,8 +110,8 @@ function InViewVideo({
   return (
     <video
       ref={videoRef}
-      src={src}
-      poster={poster}
+      src={`${src}#t=0.1`}
+      preload="metadata"
       loop={!trimEnd}
       muted
       playsInline
@@ -125,17 +141,34 @@ export default function FeaturedWork() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
   };
 
-  const openModal = (project: ProjectItem) => {
+  // Remembered so focus goes back to the card the visitor opened, rather than
+  // to the top of the document once the lightbox closes.
+  const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const openModal = (project: ProjectItem, trigger: HTMLButtonElement) => {
     playClickSound();
+    lastTriggerRef.current = trigger;
     setActiveProject(project);
-    document.body.style.overflow = "hidden";
   };
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     playClickSound();
     setActiveProject(null);
-    document.body.style.overflow = "auto";
-  };
+    lastTriggerRef.current?.focus();
+  }, [playClickSound]);
+
+  useScrollLock(activeProject !== null);
+
+  // A lightbox that only closes by clicking its backdrop leaves keyboard users
+  // stuck inside it.
+  useEffect(() => {
+    if (!activeProject) return;
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeModal();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [activeProject, closeModal]);
 
   return (
     <section id="work" className={styles.section}>
@@ -160,18 +193,16 @@ export default function FeaturedWork() {
           className={styles.grid}
         >
           {rawProjects.map((project) => (
-            <motion.div
+            <motion.article
               key={project.id}
               variants={itemVariants}
               className={styles.workCard}
               data-cursor="PLAY"
-              onClick={() => openModal(project)}
             >
               <div className={styles.mediaWrapper}>
-                <span className={styles.categoryTag}>{t(project.categoryKey as any)}</span>
+                <span className={styles.categoryTag}>{t(project.categoryKey)}</span>
                 <InViewVideo
                   src={project.videoSrc}
-                  poster={project.poster}
                   playbackRate={project.playbackRate}
                   trimEnd={project.trimEnd}
                   className={styles.mediaVideo}
@@ -182,17 +213,31 @@ export default function FeaturedWork() {
                   </div>
                   <span className={styles.playText}>{t('work_watch')}</span>
                 </div>
+
+                {/* The card used to be a <div onClick>: reachable by mouse
+                    only. A button cannot legally wrap the heading and copy
+                    below, so it covers the media instead and carries the
+                    project title as its accessible name. */}
+                <button
+                  type="button"
+                  className={styles.cardTrigger}
+                  onClick={(event) => openModal(project, event.currentTarget)}
+                >
+                  <span className={styles.srOnly}>
+                    {t('work_watch')}: {t(project.titleKey)}
+                  </span>
+                </button>
               </div>
 
               <div className={styles.cardContent}>
-                <h3 className={styles.projectTitle}>{t(project.titleKey as any)}</h3>
-                <p className={styles.projectDesc}>{t(project.descKey as any)}</p>
+                <h3 className={styles.projectTitle}>{t(project.titleKey)}</h3>
+                <p className={styles.projectDesc}>{t(project.descKey)}</p>
                 <div className={styles.metricBadge}>
-                  <span>{t(project.metricKey as any)}</span>
-                  <span>{t(project.typeKey as any)}</span>
+                  <span>{t(project.metricKey)}</span>
+                  <span>{t(project.typeKey)}</span>
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </motion.div>
       </div>
@@ -216,7 +261,7 @@ export default function FeaturedWork() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className={styles.modalHeader}>
-                <h4 className={styles.modalTitle}>{t(activeProject.titleKey as any)}</h4>
+                <h4 className={styles.modalTitle}>{t(activeProject.titleKey)}</h4>
                 <button
                   type="button"
                   className={styles.modalClose}
