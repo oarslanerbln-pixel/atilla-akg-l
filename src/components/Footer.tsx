@@ -3,6 +3,7 @@
 import Link from "next/link";
 import React from "react";
 import { motion } from "framer-motion";
+import { socialProfiles } from "@/lib/site";
 import styles from "./Footer.module.css";
 import RevealText from "./RevealText";
 import { useLanguage } from "@/context/LanguageContext";
@@ -35,7 +36,7 @@ export default function Footer() {
           <div className={styles.bottomBar}>
             <div className={styles.socials}>
               <a
-                href="https://instagram.com/atillabarbarossa"
+                href={socialProfiles.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="magnetic"
@@ -45,7 +46,7 @@ export default function Footer() {
                 INSTAGRAM
               </a>
               <a
-                href="https://tiktok.com/@atillabarbarossa"
+                href={socialProfiles.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="magnetic"
@@ -55,7 +56,7 @@ export default function Footer() {
                 TIKTOK
               </a>
               <a
-                href="https://youtube.com/@atillabarbarossa"
+                href={socialProfiles.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="magnetic"

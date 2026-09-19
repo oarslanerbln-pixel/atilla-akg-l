@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { socialProfiles } from "@/lib/site";
 import styles from "./Hero.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
@@ -166,7 +167,7 @@ export default function Hero() {
             className={styles.socialIcons}
           >
             <a
-              href="https://instagram.com/atillabarbarossa"
+              href={socialProfiles.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialCapsule}
@@ -180,7 +181,7 @@ export default function Hero() {
               </span>
             </a>
             <a
-              href="https://www.tiktok.com/@atillabarbarossa"
+              href={socialProfiles.tiktok}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialCapsule}
@@ -194,7 +195,7 @@ export default function Hero() {
               </span>
             </a>
             <a
-              href="https://www.youtube.com/@atillabarbarossa"
+              href={socialProfiles.youtube}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialCapsule}

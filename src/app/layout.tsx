@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { contact, siteUrl, socialProfiles } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,21 +14,6 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   display: "swap",
 });
-
-/**
- * Absolute URLs in the metadata resolve against this. It was pinned to the
- * custom domain, so every preview link from a Vercel preview or the
- * *.vercel.app deployment pointed at a host that may not be serving this
- * build yet. Vercel supplies the deployment host; the custom domain stays the
- * production default.
- */
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_ENV === "production"
-    ? "https://atillabarbarossa.com"
-    : process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "https://atillabarbarossa.com");
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -55,6 +41,28 @@ export const metadata: Metadata = {
 
 import { Providers } from "./Providers";
 
+/**
+ * Structured data for the person the site is about.
+ *
+ * A search engine could previously infer the name only from the headline. The
+ * fields here are the ones the site already states out loud — nothing is
+ * invented, and the postal address is left out until the imprint carries it.
+ */
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Atilla Akgül",
+  alternateName: "Atilla Barbarossa",
+  jobTitle: "Creative Director & Filmmaker",
+  description:
+    "Global visual storyteller, creative director and premium filmmaker specializing in luxury hospitality, executive aviation, and high-end lifestyle.",
+  url: siteUrl,
+  email: `mailto:${contact.email}`,
+  telephone: contact.phone,
+  knowsLanguage: ["de", "en", "tr"],
+  sameAs: Object.values(socialProfiles),
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -63,6 +71,12 @@ export default function RootLayout({
   return (
     <html lang="de" className={`${inter.variable} ${playfair.variable}`}>
       <body>
+        <script
+          type="application/ld+json"
+          // The object is a literal defined above, not anything a visitor can
+          // reach; JSON.stringify is what serialises it.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
         <Providers>
           {children}
         </Providers>
