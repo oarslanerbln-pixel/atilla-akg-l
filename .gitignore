@@ -43,3 +43,13 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# --- added: secrets & oversized media ---
+.env
+.env.*
+node_modules/
+.next/
+.vercel/
+.agents/
+.vscode/
+*.mp4
