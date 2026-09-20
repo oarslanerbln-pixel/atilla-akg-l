@@ -8,6 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import type { TranslationKeys } from "@/i18n/translations";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useScrollLock } from "@/hooks/useScrollLock";
+import { usePosterFrame } from "@/hooks/usePosterFrame";
 
 interface ProjectItem {
   id: string;
@@ -77,6 +78,7 @@ function InViewVideo({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(videoRef, { margin: "-100px" });
+  usePosterFrame(videoRef);
 
   useEffect(() => {
     const video = videoRef.current;

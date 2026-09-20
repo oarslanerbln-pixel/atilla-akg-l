@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { Play, Volume2, VolumeX, Heart, MessageCircle, Send, Bookmark } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
+import { usePosterFrame } from "@/hooks/usePosterFrame";
 import styles from "./CaseStudy.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
@@ -12,6 +13,7 @@ export default function CaseStudy() {
   const { t } = useLanguage();
   const { playClickSound } = useSoundDesign();
   const videoRef = useRef<HTMLVideoElement>(null);
+  usePosterFrame(videoRef);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
 
