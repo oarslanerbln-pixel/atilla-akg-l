@@ -8,7 +8,6 @@ import { useLanguage } from "@/context/LanguageContext";
 import type { TranslationKeys } from "@/i18n/translations";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useScrollLock } from "@/hooks/useScrollLock";
-import { usePosterFrame } from "@/hooks/usePosterFrame";
 
 interface ProjectItem {
   id: string;
@@ -17,6 +16,7 @@ interface ProjectItem {
   descKey: TranslationKeys;
   metricKey: TranslationKeys;
   typeKey: TranslationKeys;
+  poster: string;
   videoSrc: string;
   playbackRate?: number;
   trimEnd?: number;
@@ -30,6 +30,7 @@ const rawProjects: ProjectItem[] = [
     descKey: "project_1_desc",
     metricKey: "project_1_metric",
     typeKey: "project_1_type",
+    poster: "/posters/hero-reel.webp",
     videoSrc: "/hero-reel.mp4",
   },
   {
@@ -39,6 +40,7 @@ const rawProjects: ProjectItem[] = [
     descKey: "project_2_desc",
     metricKey: "project_2_metric",
     typeKey: "project_2_type",
+    poster: "/posters/maldives-cinematic.webp",
     videoSrc: "/maldives-cinematic.mp4",
     playbackRate: 0.7,
     trimEnd: 4,
@@ -50,6 +52,7 @@ const rawProjects: ProjectItem[] = [
     descKey: "project_3_desc",
     metricKey: "project_3_metric",
     typeKey: "project_3_type",
+    poster: "/posters/caravanserai-documentary.webp",
     videoSrc: "/caravanserai-documentary.mp4",
   },
 ];
@@ -57,28 +60,30 @@ const rawProjects: ProjectItem[] = [
 /**
  * Card preview for one project.
  *
- * The poster used to be a stock photo fetched from images.pexels.com on every
- * page view — a third-party request that hands the visitor's IP to a US host
- * before they have consented to anything, and a stock image standing in for
- * work that is supposedly the portfolio. The still frame now comes from the
- * clip itself: the `#t=0.1` fragment makes the browser seek to and paint that
- * frame, and `preload="metadata"` keeps it to the header plus that one frame
- * until the card actually scrolls into view.
+ * The poster was a stock photo fetched from images.pexels.com on every page
+ * view — a third-party request handing the visitor's IP to a US host before
+ * any consent, and stock imagery standing in for the work it illustrated.
+ * Asking the browser to paint the clip's own first frame replaced it, but that
+ * only ever worked by request. It is now a self-hosted still cut from the
+ * clip, so the card needs nothing from the video until it scrolls into view:
+ * `preload="none"` means a visitor who never reaches this section downloads
+ * not one frame of it.
  */
 function InViewVideo({
   src,
+  poster,
   className,
   playbackRate = 1.0,
   trimEnd,
 }: {
   src: string;
+  poster: string;
   className?: string;
   playbackRate?: number;
   trimEnd?: number;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(videoRef, { margin: "-100px" });
-  usePosterFrame(videoRef);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -112,8 +117,9 @@ function InViewVideo({
   return (
     <video
       ref={videoRef}
-      src={`${src}#t=0.1`}
-      preload="metadata"
+      src={src}
+      poster={poster}
+      preload="none"
       loop={!trimEnd}
       muted
       playsInline
@@ -205,6 +211,7 @@ export default function FeaturedWork() {
                 <span className={styles.categoryTag}>{t(project.categoryKey)}</span>
                 <InViewVideo
                   src={project.videoSrc}
+                  poster={project.poster}
                   playbackRate={project.playbackRate}
                   trimEnd={project.trimEnd}
                   className={styles.mediaVideo}
@@ -277,6 +284,7 @@ export default function FeaturedWork() {
               <div className={styles.modalVideoWrapper}>
                 <video
                   src={activeProject.videoSrc}
+                  poster={activeProject.poster}
                   controls
                   autoPlay
                   playsInline
