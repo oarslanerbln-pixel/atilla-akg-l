@@ -4,7 +4,6 @@ import React, { useRef, useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { Play, Volume2, VolumeX, Heart, MessageCircle, Send, Bookmark } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
-import { usePosterFrame } from "@/hooks/usePosterFrame";
 import styles from "./CaseStudy.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
@@ -13,7 +12,6 @@ export default function CaseStudy() {
   const { t } = useLanguage();
   const { playClickSound } = useSoundDesign();
   const videoRef = useRef<HTMLVideoElement>(null);
-  usePosterFrame(videoRef);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
 
@@ -84,13 +82,14 @@ export default function CaseStudy() {
             >
               {/* The poster was a stock photo pulled from images.pexels.com at
                   runtime — a third-party request on every visit, standing in for
-                  the reel it sits on top of. `#t=0.1` paints the clip's own first
-                  frame instead, and `preload="metadata"` fetches only that until
-                  the visitor presses play. */}
+                  the reel it sits on top of. It is now a self-hosted still cut
+                  from the clip, which also means nothing of the video is
+                  fetched until the visitor presses play. */}
               <video
                 ref={videoRef}
-                src="/hero-reel.mp4#t=0.1"
-                preload="metadata"
+                src="/hero-reel.mp4"
+                poster="/posters/hero-reel.webp"
+                preload="none"
                 className={styles.image}
                 loop
                 playsInline
