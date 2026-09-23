@@ -30,7 +30,10 @@ Always utilize CSS variables defined in `src/app/globals.css`:
   - `--text-primary: #181512` (Obsidian charcoal)
   - `--text-secondary: #5a524a` (Warm graphite)
   - `--text-on-ink: #fcfbf9` (Light text on ink surfaces)
-  - Headings: `var(--font-playfair)` (Serif)
+  - Section headings: `var(--font-display)` — Inter Tight 300, plain ink,
+    mixed case ("Projekte", not "PROJEKTE"). The gold lives in the small
+    uppercase eyebrow above each one, not in the heading itself.
+  - Brand name, editorial quote, figures: `var(--font-playfair)` (Serif)
   - Body & UI: `var(--font-inter)` (Clean Sans-serif)
 - **Accents:**
   - `--accent-gold: #b38b59`

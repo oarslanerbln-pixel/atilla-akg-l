@@ -32,6 +32,17 @@
   /* Transitions */
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
+  /* Section headings.
+     These were Playfair Display with a gold gradient sweeping across them on
+     an infinite loop — five sections each announcing themselves the same loud
+     way. They are now a light grotesk in plain ink, set in mixed case: Inter
+     Tight shares its skeleton with the body face, so the page reads as one
+     voice, and the gold is left to the small eyebrow above each heading where
+     it is rare enough to mean something. The narrower letterforms also give
+     long German compounds more room before they have to break. Playfair
+     stays for the brand name, the quote and the figures. */
+  --font-display: var(--font-inter-tight), var(--font-inter), sans-serif;
+
   /* Stacking order.
      The fixed layers were competing with raw literals — 999, 1000, 1002,
      9999, 99997, 99998, 99999 and 999999 — and the numbers no longer said

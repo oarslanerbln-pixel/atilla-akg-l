@@ -40,7 +40,7 @@ export const translations = {
     stats_reach_post: "Post Ø",
     
     // Services
-    services_title: "LEISTUNGEN",
+    services_title: "Leistungen",
     services_subtitle: "Service Portfolio",
     service_1_title: "Authentische Hotel- & Destinations-Features",
     service_1_desc: "Organische Einbindung und fesselndes Storytelling direkt vor Ort, um die Einzigartigkeit der Location für anspruchsvolle Reisende spürbar zu machen.",
@@ -54,7 +54,7 @@ export const translations = {
     services_disclaimer: "Sämtliche Leistungen, Paketpreise und Format-Kombinationen (z. B. Story-Sequenzen, YouTube-Vlogs oder exklusive TikTok-Serien) werden individuell auf die Ziele der jeweiligen Kampagne abgestimmt.",
     
     // FeaturedWork
-    work_title: "PROJEKTE",
+    work_title: "Projekte",
     work_subtitle: "Selected Portfolio",
     project_1_title: "Novotel Bosphorus Istanbul",
     project_1_cat: "Hospitality & Resorts",
@@ -93,7 +93,7 @@ export const translations = {
     quote_role: "CREATIVE DIRECTOR & FILMMAKER",
     
     // Contact
-    contact_title: "ZUSAMMENARBEIT & ABLAUF",
+    contact_title: "Zusammenarbeit & Ablauf",
     contact_subtitle: "Philosophie",
     contact_form_title: "Let's Connect",
     contact_form_subtitle: "Bereit für das nächste Level?",
@@ -167,7 +167,7 @@ export const translations = {
     stats_reach_post: "Post Avg.",
     
     // Services
-    services_title: "SERVICES",
+    services_title: "Services",
     services_subtitle: "Service Portfolio",
     service_1_title: "Authentic Hotel & Destination Features",
     service_1_desc: "Organic on-site integration and captivating visual storytelling designed to highlight the true luxury and uniqueness of your location.",
@@ -181,7 +181,7 @@ export const translations = {
     services_disclaimer: "All services, package rates, and format combinations (e.g. dedicated Story sequences, YouTube vlogs, or multi-part TikTok series) are custom-tailored to each brand's specific goals.",
     
     // FeaturedWork
-    work_title: "WORK",
+    work_title: "Work",
     work_subtitle: "Selected Portfolio",
     project_1_title: "Novotel Bosphorus Istanbul",
     project_1_cat: "Hospitality & Resorts",
@@ -220,7 +220,7 @@ export const translations = {
     quote_role: "CREATIVE DIRECTOR & FILMMAKER",
     
     // Contact
-    contact_title: "COLLABORATION & PROCESS",
+    contact_title: "Collaboration & Process",
     contact_subtitle: "Philosophy",
     contact_form_title: "Let's Connect",
     contact_form_subtitle: "Ready for the next level?",
@@ -294,7 +294,7 @@ export const translations = {
     stats_reach_post: "Gönderi Ort.",
     
     // Services
-    services_title: "HİZMETLER",
+    services_title: "Hizmetler",
     services_subtitle: "Hizmet Portföyü",
     service_1_title: "Otantik Otel ve Destinasyon Tanıtımları",
     service_1_desc: "Mekanın eşsiz lüksünü ve atmosferini anında hissettirmek için yerinde organik entegrasyon ve büyüleyici sinematik anlatım.",
@@ -308,7 +308,7 @@ export const translations = {
     services_disclaimer: "Tüm hizmetler, paket fiyatları ve format kombinasyonları (örneğin özel Hikaye serileri, YouTube vlogları veya çok bölümlü TikTok serileri), her markanın özel hedeflerine göre uyarlanır.",
     
     // FeaturedWork
-    work_title: "PROJELER",
+    work_title: "Projeler",
     work_subtitle: "Seçilmiş Çalışmalar",
     project_1_title: "Novotel Bosphorus Istanbul",
     project_1_cat: "Otelcilik ve Tatil Köyleri",
@@ -347,7 +347,7 @@ export const translations = {
     quote_role: "KREATİF DİREKTÖR & YÖNETMEN",
     
     // Contact
-    contact_title: "İŞ BİRLİĞİ & SÜREÇ",
+    contact_title: "İş Birliği & Süreç",
     contact_subtitle: "Felsefe",
     contact_form_title: "İletişime Geçin",
     contact_form_subtitle: "Yeni projeler için hazır mısınız?",
