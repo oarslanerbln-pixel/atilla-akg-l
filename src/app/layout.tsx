@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Inter_Tight, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { contact, siteUrl, socialProfiles } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+// Section headings. Only the one weight they use: a static 300 is a fraction
+// of the variable file, and nothing else on the page asks for this family.
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  weight: "300",
+  variable: "--font-inter-tight",
   display: "swap",
 });
 
@@ -69,7 +78,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="de" className={`${inter.variable} ${interTight.variable} ${playfair.variable}`}>
       <body>
         <script
           type="application/ld+json"

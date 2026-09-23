@@ -109,7 +109,15 @@ export default function Navbar() {
               aria-expanded={langOpen}
               aria-haspopup="menu"
               aria-label={`Sprache: ${activeLang}`}
-              onClick={() => setLangOpen((open) => !open)}
+              onClick={(event) => {
+                // A mouse has already opened the menu on hover by the time it
+                // clicks, so toggling here shut it again under the pointer —
+                // clicking the trigger closed the menu it had just opened.
+                // Keyboard activation arrives with detail 0 and toggles; a
+                // pointer click only makes sure the menu is open.
+                if (event.detail === 0) setLangOpen((open) => !open);
+                else setLangOpen(true);
+              }}
             >
               {activeLang}
               <svg className={`${styles.chevron} ${langOpen ? styles.chevronOpen : ""}`} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">

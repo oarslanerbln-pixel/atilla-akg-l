@@ -48,6 +48,5 @@ next-env.d.ts
 /*.mp4.mp4
 /hero-video.mp4.mp4
 
-# editor / agent local state
+# editor local state
 /.vscode
-/.agents
