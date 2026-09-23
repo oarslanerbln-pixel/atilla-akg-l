@@ -12,6 +12,22 @@
   justify-content: center;
   overflow: hidden;
   cursor: pointer; /* Suggests skippable */
+  /* Failsafe that needs no JavaScript. The overlay is server-rendered so the
+     page never flashes before it — which means that if the bundle fails to
+     arrive (a dropped chunk on mobile data, a blocker, a proxy), nothing is
+     left to remove it and the site stays covered for good. <noscript> only
+     covers JavaScript being switched off, not JavaScript that never loads.
+     Working JS unmounts this well before the delay: ~2.2s on a first visit,
+     ~1s for a returning one. */
+  animation: preloaderFailsafe 0.6s ease 6s forwards;
+}
+
+@keyframes preloaderFailsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 .cinematicWrapper {
