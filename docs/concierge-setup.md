@@ -57,7 +57,31 @@ Atilla şu an normal WhatsApp kullandığı için concierge'e **ayrı bir numara
 2. Developers → API keys → `STRIPE_SECRET_KEY`.
 3. Developers → Webhooks → endpoint: `https://SITE/api/webhooks/stripe`. Olaylar: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.expired`. Signing secret → `STRIPE_WEBHOOK_SECRET`.
 
-## 6. Vercel
+## 6. Şifreleme anahtarları
+Müşteri adları, telefon numaraları, Instagram kimlikleri, e-postalar ve bütün konuşmalar veritabanına yazılmadan önce sunucuda **AES-256-GCM** ile şifrelenir. Supabase'e veya bir yedeğe erişen biri yalnızca anlamsız metin görür.
+
+1. İki ayrı anahtar üretin (komutu iki kez çalıştırın):
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+   ```
+2. `CONCIERGE_ENCRYPTION_KEYS=1:<birinci anahtar>` ve `CONCIERGE_INDEX_KEY=<ikinci anahtar>` olarak girin.
+3. **İki anahtarı da bir şifre yöneticisine (1Password, Bitwarden) kaydedin.** Anahtar kaybolursa kayıtlı müşteri verileri bir daha okunamaz.
+4. Anahtar yenileme (ör. yılda bir veya bir sızıntı şüphesinde): yeni anahtarı başa ekleyin → `2:<yeni>,1:<eski>`. Yeni veriler yeni anahtarla yazılır, eskiler okunmaya devam eder. `CONCIERGE_INDEX_KEY` değiştirilmez.
+
+Not: Supabase Table Editor'de `contacts`, `messages` ve `bookings` tablolarındaki kişisel alanlar bu yüzden `v1.1.…` şeklinde görünür. Okunabilir görünüm, planlanan CRM panelinde gelecek.
+
+**Diğer korumalar**
+- Meta ve Stripe webhook'ları imza ile doğrulanır; sahte istekler reddedilir.
+- Stripe ödemesi yalnızca tutar, para birimi ve oturum rezervasyonla birebir eşleşirse onaylanır. Eşleşmezse Atilla'ya uyarı gider.
+- Bir kişi bir saatte 30'dan fazla mesaj atarsa (spam, bot, maliyet saldırısı) bot o sohbette durur ve Atilla'ya haber verilir.
+- Veritabanı herkese açık API rollerine (`anon`, `authenticated`) tamamen kapalıdır; yalnızca sunucu erişebilir.
+
+**Veri saklama (DSGVO/KVKK):** `purge_stale_personal_data()` fonksiyonu 24 aydır hareketsiz, ödenmiş rezervasyonu olmayan müşterileri ve eski mesajları siler. Supabase → Database → Extensions'dan `pg_cron`'u açıp SQL Editor'de bir kez çalıştırın:
+```sql
+select cron.schedule('concierge-purge', '30 3 * * *', 'select public.purge_stale_personal_data()');
+```
+
+## 7. Vercel
 Bütün değişkenleri girin (`SITE_URL` dahil) ve yeniden deploy edin. Webhook'lar birkaç dakika sürebilen işleri cevap döndükten sonra çalıştırdığı için Fluid Compute açık kalmalı (varsayılan olarak açık).
 
 ---

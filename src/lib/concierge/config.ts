@@ -1,3 +1,5 @@
+import 'server-only';
+
 export type Lang = 'de' | 'en' | 'tr';
 export type Channel = 'whatsapp' | 'instagram';
 
@@ -10,6 +12,10 @@ export const CONCIERGE = {
   historyLimit: 40,
   maxAgentIterations: 8,
   holdHours: 24,
+  /** Longer customer messages are cut before they are stored or sent to the model. */
+  maxInboundChars: 4000,
+  /** More customer messages than this within an hour pause the bot and alert Atilla. */
+  maxMessagesPerHour: 30,
   graphVersion: process.env.META_GRAPH_VERSION ?? 'v23.0',
   commentKeywords: (process.env.IG_COMMENT_KEYWORDS ?? 'tur,tour,reise,info,preis,price,fiyat')
     .split(',')

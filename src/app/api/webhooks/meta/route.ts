@@ -1,22 +1,30 @@
 import { after } from 'next/server';
 import { jobsFromMetaWebhook } from '@/lib/concierge/inbound';
 import { verifyMetaSignature } from '@/lib/concierge/meta';
+import { safeEqual } from '@/lib/concierge/crypto';
 
 // Agent runs continue after the 200 response, and a run includes the debounce and the model call.
 export const maxDuration = 300;
+
+// Meta batches at most a few hundred KB per delivery; anything larger is not from Meta.
+const MAX_BODY_BYTES = 1_000_000;
 
 /** Meta's one-time subscription handshake. */
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const verifyToken = process.env.META_VERIFY_TOKEN;
-  if (verifyToken && params.get('hub.mode') === 'subscribe' && params.get('hub.verify_token') === verifyToken) {
+  if (verifyToken && params.get('hub.mode') === 'subscribe' && safeEqual(params.get('hub.verify_token') ?? '', verifyToken)) {
     return new Response(params.get('hub.challenge') ?? '', { status: 200 });
   }
   return new Response('Forbidden', { status: 403 });
 }
 
 export async function POST(request: Request) {
+  if (Number(request.headers.get('content-length') ?? 0) > MAX_BODY_BYTES) {
+    return new Response('Payload too large', { status: 413 });
+  }
   const raw = await request.text();
+  if (raw.length > MAX_BODY_BYTES) return new Response('Payload too large', { status: 413 });
   if (!verifyMetaSignature(raw, request.headers.get('x-hub-signature-256'))) {
     return new Response('Invalid signature', { status: 401 });
   }

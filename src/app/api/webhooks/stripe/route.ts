@@ -19,7 +19,11 @@ export async function POST(request: Request) {
     const session = event.data.object;
     const bookingId = session.metadata?.booking_id;
     if (bookingId && session.payment_status === 'paid') {
-      const booking = await confirmDeposit(bookingId);
+      const booking = await confirmDeposit(bookingId, {
+        id: session.id,
+        amountTotal: session.amount_total,
+        currency: session.currency,
+      });
       if (booking) after(() => announcePaidBooking(booking).catch((e) => console.error('[concierge] announce failed', e)));
     }
   }

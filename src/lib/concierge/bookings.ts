@@ -1,7 +1,10 @@
+import 'server-only';
+import { randomUUID } from 'node:crypto';
 import { env, type Lang } from './config';
 import { db, getContact, updateContact } from './db';
 import { alertStaff, sendToContact } from './meta';
 import { bookingConfirmed, staff, type ConfirmedBooking } from './copy';
+import { seal, unseal } from './crypto';
 import { formatStart, getDeparture, getTour } from './tours';
 
 interface BookingRow {
@@ -12,12 +15,95 @@ interface BookingRow {
   adults: number;
   children: number;
   full_name: string;
+  email: string;
   total_eur: number;
   deposit_eur: number;
+  stripe_session_id: string | null;
 }
 
-/** Marks the deposit as paid. Returns null when Stripe re-delivers an event we already handled. */
-export async function confirmDeposit(bookingId: string): Promise<BookingRow | null> {
+// Guest name and email are sealed like the contact fields; the AAD ties them to this booking.
+const bookingAad = (field: 'full_name' | 'email', id: string) => `bookings.${field}:${id}`;
+
+function bookingFromRow(row: Record<string, unknown>): BookingRow {
+  const id = row.id as string;
+  return {
+    ...(row as unknown as BookingRow),
+    full_name: unseal(row.full_name, bookingAad('full_name', id)) ?? '',
+    email: unseal(row.email, bookingAad('email', id)) ?? '',
+  };
+}
+
+export interface NewBooking {
+  contactId: string;
+  departureId: string;
+  adults: number;
+  children: number;
+  fullName: string;
+  email: string;
+  totalEur: number;
+  depositEur: number;
+  expiresAt: Date;
+}
+
+/** Inserts an unpaid booking that holds its seats until `expiresAt`. */
+export async function createPendingBooking(b: NewBooking): Promise<{ id: string; ref: string }> {
+  const id = randomUUID();
+  const { data, error } = await db()
+    .from('bookings')
+    .insert({
+      id,
+      contact_id: b.contactId,
+      departure_id: b.departureId,
+      adults: b.adults,
+      children: b.children,
+      full_name: seal(b.fullName, bookingAad('full_name', id)),
+      email: seal(b.email, bookingAad('email', id)),
+      total_eur: b.totalEur,
+      deposit_eur: b.depositEur,
+      expires_at: b.expiresAt.toISOString(),
+    })
+    .select('id, ref')
+    .single();
+  if (error) throw new Error(`createPendingBooking: ${error.message}`);
+  return data;
+}
+
+export async function attachCheckoutSession(bookingId: string, sessionId: string): Promise<void> {
+  const { error } = await db().from('bookings').update({ stripe_session_id: sessionId }).eq('id', bookingId);
+  if (error) throw new Error(`attachCheckoutSession: ${error.message}`);
+}
+
+export interface PaidSession {
+  id: string;
+  amountTotal: number | null;
+  currency: string | null;
+}
+
+/**
+ * Marks the deposit as paid once the Stripe session matches the booking exactly: same session,
+ * same amount in cents, EUR. Anything else is reported to Atilla instead of confirming a tour.
+ * Returns null when there is nothing to announce (unknown booking, mismatch, or a re-delivery).
+ */
+export async function confirmDeposit(bookingId: string, paid: PaidSession): Promise<BookingRow | null> {
+  const found = await db().from('bookings').select('*').eq('id', bookingId).maybeSingle();
+  if (found.error) throw new Error(`confirmDeposit: ${found.error.message}`);
+  if (!found.data) return null;
+  const booking = bookingFromRow(found.data);
+
+  const expectedCents = booking.deposit_eur * 100;
+  if (booking.stripe_session_id !== paid.id || paid.amountTotal !== expectedCents || paid.currency !== 'eur') {
+    console.error('[concierge] payment does not match booking', booking.ref);
+    await alertStaff(
+      env('STAFF_WHATSAPP'),
+      staff.paymentMismatch(
+        booking.ref,
+        `${booking.deposit_eur} EUR (${booking.stripe_session_id ?? '-'})`,
+        `${(paid.amountTotal ?? 0) / 100} ${(paid.currency ?? '?').toUpperCase()} (${paid.id})`,
+      ),
+    );
+    return null;
+  }
+
   const { data, error } = await db()
     .from('bookings')
     .update({ status: 'deposit_paid', paid_at: new Date().toISOString() })
@@ -26,7 +112,7 @@ export async function confirmDeposit(bookingId: string): Promise<BookingRow | nu
     .select('*')
     .maybeSingle();
   if (error) throw new Error(`confirmDeposit: ${error.message}`);
-  return data as BookingRow | null;
+  return data ? bookingFromRow(data) : null;
 }
 
 export async function expireBooking(bookingId: string): Promise<void> {

@@ -1,6 +1,8 @@
+import 'server-only';
 import type Anthropic from '@anthropic-ai/sdk';
 import { CONCIERGE, env, isLang, type Lang } from './config';
-import { db, updateContact, type Contact, type Stage } from './db';
+import { attachCheckoutSession, createPendingBooking } from './bookings';
+import { updateContact, type Contact, type ContactPatch, type Stage } from './db';
 import { alertStaff } from './meta';
 import { staff } from './copy';
 import { stripe } from './stripe';
@@ -180,7 +182,7 @@ async function saveCustomerDetails(input: Input, ctx: ToolContext) {
     if (input[key] !== undefined && input[key] !== '') qualification[key] = input[key];
   }
 
-  const patch: Partial<Contact> = { qualification };
+  const patch: ContactPatch = { qualification };
   if (typeof input.name === 'string' && input.name) patch.name = input.name;
   if (typeof input.email === 'string' && input.email) patch.email = input.email;
   if (isLang(input.language)) patch.language = input.language;
@@ -217,22 +219,17 @@ async function createDepositLink(input: Input, ctx: ToolContext) {
   const expiresAt = new Date(Date.now() + CONCIERGE.holdHours * 3600_000 - 60_000);
   const starts = formatStart(departure.starts_at, l);
 
-  const { data: booking, error } = await db()
-    .from('bookings')
-    .insert({
-      contact_id: ctx.contact.id,
-      departure_id: departure.departure_id,
-      adults,
-      children,
-      full_name: fullName,
-      email,
-      total_eur: total,
-      deposit_eur: deposit,
-      expires_at: expiresAt.toISOString(),
-    })
-    .select('id, ref')
-    .single();
-  if (error) throw new Error(`createDepositLink: ${error.message}`);
+  const booking = await createPendingBooking({
+    contactId: ctx.contact.id,
+    departureId: departure.departure_id,
+    adults,
+    children,
+    fullName,
+    email,
+    totalEur: total,
+    depositEur: deposit,
+    expiresAt,
+  });
 
   const session = await stripe().checkout.sessions.create({
     mode: 'payment',
@@ -259,7 +256,7 @@ async function createDepositLink(input: Input, ctx: ToolContext) {
     cancel_url: `${env('SITE_URL')}/?booking=${booking.ref}&status=cancelled`,
   });
 
-  await db().from('bookings').update({ stripe_session_id: session.id }).eq('id', booking.id);
+  await attachCheckoutSession(booking.id, session.id);
   ctx.contact = await updateContact(ctx.contact.id, {
     stage: 'offer_sent',
     name: ctx.contact.name ?? fullName,

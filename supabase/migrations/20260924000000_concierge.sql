@@ -1,5 +1,10 @@
 -- Atilla concierge: tour catalogue, local guides, CRM contacts, message log and bookings.
--- Every table has RLS enabled with no policies: only the server (service role) can read or write.
+-- Every table has RLS enabled with no policies and no grants for anon/authenticated:
+-- only the server (service role) can read or write.
+--
+-- Personal data is encrypted by the app before it reaches the database (AES-256-GCM, see
+-- src/lib/concierge/crypto.ts). Columns marked "ciphertext" hold v1.<key>.<iv>.<data>.<tag>
+-- tokens, so a leaked backup or dashboard session exposes no names, numbers or conversations.
 
 create extension if not exists pgcrypto;
 
@@ -43,29 +48,30 @@ create table public.departures (
 create table public.contacts (
   id uuid primary key default gen_random_uuid(),
   channel text not null check (channel in ('whatsapp', 'instagram')),
-  external_id text not null,           -- WhatsApp wa_id or Instagram-scoped user id
-  name text,
-  username text,
+  external_id text not null,           -- ciphertext: WhatsApp wa_id or Instagram-scoped user id
+  external_id_hash text not null,      -- HMAC blind index of channel + external_id, for lookups
+  name text,                           -- ciphertext
+  username text,                       -- ciphertext
   language text check (language in ('de', 'en', 'tr')),
-  email text,
-  phone text,
+  email text,                          -- ciphertext
+  phone text,                          -- ciphertext
   stage text not null default 'new'
     check (stage in ('new', 'qualifying', 'qualified', 'offer_sent', 'booked', 'completed', 'lost')),
-  qualification jsonb not null default '{}',
+  qualification text,                  -- ciphertext of a JSON object
   bot_paused boolean not null default false,
   marketing_consent boolean not null default false,
   agent_lock_until timestamptz,
   last_inbound_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  unique (channel, external_id)
+  unique (channel, external_id_hash)
 );
 
 create table public.messages (
   id bigint generated always as identity primary key,
   contact_id uuid not null references public.contacts (id) on delete cascade,
   role text not null check (role in ('customer', 'assistant', 'human')),
-  body text not null,
+  body text not null,                  -- ciphertext
   meta_message_id text unique,
   created_at timestamptz not null default now()
 );
@@ -78,8 +84,8 @@ create table public.bookings (
   departure_id uuid not null references public.departures (id),
   adults integer not null check (adults >= 1),
   children integer not null default 0 check (children >= 0),
-  full_name text not null,
-  email text not null,
+  full_name text not null,             -- ciphertext
+  email text not null,                 -- ciphertext
   total_eur integer not null,
   deposit_eur integer not null,
   status text not null default 'pending'
@@ -139,3 +145,31 @@ alter table public.messages enable row level security;
 alter table public.bookings enable row level security;
 alter table public.staff_alerts enable row level security;
 alter table public.processed_events enable row level security;
+
+-- Deletes personal data nobody needs any more (DSGVO Art. 5(1)(e) storage limitation).
+-- Contacts with a paid or completed booking are kept for accounting; everyone else is removed
+-- after the retention period, together with their messages and unpaid bookings (cascade).
+-- Schedule daily with pg_cron: select cron.schedule('concierge-purge', '30 3 * * *', 'select public.purge_stale_personal_data()');
+create function public.purge_stale_personal_data(p_retention interval default interval '24 months')
+returns void
+language sql
+as $$
+  delete from public.contacts c
+  where greatest(c.updated_at, coalesce(c.last_inbound_at, c.created_at)) < now() - p_retention
+    and not exists (
+      select 1 from public.bookings b
+      where b.contact_id = c.id and b.status in ('deposit_paid', 'completed')
+    );
+
+  delete from public.messages where created_at < now() - p_retention;
+  delete from public.processed_events where created_at < now() - interval '30 days';
+  delete from public.staff_alerts where created_at < now() - interval '90 days';
+$$;
+
+-- Defence in depth on top of RLS: the public API roles get no table or function access at all.
+revoke all on all tables in schema public from anon, authenticated;
+revoke all on all sequences in schema public from anon, authenticated;
+revoke execute on function public.claim_agent_turn(uuid, integer) from public, anon, authenticated;
+revoke execute on function public.purge_stale_personal_data(interval) from public, anon, authenticated;
+alter default privileges in schema public revoke all on tables from anon, authenticated;
+alter default privileges in schema public revoke execute on functions from public, anon, authenticated;

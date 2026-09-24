@@ -1,8 +1,10 @@
+import 'server-only';
 import { CONCIERGE, env, sleep, type Channel } from './config';
 import {
   claimAgentTurn,
   claimEvent,
   contactForStaffAlert,
+  customerMessagesSince,
   latestCustomerMessageId,
   messageExists,
   recordInbound,
@@ -43,12 +45,26 @@ async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
     username: msg.username,
     phone: msg.channel === 'whatsapp' ? msg.externalId : null,
   });
-  if (!(await recordInbound(contact.id, msg.text, msg.metaMessageId))) return;
+  const text = msg.text.slice(0, CONCIERGE.maxInboundChars);
+  if (!(await recordInbound(contact.id, text, msg.metaMessageId))) return;
   if (msg.channel === 'whatsapp') await markWhatsAppRead(msg.metaMessageId);
   if (contact.bot_paused) return;
+  if (await floodDetected(contact)) return;
 
   await sleep(CONCIERGE.debounceMs);
   await answerWhenFree(contact.id);
+}
+
+/**
+ * Flood protection: a sender far above any real customer's pace (spam, a bot, someone trying
+ * to run up model costs) is handed to Atilla instead of being answered.
+ */
+async function floodDetected(contact: Contact): Promise<boolean> {
+  const count = await customerMessagesSince(contact.id, new Date(Date.now() - 3600_000));
+  if (count <= CONCIERGE.maxMessagesPerHour) return false;
+  const paused = await updateContact(contact.id, { bot_paused: true });
+  await alertStaff(env('STAFF_WHATSAPP'), staff.rateLimited(displayName(paused), count), paused);
+  return true;
 }
 
 /**

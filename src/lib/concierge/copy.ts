@@ -88,4 +88,8 @@ export const staff = {
     `💶 *Kapora ödendi* – ${b.ref}\n${who}\n${b.tourName}\n${b.startsAt} · ${b.guests} kişi\nKapora ${b.depositEur} € · Kalan ${b.balanceEur} €${b.guideName ? `\nRehber: ${b.guideName}` : '\n⚠️ Rehber atanmadı!'}`,
   guideAssigned: (b: ConfirmedBooking, customerName: string) =>
     `🧭 *Yeni tur* – ${b.ref}\n${b.tourName}\n${b.startsAt}\n${b.guests} kişi · Misafir: ${customerName}\nBuluşma: ${b.meetingPoint ?? '-'}`,
+  rateLimited: (who: string, count: number) =>
+    `🛑 ${who} son bir saatte ${count} mesaj gönderdi. Olası spam veya kötüye kullanım nedeniyle bot bu sohbette durduruldu. Tekrar açmak için bu mesajı *bot* diye yanıtla.`,
+  paymentMismatch: (ref: string, expected: string, received: string) =>
+    `⚠️ *Ödeme kontrolü başarısız* – ${ref}\nBeklenen: ${expected}\nGelen: ${received}\nRezervasyon onaylanmadı. Lütfen Stripe panelinden kontrol et.`,
 };
