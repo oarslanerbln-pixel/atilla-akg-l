@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Inter_Tight, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { contact, siteUrl, socialProfiles } from "@/lib/site";
+import { partners } from "@/lib/partners";
+import { translations } from "@/i18n/translations";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -50,26 +52,69 @@ export const metadata: Metadata = {
 
 import { Providers } from "./Providers";
 
+const personId = `${siteUrl}/#person`;
+
+// Destinations the work covers, in English, taken from the partner list so a
+// new partner updates this without a second edit. UNESCO is international,
+// not a place, so it is not a destination.
+const destinations = partners
+  .filter((partner) => partner.region !== "partners_region_intl")
+  .map((partner) => translations.EN[partner.region]);
+
 /**
- * Structured data for the person the site is about.
+ * Structured data for the person the site is about and the organisations
+ * they have worked with.
  *
  * A search engine could previously infer the name only from the headline. The
  * fields here are the ones the site already states out loud — nothing is
  * invented, and the postal address is left out until the imprint carries it.
+ *
+ * The two nodes share one @graph and are joined by @id, which is how
+ * schema.org expresses "these are about each other" without claiming a
+ * relationship it has no property for: Person has no "worked with". Once a
+ * partner has a link to the published collaboration, that link becomes a
+ * CreativeWork whose creator is the Person and whose subject is the partner —
+ * the relationship stated through the thing that proves it.
  */
-const personSchema = {
+const structuredData = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Atilla Akgül",
-  alternateName: "Atilla Barbarossa",
-  jobTitle: "Creative Director & Filmmaker",
-  description:
-    "Global visual storyteller, creative director and premium filmmaker specializing in luxury hospitality, executive aviation, and high-end lifestyle.",
-  url: siteUrl,
-  email: `mailto:${contact.email}`,
-  telephone: contact.phone,
-  knowsLanguage: ["de", "en", "tr"],
-  sameAs: Object.values(socialProfiles),
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": personId,
+      name: "Atilla Akgül",
+      alternateName: "Atilla Barbarossa",
+      jobTitle: "Creative Director & Filmmaker",
+      description:
+        "Global visual storyteller, creative director and premium filmmaker specializing in luxury hospitality, executive aviation, and high-end lifestyle.",
+      url: siteUrl,
+      email: `mailto:${contact.email}`,
+      telephone: contact.phone,
+      knowsLanguage: ["de", "en", "tr"],
+      knowsAbout: ["Travel filmmaking", "Destination marketing", "Luxury hospitality", ...destinations],
+      sameAs: Object.values(socialProfiles),
+    },
+    {
+      "@type": "ItemList",
+      "@id": `${siteUrl}/#partners`,
+      name: "Tourism boards and institutions Atilla Barbarossa has worked with",
+      itemListElement: partners.map((partner, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Organization",
+          name: partner.name,
+          ...(partner.url && {
+            subjectOf: {
+              "@type": "CreativeWork",
+              url: partner.url,
+              creator: { "@id": personId },
+            },
+          }),
+        },
+      })),
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -84,7 +129,7 @@ export default function RootLayout({
           type="application/ld+json"
           // The object is a literal defined above, not anything a visitor can
           // reach; JSON.stringify is what serialises it.
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         <Providers>
           {children}
