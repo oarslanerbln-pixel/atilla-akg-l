@@ -83,6 +83,14 @@ src/
 
 ---
 
+## 🤖 AI Concierge (Instagram + WhatsApp tour sales)
+- Server-only code in `src/lib/concierge/`; webhooks in `src/app/api/webhooks/{meta,stripe}/route.ts`.
+- Stack: `@anthropic-ai/sdk` (Claude tool-use loop in `agent.ts`), `@supabase/supabase-js` (CRM, schema in `supabase/migrations/`), `stripe` (deposit Checkout).
+- Fixed customer messages live in `src/lib/concierge/copy.ts` (DE/EN/TR), not `translations.ts`, because they are sent server-side.
+- Setup and env vars: `docs/concierge-setup.md`, `.env.example`.
+
+---
+
 ## ⚙️ Development & Scripts
 - `npm run dev` - Start local development server (localhost:3000)
 - `npm run build` - Create production build

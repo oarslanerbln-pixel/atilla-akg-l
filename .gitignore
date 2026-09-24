@@ -53,3 +53,5 @@ node_modules/
 .agents/
 .vscode/
 *.mp4
+
+!.env.example
