@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { RAYS } from "@/components/BrandMark";
 
 /**
  * The share card, generated at build time.
@@ -28,16 +29,15 @@ export default function OpenGraphImage() {
           position: "relative",
         }}
       >
-        <div
-          style={{
-            fontSize: 22,
-            letterSpacing: 10,
-            color: "#d8b482",
-            marginBottom: 36,
-          }}
-        >
-          CREATIVE DIRECTION
-        </div>
+        {/* The compass mark (see BrandMark.tsx), drawn with literal colours
+            because the card is rendered outside the page's CSS. */}
+        <svg width="120" height="120" viewBox="0 0 100 100" style={{ marginBottom: 40 }}>
+          <circle cx="50" cy="50" r="40" fill="none" stroke="#fcfbf9" strokeWidth="1.2" />
+          {RAYS.map(([dark, gold]) => [
+            <polygon key={dark} points={dark} fill="#fcfbf9" />,
+            <polygon key={gold} points={gold} fill="#b38b59" />,
+          ])}
+        </svg>
 
         <div style={{ display: "flex", fontSize: 84, letterSpacing: 4, fontWeight: 300 }}>
           Atilla
