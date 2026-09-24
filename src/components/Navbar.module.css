@@ -43,9 +43,12 @@
   color: var(--text-primary);
 }
 
-.goldDot {
-  color: var(--accent-gold);
-  font-size: 0.75rem;
+/* Sized to the wordmark beside it; the north ray rises just past its cap
+   height, which is the point of the mark. */
+.mark {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
 }
 
 .navLinks {

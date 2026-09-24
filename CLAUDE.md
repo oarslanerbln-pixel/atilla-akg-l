@@ -83,6 +83,7 @@ src/
 │   ├── Contact.tsx
 │   ├── Footer.tsx
 │   ├── Partners.tsx         # Tourism boards & institutions
+│   ├── BrandMark.tsx        # The compass mark, inline
 │   └── LegalPage.tsx        # Shell shared by the two legal routes
 ├── context/
 │   └── LanguageContext.tsx  # Language state & provider
@@ -119,6 +120,25 @@ partner there and all three follow.
   `CreativeWork` created by Atilla about that partner.
 - The name always stays on the page as text, logo or not: search engines and
   AI answer engines read text, not the pixels of a wordmark.
+
+## 🧭 Brand mark
+The logo is the **compass**: a four-point north star whose north ray breaks
+out of its ring, each ray half ink, half gold, alternating clockwise. The
+wordmark is `ATILLA BARBAROSSA` in Cormorant Garamond 400, tracked 0.26em,
+and carries no tagline.
+
+- On the site the mark is `src/components/BrandMark.tsx` (inline SVG, dark
+  halves in `currentColor`, gold halves in `--accent-gold`). The share card
+  imports its geometry from there, so the two cannot drift apart.
+- `src/app/icon.svg`, `apple-icon.png` and `favicon.ico` are the app icons;
+  Next links them by convention.
+- `public/brand/` holds the exported artwork: the mark, stacked and
+  horizontal lockups, each in colour, reverse (for dark grounds), black and
+  white. The wordmark in them is outlined, so they render without the font.
+  Outside the site header (print, social, decks, video), use these files;
+  never retype the wordmark in another font.
+- `watermark-frame.svg` (a viewfinder with an "A" peak and a gold sun) is for
+  **video watermarks only**. Everywhere else the compass stands alone.
 
 ## 🔐 Environment
 `.env.example` documents the variables. Without `RESEND_API_KEY`,

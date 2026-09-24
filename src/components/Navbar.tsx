@@ -8,6 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { Language } from "@/i18n/translations";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import LiveClock from "./LiveClock";
+import BrandMark from "./BrandMark";
 
 const NAV_ITEMS = [
   { href: "#about", key: "nav_about" },
@@ -80,8 +81,8 @@ export default function Navbar() {
       <div className={styles.navContainer}>
         {/* Brand Logo */}
         <a href="#" className={styles.brand} onClick={handleLinkClick}>
+          <BrandMark className={styles.mark} />
           <span>ATILLA BARBAROSSA</span>
-          <span className={styles.goldDot}>✦</span>
         </a>
 
         {/* Center Navigation Links */}
