@@ -65,6 +65,7 @@ src/
 │   ├── opengraph-image.tsx  # Share card, generated at build time by next/og
 │   ├── Providers.tsx        # Context providers wrapper (LanguageProvider)
 │   ├── api/contact/route.ts # Contact form delivery (Resend)
+│   ├── llms.txt/route.ts    # Plain-text summary for AI answer engines
 │   ├── impressum/           # § 5 DDG imprint
 │   └── datenschutz/         # Privacy notice
 ├── components/              # Modular UI components with *.module.css pairs
@@ -81,6 +82,7 @@ src/
 │   ├── EditorialQuote.tsx
 │   ├── Contact.tsx
 │   ├── Footer.tsx
+│   ├── Partners.tsx         # Tourism boards & institutions
 │   └── LegalPage.tsx        # Shell shared by the two legal routes
 ├── context/
 │   └── LanguageContext.tsx  # Language state & provider
@@ -102,6 +104,21 @@ src/
 
 Run `tsc --noEmit`, `next build` and `eslint` before every push; all three are
 expected to pass with zero output.
+
+## 🤝 Partners (tourism boards & institutions)
+`src/lib/partners.ts` is the single source for the Partners section, the
+`ItemList` in the root layout's structured data and `/llms.txt`. Add or edit a
+partner there and all three follow.
+
+- **Logo:** drop the organisation's official file into `public/partners/`,
+  unaltered, and set `logo: { src, width, height }` with its intrinsic size.
+  Until then the tile shows the name as type. UNESCO's emblem needs UNESCO's
+  written authorisation — without it, leave UNESCO as type.
+- **Link:** set `url` to the published collaboration (the reel or film). The
+  tile then links to it, and the structured data states the relationship as a
+  `CreativeWork` created by Atilla about that partner.
+- The name always stays on the page as text, logo or not: search engines and
+  AI answer engines read text, not the pixels of a wordmark.
 
 ## 🔐 Environment
 `.env.example` documents the variables. Without `RESEND_API_KEY`,
