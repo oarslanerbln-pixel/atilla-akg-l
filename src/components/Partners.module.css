@@ -1,0 +1,171 @@
+.section {
+  padding: var(--section-padding-y) 0;
+  border-top: 1px solid var(--border-light);
+}
+
+.header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 4rem;
+}
+
+.subtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4.2vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.divider {
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(to right, var(--accent-gold), transparent);
+  margin: 0 auto;
+}
+
+.intro {
+  margin-top: 1.75rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* A hairline grid: the 1px gap shows the list's own background through, so
+   every cell is ruled on all sides without any border being drawn twice. */
+.grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1px;
+  background: var(--border-light);
+  border: 1px solid var(--border-light);
+}
+
+.cell {
+  display: flex;
+  background: var(--bg-primary);
+}
+
+.tile {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 190px;
+  padding: 2.25rem 1rem;
+  text-align: center;
+  color: inherit;
+  transition: background-color var(--transition-smooth);
+}
+
+/* The global a:hover turns links gold; a whole tile going gold would shout. */
+a.tile:hover {
+  color: inherit;
+  background: var(--bg-card);
+}
+
+a.tile:focus-visible {
+  outline: 2px solid var(--accent-gold-readable);
+  outline-offset: -4px;
+}
+
+/* One fixed box for whatever identifies the partner. Names differ in length —
+   "Visit Kazakhstan" wraps where "UNESCO" never does — and a logo with its
+   caption is taller than a one-line name. Without a common box the region
+   label under each dropped to a different height, so a row of labels stopped
+   reading as a row. Sized for the tallest case: logo plus caption. */
+.mark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 4.6rem;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.25rem, 1.7vw, 1.55rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+
+/* Official files are shown as supplied — brand guidelines rarely allow a
+   partner to recolour or desaturate their mark. */
+.logo {
+  height: 44px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+}
+
+.caption {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+
+.region {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+/* Holds the line's height on tiles without a link; never seen or announced. */
+.reserved {
+  visibility: hidden;
+}
+
+@media (max-width: 640px) {
+  .header {
+    margin-bottom: 3rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Five partners on two columns leave one alone on the last row; let it
+     take the full width instead of sitting next to a ruled empty cell. */
+  .cell:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .tile {
+    min-height: 150px;
+    padding: 1.75rem 1rem;
+  }
+}

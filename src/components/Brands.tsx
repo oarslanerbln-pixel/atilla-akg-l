@@ -3,10 +3,11 @@
 import React from "react";
 import styles from "./Brands.module.css";
 
+// Commercial brands only. Tourism boards and institutions (UNESCO, Visit
+// Kazakhstan …) moved to the Partners section, where each gets the context a
+// destination client reads them for — see src/lib/partners.ts.
 const brands = [
-  "UNESCO",
   "RIXOS HOTELS",
-  "KAZAKH TOURISM",
   "ACCOR LIVE LIMITLESS",
   "GILLETTE",
   "BER FLUGHAFEN",

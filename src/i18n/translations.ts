@@ -41,6 +41,15 @@ export const translations = {
     
     // Services
     services_title: "Leistungen",
+    partners_subtitle: "Destination Partner",
+    partners_title: "Tourismusbehörden & Institutionen",
+    partners_intro: "Ich habe mit nationalen Tourismusbehörden und internationalen Institutionen zusammengearbeitet – darunter {partners}.",
+    partners_view: "Zum Beitrag",
+    partners_region_mt: "Malta",
+    partners_region_kz: "Kasachstan",
+    partners_region_tr: "Türkei",
+    partners_region_ro: "Rumänien",
+    partners_region_intl: "International",
     services_subtitle: "Service Portfolio",
     service_1_title: "Authentische Hotel- & Destinations-Features",
     service_1_desc: "Organische Einbindung und fesselndes Storytelling direkt vor Ort, um die Einzigartigkeit der Location für anspruchsvolle Reisende spürbar zu machen.",
@@ -168,6 +177,15 @@ export const translations = {
     
     // Services
     services_title: "Services",
+    partners_subtitle: "Destination Partners",
+    partners_title: "Tourism Boards & Institutions",
+    partners_intro: "I have worked with national tourism boards and international institutions, including {partners}.",
+    partners_view: "View the work",
+    partners_region_mt: "Malta",
+    partners_region_kz: "Kazakhstan",
+    partners_region_tr: "Türkiye",
+    partners_region_ro: "Romania",
+    partners_region_intl: "International",
     services_subtitle: "Service Portfolio",
     service_1_title: "Authentic Hotel & Destination Features",
     service_1_desc: "Organic on-site integration and captivating visual storytelling designed to highlight the true luxury and uniqueness of your location.",
@@ -295,6 +313,15 @@ export const translations = {
     
     // Services
     services_title: "Hizmetler",
+    partners_subtitle: "Destinasyon Ortakları",
+    partners_title: "Turizm Kurumları & Kuruluşlar",
+    partners_intro: "Ulusal turizm kurumları ve uluslararası kuruluşlarla iş birliği yaptım; bunlar arasında {partners} yer alıyor.",
+    partners_view: "İçeriği gör",
+    partners_region_mt: "Malta",
+    partners_region_kz: "Kazakistan",
+    partners_region_tr: "Türkiye",
+    partners_region_ro: "Romanya",
+    partners_region_intl: "Uluslararası",
     services_subtitle: "Hizmet Portföyü",
     service_1_title: "Otantik Otel ve Destinasyon Tanıtımları",
     service_1_desc: "Mekanın eşsiz lüksünü ve atmosferini anında hissettirmek için yerinde organik entegrasyon ve büyüleyici sinematik anlatım.",
