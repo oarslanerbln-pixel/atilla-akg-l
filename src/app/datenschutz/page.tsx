@@ -82,7 +82,27 @@ export default function Datenschutz() {
         keine gesetzlichen Aufbewahrungsfristen entgegenstehen.
       </p>
 
-      <h2>6. Ihre Rechte</h2>
+      <h2>6. Kontakt über WhatsApp</h2>
+      <p>
+        Die Seite enthält einen Link, über den Sie mich per WhatsApp erreichen
+        können. Auf der Seite selbst wird dafür nichts von WhatsApp geladen;
+        erst wenn Sie den Link antippen, öffnet sich WhatsApp mit einer
+        vorformulierten Nachricht, die Sie vor dem Absenden ändern oder
+        verwerfen können.
+      </p>
+      <p>
+        Schreiben Sie mir über WhatsApp, verarbeitet der Anbieter WhatsApp
+        Ireland Limited (Merrion Road, Dublin 4, D04 X2K5, Irland), ein
+        Unternehmen der Meta-Gruppe, Ihre Telefonnummer, Ihren Profilnamen und
+        die Nachricht; eine Übermittlung in die USA ist dabei nicht
+        auszuschließen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, soweit
+        Ihre Anfrage auf einen Vertrag gerichtet ist, im Übrigen Art. 6 Abs. 1
+        lit. f DSGVO (berechtigtes Interesse an der Beantwortung von
+        Anfragen). Die Nutzung ist freiwillig; Kontaktformular und E-Mail
+        stehen gleichwertig zur Verfügung.
+      </p>
+
+      <h2>7. Ihre Rechte</h2>
       <p>Sie haben jederzeit das Recht auf</p>
       <ul>
         <li>Auskunft über die zu Ihrer Person verarbeiteten Daten (Art. 15 DSGVO),</li>
@@ -101,7 +121,7 @@ export default function Datenschutz() {
         Verantwortlichen.
       </p>
 
-      <h2>7. Stand</h2>
+      <h2>8. Stand</h2>
       <p>
         Diese Erklärung beschreibt den technischen Stand dieser Website. Bei
         Änderungen an eingesetzten Diensten wird sie angepasst.

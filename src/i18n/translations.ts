@@ -15,6 +15,8 @@ export const translations = {
     // Hero
     hero_welcome: "Willkommen",
     hero_scroll: "Scrollen",
+    whatsapp_label: "Per WhatsApp schreiben",
+    whatsapp_message: "Hallo Atilla, ich interessiere mich für eine Zusammenarbeit.",
     hero_storytelling: "Visual Storytelling",
     hero_excellence: "Digital Excellence",
     hero_direction: "Creative Direction",
@@ -146,6 +148,8 @@ export const translations = {
     // Hero
     hero_welcome: "Welcome",
     hero_scroll: "Scroll",
+    whatsapp_label: "Message on WhatsApp",
+    whatsapp_message: "Hi Atilla, I'm interested in working together.",
     hero_storytelling: "Visual Storytelling",
     hero_excellence: "Digital Excellence",
     hero_direction: "Creative Direction",
@@ -277,6 +281,8 @@ export const translations = {
     // Hero
     hero_welcome: "Hoş Geldiniz",
     hero_scroll: "Kaydırın",
+    whatsapp_label: "WhatsApp'tan yaz",
+    whatsapp_message: "Merhaba Atilla, bir iş birliğiyle ilgileniyorum.",
     hero_storytelling: "Görsel Hikayecilik",
     hero_excellence: "Dijital Mükemmellik",
     hero_direction: "Kreatif Direktörlük",

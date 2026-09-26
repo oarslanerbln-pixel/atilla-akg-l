@@ -25,6 +25,8 @@ export const contact = {
   management: "lisaweber@barbarossafilms.de",
   phone: "+4917672725165",
   phoneDisplay: "+49 1767 27 25 165",
+  /** Digits only, as wa.me expects. */
+  whatsapp: "4917672725165",
 } as const;
 
 export const socialProfiles = {

@@ -75,6 +75,7 @@ src/
 │   ├── LiveClock.tsx
 │   ├── Hero.tsx
 │   ├── HeroHorizon.tsx      # Live WebGL sea-at-dusk backdrop
+│   ├── WhatsAppButton.tsx   # Floating wa.me link between hero and contact
 │   ├── Brands.tsx
 │   ├── Stats.tsx
 │   ├── FeaturedWork.tsx
@@ -185,7 +186,7 @@ poster. Anything new and heavy loads on visibility, and `usePrefersCalm()`
 decides whether it autoplays at all.
 
 ### Stacking order comes from the scale
-`--z-nav-panel` through `--z-preloader` live in `globals.css`. Raw literals
+`--z-float` through `--z-preloader` live in `globals.css`. Raw literals
 (999, 1002, 9999, 99997, 99998, 99999, 999999) once competed with each other,
 and the lightbox ended up above the bespoke cursor — which, with
 `cursor: none` on the body, left the visitor with no pointer at all. A new

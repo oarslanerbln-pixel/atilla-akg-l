@@ -51,6 +51,7 @@
      visitor with no visible pointer at all, because `cursor: none` still
      applied. Every fixed layer now takes a token from this list, and a new
      one gets a token here rather than another digit. */
+  --z-float: 800;        /* floating contact button, under the mobile sheet */
   --z-nav-panel: 900;    /* mobile sheet, deliberately under the header */
   --z-nav: 1000;         /* sticky header */
   --z-nav-trigger: 1010; /* hamburger, above the sheet it opens */
