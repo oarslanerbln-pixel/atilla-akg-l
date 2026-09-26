@@ -30,7 +30,10 @@ Always utilize CSS variables defined in `src/app/globals.css`:
   - `--text-primary: #181512` (Obsidian charcoal)
   - `--text-secondary: #5a524a` (Warm graphite)
   - `--text-on-ink: #fcfbf9` (Light text on ink surfaces)
-  - Headings: `var(--font-playfair)` (Serif)
+  - Section headings: `var(--font-display)` — Inter Tight 300, plain ink,
+    mixed case ("Projekte", not "PROJEKTE"). The gold lives in the small
+    uppercase eyebrow above each one, not in the heading itself.
+  - Brand name, editorial quote, figures: `var(--font-playfair)` (Serif)
   - Body & UI: `var(--font-inter)` (Clean Sans-serif)
 - **Accents:**
   - `--accent-gold: #b38b59`
@@ -56,15 +59,20 @@ Always utilize CSS variables defined in `src/app/globals.css`:
 ```
 src/
 ├── app/
-│   ├── globals.css          # Design tokens, base styles, reset, utility classes
-│   ├── layout.tsx           # Root layout, Google Fonts (Inter & Playfair), SEO metadata
+│   ├── globals.css          # Design tokens, z-index scale, base styles, reset
+│   ├── layout.tsx           # Root layout, self-hosted fonts, SEO metadata
 │   ├── page.tsx             # Single page landing orchestrator
-│   └── Providers.tsx        # Context providers wrapper (LanguageProvider)
+│   ├── opengraph-image.tsx  # Share card, generated at build time by next/og
+│   ├── Providers.tsx        # Context providers wrapper (LanguageProvider)
+│   ├── api/contact/route.ts # Contact form delivery (Resend)
+│   ├── llms.txt/route.ts    # Plain-text summary for AI answer engines
+│   ├── impressum/           # § 5 DDG imprint
+│   └── datenschutz/         # Privacy notice
 ├── components/              # Modular UI components with *.module.css pairs
 │   ├── Preloader.tsx
 │   ├── CustomCursor.tsx
-│   ├── FilmGrain.tsx
 │   ├── Navbar.tsx
+│   ├── LiveClock.tsx
 │   ├── Hero.tsx
 │   ├── Brands.tsx
 │   ├── Stats.tsx
@@ -73,10 +81,16 @@ src/
 │   ├── CaseStudy.tsx
 │   ├── EditorialQuote.tsx
 │   ├── Contact.tsx
-│   └── Footer.tsx
+│   ├── Footer.tsx
+│   ├── Partners.tsx         # Tourism boards & institutions
+│   ├── BrandMark.tsx        # The compass mark, inline
+│   └── LegalPage.tsx        # Shell shared by the two legal routes
 ├── context/
 │   └── LanguageContext.tsx  # Language state & provider
-├── hooks/                   # Custom hooks
+├── hooks/
+│   ├── useSoundDesign.ts    # Shared AudioContext for the click sound
+│   ├── useScrollLock.ts     # Body scroll lock, counted across overlays
+│   └── usePrefersCalm.ts    # prefers-reduced-motion / -data / Save-Data
 └── i18n/
     └── translations.ts      # All translations for DE, EN, TR
 ```
@@ -96,8 +110,94 @@ src/
 - `npm run dev` - Start local development server (localhost:3000)
 - `npm run build` - Create production build
 - `npm run lint` - Run ESLint checks
+- `npx tsc --noEmit` - Type check only
+
+Run `tsc --noEmit`, `next build` and `eslint` before every push; all three are
+expected to pass with zero output.
+
+## 🤝 Partners (tourism boards & institutions)
+`src/lib/partners.ts` is the single source for the Partners section, the
+`ItemList` in the root layout's structured data and `/llms.txt`. Add or edit a
+partner there and all three follow.
+
+- **Logo:** drop the organisation's official file into `public/partners/`,
+  unaltered, and set `logo: { src, width, height }` with its intrinsic size.
+  Until then the tile shows the name as type. UNESCO's emblem needs UNESCO's
+  written authorisation — without it, leave UNESCO as type.
+- **Link:** set `url` to the published collaboration (the reel or film). The
+  tile then links to it, and the structured data states the relationship as a
+  `CreativeWork` created by Atilla about that partner.
+- The name always stays on the page as text, logo or not: search engines and
+  AI answer engines read text, not the pixels of a wordmark.
+
+## 🧭 Brand mark
+The logo is the **compass**: a four-point north star whose north ray breaks
+out of its ring, each ray half ink, half gold, alternating clockwise. The
+wordmark is `ATILLA BARBAROSSA` in Cormorant Garamond 400, tracked 0.26em,
+and carries no tagline.
+
+- On the site the mark is `src/components/BrandMark.tsx` (inline SVG, dark
+  halves in `currentColor`, gold halves in `--accent-gold`). The share card
+  imports its geometry from there, so the two cannot drift apart.
+- `src/app/icon.svg`, `apple-icon.png` and `favicon.ico` are the app icons;
+  Next links them by convention.
+- `public/brand/` holds the exported artwork: the mark, stacked and
+  horizontal lockups, each in colour, reverse (for dark grounds), black and
+  white. The wordmark in them is outlined, so they render without the font.
+  Outside the site header (print, social, decks, video), use these files;
+  never retype the wordmark in another font.
+- `watermark-frame.svg` (a viewfinder with an "A" peak and a gold sun) is for
+  **video watermarks only**. Everywhere else the compass stands alone.
+
+## 🔐 Environment
+`.env.example` documents the variables. Without `RESEND_API_KEY`,
+`CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` the contact endpoint answers 503
+and the form shows the direct mail address — it must never report a send it
+did not perform.
 
 ---
+
+## 🚦 Rules this project has paid for
+
+### Nothing loads from a third party at runtime
+The audience is German-speaking; a stock photo pulled from an external image
+host on every page view hands the visitor's IP to a third country before any
+consent exists, and that is the same class of defect as embedding Google
+Fonts. Three Pexels posters were removed for exactly this reason. Fonts come
+from `next/font`, which self-hosts them at build time. Videos, icons and
+images ship from `public/`. Keep it that way — and keep
+`src/app/datenschutz/page.tsx` honest if it ever changes.
+
+### The contact endpoint never fakes success
+It previously waited 1.5 s and answered "Message securely delivered." while
+sending nothing, so every inquiry was lost. A response of 200 from
+`/api/contact` means a mail provider accepted the message. Misconfiguration
+returns 503, delivery failure returns 502, and the form surfaces both.
+
+### Mobile data is the budget
+Visitors arrive from Instagram on a phone. Only the visible hero clip plays;
+the second one carries `preload="none"`. Still frames come from the clip
+itself via the `#t=0.1` fragment rather than a separate poster asset. Anything
+new and heavy loads on visibility, and `usePrefersCalm()` decides whether it
+autoplays at all.
+
+### Stacking order comes from the scale
+`--z-nav-panel` through `--z-preloader` live in `globals.css`. Raw literals
+(999, 1002, 9999, 99997, 99998, 99999, 999999) once competed with each other,
+and the lightbox ended up above the bespoke cursor — which, with
+`cursor: none` on the body, left the visitor with no pointer at all. A new
+fixed layer takes a token, or adds one.
+
+### Interactive means a real control
+`<button>`, `<a>` or a genuine form field — never a `<div>` with `onClick`.
+The project cards, the language switcher and the intro skip were all
+unreachable without a mouse. Every overlay closes with Escape and returns
+focus to whatever opened it. `:focus-visible` styling is not decoration.
+
+### Three languages, no halves
+Every new string gets a key in all three blocks of `src/i18n/translations.ts`.
+Where a sentence has to carry a link, the translation owns its position with a
+`{link}` token — word order differs across DE, EN and TR.
 
 ## 📋 Rules for Claude
 1. **Next.js 16 & React 19:**

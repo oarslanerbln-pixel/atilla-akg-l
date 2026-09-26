@@ -40,7 +40,16 @@ export const translations = {
     stats_reach_post: "Post Ø",
     
     // Services
-    services_title: "LEISTUNGEN",
+    services_title: "Leistungen",
+    partners_subtitle: "Destination Partner",
+    partners_title: "Tourismusbehörden & Institutionen",
+    partners_intro: "Ich habe mit nationalen Tourismusbehörden und internationalen Institutionen zusammengearbeitet – darunter {partners}.",
+    partners_view: "Zum Beitrag",
+    partners_region_mt: "Malta",
+    partners_region_kz: "Kasachstan",
+    partners_region_tr: "Türkei",
+    partners_region_ro: "Rumänien",
+    partners_region_intl: "International",
     services_subtitle: "Service Portfolio",
     service_1_title: "Authentische Hotel- & Destinations-Features",
     service_1_desc: "Organische Einbindung und fesselndes Storytelling direkt vor Ort, um die Einzigartigkeit der Location für anspruchsvolle Reisende spürbar zu machen.",
@@ -54,7 +63,7 @@ export const translations = {
     services_disclaimer: "Sämtliche Leistungen, Paketpreise und Format-Kombinationen (z. B. Story-Sequenzen, YouTube-Vlogs oder exklusive TikTok-Serien) werden individuell auf die Ziele der jeweiligen Kampagne abgestimmt.",
     
     // FeaturedWork
-    work_title: "PROJEKTE",
+    work_title: "Projekte",
     work_subtitle: "Selected Portfolio",
     project_1_title: "Novotel Bosphorus Istanbul",
     project_1_cat: "Hospitality & Resorts",
@@ -93,7 +102,7 @@ export const translations = {
     quote_role: "CREATIVE DIRECTOR & FILMMAKER",
     
     // Contact
-    contact_title: "ZUSAMMENARBEIT & ABLAUF",
+    contact_title: "Zusammenarbeit & Ablauf",
     contact_subtitle: "Philosophie",
     contact_form_title: "Let's Connect",
     contact_form_subtitle: "Bereit für das nächste Level?",
@@ -108,6 +117,15 @@ export const translations = {
     contact_sending: "SENDET...",
     contact_success: "ERFOLGREICH GESENDET",
     contact_error: "FEHLER - ERNEUT VERSUCHEN",
+    contact_consent: "Ich stimme zu, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet werden. Näheres in der {link}.",
+    contact_privacy_link: "Datenschutzerklärung",
+    contact_success_detail: "Vielen Dank — ich melde mich in der Regel innerhalb von 24 Stunden.",
+    contact_error_generic: "Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    contact_error_rate: "Zu viele Anfragen in kurzer Zeit. Bitte warten Sie einen Moment.",
+    contact_error_invalid: "Bitte prüfen Sie Name, E-Mail-Adresse und Nachricht.",
+    contact_error_consent: "Bitte bestätigen Sie die Datenschutzhinweise.",
+    contact_error_unavailable: "Der Formularversand ist derzeit gestört. Schreiben Sie mir bitte direkt an",
+    legal_back: "Zurück zur Startseite",
     
     // Footer
     footer_subtitle: "Ready for the next level?",
@@ -158,7 +176,16 @@ export const translations = {
     stats_reach_post: "Post Avg.",
     
     // Services
-    services_title: "SERVICES",
+    services_title: "Services",
+    partners_subtitle: "Destination Partners",
+    partners_title: "Tourism Boards & Institutions",
+    partners_intro: "I have worked with national tourism boards and international institutions, including {partners}.",
+    partners_view: "View the work",
+    partners_region_mt: "Malta",
+    partners_region_kz: "Kazakhstan",
+    partners_region_tr: "Türkiye",
+    partners_region_ro: "Romania",
+    partners_region_intl: "International",
     services_subtitle: "Service Portfolio",
     service_1_title: "Authentic Hotel & Destination Features",
     service_1_desc: "Organic on-site integration and captivating visual storytelling designed to highlight the true luxury and uniqueness of your location.",
@@ -172,7 +199,7 @@ export const translations = {
     services_disclaimer: "All services, package rates, and format combinations (e.g. dedicated Story sequences, YouTube vlogs, or multi-part TikTok series) are custom-tailored to each brand's specific goals.",
     
     // FeaturedWork
-    work_title: "WORK",
+    work_title: "Work",
     work_subtitle: "Selected Portfolio",
     project_1_title: "Novotel Bosphorus Istanbul",
     project_1_cat: "Hospitality & Resorts",
@@ -211,7 +238,7 @@ export const translations = {
     quote_role: "CREATIVE DIRECTOR & FILMMAKER",
     
     // Contact
-    contact_title: "COLLABORATION & PROCESS",
+    contact_title: "Collaboration & Process",
     contact_subtitle: "Philosophy",
     contact_form_title: "Let's Connect",
     contact_form_subtitle: "Ready for the next level?",
@@ -226,6 +253,15 @@ export const translations = {
     contact_sending: "SENDING...",
     contact_success: "SENT SUCCESSFULLY",
     contact_error: "ERROR - PLEASE RETRY",
+    contact_consent: "I agree that my details may be processed in order to handle my inquiry. See the {link} for more.",
+    contact_privacy_link: "privacy policy",
+    contact_success_detail: "Thank you — I usually reply within 24 hours.",
+    contact_error_generic: "The message could not be sent. Please try again.",
+    contact_error_rate: "Too many requests in a short time. Please wait a moment.",
+    contact_error_invalid: "Please check your name, email address and message.",
+    contact_error_consent: "Please confirm the privacy notice.",
+    contact_error_unavailable: "The form is temporarily unavailable. Please write to me directly at",
+    legal_back: "Back to the homepage",
     
     // Footer
     footer_subtitle: "Ready for the next level?",
@@ -276,7 +312,16 @@ export const translations = {
     stats_reach_post: "Gönderi Ort.",
     
     // Services
-    services_title: "HİZMETLER",
+    services_title: "Hizmetler",
+    partners_subtitle: "Destinasyon Ortakları",
+    partners_title: "Turizm Kurumları & Kuruluşlar",
+    partners_intro: "Ulusal turizm kurumları ve uluslararası kuruluşlarla iş birliği yaptım; bunlar arasında {partners} yer alıyor.",
+    partners_view: "İçeriği gör",
+    partners_region_mt: "Malta",
+    partners_region_kz: "Kazakistan",
+    partners_region_tr: "Türkiye",
+    partners_region_ro: "Romanya",
+    partners_region_intl: "Uluslararası",
     services_subtitle: "Hizmet Portföyü",
     service_1_title: "Otantik Otel ve Destinasyon Tanıtımları",
     service_1_desc: "Mekanın eşsiz lüksünü ve atmosferini anında hissettirmek için yerinde organik entegrasyon ve büyüleyici sinematik anlatım.",
@@ -290,7 +335,7 @@ export const translations = {
     services_disclaimer: "Tüm hizmetler, paket fiyatları ve format kombinasyonları (örneğin özel Hikaye serileri, YouTube vlogları veya çok bölümlü TikTok serileri), her markanın özel hedeflerine göre uyarlanır.",
     
     // FeaturedWork
-    work_title: "PROJELER",
+    work_title: "Projeler",
     work_subtitle: "Seçilmiş Çalışmalar",
     project_1_title: "Novotel Bosphorus Istanbul",
     project_1_cat: "Otelcilik ve Tatil Köyleri",
@@ -329,7 +374,7 @@ export const translations = {
     quote_role: "KREATİF DİREKTÖR & YÖNETMEN",
     
     // Contact
-    contact_title: "İŞ BİRLİĞİ & SÜREÇ",
+    contact_title: "İş Birliği & Süreç",
     contact_subtitle: "Felsefe",
     contact_form_title: "İletişime Geçin",
     contact_form_subtitle: "Yeni projeler için hazır mısınız?",
@@ -344,6 +389,15 @@ export const translations = {
     contact_sending: "GÖNDERİLİYOR...",
     contact_success: "BAŞARIYLA GÖNDERİLDİ",
     contact_error: "HATA - TEKRAR DENEYİN",
+    contact_consent: "Talebimin işlenmesi amacıyla bilgilerimin işlenmesini kabul ediyorum. Ayrıntılar için bkz. {link}.",
+    contact_privacy_link: "Gizlilik Politikası",
+    contact_success_detail: "Teşekkürler — genellikle 24 saat içinde dönüş yapıyorum.",
+    contact_error_generic: "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+    contact_error_rate: "Kısa sürede çok fazla istek gönderildi. Lütfen biraz bekleyin.",
+    contact_error_invalid: "Lütfen ad, e-posta ve mesaj alanlarını kontrol edin.",
+    contact_error_consent: "Lütfen gizlilik bildirimini onaylayın.",
+    contact_error_unavailable: "Form gönderimi şu anda çalışmıyor. Lütfen doğrudan şu adrese yazın:",
+    legal_back: "Ana sayfaya dön",
     
     // Footer
     footer_subtitle: "Ready for the next level?",

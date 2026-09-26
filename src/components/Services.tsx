@@ -5,13 +5,14 @@ import { motion, Variants } from "framer-motion";
 import { Compass, Video, PackageSearch, Copyright } from "lucide-react";
 import styles from "./Services.module.css";
 import { useLanguage } from "@/context/LanguageContext";
+import type { TranslationKeys } from "@/i18n/translations";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 
 export default function Services() {
   const { t } = useLanguage();
   const { playClickSound } = useSoundDesign();
 
-  const services = [
+  const services: { icon: React.ReactNode; titleKey: TranslationKeys; descKey: TranslationKeys }[] = [
     {
       icon: <Compass className={styles.icon} />,
       titleKey: "service_1_title",
@@ -75,8 +76,8 @@ export default function Services() {
           {services.map((service, index) => (
             <motion.div key={index} variants={itemVariants} className={styles.card}>
               <div className={styles.iconWrapper}>{service.icon}</div>
-              <h4 className={styles.cardTitle}>{t(service.titleKey as any)}</h4>
-              <p className={styles.cardDesc}>{t(service.descKey as any)}</p>
+              <h4 className={styles.cardTitle}>{t(service.titleKey)}</h4>
+              <p className={styles.cardDesc}>{t(service.descKey)}</p>
               
               <a
                 href="#contact"

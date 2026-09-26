@@ -98,3 +98,19 @@
     text-align: center;
   }
 }
+
+/* Imprint / privacy — legally required on every page, so they live in the
+   footer rather than only on the landing sections. */
+.legalLinks {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-on-ink-muted);
+}
+
+.legalLinks a:hover {
+  color: var(--accent-gold-light);
+}

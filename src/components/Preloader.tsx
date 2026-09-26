@@ -1,41 +1,89 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useSyncExternalStore } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Preloader.module.css";
 
 import { useLanguage } from "@/context/LanguageContext";
+import { useScrollLock } from "@/hooks/useScrollLock";
+
+const SEEN_KEY = "atilla_preloader_seen";
+
+/**
+ * Whether this browser session has already played the intro.
+ *
+ * sessionStorage is an external store, so it is read through
+ * useSyncExternalStore rather than in an effect. The old version started with
+ * `isLoading = false` and switched it on after mount, which meant a returning
+ * visitor briefly saw the page and then had it covered again — and the
+ * first-time visitor saw the landing page flash before the intro dropped over
+ * it. Reading the flag during render removes both flashes.
+ */
+function subscribeSeen(): () => void {
+  // Nothing else writes the key during the page's life.
+  return () => {};
+}
+
+function hasSeenIntro(): boolean {
+  try {
+    return sessionStorage.getItem(SEEN_KEY) !== null;
+  } catch {
+    // Private mode or blocked storage: treat the intro as unseen.
+    return false;
+  }
+}
+
+function hasSeenIntroOnServer(): boolean {
+  return false;
+}
 
 export default function Preloader() {
-  const [isLoading, setIsLoading] = useState(false);
+  const alreadySeen = useSyncExternalStore(subscribeSeen, hasSeenIntro, hasSeenIntroOnServer);
+  const [dismissed, setDismissed] = useState(false);
   const { t } = useLanguage();
 
-  useEffect(() => {
-    // Check if user already saw the preloader in this session
-    const hasSeen = sessionStorage.getItem("atilla_preloader_seen");
-    if (hasSeen) {
-      return;
-    }
+  const isLoading = !alreadySeen && !dismissed;
+  useScrollLock(isLoading);
 
-    setIsLoading(true);
-    document.body.style.overflow = "hidden";
+  useEffect(() => {
+    if (!isLoading) return;
+
+    const markSeen = () => {
+      try {
+        sessionStorage.setItem(SEEN_KEY, "true");
+      } catch {
+        // Storage unavailable — the intro simply plays again next navigation.
+      }
+    };
 
     const timer = setTimeout(() => {
-      setIsLoading(false);
-      document.body.style.overflow = "auto";
-      sessionStorage.setItem("atilla_preloader_seen", "true");
+      markSeen();
+      setDismissed(true);
     }, 1400);
+
+    // An overlay that only a mouse can dismiss is a trap for anyone on a
+    // keyboard, so Escape closes it too.
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        markSeen();
+        setDismissed(true);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
 
     return () => {
       clearTimeout(timer);
-      document.body.style.overflow = "auto";
+      window.removeEventListener("keydown", handleKey);
     };
-  }, []);
+  }, [isLoading]);
 
   const handleDismiss = () => {
-    setIsLoading(false);
-    document.body.style.overflow = "auto";
-    sessionStorage.setItem("atilla_preloader_seen", "true");
+    try {
+      sessionStorage.setItem(SEEN_KEY, "true");
+    } catch {
+      // See above.
+    }
+    setDismissed(true);
   };
 
   return (
@@ -44,6 +92,7 @@ export default function Preloader() {
         <motion.div
           className={styles.preloader}
           onClick={handleDismiss}
+          role="presentation"
           initial={{ y: 0 }}
           exit={{ 
             opacity: 0,
@@ -54,6 +103,14 @@ export default function Preloader() {
             } 
           }}
         >
+          {/* Without JavaScript nothing ever removes this overlay, so the
+              page would stay behind it forever. CSS Modules hand us the
+              hashed class name at runtime, which is what lets a noscript
+              stylesheet target it. */}
+          <noscript>
+            <style>{`.${styles.preloader}{display:none!important}`}</style>
+          </noscript>
+
           {/* Cinematic Wrapper */}
           <div className={styles.cinematicWrapper}>
             <motion.div 
@@ -82,7 +139,9 @@ export default function Preloader() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className={styles.skipContainer}
           >
-            <div className={styles.skipText}>{t('preloader_skip')}</div>
+            <button type="button" className={styles.skipText} onClick={handleDismiss}>
+              {t('preloader_skip')}
+            </button>
             <div className={styles.progressBar}>
               <div className={styles.progressFill}></div>
             </div>

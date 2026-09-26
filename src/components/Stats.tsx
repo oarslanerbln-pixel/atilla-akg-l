@@ -4,6 +4,7 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 import { Users, MapPin, Target, Eye } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
+import { socialProfiles } from "@/lib/site";
 import styles from "./Stats.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
@@ -112,7 +113,7 @@ export default function Stats() {
           {/* Social Links */}
           <motion.div variants={itemVariants} className={styles.socialGroup}>
             <a
-              href="https://instagram.com/atillabarbarossa"
+              href={socialProfiles.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialCard}
@@ -129,7 +130,7 @@ export default function Stats() {
             </a>
 
             <a
-              href="https://www.tiktok.com/@atillabarbarossa"
+              href={socialProfiles.tiktok}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialCard}
@@ -146,7 +147,7 @@ export default function Stats() {
             </a>
 
             <a
-              href="https://www.youtube.com/@atillabarbarossa"
+              href={socialProfiles.youtube}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialCard}

@@ -1,10 +1,10 @@
 import Preloader from "@/components/Preloader";
 import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
-import FilmGrain from "@/components/FilmGrain";
 import Hero from "@/components/Hero";
 import Brands from "@/components/Brands";
 import Stats from "@/components/Stats";
+import Partners from "@/components/Partners";
 import FeaturedWork from "@/components/FeaturedWork";
 import Services from "@/components/Services";
 import CaseStudy from "@/components/CaseStudy";
@@ -17,11 +17,11 @@ export default function Home() {
     <main>
       <Preloader />
       <CustomCursor />
-      <FilmGrain />
       <Navbar />
       <Hero />
       <Brands />
       <Stats />
+      <Partners />
       <FeaturedWork />
       <Services />
       <CaseStudy />

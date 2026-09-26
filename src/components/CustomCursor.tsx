@@ -1,14 +1,25 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./CustomCursor.module.css";
 
+/**
+ * Bespoke cursor: a dot pinned to the pointer and a ring that eases after it.
+ *
+ * The positions deliberately never enter React state. The earlier version
+ * called setState on every mousemove *and* on every animation frame, so the
+ * component re-rendered roughly sixty times a second for as long as the
+ * pointer was on the page — for two elements whose only change is a transform.
+ * Coordinates are written straight to the nodes instead, and state is reserved
+ * for the things that genuinely change the markup: visibility and the label.
+ */
 export default function CustomCursor() {
-  const [pos, setPos] = useState({ x: -100, y: -100 });
-  const [ringPos, setRingPos] = useState({ x: -100, y: -100 });
+  const [isVisible, setIsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [hoverText, setHoverText] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
+
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Only run on devices with fine pointer (mouse)
@@ -20,13 +31,12 @@ export default function CustomCursor() {
     let animationFrameId: number;
     let targetX = -100;
     let targetY = -100;
-    let currentX = -100;
-    let currentY = -100;
+    let ringX = -100;
+    let ringY = -100;
 
     const handleMouseMove = (e: MouseEvent) => {
       targetX = e.clientX;
       targetY = e.clientY;
-      setPos({ x: e.clientX, y: e.clientY });
       setIsVisible(true);
 
       const target = e.target as HTMLElement | null;
@@ -60,9 +70,19 @@ export default function CustomCursor() {
 
     const render = () => {
       // Smooth lerp for ring
-      currentX += (targetX - currentX) * 0.18;
-      currentY += (targetY - currentY) * 0.18;
-      setRingPos({ x: currentX, y: currentY });
+      ringX += (targetX - ringX) * 0.18;
+      ringY += (targetY - ringY) * 0.18;
+
+      // Written as custom properties, not as `transform`, so the stylesheet
+      // keeps ownership of the -50% centring offset and the hover state.
+      if (dotRef.current) {
+        dotRef.current.style.setProperty("--cx", `${targetX}px`);
+        dotRef.current.style.setProperty("--cy", `${targetY}px`);
+      }
+      if (ringRef.current) {
+        ringRef.current.style.setProperty("--cx", `${ringX}px`);
+        ringRef.current.style.setProperty("--cy", `${ringY}px`);
+      }
       animationFrameId = requestAnimationFrame(render);
     };
 
@@ -81,15 +101,9 @@ export default function CustomCursor() {
   if (!isVisible) return null;
 
   return (
-    <div className={isHovering ? styles.cursorHover : ""}>
-      <div
-        className={styles.cursorDot}
-        style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
-      />
-      <div
-        className={styles.cursorRing}
-        style={{ left: `${ringPos.x}px`, top: `${ringPos.y}px` }}
-      >
+    <div className={isHovering ? styles.cursorHover : ""} aria-hidden="true">
+      <div ref={dotRef} className={styles.cursorDot} />
+      <div ref={ringRef} className={styles.cursorRing}>
         {hoverText && <span className={styles.cursorText}>{hoverText}</span>}
       </div>
     </div>

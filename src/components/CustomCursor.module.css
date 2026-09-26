@@ -7,9 +7,12 @@
   background-color: var(--accent-gold);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 99998;
-  transform: translate(-50%, -50%);
+  z-index: var(--z-cursor);
+  /* --cx/--cy are written per animation frame by CustomCursor; keeping the
+     centring offset here means JS never has to know about it. */
+  transform: translate3d(var(--cx, -100px), var(--cy, -100px), 0) translate(-50%, -50%);
   transition: opacity 0.3s ease;
+  will-change: transform;
 }
 
 .cursorRing {
@@ -21,13 +24,16 @@
   border: 1px solid rgba(194, 165, 126, 0.4);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 99997;
-  transform: translate(-50%, -50%);
+  z-index: calc(var(--z-cursor) - 1);
+  transform: translate3d(var(--cx, -100px), var(--cy, -100px), 0) translate(-50%, -50%);
+  /* No transform transition: the trailing motion is the JS lerp. Animating
+     the same property here as well added a second easing on top and made the
+     ring lag behind the pointer twice over. */
   transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
               height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.3s ease,
-              background-color 0.3s ease,
-              transform 0.15s ease-out;
+              background-color 0.3s ease;
+  will-change: transform;
   display: flex;
   align-items: center;
   justify-content: center;
