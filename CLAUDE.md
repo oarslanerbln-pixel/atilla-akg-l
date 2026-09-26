@@ -97,6 +97,15 @@ src/
 
 ---
 
+## 🤖 AI Concierge (Instagram + WhatsApp tour sales)
+- Server-only code in `src/lib/concierge/`; webhooks in `src/app/api/webhooks/{meta,stripe}/route.ts`.
+- Stack: `@anthropic-ai/sdk` (Claude tool-use loop in `agent.ts`), `@supabase/supabase-js` (CRM, schema in `supabase/migrations/`), `stripe` (deposit Checkout).
+- Fixed customer messages live in `src/lib/concierge/copy.ts` (DE/EN/TR), not `translations.ts`, because they are sent server-side.
+- Setup and env vars: `docs/concierge-setup.md`, `.env.example`.
+- Personal data is encrypted in the app before it reaches Supabase (`crypto.ts`, AES-256-GCM, AAD `table.column:rowId`). Never write personal fields to the DB directly: go through the mappers in `db.ts` / `bookings.ts`. Look contacts up by `external_id_hash` (blind index), never by `external_id`.
+
+---
+
 ## ⚙️ Development & Scripts
 - `npm run dev` - Start local development server (localhost:3000)
 - `npm run build` - Create production build
