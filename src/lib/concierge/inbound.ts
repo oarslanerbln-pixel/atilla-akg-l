@@ -13,15 +13,29 @@ import {
   updateContact,
   upsertContact,
   type Contact,
+  type ContactPatch,
 } from './db';
 import {
   alertStaff,
   markWhatsAppRead,
+  MetaApiError,
+  replyToInstagramComment,
   sendInstagramPrivateReply,
   sendToContact,
   sendWhatsAppText,
+  type QuickReply,
 } from './meta';
-import { commentReply, guessLang, staff } from './copy';
+import {
+  commentReply,
+  guessLang,
+  offerButton,
+  offerLink,
+  offerTeaser,
+  publicCommentReply,
+  staff,
+  tourButton,
+} from './copy';
+import { activeOffers, createOfferLink, offerForWords, OFFER_PAYLOAD, rememberMedia, sendOfferLink } from './offers';
 import { runConcierge } from './agent';
 
 type Job = () => Promise<void>;
@@ -37,6 +51,8 @@ interface InboundMessage {
   text: string;
   name?: string;
   username?: string;
+  /** Set when the customer tapped a partner offer's "send me the link" button. */
+  offerId?: string;
 }
 
 async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
@@ -50,6 +66,8 @@ async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
   if (msg.channel === 'whatsapp') await markWhatsAppRead(msg.metaMessageId);
   if (contact.bot_paused) return;
   if (await floodDetected(contact)) return;
+  // The link request is answered directly; a paused or removed offer falls through to the concierge.
+  if (msg.offerId && (await sendOfferLink(contact, msg.offerId))) return;
 
   await sleep(CONCIERGE.debounceMs);
   await answerWhenFree(contact.id);
@@ -122,22 +140,79 @@ async function handleInstagramEcho(customerId: string, mid: string, text: string
   }
 }
 
-/** Comment-to-DM: a keyword under a post or reel opens a private conversation. */
-async function handleInstagramComment(commentId: string, text: string, fromId: string, username?: string) {
-  if (fromId === env('INSTAGRAM_ACCOUNT_ID')) return;
-  const words = text.toLowerCase().split(/[^\p{L}\p{N}]+/u);
-  if (!words.some((w) => CONCIERGE.commentKeywords.includes(w))) return;
-
-  const contact = await upsertContact('instagram', fromId, { username });
-  // Logged as the customer's opening line so the concierge knows where they came from.
-  if (!(await recordInbound(contact.id, `[Instagram comment] ${text}`, `comment:${commentId}`))) return;
-
-  const lang = contact.language ?? guessLang(text);
-  const reply = commentReply(lang);
-  const sent = await sendInstagramPrivateReply(commentId, reply);
-  if (!contact.language) await updateContact(contact.id, { language: lang });
-  await recordOutbound(contact.id, 'assistant', reply, sent.messageId);
+interface InstagramComment {
+  commentId: string;
+  text: string;
+  fromId: string;
+  username?: string;
+  mediaId?: string;
 }
+
+/**
+ * Comment-to-DM: a keyword under a post or reel opens a private conversation. Partner-offer
+ * keywords (e.g. AMEX) get the offer, tour keywords the concierge. The commenter also gets a
+ * short public answer, and the reel is remembered as the source of the lead.
+ */
+async function handleInstagramComment(c: InstagramComment): Promise<void> {
+  if (c.fromId === env('INSTAGRAM_ACCOUNT_ID')) return;
+  const words = c.text.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  const offer = offerForWords(words, await activeOffers());
+  const keyword = offer
+    ? words.find((w) => offer.keywords.some((k) => k.toLowerCase() === w))
+    : words.find((w) => CONCIERGE.commentKeywords.includes(w));
+  if (!keyword) return;
+
+  if (c.mediaId) await rememberMedia(c.mediaId);
+  let contact = await upsertContact('instagram', c.fromId, { username: c.username });
+  // Logged as the customer's opening line so the concierge knows where they came from.
+  if (!(await recordInbound(contact.id, `[Instagram comment] ${c.text}`, `comment:${c.commentId}`))) return;
+
+  const lang = contact.language ?? guessLang(c.text);
+  const patch: ContactPatch = {};
+  if (!contact.language) patch.language = lang;
+  if (!contact.source_media_id && c.mediaId) Object.assign(patch, { source_media_id: c.mediaId, source_keyword: keyword });
+  if (Object.keys(patch).length) contact = await updateContact(contact.id, patch);
+
+  if (offer) {
+    await privateReplyWithButton(contact, c.commentId, offerTeaser(lang, offer.pitch[lang]), {
+      title: offerButton(lang),
+      payload: `${OFFER_PAYLOAD}${offer.id}`,
+    }, async () => `${offer.pitch[lang]}\n\n${offerLink(lang, offer.name[lang], await createOfferLink(offer, contact))}`);
+  } else {
+    const reply = commentReply(lang);
+    await privateReplyWithButton(contact, c.commentId, reply, { title: tourButton(lang), payload: 'TOURS' }, async () => reply);
+  }
+
+  // A courtesy for other viewers; the DM matters, so a failure here is only logged.
+  await replyToInstagramComment(c.commentId, publicCommentReply(lang)).catch((e) =>
+    console.error('[concierge] public comment reply failed', e),
+  );
+}
+
+/**
+ * Instagram allows one private reply and nothing more until the customer answers, so it carries a
+ * one-tap button. If the API refuses the button, the fallback text is sent without one.
+ */
+async function privateReplyWithButton(
+  contact: Contact,
+  commentId: string,
+  text: string,
+  button: QuickReply,
+  fallback: () => Promise<string>,
+): Promise<void> {
+  let body = text;
+  let sent: { messageId?: string };
+  try {
+    sent = await sendInstagramPrivateReply(commentId, text, [button]);
+  } catch (e) {
+    if (!(e instanceof MetaApiError) || e.status >= 500) throw e;
+    console.error('[concierge] private reply with button refused, retrying without', e);
+    body = await fallback();
+    sent = await sendInstagramPrivateReply(commentId, body);
+  }
+  await recordOutbound(contact.id, 'assistant', body, sent.messageId);
+}
+
 
 // ---------- Payload parsing ----------
 
@@ -254,9 +329,16 @@ export function jobsFromMetaWebhook(payload: {
         }
         if (message && !message.is_deleted && !message.is_unsupported) {
           const text = instagramText(message);
+          const payload = message.quick_reply?.payload;
           if (text) {
             jobs.push(() =>
-              handleCustomerMessage({ channel: 'instagram', externalId: event.sender.id, metaMessageId: message.mid, text }),
+              handleCustomerMessage({
+                channel: 'instagram',
+                externalId: event.sender.id,
+                metaMessageId: message.mid,
+                text,
+                offerId: payload?.startsWith(OFFER_PAYLOAD) ? payload.slice(OFFER_PAYLOAD.length) : undefined,
+              }),
             );
           }
         } else if (postback) {
@@ -272,8 +354,16 @@ export function jobsFromMetaWebhook(payload: {
       }
       for (const change of (entry.changes as { field: string; value: Record<string, unknown> }[] | undefined) ?? []) {
         if (change.field !== 'comments') continue;
-        const v = change.value as { id: string; text?: string; from?: { id: string; username?: string } };
-        if (v.text && v.from) jobs.push(() => handleInstagramComment(v.id, v.text!, v.from!.id, v.from!.username));
+        const v = change.value as {
+          id: string;
+          text?: string;
+          from?: { id: string; username?: string };
+          media?: { id: string };
+        };
+        if (v.text && v.from) {
+          const comment = { commentId: v.id, text: v.text, fromId: v.from.id, username: v.from.username, mediaId: v.media?.id };
+          jobs.push(() => handleInstagramComment(comment));
+        }
       }
     }
   }

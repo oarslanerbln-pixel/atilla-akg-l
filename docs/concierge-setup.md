@@ -18,6 +18,7 @@ Bütün anahtarlar `.env.example` dosyasında listeli. Yerelde `.env.local` dosy
 1. supabase.com → New project → bölge olarak **Frankfurt (eu-central-1)** seçin (DSGVO/KVKK için AB'de kalsın).
 2. SQL Editor'de sırayla çalıştırın:
    - `supabase/migrations/20260924000000_concierge.sql` (tablolar)
+   - `supabase/migrations/20260926000000_offers_and_sources.sql` (partner teklifleri ve reel takibi)
    - `supabase/seed.sql` (**örnek** turlar, rehberler ve önümüzdeki 90 günün tarihleri)
 3. Project Settings → API → `SUPABASE_URL` ve `service_role` anahtarını kopyalayın.
 4. Gerçek turlar, fiyatlar ve rehber numaraları Table Editor'den `tours`, `guides` ve `departures` tablolarına girilir. Müşteriler `contacts`, konuşmalar `messages`, rezervasyonlar `bookings` tablosunda görünür.
@@ -50,7 +51,27 @@ Atilla şu an normal WhatsApp kullandığı için concierge'e **ayrı bir numara
 6. Instagram uygulamasında Ayarlar → Mesajlar → **Bağlı araçlar / Mesaj erişimine izin ver** seçeneğini açın.
 7. Yabancı müşterilerden mesaj alabilmek için uygulamanın **App Review**'dan geçmesi ve *Live* moda alınması gerekir. İnceleme tamamlanana kadar yalnızca uygulamaya eklenmiş test hesaplarıyla çalışır.
 
-**Yoruma otomatik DM:** Bir post veya reel'in altına `IG_COMMENT_KEYWORDS` listesindeki kelimelerden biri (ör. "TUR", "Reise", "info") yazıldığında, yorum yapan kişiye müşterinin dilinde otomatik DM gider ve concierge sohbeti devralır.
+**Yoruma otomatik DM:** Bir post veya reel'in altına `IG_COMMENT_KEYWORDS` listesindeki kelimelerden biri (ör. "TUR", "Reise", "info") yazıldığında:
+1. Yorum yapan kişiye, dilinde, **"Turları göster"** butonlu bir DM gider. Instagram, müşteri cevap verene kadar ikinci mesaja izin vermediği için buton tek dokunuşla sohbeti açar ve concierge devralır.
+2. Yorumun altına 6 farklı kısa cevaptan biri herkese açık olarak yazılır ("DM'den yazdım ✨" gibi).
+3. Yorumun hangi reel'den geldiği kaydedilir (bkz. *Hangi reel ne kazandırdı?*).
+
+### Partner (affiliate) teklifleri – ör. American Express
+Tur dışında Awin, Admitad veya FinanceAds üzerinden tanıtılan ürünler `affiliate_offers` tablosunda durur. `seed.sql` bir **örnek** `amex` kaydı ekler; bu kayıt kapalıdır (`active = false`).
+
+1. Affiliate ağından programın takip linkini alın ve alt kimlik (sub-id) parametresine `{click_id}` yazın. Parametrenin adı ağa göre değişir; Awin'de `clickref`:
+   `https://www.awin1.com/cread.php?awinmid=…&awinaffid=…&clickref={click_id}`
+2. `tracking_url`, `pitch` (programın onayladığı kısa tanıtım metni, DE/EN/TR) ve `keywords` alanlarını doldurup `active = true` yapın.
+3. Reel'de ör. *"Yorumlara AMEX yaz"* deyin. Yorum yapan kişiye tanıtım metni ve **"Linki gönder"** butonu gider. Butona basınca kişiye özel bir link (`SITE/go/…`) ve reklam uyarısı gönderilir. Concierge'e DM'den soran müşteriye de aynı link gönderilir.
+4. Her tıklama sayılır. Tıklama kimliği ağa sub-id olarak gider; ağın komisyon raporundaki sub-id ile hangi reel'den geldiği eşleştirilebilir.
+
+**Hukuki notlar**
+- Her partner linkinde "Anzeige / Ad / Reklam" uyarısı otomatik olarak yer alır. Reel'in kendisi de reklam olarak işaretlenmeli (ör. "Werbung" etiketi veya Instagram'ın *Ücretli ortaklık* etiketi).
+- Concierge kredi kartları hakkında kişisel finansal tavsiye vermez; yalnızca onaylı tanıtım metnini kullanır ve koşullar için sağlayıcıya yönlendirir.
+- Programın koşullarını kontrol edin: bazı kart programları DM, yorum veya teşvikli trafik üzerinden tanıtımı kısıtlar. Tanıtım metni programın izin verdiği ifadelerden oluşmalı.
+
+### Hangi reel ne kazandırdı?
+Supabase'deki `source_performance` görünümünde her post/reel için şunlar listelenir: link, açılan sohbet sayısı, ödenmiş rezervasyonlar, tur cirosu, gönderilen ve açılan partner linkleri.
 
 ## 5. Stripe
 1. Stripe hesabı → para birimi EUR. Settings → Payment methods'ta kart, Apple Pay, Google Pay, PayPal ve SEPA'yı açın.

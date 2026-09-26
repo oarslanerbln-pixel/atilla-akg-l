@@ -2,6 +2,7 @@ import 'server-only';
 import type Anthropic from '@anthropic-ai/sdk';
 import { CONCIERGE, env, isLang, type Lang } from './config';
 import { attachCheckoutSession, createPendingBooking } from './bookings';
+import { activeOffers, sendOfferLink } from './offers';
 import { updateContact, type Contact, type ContactPatch, type Stage } from './db';
 import { alertStaff } from './meta';
 import { staff } from './copy';
@@ -104,6 +105,25 @@ export const TOOLS: Anthropic.Beta.BetaTool[] = [
         },
       },
       required: ['reason', 'summary'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'list_partner_offers',
+    description:
+      "Returns the partner products Atilla recommends as an affiliate (for example American Express cards), each with its id, name and the approved short description. Call it only when the customer asks about such a product or their conversation started from one; it is separate from the tours.",
+    strict: true,
+    input_schema: { type: 'object', properties: {}, required: [], additionalProperties: false },
+  },
+  {
+    name: 'send_partner_link',
+    description:
+      'Sends the customer a personal tracked link to a partner offer together with the legally required advertising notice. This is the only way to share a partner link: never write a partner URL yourself, and do not repeat the link afterwards.',
+    strict: true,
+    input_schema: {
+      type: 'object',
+      properties: { offer_id: { type: 'string', description: 'Offer id from list_partner_offers.' } },
+      required: ['offer_id'],
       additionalProperties: false,
     },
   },
@@ -229,6 +249,7 @@ async function createDepositLink(input: Input, ctx: ToolContext) {
     totalEur: total,
     depositEur: deposit,
     expiresAt,
+    sourceMediaId: ctx.contact.source_media_id,
   });
 
   const session = await stripe().checkout.sessions.create({
@@ -286,6 +307,21 @@ async function handoffToAtilla(input: Input, ctx: ToolContext) {
   return { handed_off: true, note: 'Atilla has been notified and will reply personally. Automatic replies are now off for this customer.' };
 }
 
+async function listPartnerOffers(ctx: ToolContext) {
+  const l = lang(ctx);
+  const offers = await activeOffers();
+  return offers.length
+    ? offers.map((o) => ({ id: o.id, name: o.name[l], description: o.pitch[l] }))
+    : { offers: [], note: 'There are no partner offers at the moment.' };
+}
+
+async function sendPartnerLink(input: Input, ctx: ToolContext) {
+  if (!(await sendOfferLink(ctx.contact, String(input.offer_id)))) {
+    return { error: 'This offer is not available. Call list_partner_offers for the current ones.' };
+  }
+  return { sent: true, note: 'The link and the advertising notice are already in the chat. Do not repeat the link.' };
+}
+
 export async function runTool(name: string, input: Input, ctx: ToolContext): Promise<unknown> {
   switch (name) {
     case 'list_tours':
@@ -298,6 +334,10 @@ export async function runTool(name: string, input: Input, ctx: ToolContext): Pro
       return createDepositLink(input, ctx);
     case 'handoff_to_atilla':
       return handoffToAtilla(input, ctx);
+    case 'list_partner_offers':
+      return listPartnerOffers(ctx);
+    case 'send_partner_link':
+      return sendPartnerLink(input, ctx);
     default:
       return { error: `Unknown tool ${name}` };
   }

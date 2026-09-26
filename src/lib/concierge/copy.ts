@@ -15,6 +15,29 @@ export interface ConfirmedBooking {
 }
 
 const customer = {
+  // Public answers under a comment. Several variants so the thread doesn't look automated.
+  publicCommentReply: {
+    de: ['Hab dir eine DM geschickt ✨', 'Schau mal in deine Nachrichten 📩', 'Ist unterwegs – check deine DMs!', 'Danke dir! Details kommen per DM.', 'Gerne – ich hab dir privat geschrieben.', 'Infos sind in deinem Postfach 🙌'],
+    en: ['Sent you a DM ✨', 'Check your messages 📩', 'On its way – check your DMs!', 'Thank you! Details are in your DMs.', 'Happy to help – I messaged you privately.', 'The info is in your inbox 🙌'],
+    tr: ["DM'den yazdım ✨", 'Mesaj kutunuza bakın 📩', "Gönderildi – DM'lerinizi kontrol edin!", "Teşekkürler! Detaylar DM'de.", 'Memnuniyetle – size özelden yazdım.', 'Bilgiler gelen kutunuzda 🙌'],
+  },
+  // Quick-reply buttons: Instagram allows at most 20 characters.
+  tourButton: { de: 'Touren ansehen', en: 'Show me the tours', tr: 'Turları göster' },
+  offerButton: { de: 'Link schicken', en: 'Send me the link', tr: 'Linki gönder' },
+  offerTeaser: {
+    de: (pitch: string) => `${pitch}\n\nTipp unten auf den Button, dann schicke ich dir den Link.`,
+    en: (pitch: string) => `${pitch}\n\nTap the button below and I'll send you the link.`,
+    tr: (pitch: string) => `${pitch}\n\nAşağıdaki butona dokunun, linki hemen göndereyim.`,
+  },
+  // Advertising notice required for affiliate links (DE: § 5a UWG, TR: Reklam Kurulu).
+  offerLink: {
+    de: (name: string, url: string) =>
+      `Hier ist dein Link zu ${name}:\n${url}\n\nAnzeige: Das ist ein Partnerlink. Wenn du darüber einen Antrag stellst, erhält Atilla eine Provision – für dich ändert sich nichts. Konditionen und Beratung gibt es direkt beim Anbieter.`,
+    en: (name: string, url: string) =>
+      `Here is your link to ${name}:\n${url}\n\nAd: this is a partner link. If you apply through it, Atilla earns a commission at no extra cost to you. Terms and advice come directly from the provider.`,
+    tr: (name: string, url: string) =>
+      `${name} için linkiniz:\n${url}\n\nReklam: Bu bir iş ortaklığı (affiliate) linkidir. Bu link üzerinden başvurursanız Atilla komisyon alır; sizin için hiçbir şey değişmez. Koşullar ve danışmanlık için doğrudan sağlayıcıya başvurun.`,
+  },
   commentReply: {
     de: 'Danke für dein Interesse! ✨ Schreib mir hier einfach, welche Tour dich reizt, wann du reisen möchtest und mit wie vielen Personen – ich stelle dir alles zusammen.',
     en: 'Thank you for your interest! ✨ Just reply here with the tour you have in mind, your travel dates and how many of you are coming – I will put everything together for you.',
@@ -59,6 +82,16 @@ const customer = {
 export function commentReply(lang: Lang): string {
   return customer.commentReply[lang];
 }
+
+export function publicCommentReply(lang: Lang): string {
+  const options = customer.publicCommentReply[lang];
+  return options[Math.floor(Math.random() * options.length)];
+}
+
+export const tourButton = (lang: Lang) => customer.tourButton[lang];
+export const offerButton = (lang: Lang) => customer.offerButton[lang];
+export const offerTeaser = (lang: Lang, pitch: string) => customer.offerTeaser[lang](pitch);
+export const offerLink = (lang: Lang, name: string, url: string) => customer.offerLink[lang](name, url);
 
 export function fallbackReply(lang: Lang): string {
   return customer.fallback[lang];

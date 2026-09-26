@@ -23,6 +23,7 @@ function crmContext(contact: Contact, history: StoredMessage[]): string {
     language: contact.language,
     email: contact.email,
     stage: contact.stage,
+    came_from_comment_keyword: contact.source_keyword,
     ...contact.qualification,
   };
   return [

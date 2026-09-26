@@ -20,6 +20,9 @@ export interface Contact {
   qualification: Record<string, unknown>;
   bot_paused: boolean;
   marketing_consent: boolean;
+  /** Instagram post or reel that started the conversation (first touch). */
+  source_media_id: string | null;
+  source_keyword: string | null;
 }
 
 export interface StoredMessage {
@@ -70,6 +73,8 @@ function contactFromRow(row: Record<string, unknown>): Contact {
     qualification: qualification ? JSON.parse(qualification) : {},
     bot_paused: row.bot_paused === true,
     marketing_consent: row.marketing_consent === true,
+    source_media_id: (row.source_media_id as string | null) ?? null,
+    source_keyword: (row.source_keyword as string | null) ?? null,
   };
 }
 

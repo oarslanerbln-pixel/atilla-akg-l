@@ -43,6 +43,7 @@ export interface NewBooking {
   totalEur: number;
   depositEur: number;
   expiresAt: Date;
+  sourceMediaId: string | null;
 }
 
 /** Inserts an unpaid booking that holds its seats until `expiresAt`. */
@@ -61,6 +62,7 @@ export async function createPendingBooking(b: NewBooking): Promise<{ id: string;
       total_eur: b.totalEur,
       deposit_eur: b.depositEur,
       expires_at: b.expiresAt.toISOString(),
+      source_media_id: b.sourceMediaId,
     })
     .select('id, ref')
     .single();

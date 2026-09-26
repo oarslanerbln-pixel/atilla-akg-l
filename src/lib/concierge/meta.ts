@@ -28,6 +28,13 @@ async function graphPost(url: string, token: string, body: unknown): Promise<Rec
   return json as Record<string, unknown>;
 }
 
+async function graphGet(url: string, token: string): Promise<Record<string, unknown>> {
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+  const json = (await res.json().catch(() => ({}))) as { error?: { code?: number; message?: string } };
+  if (!res.ok) throw new MetaApiError(res.status, json.error?.code, json.error?.message ?? res.statusText);
+  return json as Record<string, unknown>;
+}
+
 /** Validates X-Hub-Signature-256. WhatsApp and Instagram may live in different Meta apps. */
 export function verifyMetaSignature(rawBody: string, header: string | null): boolean {
   if (!header?.startsWith('sha256=')) return false;
@@ -135,16 +142,44 @@ export async function sendInstagramText(
   return json.message_id as string | undefined;
 }
 
-/** Private reply to a comment: opens a DM thread with the commenter. */
+export interface QuickReply {
+  /** At most 20 characters. */
+  title: string;
+  payload: string;
+}
+
+/**
+ * Private reply to a comment: opens a DM thread with the commenter. Instagram allows no second
+ * message until they answer, so a one-tap quick reply makes that answer (and the 24h window) easy.
+ */
 export async function sendInstagramPrivateReply(
   commentId: string,
   text: string,
+  quickReplies: QuickReply[] = [],
 ): Promise<{ recipientId?: string; messageId?: string }> {
   const json = await graphPost(instagramUrl(), env('INSTAGRAM_ACCESS_TOKEN'), {
     recipient: { comment_id: commentId },
-    message: { text },
+    message: {
+      text,
+      ...(quickReplies.length ? { quick_replies: quickReplies.map((q) => ({ content_type: 'text', ...q })) } : {}),
+    },
   });
   return { recipientId: json.recipient_id as string | undefined, messageId: json.message_id as string | undefined };
+}
+
+/** Public answer under the comment, so other viewers see that commenting works. */
+export async function replyToInstagramComment(commentId: string, text: string): Promise<void> {
+  await graphPost(`https://graph.instagram.com/${CONCIERGE.graphVersion}/${commentId}/replies`, env('INSTAGRAM_ACCESS_TOKEN'), {
+    message: text,
+  });
+}
+
+export async function getInstagramMedia(mediaId: string): Promise<{ permalink?: string; caption?: string }> {
+  const json = await graphGet(
+    `https://graph.instagram.com/${CONCIERGE.graphVersion}/${mediaId}?fields=permalink,caption`,
+    env('INSTAGRAM_ACCESS_TOKEN'),
+  );
+  return { permalink: json.permalink as string | undefined, caption: json.caption as string | undefined };
 }
 
 // ---------- Channel-agnostic helpers ----------
