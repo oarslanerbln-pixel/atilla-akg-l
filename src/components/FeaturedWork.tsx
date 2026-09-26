@@ -18,8 +18,6 @@ interface ProjectItem {
   typeKey: TranslationKeys;
   poster: string;
   videoSrc: string;
-  playbackRate?: number;
-  trimEnd?: number;
 }
 
 const rawProjects: ProjectItem[] = [
@@ -32,18 +30,6 @@ const rawProjects: ProjectItem[] = [
     typeKey: "project_1_type",
     poster: "/posters/hero-reel.webp",
     videoSrc: "/hero-reel.mp4",
-  },
-  {
-    id: "2",
-    categoryKey: "project_2_cat",
-    titleKey: "project_2_title",
-    descKey: "project_2_desc",
-    metricKey: "project_2_metric",
-    typeKey: "project_2_type",
-    poster: "/posters/maldives-cinematic.webp",
-    videoSrc: "/maldives-cinematic.mp4",
-    playbackRate: 0.7,
-    trimEnd: 4,
   },
   {
     id: "3",
@@ -73,14 +59,10 @@ function InViewVideo({
   src,
   poster,
   className,
-  playbackRate = 1.0,
-  trimEnd,
 }: {
   src: string;
   poster: string;
   className?: string;
-  playbackRate?: number;
-  trimEnd?: number;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(videoRef, { margin: "-100px" });
@@ -89,30 +71,20 @@ function InViewVideo({
     const video = videoRef.current;
     if (!video) return;
 
-    // Someone who asked their system for less motion did not ask for three
-    // clips looping behind the copy.
+    // Someone who asked their system for less motion did not ask for clips
+    // looping behind the copy.
     const wantsLessMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (wantsLessMotion) {
       video.pause();
       return;
     }
 
-    video.playbackRate = playbackRate;
     if (isInView) {
       video.play().catch(() => {});
     } else {
       video.pause();
     }
-  }, [isInView, playbackRate]);
-
-  const handleTimeUpdate = () => {
-    if (trimEnd && videoRef.current && videoRef.current.duration) {
-      if (videoRef.current.currentTime >= videoRef.current.duration - trimEnd) {
-        videoRef.current.currentTime = 0;
-        videoRef.current.play().catch(() => {});
-      }
-    }
-  };
+  }, [isInView]);
 
   return (
     <video
@@ -120,11 +92,10 @@ function InViewVideo({
       src={src}
       poster={poster}
       preload="none"
-      loop={!trimEnd}
+      loop
       muted
       playsInline
       className={className}
-      onTimeUpdate={handleTimeUpdate}
     />
   );
 }
@@ -212,8 +183,6 @@ export default function FeaturedWork() {
                 <InViewVideo
                   src={project.videoSrc}
                   poster={project.poster}
-                  playbackRate={project.playbackRate}
-                  trimEnd={project.trimEnd}
                   className={styles.mediaVideo}
                 />
                 <div className={styles.playOverlay}>

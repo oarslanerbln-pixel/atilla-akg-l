@@ -74,6 +74,7 @@ src/
 │   ├── Navbar.tsx
 │   ├── LiveClock.tsx
 │   ├── Hero.tsx
+│   ├── HeroHorizon.tsx      # Live WebGL sea-at-dusk backdrop
 │   ├── Brands.tsx
 │   ├── Stats.tsx
 │   ├── FeaturedWork.tsx
@@ -175,11 +176,13 @@ sending nothing, so every inquiry was lost. A response of 200 from
 returns 503, delivery failure returns 502, and the form surfaces both.
 
 ### Mobile data is the budget
-Visitors arrive from Instagram on a phone. Only the visible hero clip plays;
-the second one carries `preload="none"`. Still frames come from the clip
-itself via the `#t=0.1` fragment rather than a separate poster asset. Anything
-new and heavy loads on visibility, and `usePrefersCalm()` decides whether it
-autoplays at all.
+Visitors arrive from Instagram on a phone. The hero backdrop is a live WebGL
+scene (`HeroHorizon.tsx`), not a clip: a few kilobytes of shader, rendered
+below screen resolution, stopped when off screen, and a single still frame
+under `usePrefersCalm()`. Keep it dependency-free; a 3D library would cost
+more than the scene. Project clips carry `preload="none"` and a self-hosted
+poster. Anything new and heavy loads on visibility, and `usePrefersCalm()`
+decides whether it autoplays at all.
 
 ### Stacking order comes from the scale
 `--z-nav-panel` through `--z-preloader` live in `globals.css`. Raw literals
