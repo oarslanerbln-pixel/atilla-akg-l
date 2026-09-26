@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { socialProfiles } from "@/lib/site";
 import styles from "./Hero.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
-import { usePrefersCalm } from "@/hooks/usePrefersCalm";
+import HeroHorizon from "./HeroHorizon";
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -30,82 +29,15 @@ const YoutubeIcon = () => (
   </svg>
 );
 
-const PLAYBACK_RATES = [0.75, 0.85] as const;
-
 export default function Hero() {
   const { t } = useLanguage();
   const { playClickSound } = useSoundDesign();
-  const [activeVideo, setActiveVideo] = useState<0 | 1>(0);
-  const videoRef1 = useRef<HTMLVideoElement>(null);
-  const videoRef2 = useRef<HTMLVideoElement>(null);
-
-  /**
-   * Both clips used to autoplay at once — 27 MB pulled down before the
-   * headline settled, two decoders running, one of them behind an opacity of
-   * zero. The audience arrives on a phone over mobile data, so: only the
-   * visible clip plays, the second one is not fetched until it is switched to,
-   * and a visitor who asked for less motion or is saving data gets the first
-   * frame as a still backdrop instead.
-   */
-  const cinematic = !usePrefersCalm();
-
-  // Seamless auto-switch between the two cinematic videos every 7.5 seconds
-  useEffect(() => {
-    if (!cinematic) return;
-    const timer = setInterval(() => {
-      setActiveVideo((prev) => (prev === 0 ? 1 : 0));
-    }, 7500);
-    return () => clearInterval(timer);
-  }, [cinematic]);
-
-  // Play the clip on screen, hold the other one still.
-  useEffect(() => {
-    const videos = [videoRef1.current, videoRef2.current];
-    videos.forEach((video, index) => {
-      if (!video) return;
-      video.playbackRate = PLAYBACK_RATES[index];
-      if (cinematic && index === activeVideo) {
-        video.play().catch(() => {});
-      } else {
-        video.pause();
-      }
-    });
-  }, [activeVideo, cinematic]);
-
-  const handleVideoSwitch = (index: 0 | 1) => {
-    playClickSound();
-    setActiveVideo(index);
-  };
 
   return (
     <section className={styles.hero} id="home">
-      {/* Dual Video Cinematic Background with crossfade */}
-      <div className={styles.backgroundVideoWrapper}>
-        <video
-          ref={videoRef1}
-          src="/maldives-cinematic.mp4"
-          poster="/posters/maldives-cinematic.webp"
-          preload="metadata"
-          muted
-          loop
-          playsInline
-          aria-hidden="true"
-          className={`${styles.backgroundVideo} ${activeVideo === 0 ? styles.videoActive : styles.videoHidden}`}
-        />
-        {/* preload="none": the second clip costs nothing until it is switched
-            to, whether by the rotation timer or by the visitor. Its poster is
-            29 KB, so the crossfade never lands on an empty frame. */}
-        <video
-          ref={videoRef2}
-          src="/caravanserai-documentary.mp4"
-          poster="/posters/caravanserai-documentary.webp"
-          preload="none"
-          muted
-          loop
-          playsInline
-          aria-hidden="true"
-          className={`${styles.backgroundVideo} ${activeVideo === 1 ? styles.videoActive : styles.videoHidden}`}
-        />
+      {/* Live 3D backdrop; its reasoning lives in HeroHorizon.tsx. */}
+      <div className={styles.backdrop}>
+        <HeroHorizon />
         <div className={styles.overlay}></div>
       </div>
 
@@ -213,28 +145,6 @@ export default function Hero() {
             </a>
           </motion.div>
         </motion.div>
-      </div>
-
-      {/* Video Switcher Indicators */}
-      <div className={styles.videoSwitcher}>
-        <button
-          type="button"
-          onClick={() => handleVideoSwitch(0)}
-          className={`${styles.switcherDot} ${activeVideo === 0 ? styles.switcherDotActive : ""}`}
-          aria-label="Video 1: Maldives Cinematic"
-        >
-          <span className={styles.dotNum}>01</span>
-          <span className={styles.dotBar}></span>
-        </button>
-        <button
-          type="button"
-          onClick={() => handleVideoSwitch(1)}
-          className={`${styles.switcherDot} ${activeVideo === 1 ? styles.switcherDotActive : ""}`}
-          aria-label="Video 2: Caravanserai Documentary"
-        >
-          <span className={styles.dotNum}>02</span>
-          <span className={styles.dotBar}></span>
-        </button>
       </div>
 
       {/* Scroll Indicator */}
