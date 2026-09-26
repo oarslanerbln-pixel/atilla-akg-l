@@ -19,6 +19,7 @@ Bütün anahtarlar `.env.example` dosyasında listeli. Yerelde `.env.local` dosy
 2. SQL Editor'de sırayla çalıştırın:
    - `supabase/migrations/20260924000000_concierge.sql` (tablolar)
    - `supabase/migrations/20260926000000_offers_and_sources.sql` (partner teklifleri ve reel takibi)
+   - `supabase/migrations/20260927000000_function_search_path.sql` (fonksiyon güvenlik ayarı)
    - `supabase/seed.sql` (**örnek** turlar, rehberler ve önümüzdeki 90 günün tarihleri)
 3. Project Settings → API → `SUPABASE_URL` ve `service_role` anahtarını kopyalayın.
 4. Gerçek turlar, fiyatlar ve rehber numaraları Table Editor'den `tours`, `guides` ve `departures` tablolarına girilir. Müşteriler `contacts`, konuşmalar `messages`, rezervasyonlar `bookings` tablosunda görünür.
