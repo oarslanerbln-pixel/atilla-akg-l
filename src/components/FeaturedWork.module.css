@@ -38,10 +38,14 @@
   margin: 0 auto;
 }
 
+/* Two projects: two columns, so no card sits beside an empty cell. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2rem;
+  /* Capped so the tall cards stay the width they had in three columns. */
+  max-width: 880px;
+  margin: 0 auto;
 }
 
 .grid > * {
@@ -266,12 +270,6 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-@media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 768px) {
