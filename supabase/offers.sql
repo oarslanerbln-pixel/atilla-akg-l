@@ -24,11 +24,11 @@ insert into public.affiliate_offers (id, network, name, pitch, tracking_url, key
   ('amex-platinum',
    'financeads',
    '{"de": "American Express Platinum Card", "en": "American Express Platinum Card", "tr": "American Express Platinum Card"}',
-   '{"de": "Die American Express Platinum Card mit Membership Rewards (für Wohnsitz in Deutschland) – alle Vorteile, Konditionen und den Antrag findest du direkt bei American Express.",
-     "en": "The American Express Platinum Card with Membership Rewards (for residents of Germany) – all benefits, terms and the application directly at American Express.",
-     "tr": "Membership Rewards''lı American Express Platinum Card (Almanya''da ikamet edenler için) – tüm avantajlar, koşullar ve başvuru doğrudan American Express''te."}',
+   '{"de": "Die American Express Platinum Card mit Membership Rewards (für Wohnsitz in Deutschland), mit Zugang zu Flughafen-Lounges weltweit. Alle Vorteile, Konditionen und den Antrag findest du direkt bei American Express.",
+     "en": "The American Express Platinum Card with Membership Rewards (for residents of Germany), with access to airport lounges worldwide. All benefits, terms and the application directly at American Express.",
+     "tr": "Membership Rewards''lı American Express Platinum Card (Almanya''da ikamet edenler için), dünya genelinde havalimanı lounge erişimiyle. Tüm avantajlar, koşullar ve başvuru doğrudan American Express''te."}',
    'https://financeads.net/tc.php?t=66144C140129719T&subid={click_id}',
-   '{platinum,platin}',
+   '{platinum,platin,lounge}',
    true),
 
   -- Paid per install through Adjust; the short link carries no sub id.
