@@ -1,52 +1,68 @@
 "use client";
 
-import React from "react";
+import { useEffect, useRef } from "react";
 import styles from "./Brands.module.css";
+import { useLanguage } from "@/context/LanguageContext";
 
 // Commercial brands only. Tourism boards and institutions (UNESCO, Visit
 // Kazakhstan …) moved to the Partners section, where each gets the context a
 // destination client reads them for — see src/lib/partners.ts.
-const brands = [
-  "RIXOS HOTELS",
-  "ACCOR LIVE LIMITLESS",
-  "GILLETTE",
-  "BER FLUGHAFEN",
-];
+// Written in their own case; the capitals come from CSS, so a screen reader
+// says "Gillette", not G-I-L-L-E-T-T-E.
+const brands = ["Rixos Hotels", "Accor Live Limitless", "Gillette", "BER Flughafen"];
 
+// Reading pace in pixels per second. Around 30 the eye can follow a name from
+// edge to edge without chasing it; faster turns the band into a blur, slower
+// makes it look stuck.
+const SPEED = 30;
+
+/**
+ * The brand band under the hero.
+ *
+ * It used to shout: heavy capitals, a gold spotlight and a shimmering ribbon,
+ * all moving at once right after the hero. Now it is quiet type — light,
+ * widely spaced, in warm grey — gliding past at a reading pace, so it reads
+ * as a credit line rather than an advert.
+ *
+ * The loop's duration is derived from the track's measured width, so the band
+ * moves at the same speed on a phone and on a wide screen instead of racing
+ * on the larger one. A mouse resting on it pauses it; a visitor who asked for
+ * less motion gets the names standing still (see Brands.module.css).
+ */
 export default function Brands() {
-  const renderMarquee = (layerClass: string) => (
-    <div className={styles.marquee}>
-      <div className={`${styles.track} ${layerClass}`}>
-        {brands.map((brand, index) => (
-          <div key={`t1-${index}`} className={styles.brandItem}>
-            <span className={styles.brandName}>{brand}</span>
-            <span className={styles.separator}>✦</span>
-          </div>
-        ))}
-      </div>
-      
-      {/* Duplicate track for seamless infinite scroll */}
-      <div className={`${styles.track} ${layerClass}`} aria-hidden="true">
-        {brands.map((brand, index) => (
-          <div key={`t2-${index}`} className={styles.brandItem}>
-            <span className={styles.brandName}>{brand}</span>
-            <span className={styles.separator}>✦</span>
-          </div>
-        ))}
-      </div>
-    </div>
+  const { t } = useLanguage();
+  const marqueeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const marquee = marqueeRef.current;
+    const track = marquee?.firstElementChild as HTMLElement | null;
+    if (!marquee || !track) return;
+    const update = () => {
+      marquee.style.setProperty("--duration", `${Math.round(track.offsetWidth / SPEED)}s`);
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, []);
+
+  const renderTrack = (copy: boolean) => (
+    <ul className={styles.track} aria-hidden={copy || undefined}>
+      {brands.map((brand) => (
+        <li key={brand} className={styles.brandItem}>
+          <span className={styles.brandName}>{brand}</span>
+          <span className={styles.separator} aria-hidden="true" />
+        </li>
+      ))}
+    </ul>
   );
 
   return (
-    <section className={styles.section}>
-      <div className={styles.edgeMask}>
-        {/* Base Layer: Silver text */}
-        {renderMarquee(styles.silver)}
-        
-        {/* Top Layer: Gold text, masked to only show in the exact center */}
-        <div className={styles.goldOverlay}>
-          {renderMarquee(styles.gold)}
-        </div>
+    <section className={styles.section} aria-label={t("brands_label")}>
+      <div className={styles.marquee} ref={marqueeRef}>
+        {renderTrack(false)}
+        {/* Second copy for a seamless loop. */}
+        {renderTrack(true)}
       </div>
     </section>
   );

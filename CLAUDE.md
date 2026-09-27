@@ -25,7 +25,7 @@ Always utilize CSS variables defined in `src/app/globals.css`:
   - `--bg-primary: #fcfbf9` (Luminous gallery white)
   - `--bg-secondary: #f4f1ea` (Soft porcelain alabaster)
   - `--bg-card: #ffffff` (Crisp floating white)
-  - `--bg-ink: #140f0a` (Statement dark cards, marquee, contrast footer)
+  - `--bg-ink: #140f0a` (Statement dark cards, contrast footer)
 - **Text & Typography:**
   - `--text-primary: #181512` (Obsidian charcoal)
   - `--text-secondary: #5a524a` (Warm graphite)
@@ -33,7 +33,7 @@ Always utilize CSS variables defined in `src/app/globals.css`:
   - Section headings: `var(--font-display)` — Inter Tight 300, plain ink,
     mixed case ("Projekte", not "PROJEKTE"). The gold lives in the small
     uppercase eyebrow above each one, not in the heading itself.
-  - Brand name, editorial quote, figures: `var(--font-playfair)` (Serif)
+  - Headings, figures, the editorial quote: `var(--font-display)` (Inter Tight 300/400/500). Playfair is no longer used.
   - Body & UI: `var(--font-inter)` (Clean Sans-serif)
 - **Accents:**
   - `--accent-gold: #b38b59`
@@ -74,9 +74,9 @@ src/
 │   ├── Navbar.tsx
 │   ├── LiveClock.tsx
 │   ├── Hero.tsx
-│   ├── HeroHorizon.tsx      # Live WebGL sea-at-dusk backdrop
+│   ├── HeroHorizon.tsx      # Live WebGL sea-at-sunrise backdrop
 │   ├── WhatsAppButton.tsx   # Floating wa.me link between hero and contact
-│   ├── Brands.tsx
+│   ├── Brands.tsx           # Grey credit-line marquee, constant 30 px/s
 │   ├── Stats.tsx
 │   ├── FeaturedWork.tsx
 │   ├── Services.tsx

@@ -1,143 +1,119 @@
+/* A quiet credit line on paper: hairlines above and below, no ribbon, no
+   sheen. The hero above carries the page's only shimmer. */
 .section {
-  padding: 2.25rem 0;
+  --gap: clamp(2.5rem, 5vw, 4.5rem);
+  position: relative;
   margin: 0;
-  /* Luminous Satin Champagne-Alabaster Silk ribbon */
-  background: linear-gradient(
-    90deg,
-    #f4f0e8 0%,
-    #ffffff 20%,
-    #ede5d8 40%,
-    #ffffff 60%,
-    #f4f0e8 80%,
-    #ffffff 100%
-  );
-  background-size: 200% 100%;
-  animation: bgSheen 20s ease infinite;
-  border-top: 1px solid rgba(179, 139, 89, 0.28);
-  border-bottom: 1px solid rgba(179, 139, 89, 0.28);
-  box-shadow: 0 6px 25px rgba(24, 21, 18, 0.03);
-  position: relative;
+  padding: clamp(1.35rem, 2.4vw, 1.9rem) 0;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
   overflow: hidden;
-  display: flex;
-  align-items: center;
 }
 
-@keyframes bgSheen {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.edgeMask {
-  width: 100%;
-  position: relative;
-  /* Soft smooth fade on edges */
-  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-}
-
+/* The names fade in and out at the edges instead of being cut off. */
 .marquee {
   display: flex;
-  overflow: hidden;
-  user-select: none;
-  gap: 4rem;
   width: 100%;
+  user-select: none;
+  mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
 }
 
+/* Two identical tracks side by side, each sliding its own width: when the
+   first has gone, the second stands exactly where it began. The duration is
+   set from the measured width in Brands.tsx; 60s is the fallback. */
 .track {
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: space-around;
-  gap: 4rem;
   min-width: 100%;
-  animation: scroll 32s linear infinite;
-  transform: translateZ(0);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: glide var(--duration, 60s) linear infinite;
+  will-change: transform;
 }
 
-.goldOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  /* Spotlight effect in the center */
-  mask-image: linear-gradient(to right, transparent 32%, black 45%, black 55%, transparent 68%);
-  -webkit-mask-image: linear-gradient(to right, transparent 32%, black 45%, black 55%, transparent 68%);
+@keyframes glide {
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
 }
 
+/* A resting mouse stops the band, so a name can be read in full. */
+@media (hover: hover) and (pointer: fine) {
+  .marquee:hover .track {
+    animation-play-state: paused;
+  }
+}
+
+/* The trailing gap belongs to each item, so the loop's seam is spaced like
+   every other gap. */
 .brandItem {
   display: flex;
   align-items: center;
-  gap: 4rem;
+  gap: var(--gap);
+  padding-right: var(--gap);
 }
 
 .brandName {
-  font-family: var(--font-inter), sans-serif;
-  font-size: clamp(2rem, 4.5vw, 3.8rem);
-  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.35vw, 1.2rem);
+  font-weight: 400;
+  letter-spacing: 0.34em;
+  line-height: 1;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
   white-space: nowrap;
-  transition: all 0.5s ease;
+  color: var(--text-secondary);
 }
 
-/* Base layer: elegant watermarked obsidian charcoal */
-.silver .brandName {
-  color: #181512;
-  opacity: 0.18;
-}
-
-/* Center layer: intense liquid bronze-gold spotlight */
-.gold .brandName {
-  background: linear-gradient(
-    110deg,
-    #7c5423 0%,
-    #b38b59 20%,
-    #d8b482 40%,
-    #b38b59 60%,
-    #7c5423 80%,
-    #b38b59 100%
-  );
-  background-size: 200% auto;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: shine 4s linear infinite;
-  filter: drop-shadow(0 2px 10px rgba(179, 139, 89, 0.35));
-}
-
+/* A small diamond, a quiet echo of the compass mark. */
 .separator {
-  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
-}
-
-.silver .separator {
-  color: var(--accent-gold);
-  opacity: 0.35;
-}
-
-.gold .separator {
-  color: var(--accent-gold);
-  filter: drop-shadow(0 0 6px rgba(179, 139, 89, 0.6));
-}
-
-@keyframes scroll {
-  0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(calc(-100% - 4rem), 0, 0); }
-}
-
-@keyframes shine {
-  to {
-    background-position: 200% center;
-  }
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
+  background: var(--champagne-muted);
+  opacity: 0.55;
+  transform: rotate(45deg);
 }
 
 @media (max-width: 768px) {
-  .section {
-    padding: 1.5rem 0;
+  .marquee {
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   }
+
+  .brandName {
+    letter-spacing: 0.26em;
+  }
+}
+
+/* Less motion: the names stand still, centred, wrapping if they must. The
+   diamonds go, since a wrapped line would leave one dangling at its end. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
   .track {
-    animation: scroll 22s linear infinite;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem var(--gap);
+    width: 100%;
+    min-width: 0;
+    padding-inline: 1.5rem;
+    animation: none;
+  }
+
+  .track[aria-hidden="true"],
+  .separator {
+    display: none;
+  }
+
+  .brandItem {
+    padding-right: 0;
   }
 }
