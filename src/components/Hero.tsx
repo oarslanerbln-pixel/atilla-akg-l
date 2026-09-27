@@ -63,9 +63,9 @@ export default function Hero() {
             className={styles.subtitle}
           >
             <span>{t('hero_storytelling')}</span>
-            <span className={styles.diamond}>✦</span>
+            <span className={styles.separator} aria-hidden="true" />
             <span>{t('hero_excellence')}</span>
-            <span className={styles.diamond}>✦</span>
+            <span className={styles.separator} aria-hidden="true" />
             <span>{t('hero_direction')}</span>
           </motion.div>
           
@@ -94,7 +94,7 @@ export default function Hero() {
             </a>
           </motion.div>
           
-          {/* Social Icons with Animated Rotating Color Aura */}
+          {/* Social links: thin gold rings, see Hero.module.css */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -110,7 +110,6 @@ export default function Hero() {
               onClick={() => playClickSound()}
               aria-label="Instagram Profile"
             >
-              <span className={styles.rotatingAura}></span>
               <span className={styles.iconInner}>
                 <InstagramIcon />
               </span>
@@ -124,7 +123,6 @@ export default function Hero() {
               onClick={() => playClickSound()}
               aria-label="TikTok Profile"
             >
-              <span className={styles.rotatingAura}></span>
               <span className={styles.iconInner}>
                 <TikTokIcon />
               </span>
@@ -138,7 +136,6 @@ export default function Hero() {
               onClick={() => playClickSound()}
               aria-label="YouTube Channel"
             >
-              <span className={styles.rotatingAura}></span>
               <span className={styles.iconInner}>
                 <YoutubeIcon />
               </span>
