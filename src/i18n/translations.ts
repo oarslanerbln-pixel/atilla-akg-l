@@ -43,6 +43,7 @@ export const translations = {
     
     // Services
     services_title: "Leistungen",
+    brands_label: "Marken, mit denen ich gearbeitet habe",
     partners_subtitle: "Destination Partner",
     partners_title: "Tourismusbehörden & Institutionen",
     partners_intro: "Ich habe mit nationalen Tourismusbehörden und internationalen Institutionen zusammengearbeitet – darunter {partners}.",
@@ -176,6 +177,7 @@ export const translations = {
     
     // Services
     services_title: "Services",
+    brands_label: "Brands I have worked with",
     partners_subtitle: "Destination Partners",
     partners_title: "Tourism Boards & Institutions",
     partners_intro: "I have worked with national tourism boards and international institutions, including {partners}.",
@@ -309,6 +311,7 @@ export const translations = {
     
     // Services
     services_title: "Hizmetler",
+    brands_label: "Birlikte çalıştığım markalar",
     partners_subtitle: "Destinasyon Ortakları",
     partners_title: "Turizm Kurumları & Kuruluşlar",
     partners_intro: "Ulusal turizm kurumları ve uluslararası kuruluşlarla iş birliği yaptım; bunlar arasında {partners} yer alıyor.",

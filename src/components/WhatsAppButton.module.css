@@ -11,7 +11,8 @@
   gap: 0.6rem;
   width: 56px;
   height: 56px;
-  border-radius: 999px;
+  /* Sharp corners, like every other button here (premium-aesthetics.md). */
+  border-radius: 0;
   border: 1px solid var(--accent-gold);
   background: var(--bg-ink);
   color: var(--text-on-ink);
