@@ -7,6 +7,7 @@ import { Mail, Phone, Loader2, CheckCircle } from "lucide-react";
 import styles from "./Contact.module.css";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useLanguage } from "@/context/LanguageContext";
+import { contact } from "@/lib/site";
 import type { TranslationKeys } from "@/i18n/translations";
 
 const DIRECT_MAIL = "a@barbarossafilms.de";
@@ -149,7 +150,7 @@ export default function Contact() {
                 <span>lisaweber@barbarossafilms.de</span>
               </a>
               <a
-                href="tel:+4917672725165"
+                href={`tel:${contact.phone}`}
                 className={styles.contactLink}
                 onClick={() => playClickSound()}
                 data-cursor="CALL"
@@ -157,7 +158,7 @@ export default function Contact() {
                 <div className={styles.iconBox}>
                   <Phone className={styles.icon} />
                 </div>
-                <span>+49 1767 27 25 165</span>
+                <span>{contact.phoneDisplay}</span>
               </a>
             </motion.div>
 
