@@ -112,6 +112,7 @@ src/
 - `npm run build` - Create production build
 - `npm run lint` - Run ESLint checks
 - `npx tsc --noEmit` - Type check only
+- `npm run social -- social/briefs/<brief>.json` - Render reel covers / stories into `social/out/` (see `social/README.md`)
 
 Run `tsc --noEmit`, `next build` and `eslint` before every push; all three are
 expected to pass with zero output.
