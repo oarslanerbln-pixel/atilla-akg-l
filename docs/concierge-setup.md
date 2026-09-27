@@ -27,7 +27,7 @@ Bütün anahtarlar `.env.example` dosyasında listeli. Yerelde `.env.local` dosy
 4. Gerçek turlar, fiyatlar ve rehber numaraları Table Editor'den `tours`, `guides` ve `departures` tablolarına girilir. Müşteriler `contacts`, konuşmalar `messages`, rezervasyonlar `bookings` tablosunda görünür.
 
 ## 2. Claude
-console.anthropic.com → API Keys → `ANTHROPIC_API_KEY`. Model: `claude-opus-5`. Anthropic'in önerdiği şekilde, bir istek güvenlik nedeniyle reddedilirse otomatik olarak başka bir modelle tekrar denenir (server-side fallback).
+console.anthropic.com → API Keys → `ANTHROPIC_API_KEY`. Model: `claude-opus-5-5`. Anthropic'in önerdiği şekilde, bir istek güvenlik nedeniyle reddedilirse otomatik olarak başka bir modelle tekrar denenir (server-side fallback).
 
 ## 3. WhatsApp Business Platform
 Atilla şu an normal WhatsApp kullandığı için concierge'e **ayrı bir numara** (yeni SIM veya sanal numara) ayırmak en temizi. Cloud API'ye bağlanan numara artık normal WhatsApp uygulamasında kullanılamaz.
