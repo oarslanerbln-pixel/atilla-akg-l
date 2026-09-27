@@ -5,7 +5,7 @@ export type Channel = 'whatsapp' | 'instagram';
 
 export const CONCIERGE = {
   brand: 'Atilla Barbarossa Journeys',
-  model: 'claude-opus-5',
+  model: 'claude-opus-5-5',
   timezone: process.env.TOUR_TIMEZONE ?? 'Europe/Istanbul',
   // Customers often send several short messages in a row; wait for the burst to end.
   debounceMs: 4000,
