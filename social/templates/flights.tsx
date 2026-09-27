@@ -13,14 +13,15 @@ export interface FlightsBrief {
   /** The affiliate partner, named in the ad label and the price note. */
   partner: string;
   title: string;
-  /** Second title line in italic gold, e.g. "ab Berlin". */
+  /** Second title line in italic gold, e.g. "ab Deutschland". */
   accent?: string;
   /** Keyword for story replies; must match the partner offer's keywords in supabase/offers.sql. */
   keyword: string;
   /** Date the prices were read, as it should appear ("27.09.2026"). */
   asOf: string;
-  /** Up to four destinations, cheapest first. */
-  deals: { city: string; country: string; price: number }[];
+  /** Up to four destinations (a city or a whole country, as the partner lists them), cheapest first.
+   *  `detail` is the small line below, e.g. the city's country or "Direktflug". */
+  deals: { destination: string; detail?: string; price: number }[];
 }
 
 const COPY: Record<
@@ -53,8 +54,15 @@ const COPY: Record<
   },
 };
 
+/** Title size that keeps the longer title line on one line within the 904 px column (serif ≈ 0.5 em a letter). */
+function titleSize(...lines: (string | undefined)[]) {
+  const longest = Math.max(...lines.map((l) => l?.length ?? 0));
+  return Math.min(140, Math.floor(904 / (0.5 * longest)));
+}
+
 export function flightsStory(b: FlightsBrief): ReactElement {
   const t = COPY[b.lang];
+  const size = titleSize(b.title, b.accent);
   return (
     <div
       style={{
@@ -84,9 +92,9 @@ export function flightsStory(b: FlightsBrief): ReactElement {
       >
         {`${t.ad} · ${b.partner}`}
       </div>
-      <div style={{ display: "flex", marginTop: 24, fontFamily: serif, fontSize: 140, lineHeight: 1.02, color: C.text }}>{b.title}</div>
+      <div style={{ display: "flex", marginTop: 24, fontFamily: serif, fontSize: size, lineHeight: 1.02, color: C.text }}>{b.title}</div>
       {b.accent && (
-        <div style={{ display: "flex", fontFamily: serif, fontStyle: "italic", fontSize: 140, lineHeight: 1.02, color: C.goldReadable }}>
+        <div style={{ display: "flex", fontFamily: serif, fontStyle: "italic", fontSize: size, lineHeight: 1.02, color: C.goldReadable }}>
           {b.accent}
         </div>
       )}
@@ -97,7 +105,7 @@ export function flightsStory(b: FlightsBrief): ReactElement {
           const [prefix, price] = t.price(d.price);
           return (
             <div
-              key={d.city}
+              key={d.destination}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -107,21 +115,23 @@ export function flightsStory(b: FlightsBrief): ReactElement {
               }}
             >
               <div style={{ display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", fontFamily: serif, fontSize: 58, lineHeight: 1.05, color: C.text }}>{d.city}</div>
-                <div
-                  style={{
-                    display: "flex",
-                    marginTop: 4,
-                    fontFamily: sans,
-                    fontWeight: 500,
-                    fontSize: 20,
-                    letterSpacing: 4,
-                    textTransform: "uppercase",
-                    color: C.graphite,
-                  }}
-                >
-                  {d.country}
-                </div>
+                <div style={{ display: "flex", fontFamily: serif, fontSize: 58, lineHeight: 1.05, color: C.text }}>{d.destination}</div>
+                {d.detail && (
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: 4,
+                      fontFamily: sans,
+                      fontWeight: 500,
+                      fontSize: 20,
+                      letterSpacing: 4,
+                      textTransform: "uppercase",
+                      color: C.graphite,
+                    }}
+                  >
+                    {d.detail}
+                  </div>
+                )}
               </div>
               <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}>
                 {prefix && <div style={{ display: "flex", fontFamily: sans, fontSize: 28, color: C.graphite }}>{prefix}</div>}
