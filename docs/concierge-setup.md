@@ -21,6 +21,7 @@ Bütün anahtarlar `.env.example` dosyasında listeli. Yerelde `.env.local` dosy
    - `supabase/migrations/20260926000000_offers_and_sources.sql` (partner teklifleri ve reel takibi)
    - `supabase/migrations/20260927000000_function_search_path.sql` (fonksiyon güvenlik ayarı)
    - `supabase/migrations/20260928000000_offer_links_without_sub_id.sql` (sub-id'siz partner linkleri)
+   - `supabase/migrations/20260929000000_instagram_token.sql` (Instagram token'ının otomatik yenilenmesi)
    - `supabase/seed.sql` (**örnek** turlar, rehberler ve önümüzdeki 90 günün tarihleri)
    - `supabase/offers.sql` (partner teklifleri; her değişiklikten sonra tekrar çalıştırılabilir)
 3. Project Settings → API → `SUPABASE_URL` ve `service_role` anahtarını kopyalayın.
@@ -53,6 +54,11 @@ Atilla şu an normal WhatsApp kullandığı için concierge'e **ayrı bir numara
 5. Webhook: aynı Callback URL ve aynı verify token. Alanlar: `messages`, `messaging_postbacks`, `comments`, `message_echoes`.
 6. Instagram uygulamasında Ayarlar → Mesajlar → **Bağlı araçlar / Mesaj erişimine izin ver** seçeneğini açın.
 7. Yabancı müşterilerden mesaj alabilmek için uygulamanın **App Review**'dan geçmesi ve *Live* moda alınması gerekir. İnceleme tamamlanana kadar yalnızca uygulamaya eklenmiş test hesaplarıyla çalışır.
+
+**Token yenileme:** `INSTAGRAM_ACCESS_TOKEN` 60 gün geçerlidir. Sistem onu ilk kullanımda şifreleyip Supabase'e (`access_tokens` tablosu) kaydeder. Her pazartesi sabahı bir Vercel Cron işi (`/api/cron/instagram-token`, `vercel.json`) Meta'dan 60 günlük yeni bir token alır ve kayıtlı olanın yerine yazar; bot bundan sonra hep kayıtlı token'ı kullanır. Bunun için Vercel'de `CRON_SECRET` tanımlı olmalı (bkz. *7. Vercel*).
+- Yenileme başarısız olursa Atilla'ya WhatsApp'tan, token'ın ne zaman sona ereceğini söyleyen bir uyarı gelir.
+- O durumda, veya hesap yeniden bağlandığında: Meta'da yeni token üretin, Vercel'de `INSTAGRAM_ACCESS_TOKEN`'a yapıştırın ve yeniden deploy edin. Sistem değişikliği fark eder ve kayıtlı token'ı yenisiyle değiştirir.
+- Meta bir token'ı ancak en az 24 saatlik olduğunda yeniler. Yeni yapıştırılan token o hafta için fazla gençse yenileme atlanır (`too_new`) ve bir sonraki pazartesi yapılır.
 
 **Yoruma otomatik DM:** Bir post veya reel'in altına `IG_COMMENT_KEYWORDS` listesindeki kelimelerden biri (ör. "TUR", "Reise", "info") yazıldığında:
 1. Yorum yapan kişiye, dilinde, **"Turları göster"** butonlu bir DM gider. Instagram, müşteri cevap verene kadar ikinci mesaja izin vermediği için buton tek dokunuşla sohbeti açar ve concierge devralır.
@@ -111,6 +117,14 @@ select cron.schedule('concierge-purge', '30 3 * * *', 'select public.purge_stale
 
 ## 7. Vercel
 Bütün değişkenleri girin (`SITE_URL` dahil) ve yeniden deploy edin. Webhook'lar birkaç dakika sürebilen işleri cevap döndükten sonra çalıştırdığı için Fluid Compute açık kalmalı (varsayılan olarak açık).
+
+**Zamanlanmış işler (Vercel Cron):** `vercel.json` içinde tanımlıdır ve yalnızca production deploy'larında çalışır. Şu an tek iş var: pazartesi 04:00 UTC'de Instagram token yenileme (Hobby planında o saat içinde herhangi bir anda).
+1. Rastgele bir metin üretin:
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(24).toString('base64url'))"
+   ```
+2. Vercel → Settings → Environment Variables → `CRON_SECRET` olarak (Production, Sensitive) girin ve yeniden deploy edin. Vercel bu değeri her cron isteğine `Authorization: Bearer …` başlığıyla ekler; `CRON_SECRET` yoksa uç nokta 503 döner ve hiçbir şey yenilenmez.
+3. Kontrol: Vercel → Settings → Cron Jobs → *Run* ile elle tetikleyin, sonra *View Logs*. Cevap `{"status":"refreshed",…}` veya token bir günden yeniyse `{"status":"too_new",…}` olmalı.
 
 ---
 

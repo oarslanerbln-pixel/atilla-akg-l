@@ -107,6 +107,7 @@ src/
 - Partner (affiliate) offers are data in `supabase/offers.sql` (idempotent, run in the SQL Editor); a keyword in a comment, a story reply or a short DM sends the tracked `/go/<id>` link.
 - Fixed customer messages live in `src/lib/concierge/copy.ts` (DE/EN/TR), not `translations.ts`, because they are sent server-side.
 - Setup and env vars: `docs/concierge-setup.md`, `.env.example`.
+- Instagram tokens expire after 60 days: `tokens.ts` keeps the current one sealed in `access_tokens` (seeded from `INSTAGRAM_ACCESS_TOKEN`) and the weekly Vercel Cron `src/app/api/cron/instagram-token/route.ts` (`vercel.json`, `CRON_SECRET`) renews it. Instagram calls take `instagramAccessToken()`, never the env var directly.
 - Personal data is encrypted in the app before it reaches Supabase (`crypto.ts`, AES-256-GCM, AAD `table.column:rowId`). Never write personal fields to the DB directly: go through the mappers in `db.ts` / `bookings.ts`. Look contacts up by `external_id_hash` (blind index), never by `external_id`.
 
 ---

@@ -125,4 +125,6 @@ export const staff = {
     `🛑 ${who} son bir saatte ${count} mesaj gönderdi. Olası spam veya kötüye kullanım nedeniyle bot bu sohbette durduruldu. Tekrar açmak için bu mesajı *bot* diye yanıtla.`,
   paymentMismatch: (ref: string, expected: string, received: string) =>
     `⚠️ *Ödeme kontrolü başarısız* – ${ref}\nBeklenen: ${expected}\nGelen: ${received}\nRezervasyon onaylanmadı. Lütfen Stripe panelinden kontrol et.`,
+  instagramTokenFailed: (expiresOn: string | null, error: string) =>
+    `⚠️ *Instagram token yenilenemedi.* ${expiresOn ? `Mevcut token ${expiresOn} tarihinde sona eriyor` : 'Mevcut token en geç 60 gün içinde sona eriyor'}; sonra bot Instagram'da cevap veremez.\nMeta'da yeni token üretip Vercel'de INSTAGRAM_ACCESS_TOKEN'a yapıştır ve yeniden deploy et (docs/concierge-setup.md, 4. Instagram).\nHata: ${error}`,
 };
