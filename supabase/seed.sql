@@ -55,15 +55,4 @@ from (values
 ) as t (id, start_time, capacity, region)
 cross join generate_series(1, 90) as g;
 
--- SAMPLE partner offer. Stays inactive until the real tracking link from the affiliate network
--- (Awin / Admitad / FinanceAds) and the programme's approved wording are filled in.
-insert into public.affiliate_offers (id, network, name, pitch, tracking_url, keywords, active) values
-  ('amex',
-   'awin',
-   '{"de": "American Express Karten", "en": "American Express cards", "tr": "American Express kartları"}',
-   '{"de": "Alle American Express Karten im Überblick – Konditionen, Vorteile und Antrag direkt beim Anbieter.",
-     "en": "All American Express cards at a glance – terms, benefits and the application directly with the provider.",
-     "tr": "Tüm American Express kartlarına genel bakış – koşullar, avantajlar ve başvuru doğrudan sağlayıcıda."}',
-   'https://example.com/replace-with-network-link?subid={click_id}',
-   '{amex,kart,karte,card,link}',
-   false);
+-- Partner offers live in supabase/offers.sql.

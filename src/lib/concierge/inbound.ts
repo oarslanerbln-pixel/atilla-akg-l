@@ -35,12 +35,23 @@ import {
   staff,
   tourButton,
 } from './copy';
-import { activeOffers, createOfferLink, offerForWords, OFFER_PAYLOAD, rememberMedia, sendOfferLink } from './offers';
+import {
+  activeOffers,
+  createOfferLink,
+  offerForWords,
+  OFFER_PAYLOAD,
+  rememberMedia,
+  sendOffer,
+  sendOfferLink,
+} from './offers';
 import { runConcierge } from './agent';
 
 type Job = () => Promise<void>;
 
 const displayName = (c: Contact) => c.name ?? (c.username ? `@${c.username}` : `+${c.external_id}`);
+const wordsOf = (text: string) => text.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+/** A partner keyword counts in a DM only within a message this short ("GOLD", "Gold bitte"). */
+const MAX_KEYWORD_MESSAGE_WORDS = 3;
 
 // ---------- Customer messages ----------
 
@@ -53,6 +64,8 @@ interface InboundMessage {
   username?: string;
   /** Set when the customer tapped a partner offer's "send me the link" button. */
   offerId?: string;
+  /** The Instagram story this message replies to. */
+  storyId?: string;
 }
 
 async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
@@ -68,9 +81,36 @@ async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
   if (await floodDetected(contact)) return;
   // The link request is answered directly; a paused or removed offer falls through to the concierge.
   if (msg.offerId && (await sendOfferLink(contact, msg.offerId))) return;
+  if (await answerOfferKeyword(contact, msg)) return;
 
   await sleep(CONCIERGE.debounceMs);
   await answerWhenFree(contact.id);
+}
+
+/**
+ * Story-to-DM: a partner-offer keyword sent as a short reply to a story ("GOLD") gets the offer
+ * and its link at once, and the story is remembered as the source like a reel for comments. The
+ * same short message outside a story reply (WhatsApp, a plain DM) is answered the same way.
+ * Longer messages stay with the concierge, so a keyword in passing never hijacks a conversation.
+ */
+async function answerOfferKeyword(contact: Contact, msg: InboundMessage): Promise<boolean> {
+  // Our own markers such as "[replied to your story]" are not the customer's words.
+  const own = msg.text.replace(/\[[^\]]*\]/g, ' ');
+  const words = wordsOf(own);
+  if (!words.length || words.length > MAX_KEYWORD_MESSAGE_WORDS) return false;
+  const offer = offerForWords(words, await activeOffers());
+  if (!offer) return false;
+
+  const patch: ContactPatch = {};
+  if (!contact.language) patch.language = guessLang(own);
+  if (!contact.source_media_id && msg.storyId) {
+    await rememberMedia(msg.storyId);
+    const keyword = words.find((w) => offer.keywords.some((k) => k.toLowerCase() === w));
+    Object.assign(patch, { source_media_id: msg.storyId, source_keyword: keyword });
+  }
+  const updated = Object.keys(patch).length ? await updateContact(contact.id, patch) : contact;
+  await sendOffer(updated, offer, true);
+  return true;
 }
 
 /**
@@ -155,7 +195,7 @@ interface InstagramComment {
  */
 async function handleInstagramComment(c: InstagramComment): Promise<void> {
   if (c.fromId === env('INSTAGRAM_ACCOUNT_ID')) return;
-  const words = c.text.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  const words = wordsOf(c.text);
   const offer = offerForWords(words, await activeOffers());
   const keyword = offer
     ? words.find((w) => offer.keywords.some((k) => k.toLowerCase() === w))
@@ -338,6 +378,7 @@ export function jobsFromMetaWebhook(payload: {
                 metaMessageId: message.mid,
                 text,
                 offerId: payload?.startsWith(OFFER_PAYLOAD) ? payload.slice(OFFER_PAYLOAD.length) : undefined,
+                storyId: message.reply_to?.story?.id,
               }),
             );
           }

@@ -20,7 +20,9 @@ Bütün anahtarlar `.env.example` dosyasında listeli. Yerelde `.env.local` dosy
    - `supabase/migrations/20260924000000_concierge.sql` (tablolar)
    - `supabase/migrations/20260926000000_offers_and_sources.sql` (partner teklifleri ve reel takibi)
    - `supabase/migrations/20260927000000_function_search_path.sql` (fonksiyon güvenlik ayarı)
+   - `supabase/migrations/20260928000000_offer_links_without_sub_id.sql` (sub-id'siz partner linkleri)
    - `supabase/seed.sql` (**örnek** turlar, rehberler ve önümüzdeki 90 günün tarihleri)
+   - `supabase/offers.sql` (partner teklifleri; her değişiklikten sonra tekrar çalıştırılabilir)
 3. Project Settings → API → `SUPABASE_URL` ve `service_role` anahtarını kopyalayın.
 4. Gerçek turlar, fiyatlar ve rehber numaraları Table Editor'den `tours`, `guides` ve `departures` tablolarına girilir. Müşteriler `contacts`, konuşmalar `messages`, rezervasyonlar `bookings` tablosunda görünür.
 
@@ -57,14 +59,18 @@ Atilla şu an normal WhatsApp kullandığı için concierge'e **ayrı bir numara
 2. Yorumun altına 6 farklı kısa cevaptan biri herkese açık olarak yazılır ("DM'den yazdım ✨" gibi).
 3. Yorumun hangi reel'den geldiği kaydedilir (bkz. *Hangi reel ne kazandırdı?*).
 
-### Partner (affiliate) teklifleri – ör. American Express
-Tur dışında Awin, Admitad veya FinanceAds üzerinden tanıtılan ürünler `affiliate_offers` tablosunda durur. `seed.sql` bir **örnek** `amex` kaydı ekler; bu kayıt kapalıdır (`active = false`).
+### Partner (affiliate) teklifleri – Amex, GetYourGuide, Skyscanner
+Tur dışında tanıtılan ürünler `affiliate_offers` tablosunda durur ve `supabase/offers.sql` dosyasından yönetilir. Dosyayı düzenleyip SQL Editor'de çalıştırmak yeterli; kayıtlar güncellenir.
 
-1. Affiliate ağından programın takip linkini alın ve alt kimlik (sub-id) parametresine `{click_id}` yazın. Parametrenin adı ağa göre değişir; Awin'de `clickref`:
-   `https://www.awin1.com/cread.php?awinmid=…&awinaffid=…&clickref={click_id}`
-2. `tracking_url`, `pitch` (programın onayladığı kısa tanıtım metni, DE/EN/TR) ve `keywords` alanlarını doldurup `active = true` yapın.
-3. Reel'de ör. *"Yorumlara AMEX yaz"* deyin. Yorum yapan kişiye tanıtım metni ve **"Linki gönder"** butonu gider. Butona basınca kişiye özel bir link (`SITE/go/…`) ve reklam uyarısı gönderilir. Concierge'e DM'den soran müşteriye de aynı link gönderilir.
-4. Her tıklama sayılır. Tıklama kimliği ağa sub-id olarak gider; ağın komisyon raporundaki sub-id ile hangi reel'den geldiği eşleştirilebilir.
+1. **Takip linki (`tracking_url`):** ağın linkinde sub-id parametresine `{click_id}` yazın. Tıklama kimliği yalnızca harf ve rakamdan oluşur.
+   - FinanceAds (Amex): `https://financeads.net/tc.php?t=…T&subid={click_id}`
+   - GetYourGuide aktivitesi: aktivite sayfasının adresi + `?partner_id=RTQEAHP&cmp={click_id}`. Her aktivite için kısa link üretmeye gerek yok.
+   - Impact (Skyscanner): `https://skyscanner.pxf.io/…?subId1={click_id}`
+   - Sub-id taşıyamayan linkler (ör. GetYourGuide app linki) `{click_id}` olmadan da girilebilir. Tıklamalar yine bizde sayılır, sadece ağın raporuyla eşleştirilemez.
+2. **`keywords`** (küçük harf), **`pitch`** (programın onayladığı kısa metin, DE/EN/TR) ve **`active`**. Anahtar kelimeler tur kelimelerinden önce gelir, bu yüzden "berlin", "link" gibi genel kelimeler seçmeyin.
+3. **Reel:** *"Yorumlara GOLD yaz"*. Yorum yapana tanıtım metni ve **"Linki gönder"** butonu gider. Butona basınca kişiye özel bir link (`SITE/go/…`) ve reklam uyarısı gelir.
+4. **Story:** *"Bu story'ye GOLD diye cevap ver"*. Story'ye kelimeyle cevap veren kişiye (en fazla 3 kelimelik mesaj) tanıtım metni ve link hemen DM'den gider, story de kaynak olarak kaydedilir. Aynı kısa mesaj DM'den veya WhatsApp'tan gelirse de aynısı olur. Instagram API ile story'ye link sticker'ı eklenemediği için story'de linki bu yolla dağıtıyoruz.
+5. Concierge'e sohbet içinde soran müşteriye de aynı link gönderilir. Her tıklama sayılır.
 
 **Hukuki notlar**
 - Her partner linkinde "Anzeige / Ad / Reklam" uyarısı otomatik olarak yer alır. Reel'in kendisi de reklam olarak işaretlenmeli (ör. "Werbung" etiketi veya Instagram'ın *Ücretli ortaklık* etiketi).
@@ -72,7 +78,7 @@ Tur dışında Awin, Admitad veya FinanceAds üzerinden tanıtılan ürünler `a
 - Programın koşullarını kontrol edin: bazı kart programları DM, yorum veya teşvikli trafik üzerinden tanıtımı kısıtlar. Tanıtım metni programın izin verdiği ifadelerden oluşmalı.
 
 ### Hangi reel ne kazandırdı?
-Supabase'deki `source_performance` görünümünde her post/reel için şunlar listelenir: link, açılan sohbet sayısı, ödenmiş rezervasyonlar, tur cirosu, gönderilen ve açılan partner linkleri.
+Supabase'deki `source_performance` görünümünde her post/reel/story için şunlar listelenir: link, açılan sohbet sayısı, ödenmiş rezervasyonlar, tur cirosu, gönderilen ve açılan partner linkleri.
 
 ## 5. Stripe
 1. Stripe hesabı → para birimi EUR. Settings → Payment methods'ta kart, Apple Pay, Google Pay, PayPal ve SEPA'yı açın.

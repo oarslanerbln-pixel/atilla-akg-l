@@ -1,12 +1,13 @@
 import 'server-only';
-import { randomBytes } from 'node:crypto';
+import { randomInt } from 'node:crypto';
 import { env, type Lang } from './config';
 import { db, type Contact } from './db';
 import { getInstagramMedia, sendToContact } from './meta';
 import { offerLink } from './copy';
 
 // Partner (affiliate) offers such as American Express cards. Links go out as SITE_URL/go/<click id>,
-// so every click is counted per reel and the click id reaches the network as sub id.
+// so every click is counted per reel or story and, where the network takes one, the click id
+// reaches it as sub id.
 
 export interface Offer {
   id: string;
@@ -16,7 +17,9 @@ export interface Offer {
   keywords: string[];
 }
 
-const CLICK_ID = /^[A-Za-z0-9_-]{16}$/;
+// Letters and digits only: FinanceAds, for one, accepts nothing else as sub id.
+const ID_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const CLICK_ID = /^[A-Za-z0-9]{16}$/;
 /** Quick-reply payload prefix for "send me the link" buttons. */
 export const OFFER_PAYLOAD = 'OFFER:';
 
@@ -36,14 +39,14 @@ export async function getOffer(id: string): Promise<Offer | null> {
   return (data as Offer | null) ?? null;
 }
 
-/** The offer whose keyword appears in a comment, if any. Offers win over the tour keywords. */
+/** The offer whose keyword appears among the words, if any. Offers win over the tour keywords. */
 export function offerForWords(words: string[], offers: Offer[]): Offer | undefined {
   return offers.find((o) => o.keywords.some((k) => words.includes(k.toLowerCase())));
 }
 
 /** A personal, countable link for this contact. */
 export async function createOfferLink(offer: Offer, contact: Contact): Promise<string> {
-  const id = randomBytes(12).toString('base64url');
+  const id = Array.from({ length: 16 }, () => ID_ALPHABET[randomInt(ID_ALPHABET.length)]).join('');
   const { error } = await db()
     .from('affiliate_clicks')
     .insert({ id, offer_id: offer.id, contact_id: contact.id, source_media_id: contact.source_media_id });
@@ -51,12 +54,20 @@ export async function createOfferLink(offer: Offer, contact: Contact): Promise<s
   return `${env('SITE_URL')}/go/${id}`;
 }
 
+/** Sends a fresh tracked link, led by the offer's description when the customer hasn't seen it yet. */
+export async function sendOffer(contact: Contact, offer: Offer, withPitch: boolean): Promise<void> {
+  const lang = contact.language ?? 'en';
+  const link = offerLink(lang, offer.name[lang], await createOfferLink(offer, contact));
+  await sendToContact(contact, withPitch ? `${offer.pitch[lang]}
+
+${link}` : link);
+}
+
 /** The customer tapped "send me the link" (or asked the concierge): a fresh tracked link. */
 export async function sendOfferLink(contact: Contact, offerId: string): Promise<boolean> {
   const offer = await getOffer(offerId);
   if (!offer) return false;
-  const lang = contact.language ?? 'en';
-  await sendToContact(contact, offerLink(lang, offer.name[lang], await createOfferLink(offer, contact)));
+  await sendOffer(contact, offer, false);
   return true;
 }
 
