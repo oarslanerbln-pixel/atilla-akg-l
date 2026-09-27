@@ -67,7 +67,8 @@ src/
 │   ├── api/contact/route.ts # Contact form delivery (Resend)
 │   ├── llms.txt/route.ts    # Plain-text summary for AI answer engines
 │   ├── impressum/           # § 5 DDG imprint
-│   └── datenschutz/         # Privacy notice
+│   ├── datenschutz/         # Privacy notice
+│   └── social-media/        # Private package page: noindex, unlinked, ?lang=en|tr
 ├── components/              # Modular UI components with *.module.css pairs
 │   ├── Preloader.tsx
 │   ├── CustomCursor.tsx
@@ -76,6 +77,7 @@ src/
 │   ├── Hero.tsx
 │   ├── HeroHorizon.tsx      # Live WebGL sea-at-sunrise backdrop
 │   ├── WhatsAppButton.tsx   # Floating wa.me link between hero and contact
+│   ├── packages/            # /social-media page (plates data in lib/packages.ts)
 │   ├── Brands.tsx           # Grey credit-line marquee, constant 30 px/s
 │   ├── Stats.tsx
 │   ├── FeaturedWork.tsx
