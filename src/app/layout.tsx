@@ -4,6 +4,7 @@ import "./globals.css";
 import { contact, siteUrl, socialProfiles } from "@/lib/site";
 import { partners } from "@/lib/partners";
 import { translations } from "@/i18n/translations";
+import { INTRO_SEEN_SCRIPT } from "@/lib/intro";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -123,8 +124,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de" className={`${inter.variable} ${interTight.variable} ${playfair.variable}`}>
+    // suppressHydrationWarning: the intro script below may add a data
+    // attribute to <html> before React hydrates it.
+    <html
+      lang="de"
+      className={`${inter.variable} ${interTight.variable} ${playfair.variable}`}
+      suppressHydrationWarning
+    >
       <body>
+        {/* Runs before first paint so a returning visitor never sees the
+            intro overlay; see src/lib/intro.ts. A fixed string, no input. */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_SEEN_SCRIPT }} />
         <script
           type="application/ld+json"
           // The object is a literal defined above, not anything a visitor can

@@ -183,7 +183,9 @@ below screen resolution, stopped when off screen, and a single still frame
 under `usePrefersCalm()`. Keep it dependency-free; a 3D library would cost
 more than the scene. Project clips carry `preload="none"` and a self-hosted
 poster. Anything new and heavy loads on visibility, and `usePrefersCalm()`
-decides whether it autoplays at all.
+decides whether it autoplays at all. The intro (`Preloader.tsx`) plays once
+per visitor, ever (localStorage), for about 1.4 s, and never under reduced
+motion — a first impression, not a toll on every return.
 
 ### Stacking order comes from the scale
 `--z-float` through `--z-preloader` live in `globals.css`. Raw literals

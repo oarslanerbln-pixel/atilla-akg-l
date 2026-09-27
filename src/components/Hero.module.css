@@ -169,13 +169,16 @@
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
-.diamond {
+/* A plain gold point between the phrases. The old ✦ glyph with its glow
+   read as a second star next to the compass mark. */
+.separator {
   display: inline-block;
-  margin: 0 0.8rem;
-  font-size: 0.85em;
-  color: var(--accent-gold);
-  opacity: 0.9;
-  filter: drop-shadow(0 0 5px rgba(194, 165, 126, 0.6));
+  width: 4px;
+  height: 4px;
+  margin: 0 0.9rem;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  opacity: 0.85;
 }
 
 /* CTA Buttons */
@@ -242,7 +245,11 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* --- Social Icons with Animated Rotating Color Aura --- */
+/* --- Social Icons ---
+   A thin gold ring, gold on hover. They used to sit inside a spinning
+   orange-to-red conic gradient: a second and third accent on a page built on
+   one, three animations that never stopped, and a glow competing with the
+   sun in the backdrop. */
 .socialIcons {
   display: flex;
   justify-content: center;
@@ -252,86 +259,41 @@
 }
 
 .socialCapsule {
-  position: relative;
   width: 44px;
   height: 44px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2px;
-  background: transparent;
+  border: 1px solid rgba(179, 139, 89, 0.55);
+  background: rgba(20, 14, 9, 0.7);
+  color: var(--text-on-ink);
   text-decoration: none;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, color 0.3s ease;
   cursor: pointer;
 }
 
-.socialCapsule:hover {
-  transform: translateY(-3px) scale(1.08);
-  box-shadow: 0 10px 25px rgba(227, 200, 150, 0.45);
-}
-
-.rotatingAura {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(
-    from 0deg,
-    #b38b59 0deg,
-    #e3c896 60deg,
-    #ff955c 120deg,
-    #e3c896 180deg,
-    #d4af37 240deg,
-    #ff7043 300deg,
-    #b38b59 360deg
-  );
-  animation: rotateAura 5s linear infinite;
-  z-index: 0;
-}
-
-@keyframes rotateAura {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.socialCapsule:hover,
+.socialCapsule:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold-light);
 }
 
 .iconInner {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: rgba(20, 14, 9, 0.88);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-on-ink);
-  transition: all 0.3s ease;
-}
-
-.socialCapsule:hover .iconInner {
-  background: rgba(20, 14, 9, 0.65);
-  color: #ffffff;
 }
 
 .iconInner svg {
   width: 19px;
   height: 19px;
-  transition: transform 0.3s ease, filter 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .socialCapsule:hover .iconInner svg {
-  transform: scale(1.12);
-  filter: drop-shadow(0 0 6px rgba(227, 200, 150, 0.7));
+  transform: scale(1.1);
 }
 
 /* Scroll Indicator */
@@ -378,6 +340,19 @@
 }
 
 /* Mobile Adjustments */
+@media (max-width: 640px) {
+  /* Three phrases on three centred lines; a separator would only hang at
+     the end of a wrapped line. */
+  .subtitle {
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .separator {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .hero {
     padding-top: 5rem;
