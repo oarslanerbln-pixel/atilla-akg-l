@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import LegalPage, { Todo } from "@/components/LegalPage";
+import LegalPage from "@/components/LegalPage";
 
 export const metadata: Metadata = {
   title: "Datenschutzerklärung | Atilla BARBAROSSA",
@@ -13,7 +13,9 @@ export default function Datenschutz() {
       <p>
         Atilla Akgül
         <br />
-        <Todo>Straße, PLZ und Ort</Todo>
+        Neuendorfer Straße 54
+        <br />
+        13585 Berlin
         <br />
         E-Mail: <a href="mailto:a@barbarossafilms.de">a@barbarossafilms.de</a>
       </p>

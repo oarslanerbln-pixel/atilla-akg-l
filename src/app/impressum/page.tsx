@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import LegalPage, { Todo } from "@/components/LegalPage";
+import LegalPage from "@/components/LegalPage";
 
 export const metadata: Metadata = {
   title: "Impressum | Atilla BARBAROSSA",
@@ -13,32 +13,27 @@ export default function Impressum() {
       <p>
         Atilla Akgül
         <br />
-        <Todo>Straße und Hausnummer</Todo>
+        Neuendorfer Straße 54
         <br />
-        <Todo>PLZ und Ort</Todo>
+        13585 Berlin
         <br />
         Deutschland
       </p>
 
       <h2>Kontakt</h2>
       <p>
-        Telefon: <a href="tel:+4917672725165">+49 176 72 72 5165</a>
+        Telefon: <a href="tel:+4917631717458">+49 176 31717458</a>
         <br />
         E-Mail: <a href="mailto:a@barbarossafilms.de">a@barbarossafilms.de</a>
         <br />
         Management: <a href="mailto:lisaweber@barbarossafilms.de">lisaweber@barbarossafilms.de</a>
       </p>
 
-      <h2>Umsatzsteuer-Identifikationsnummer</h2>
-      <p>
-        Gemäß § 27 a Umsatzsteuergesetz: <Todo>USt-IdNr. oder Steuernummer</Todo>
-      </p>
-
       <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
       <p>
         Atilla Akgül
         <br />
-        <Todo>Anschrift wie oben</Todo>
+        Neuendorfer Straße 54, 13585 Berlin
       </p>
 
       <h2>Streitbeilegung</h2>
