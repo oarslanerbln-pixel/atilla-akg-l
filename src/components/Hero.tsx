@@ -90,10 +90,11 @@ function FocusWord({
 /**
  * The hero opens like a film.
  *
- * A gold line draws across the centre — the horizon — and the black mattes
- * above and below it part to reveal the sea. The name sharpens into focus
- * letter by letter, then settles into its gold shimmer; the rest follows in
- * a short, ordered cascade. It starts only when the intro overlay leaves
+ * A gold line draws across the centre — the horizon — and the paper mattes
+ * above and below it part like curtains on a bright morning, revealing the
+ * sea at sunrise. The name sharpens into focus letter by letter, set in the
+ * same light Inter Tight as every heading on the page; the rest follows in a
+ * short, ordered cascade. It starts only when the intro overlay leaves
  * (useIntroDone), so nobody watches it play underneath the overlay.
  *
  * Scrolling away lifts the camera like a drone climbing (HeroHorizon reads
@@ -180,8 +181,8 @@ export default function Hero() {
           </motion.h2>
 
           <h1 className={styles.name}>
-            {/* The readable name, and the one that shimmers once the letters
-                have landed. It sets the layout; the letters sit over it. */}
+            {/* The readable name. It sets the layout; the focus letters sit
+                over it and hand over to it once they have landed. */}
             <motion.span
               className={styles.nameShine}
               initial={{ opacity: 0 }}
@@ -190,7 +191,7 @@ export default function Hero() {
             >
               <span className={styles.firstName}>Atilla</span>
               <br />
-              <span className={styles.lastName}>BARBAROSSA</span>
+              <span className={styles.lastName}>Barbarossa</span>
             </motion.span>
             {!calm && (
               <motion.span
@@ -203,7 +204,7 @@ export default function Hero() {
                 <FocusWord text="Atilla" start={T.letters} go={go} className={styles.firstName} />
                 <br />
                 <FocusWord
-                  text="BARBAROSSA"
+                  text="Barbarossa"
                   start={T.letters + 6 * T.stagger}
                   go={go}
                   className={styles.lastName}

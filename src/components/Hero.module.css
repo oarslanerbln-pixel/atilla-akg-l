@@ -9,14 +9,14 @@
   padding-top: 5.5rem;
   padding-bottom: 4.5rem;
   overflow: hidden;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 /* --- Backdrop ---
    The gradient is the scene's still: it paints before the first WebGL frame
-   and stays as the backdrop where WebGL is unavailable. Dusk sky, a warm band
-   at the horizon line, the sea below, and the sun's glow right of centre
-   where the shader puts it. */
+   and stays as the backdrop where WebGL is unavailable. Morning sky, a warm
+   haze at the horizon line, the sea below, and the sun's glow right of
+   centre where the shader puts it. */
 .backdrop {
   position: absolute;
   top: 0;
@@ -26,14 +26,14 @@
   z-index: -2;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 28% 18% at 72% 58%, rgba(216, 180, 130, 0.28), transparent 70%),
+    radial-gradient(ellipse 26% 20% at 72% 54%, rgba(255, 238, 205, 0.85), transparent 70%),
     linear-gradient(
       to bottom,
-      var(--bg-ink) 0%,
-      #1f160e 40%,
-      #4a2f19 57.5%,
-      #120d09 58.5%,
-      #0b0806 100%
+      #8fb0cc 0%,
+      #d9e0e2 38%,
+      #f4e7d2 56%,
+      #6f97a3 57%,
+      #1f5a68 100%
     );
 }
 
@@ -57,8 +57,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /* Cinematic dark vignette shadow to guarantee pristine legibility */
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.12) 20%, rgba(0, 0, 0, 0.6) 100%);
+  /* A soft paper light behind the copy, and a fade into the paper of the
+     next section, so the bright scene hands over without a hard edge. */
+  background:
+    radial-gradient(ellipse 55% 40% at 50% 45%, rgba(252, 251, 249, 0.38) 0%, rgba(252, 251, 249, 0) 100%),
+    linear-gradient(to bottom, rgba(252, 251, 249, 0) 84%, rgba(252, 251, 249, 0.6) 100%);
   z-index: 2;
 }
 
@@ -84,10 +87,10 @@
   max-width: 960px;
   /* closest-side: the shade reaches exactly transparent at the box edge. Sized
      to the far corner it was cut off at 20% and drew a visible edge on the sky. */
-  background: radial-gradient(closest-side, rgba(14, 9, 6, 0.55) 0%, rgba(14, 9, 6, 0.2) 60%, transparent 100%);
+  background: radial-gradient(closest-side, rgba(252, 251, 249, 0.55) 0%, rgba(252, 251, 249, 0.2) 60%, transparent 100%);
   padding: 1.5rem;
   position: relative;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .greeting {
@@ -95,47 +98,34 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.32em;
-  color: var(--accent-gold-light);
-  margin-bottom: 0.75rem;
+  color: var(--accent-gold-readable);
+  margin-bottom: 1rem;
   font-weight: 600;
   text-align: center;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 .name {
   position: relative;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-display);
   font-style: normal;
-  font-size: clamp(2.5rem, 5.8vw, 5rem);
-  line-height: 1.05;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.25rem;
+  font-size: clamp(3rem, 7.2vw, 6.4rem);
+  line-height: 1.02;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  margin-bottom: 1.5rem;
   text-align: center;
-  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.85));
+  color: var(--text-primary);
   /* The focus letters sit exactly over the readable name. Kerning pairs are
      lost between separate letter boxes, so it is off for both layers. */
   font-kerning: none;
 }
 
-/* The readable name: it sets the layout, carries the gold shimmer, and fades
-   in over the focus letters once they have landed. */
+/* The readable name: it sets the layout and takes over from the focus
+   letters once they have landed. Same ink as the section headings below. */
 .nameShine {
   display: block;
-  background: linear-gradient(
-    110deg,
-    var(--accent-gold) 0%,
-    var(--accent-gold-light) 25%,
-    #ffffff 50%,
-    var(--accent-gold-light) 75%,
-    var(--accent-gold) 100%
-  );
-  background-size: 200% auto;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
   /* Failsafe: if the script never arrives, the name still shows. */
-  animation: shimmer 12s linear infinite, nameFailsafe 0.8s ease 6s forwards;
+  animation: nameFailsafe 0.8s ease 6s forwards;
 }
 
 @keyframes nameFailsafe {
@@ -147,7 +137,7 @@
 .nameLetters {
   position: absolute;
   inset: 0;
-  color: var(--accent-gold-light);
+  color: var(--text-primary);
   pointer-events: none;
 }
 
@@ -185,7 +175,9 @@
   left: 0;
   right: 0;
   height: 50%;
-  background: #0b0806;
+  /* Paper, not black: the scene opens like curtains drawn on a bright
+     morning rather than a cinema going dark. */
+  background: var(--bg-primary);
 }
 
 .matteTop {
@@ -211,15 +203,10 @@
 
 .firstName {
   font-style: normal;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .lastName {
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-style: normal;
 }
 
 .divider {
@@ -228,7 +215,6 @@
   height: 1px;
   background-color: var(--accent-gold);
   margin: 0 auto 1.5rem;
-  box-shadow: 0 0 8px rgba(179, 139, 89, 0.6);
 }
 
 .subtitle {
@@ -244,10 +230,9 @@
   font-family: var(--font-inter), sans-serif;
   font-size: clamp(0.72rem, 0.95vw, 0.88rem);
   text-transform: uppercase;
-  letter-spacing: 0.28em; 
-  color: #ffffff;
+  letter-spacing: 0.28em;
+  color: var(--text-secondary);
   font-weight: 500;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 /* A plain gold point between the phrases. The old ✦ glyph with its glow
@@ -281,16 +266,16 @@
   align-items: center;
   justify-content: center;
   padding: 0.9rem 2.2rem;
-  background: var(--accent-gold);
-  color: #181512 !important;
+  background: var(--text-primary);
+  color: var(--bg-primary) !important;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  border: 1px solid var(--accent-gold);
+  border: 1px solid var(--text-primary);
   border-radius: 0;
-  box-shadow: 0 8px 25px rgba(179, 139, 89, 0.45);
+  box-shadow: 0 10px 28px rgba(24, 21, 18, 0.18);
   /* transform is driven by the magnetic lean (useMagnetic); transitioning it
      here would make the button lag behind the pointer. */
   transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
@@ -298,9 +283,10 @@
 }
 
 .primaryBtn:hover {
-  background: var(--accent-gold-light);
-  color: #181512 !important;
-  box-shadow: 0 12px 30px rgba(179, 139, 89, 0.6);
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: var(--text-primary) !important;
+  box-shadow: 0 12px 30px rgba(179, 139, 89, 0.4);
 }
 
 .secondaryBtn {
@@ -308,26 +294,26 @@
   align-items: center;
   justify-content: center;
   padding: 0.9rem 2.2rem;
-  background: rgba(20, 14, 9, 0.55);
+  background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: #ffffff !important;
+  color: var(--text-primary) !important;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(24, 21, 18, 0.28);
   border-radius: 0;
   transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   cursor: pointer;
 }
 
 .secondaryBtn:hover {
-  background: rgba(20, 14, 9, 0.85);
+  background: rgba(255, 255, 255, 0.85);
   border-color: var(--accent-gold);
-  color: var(--accent-gold-light) !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  color: var(--accent-gold-readable) !important;
+  box-shadow: 0 8px 20px rgba(24, 21, 18, 0.08);
 }
 
 /* --- Social Icons ---
@@ -350,9 +336,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(179, 139, 89, 0.55);
-  background: rgba(20, 14, 9, 0.7);
-  color: var(--text-on-ink);
+  border: 1px solid rgba(179, 139, 89, 0.6);
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--text-primary);
   text-decoration: none;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, color 0.3s ease;
   cursor: pointer;
@@ -362,7 +348,7 @@
 .socialCapsule:focus-visible {
   transform: translateY(-2px);
   border-color: var(--accent-gold);
-  color: var(--accent-gold-light);
+  color: var(--accent-gold-readable);
 }
 
 .iconInner {
@@ -391,8 +377,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0.35rem;
-  color: #ffffff;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+  color: var(--text-secondary);
   z-index: 10;
   cursor: pointer;
   transition: color var(--transition-smooth);
@@ -413,15 +398,6 @@
 .scrollIcon {
   width: 22px;
   height: 22px;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% center;
-  }
-  100% {
-    background-position: -200% center;
-  }
 }
 
 /* Mobile Adjustments */
@@ -449,7 +425,7 @@
   }
 
   .name {
-    font-size: clamp(2.2rem, 9vw, 3.2rem);
+    font-size: clamp(2.7rem, 12.5vw, 3.8rem);
   }
 
   .ctaGroup {

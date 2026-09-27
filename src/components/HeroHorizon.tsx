@@ -5,7 +5,7 @@ import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import styles from "./Hero.module.css";
 
 /**
- * The hero backdrop: a sea at dusk under a low gold sun, drawn live.
+ * The hero backdrop: a sea at sunrise under a low morning sun, drawn live.
  *
  * It replaces two background clips that cost 6–12 MB before the headline had
  * settled, one of which was shaky hand-held footage. This is one fragment
@@ -41,13 +41,16 @@ uniform float u_fade;
 // 0 at the top of the page, 1 once the hero has scrolled away.
 uniform float u_climb;
 
-const vec3 ZENITH  = vec3(0.030, 0.023, 0.017);
-const vec3 HORIZON = vec3(0.330, 0.205, 0.110);
-const vec3 SUN     = vec3(0.960, 0.640, 0.320);
-const vec3 GOLD    = vec3(0.702, 0.545, 0.349);
-const vec3 DEEP    = vec3(0.016, 0.014, 0.012);
+// Morning light: a soft blue overhead warming to cream at the horizon, a
+// low white-gold sun, and clear teal water that mirrors the sky.
+const vec3 ZENITH  = vec3(0.470, 0.640, 0.800);
+const vec3 HORIZON = vec3(0.960, 0.905, 0.815);
+const vec3 SUN     = vec3(1.000, 0.940, 0.800);
+const vec3 GOLD    = vec3(0.960, 0.780, 0.500);
+const vec3 DEEP    = vec3(0.045, 0.270, 0.350);
+const vec3 PAPER   = vec3(0.988, 0.984, 0.976);
 
-vec3 sunDir() { return normalize(vec3(u_sunX, 0.012, 1.0)); }
+vec3 sunDir() { return normalize(vec3(u_sunX, 0.045, 1.0)); }
 
 vec3 sky(vec3 rd) {
   float up = max(rd.y, 0.0);
@@ -55,10 +58,10 @@ vec3 sky(vec3 rd) {
   float s = max(dot(rd, sunDir()), 0.0);
   // Kept below clipping so the disc stays gold instead of burning to a pale
   // yellow once tone-mapped.
-  col += GOLD * (pow(s, 6.0) * 0.12 + pow(s, 40.0) * 0.22 + pow(s, 400.0) * 0.25);
-  col += SUN * smoothstep(0.99976, 0.99983, s) * 0.8;
+  col += GOLD * (pow(s, 6.0) * 0.05 + pow(s, 40.0) * 0.14 + pow(s, 400.0) * 0.30);
+  col += SUN * smoothstep(0.99976, 0.99983, s) * 0.9;
   // A warm haze sits on the horizon line itself.
-  col += GOLD * 0.10 * exp(-abs(rd.y) * 45.0);
+  col += GOLD * 0.06 * exp(-abs(rd.y) * 45.0);
   return col;
 }
 
@@ -98,7 +101,8 @@ void main() {
     vec3 r = reflect(rd, n);
     r.y = abs(r.y);
     float fres = 0.04 + 0.96 * pow(1.0 - max(dot(-rd, n), 0.0), 5.0);
-    col = mix(DEEP, sky(r), fres);
+    // The mirrored sky is held back a little so the water keeps its colour.
+    col = mix(DEEP, sky(r) * 0.82, fres);
     float s = max(dot(r, sunDir()), 0.0);
     col += SUN * (pow(s, 420.0) * 1.3 + pow(s, 60.0) * 0.10);
     col = mix(col, HORIZON * 0.9, 1.0 - exp(-dist * 0.012));
@@ -109,9 +113,9 @@ void main() {
   // Interleaved gradient noise: film grain without the banding a sin-hash
   // shows on some GPUs.
   float grain = fract(52.9829189 * fract(dot(floor(gl_FragCoord.xy), vec2(0.06711056, 0.00583715)) + fract(u_time * 7.0)));
-  col += (grain - 0.5) * 0.025;
-  col = col / (1.0 + col * 0.35);
-  gl_FragColor = vec4(col * u_fade, 1.0);
+  col += (grain - 0.5) * 0.018;
+  // Fades in from the page's paper colour, not from black.
+  gl_FragColor = vec4(mix(PAPER, clamp(col, 0.0, 1.0), u_fade), 1.0);
 }
 `;
 
