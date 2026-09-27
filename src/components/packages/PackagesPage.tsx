@@ -82,9 +82,38 @@ export default function PackagesPage() {
     hidden: {},
     visible: { transition: calm ? {} : { staggerChildren: 0.12, delayChildren: 0.1 } },
   };
+  // The plate wipes up, then its lines follow one after another, top to
+  // bottom, as if the card were being set line by line.
   const plateVariants: Variants = {
     hidden: { clipPath: "inset(100% 0% 0% 0%)" },
-    visible: { clipPath: "inset(0% 0% 0% 0%)", transition: at(0, 1) },
+    visible: {
+      clipPath: "inset(0% 0% 0% 0%)",
+      transition: calm
+        ? { duration: 0 }
+        : { duration: 1, ease: EASE, delayChildren: 0.35, staggerChildren: 0.08 },
+    },
+  };
+  const lineVariants: Variants = {
+    hidden: { opacity: 0, y: 14 },
+    // No delay of its own: an explicit delay would override the stagger the
+    // plate hands down.
+    visible: { opacity: 1, y: 0, transition: calm ? { duration: 0 } : { duration: 0.7, ease: EASE } },
+  };
+  // The request block closes the sequence, after the last feature line, so
+  // its delay is counted from the plate's own stagger and the list length.
+  const footVariants = (featureCount: number): Variants => ({
+    hidden: { opacity: 0, y: 14 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: calm
+        ? { duration: 0 }
+        : { duration: 0.7, ease: EASE, delay: 0.35 + 4 * 0.08 + featureCount * 0.07 },
+    },
+  });
+  const featureListVariants: Variants = {
+    hidden: {},
+    visible: { transition: calm ? {} : { staggerChildren: 0.07 } },
   };
 
   // The switcher keeps the address in step, so a link copied from the
@@ -105,29 +134,35 @@ export default function PackagesPage() {
         className={`${styles.plate} ${pkg.featured ? styles.featured : ""}`}
         variants={plateVariants}
       >
-        <div className={styles.plateTop}>
+        <motion.div className={styles.plateTop} variants={lineVariants}>
           <span className={styles.plateIndex}>{String(index + 1).padStart(2, "0")}</span>
           {pkg.featured && <span className={styles.badge}>{t("pkg_most_chosen")}</span>}
-        </div>
+        </motion.div>
 
-        <h3 className={styles.plateName}>{pkg.name}</h3>
-        <p className={styles.tagline}>{t(pkg.tagline)}</p>
+        <motion.h3 className={styles.plateName} variants={lineVariants}>
+          {pkg.name}
+        </motion.h3>
+        <motion.p className={styles.tagline} variants={lineVariants}>
+          {t(pkg.tagline)}
+        </motion.p>
 
-        <div className={styles.count}>
+        <motion.div className={styles.count} variants={lineVariants}>
           <span className={styles.countValue}>{pkg.videos}</span>
           <span className={styles.countLabel}>
             <span>{t("pkg_videos")}</span>
             <span>{t("pkg_per_month")}</span>
           </span>
-        </div>
+        </motion.div>
 
-        <ul className={styles.features}>
+        <motion.ul className={styles.features} variants={featureListVariants}>
           {pkg.features.map((feature) => (
-            <li key={feature}>{t(feature)}</li>
+            <motion.li key={feature} variants={lineVariants}>
+              {t(feature)}
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
 
-        <div className={styles.plateFoot}>
+        <motion.div className={styles.plateFoot} variants={footVariants(pkg.features.length)}>
           <p className={styles.investment}>{t("pkg_investment")}</p>
           <a
             href={whatsapp(fill(t("pkg_wa_message"), values))}
@@ -141,7 +176,7 @@ export default function PackagesPage() {
           <a href={mail(fill(t("pkg_mail_subject"), values))} className={styles.plateMail}>
             {t("pkg_cta_email")}
           </a>
-        </div>
+        </motion.div>
 
         <span className={styles.plateRule} aria-hidden="true" />
       </motion.li>
@@ -237,7 +272,7 @@ export default function PackagesPage() {
         </section>
 
         {/* Process */}
-        <section className={`${styles.section} ${styles.processSection}`} aria-labelledby="process-title">
+        <section className={styles.section} aria-labelledby="process-title">
           <div className="container">
             <motion.div className={styles.sectionHead} {...reveal()}>
               <p className={styles.eyebrow}>{t("pkg_process_eyebrow")}</p>
