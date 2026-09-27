@@ -15,6 +15,8 @@ export const translations = {
     // Hero
     hero_welcome: "Willkommen",
     hero_scroll: "Scrollen",
+    whatsapp_label: "Per WhatsApp schreiben",
+    whatsapp_message: "Hallo Atilla, ich interessiere mich für eine Zusammenarbeit.",
     hero_storytelling: "Visual Storytelling",
     hero_excellence: "Digital Excellence",
     hero_direction: "Creative Direction",
@@ -41,6 +43,7 @@ export const translations = {
     
     // Services
     services_title: "Leistungen",
+    brands_label: "Marken, mit denen ich gearbeitet habe",
     partners_subtitle: "Destination Partner",
     partners_title: "Tourismusbehörden & Institutionen",
     partners_intro: "Ich habe mit nationalen Tourismusbehörden und internationalen Institutionen zusammengearbeitet – darunter {partners}.",
@@ -70,11 +73,6 @@ export const translations = {
     project_1_desc: "Exklusives Storytelling für das renommierte Designhotel im pulsierenden Karaköy-Viertel.",
     project_1_metric: "559.316 Accounts Erreicht",
     project_1_type: "Reels Campaign",
-    project_2_title: "The Maldives",
-    project_2_cat: "Luxury Travel & Culture",
-    project_2_desc: "Atmosphärische Reisedokumentationen, die unberührte Tropenästhetik und erlesene Gastfreundschaft vereinen.",
-    project_2_metric: "1.2 MIO Video Views",
-    project_2_type: "Cinematic Film",
     project_3_title: "Croatia Ottoman Caravanserai",
     project_3_cat: "Heritage & History",
     project_3_desc: "Maßgeschneiderte visuelle Kampagnen für historische Architektur, jahrhundertealte Karawansereien und kulturelles Erbe.",
@@ -151,6 +149,8 @@ export const translations = {
     // Hero
     hero_welcome: "Welcome",
     hero_scroll: "Scroll",
+    whatsapp_label: "Message on WhatsApp",
+    whatsapp_message: "Hi Atilla, I'm interested in working together.",
     hero_storytelling: "Visual Storytelling",
     hero_excellence: "Digital Excellence",
     hero_direction: "Creative Direction",
@@ -177,6 +177,7 @@ export const translations = {
     
     // Services
     services_title: "Services",
+    brands_label: "Brands I have worked with",
     partners_subtitle: "Destination Partners",
     partners_title: "Tourism Boards & Institutions",
     partners_intro: "I have worked with national tourism boards and international institutions, including {partners}.",
@@ -206,11 +207,6 @@ export const translations = {
     project_1_desc: "Exclusive visual storytelling for the renowned design hotel located in Istanbul's vibrant Karaköy district.",
     project_1_metric: "559K Accounts Reached",
     project_1_type: "Reels Campaign",
-    project_2_title: "The Maldives",
-    project_2_cat: "Luxury Travel & Culture",
-    project_2_desc: "Atmospheric travel documentary blending pristine tropical aesthetics with bespoke luxury hospitality.",
-    project_2_metric: "1.2 MIO Video Views",
-    project_2_type: "Cinematic Film",
     project_3_title: "Croatia Ottoman Caravanserai",
     project_3_cat: "Heritage & History",
     project_3_desc: "Bespoke visual exploration spotlighting historic architecture, centuries-old caravanserais, and cultural heritage.",
@@ -287,6 +283,8 @@ export const translations = {
     // Hero
     hero_welcome: "Hoş Geldiniz",
     hero_scroll: "Kaydırın",
+    whatsapp_label: "WhatsApp'tan yaz",
+    whatsapp_message: "Merhaba Atilla, bir iş birliğiyle ilgileniyorum.",
     hero_storytelling: "Görsel Hikayecilik",
     hero_excellence: "Dijital Mükemmellik",
     hero_direction: "Kreatif Direktörlük",
@@ -313,6 +311,7 @@ export const translations = {
     
     // Services
     services_title: "Hizmetler",
+    brands_label: "Birlikte çalıştığım markalar",
     partners_subtitle: "Destinasyon Ortakları",
     partners_title: "Turizm Kurumları & Kuruluşlar",
     partners_intro: "Ulusal turizm kurumları ve uluslararası kuruluşlarla iş birliği yaptım; bunlar arasında {partners} yer alıyor.",
@@ -342,11 +341,6 @@ export const translations = {
     project_1_desc: "Canlı Karaköy semtindeki ünlü tasarım oteli için özel görsel hikaye anlatımı ve marka filmi.",
     project_1_metric: "559.316 Ulaşılan Hesap",
     project_1_type: "Reels Kampanyası",
-    project_2_title: "Maldivler",
-    project_2_cat: "Lüks Seyahat ve Kültür",
-    project_2_desc: "Bozulmamış tropikal estetiği ve üst düzey misafirperverliği birleştiren atmosferik seyahat belgeseli.",
-    project_2_metric: "1.2 MİLYON İzlenme",
-    project_2_type: "Sinematik Film",
     project_3_title: "Hırvatistan Osmanlı Kervansarayı",
     project_3_cat: "Tarihi Miras ve Kültür",
     project_3_desc: "Tarihi mimariyi, asırlık kervansarayları ve kültürel mirası gün yüzüne çıkaran özel görsel kampanya.",

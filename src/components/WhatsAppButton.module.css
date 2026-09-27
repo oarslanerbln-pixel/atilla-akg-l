@@ -1,0 +1,85 @@
+/* Ink with a gold ring at rest, gold on hover: the site's one accent, not
+   WhatsApp green — the glyph alone is recognisable. */
+.button {
+  position: fixed;
+  right: 1.25rem;
+  bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  z-index: var(--z-float);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 56px;
+  height: 56px;
+  /* Sharp corners, like every other button here (premium-aesthetics.md). */
+  border-radius: 0;
+  border: 1px solid var(--accent-gold);
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+  box-shadow: 0 10px 30px rgba(20, 15, 10, 0.28);
+  text-decoration: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 0.35s,
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.shown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    visibility 0s,
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  background: var(--accent-gold);
+  color: var(--bg-ink);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* On a phone the icon is enough; wider screens get the word as well. */
+.label {
+  display: none;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 769px) {
+  .button {
+    right: 2rem;
+    bottom: 2rem;
+    width: auto;
+    height: 48px;
+    padding: 0 1.25rem 0 1rem;
+  }
+
+  .label {
+    display: inline;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .shown {
+    transform: none;
+  }
+}

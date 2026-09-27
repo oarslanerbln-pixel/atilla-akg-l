@@ -124,10 +124,12 @@
 }
 
 .cardTitle {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-display);
   font-size: 1.6rem;
   margin-bottom: 1rem;
-  font-weight: 600;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
   min-height: 56px;
   color: var(--text-primary);
 }
@@ -176,9 +178,9 @@
 }
 
 .disclaimer {
-  font-family: var(--font-playfair), serif;
-  font-style: italic;
-  font-size: 1.1rem;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 1.2rem;
   color: var(--text-secondary);
   line-height: 1.8;
 }

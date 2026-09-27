@@ -25,7 +25,7 @@ Always utilize CSS variables defined in `src/app/globals.css`:
   - `--bg-primary: #fcfbf9` (Luminous gallery white)
   - `--bg-secondary: #f4f1ea` (Soft porcelain alabaster)
   - `--bg-card: #ffffff` (Crisp floating white)
-  - `--bg-ink: #140f0a` (Statement dark cards, marquee, contrast footer)
+  - `--bg-ink: #140f0a` (Statement dark cards, contrast footer)
 - **Text & Typography:**
   - `--text-primary: #181512` (Obsidian charcoal)
   - `--text-secondary: #5a524a` (Warm graphite)
@@ -33,7 +33,7 @@ Always utilize CSS variables defined in `src/app/globals.css`:
   - Section headings: `var(--font-display)` — Inter Tight 300, plain ink,
     mixed case ("Projekte", not "PROJEKTE"). The gold lives in the small
     uppercase eyebrow above each one, not in the heading itself.
-  - Brand name, editorial quote, figures: `var(--font-playfair)` (Serif)
+  - Headings, figures, the editorial quote: `var(--font-display)` (Inter Tight 300/400/500). Playfair is no longer used.
   - Body & UI: `var(--font-inter)` (Clean Sans-serif)
 - **Accents:**
   - `--accent-gold: #b38b59`
@@ -74,7 +74,9 @@ src/
 │   ├── Navbar.tsx
 │   ├── LiveClock.tsx
 │   ├── Hero.tsx
-│   ├── Brands.tsx
+│   ├── HeroHorizon.tsx      # Live WebGL sea-at-sunrise backdrop
+│   ├── WhatsAppButton.tsx   # Floating wa.me link between hero and contact
+│   ├── Brands.tsx           # Grey credit-line marquee, constant 30 px/s
 │   ├── Stats.tsx
 │   ├── FeaturedWork.tsx
 │   ├── Services.tsx
@@ -131,6 +133,9 @@ partner there and all three follow.
   `CreativeWork` created by Atilla about that partner.
 - The name always stays on the page as text, logo or not: search engines and
   AI answer engines read text, not the pixels of a wordmark.
+- **Coordinates:** every partner carries `coords` (capital or headquarters).
+  The card prints them and turns its compass needle to the bearing from
+  `BASE` (Berlin), computed by `bearing()` — never typed in by hand.
 
 ## 🧭 Brand mark
 The logo is the **compass**: a four-point north star whose north ray breaks
@@ -177,14 +182,22 @@ sending nothing, so every inquiry was lost. A response of 200 from
 returns 503, delivery failure returns 502, and the form surfaces both.
 
 ### Mobile data is the budget
-Visitors arrive from Instagram on a phone. Only the visible hero clip plays;
-the second one carries `preload="none"`. Still frames come from the clip
-itself via the `#t=0.1` fragment rather than a separate poster asset. Anything
-new and heavy loads on visibility, and `usePrefersCalm()` decides whether it
-autoplays at all.
+Visitors arrive from Instagram on a phone. The hero backdrop is a live WebGL
+scene (`HeroHorizon.tsx`), not a clip: a few kilobytes of shader, rendered
+below screen resolution, stopped when off screen, and a single still frame
+under `usePrefersCalm()`. Keep it dependency-free; a 3D library would cost
+more than the scene. Project clips carry `preload="none"` and a self-hosted
+poster. Anything new and heavy loads on visibility, and `usePrefersCalm()`
+decides whether it autoplays at all. The intro (`Preloader.tsx`) plays once
+per visitor, ever (localStorage), for about 1.4 s, and never under reduced
+motion — a first impression, not a toll on every return.
+The hero's opening (mattes, focus letters, cascade) waits for the intro to
+leave (`useIntroDone`, marked by the Preloader); scrolling away drives the
+WebGL camera's climb (`u_climb`). Nothing holds the scroll: the hero stays
+one screen tall.
 
 ### Stacking order comes from the scale
-`--z-nav-panel` through `--z-preloader` live in `globals.css`. Raw literals
+`--z-float` through `--z-preloader` live in `globals.css`. Raw literals
 (999, 1002, 9999, 99997, 99998, 99999, 999999) once competed with each other,
 and the lightbox ended up above the bespoke cursor — which, with
 `cursor: none` on the body, left the visitor with no pointer at all. A new

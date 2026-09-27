@@ -39,13 +39,13 @@
 }
 
 .massiveTitle {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-display);
   font-size: clamp(4rem, 12vw, 12rem);
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1;
   text-align: center;
   margin-bottom: 6rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.045em;
   
   background: linear-gradient(to right, var(--bg-primary), var(--accent-gold));
   background-size: 200% auto;

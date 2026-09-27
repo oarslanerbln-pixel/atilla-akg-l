@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Inter_Tight, Playfair_Display } from "next/font/google";
+import { Inter, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { contact, siteUrl, socialProfiles } from "@/lib/site";
 import { partners } from "@/lib/partners";
 import { translations } from "@/i18n/translations";
+import { INTRO_SEEN_SCRIPT } from "@/lib/intro";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -11,18 +12,13 @@ const inter = Inter({
   display: "swap",
 });
 
-// Section headings. Only the one weight they use: a static 300 is a fraction
-// of the variable file, and nothing else on the page asks for this family.
+// Every heading, figure and quote on the page. Three static weights: 300 for
+// display sizes, 400 and 500 where the type is small enough that a hairline
+// would break up.
 const interTight = Inter_Tight({
   subsets: ["latin"],
-  weight: "300",
+  weight: ["300", "400", "500"],
   variable: "--font-inter-tight",
-  display: "swap",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
   display: "swap",
 });
 
@@ -123,8 +119,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de" className={`${inter.variable} ${interTight.variable} ${playfair.variable}`}>
+    // suppressHydrationWarning: the intro script below may add a data
+    // attribute to <html> before React hydrates it.
+    <html
+      lang="de"
+      className={`${inter.variable} ${interTight.variable}`}
+      suppressHydrationWarning
+    >
       <body>
+        {/* Runs before first paint so a returning visitor never sees the
+            intro overlay; see src/lib/intro.ts. A fixed string, no input. */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_SEEN_SCRIPT }} />
         <script
           type="application/ld+json"
           // The object is a literal defined above, not anything a visitor can

@@ -9,11 +9,15 @@
   padding-top: 5.5rem;
   padding-bottom: 4.5rem;
   overflow: hidden;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
-/* --- Dual Background Video Wrapper --- */
-.backgroundVideoWrapper {
+/* --- Backdrop ---
+   The gradient is the scene's still: it paints before the first WebGL frame
+   and stays as the backdrop where WebGL is unavailable. Morning sky, a warm
+   haze at the horizon line, the sea below, and the sun's glow right of
+   centre where the shader puts it. */
+.backdrop {
   position: absolute;
   top: 0;
   left: 0;
@@ -21,32 +25,30 @@
   height: 100%;
   z-index: -2;
   overflow: hidden;
-  background-color: #0d0906;
+  background:
+    radial-gradient(ellipse 26% 20% at 72% 54%, rgba(255, 238, 205, 0.85), transparent 70%),
+    linear-gradient(
+      to bottom,
+      #8fb0cc 0%,
+      #d9e0e2 38%,
+      #f4e7d2 56%,
+      #6f97a3 57%,
+      #1f5a68 100%
+    );
 }
 
-.backgroundVideo {
+.horizonCanvas {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  filter: brightness(0.86);
+  display: block;
   opacity: 0;
-  transform: scale(1.05);
-  transition: opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1), transform 8s ease-out;
+  transition: opacity 1.2s ease;
 }
 
-.videoActive {
+.horizonReady {
   opacity: 1;
-  transform: scale(1);
-  z-index: 1;
-}
-
-.videoHidden {
-  opacity: 0;
-  z-index: 0;
-  pointer-events: none;
 }
 
 .overlay {
@@ -55,8 +57,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /* Cinematic dark vignette shadow to guarantee pristine legibility */
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.22) 20%, rgba(0, 0, 0, 0.78) 100%);
+  /* A soft paper light behind the copy, and a fade into the paper of the
+     next section, so the bright scene hands over without a hard edge. */
+  background:
+    radial-gradient(ellipse 55% 40% at 50% 45%, rgba(252, 251, 249, 0.38) 0%, rgba(252, 251, 249, 0) 100%),
+    linear-gradient(to bottom, rgba(252, 251, 249, 0) 84%, rgba(252, 251, 249, 0.6) 100%);
   z-index: 2;
 }
 
@@ -80,10 +85,12 @@
   text-align: center;
   width: 100%;
   max-width: 960px;
-  background: radial-gradient(ellipse at center, rgba(14, 9, 6, 0.55) 0%, rgba(14, 9, 6, 0.2) 60%, transparent 80%);
+  /* closest-side: the shade reaches exactly transparent at the box edge. Sized
+     to the far corner it was cut off at 20% and drew a visible edge on the sky. */
+  background: radial-gradient(closest-side, rgba(252, 251, 249, 0.55) 0%, rgba(252, 251, 249, 0.2) 60%, transparent 100%);
   padding: 1.5rem;
   position: relative;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .greeting {
@@ -91,59 +98,123 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.32em;
-  color: var(--accent-gold-light);
-  margin-bottom: 0.75rem;
+  color: var(--accent-gold-readable);
+  margin-bottom: 1rem;
   font-weight: 600;
   text-align: center;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 .name {
-  font-family: var(--font-inter), sans-serif;
+  position: relative;
+  font-family: var(--font-display);
   font-style: normal;
-  font-size: clamp(2.5rem, 5.8vw, 5rem);
-  line-height: 1.05;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.25rem;
+  font-size: clamp(3rem, 7.2vw, 6.4rem);
+  line-height: 1.02;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  margin-bottom: 1.5rem;
   text-align: center;
-  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.85));
-  
-  /* Shimmering gold luxury text */
-  background: linear-gradient(
-    110deg,
-    var(--accent-gold) 0%,
-    var(--accent-gold-light) 25%,
-    #ffffff 50%,
-    var(--accent-gold-light) 75%,
-    var(--accent-gold) 100%
-  );
-  background-size: 200% auto;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: shimmer 12s linear infinite;
+  color: var(--text-primary);
+  /* The focus letters sit exactly over the readable name. Kerning pairs are
+     lost between separate letter boxes, so it is off for both layers. */
+  font-kerning: none;
+}
+
+/* The readable name: it sets the layout and takes over from the focus
+   letters once they have landed. Same ink as the section headings below. */
+.nameShine {
+  display: block;
+  /* Failsafe: if the script never arrives, the name still shows. */
+  animation: nameFailsafe 0.8s ease 6s forwards;
+}
+
+@keyframes nameFailsafe {
+  to {
+    opacity: 1;
+  }
+}
+
+.nameLetters {
+  position: absolute;
+  inset: 0;
+  color: var(--text-primary);
+  pointer-events: none;
+}
+
+.word {
+  white-space: nowrap;
+}
+
+/* Each glyph is drawn from data-ch, so the letters add no text to the page. */
+.letter {
+  display: inline-block;
+}
+
+.letter::before {
+  content: attr(data-ch);
+}
+
+/* --- Opening: horizon line and mattes --- */
+.shutter {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* Failsafe: without the script the mattes would never part. */
+  animation: shutterFailsafe 0.6s ease 5s forwards;
+}
+
+@keyframes shutterFailsafe {
+  to {
+    opacity: 0;
+  }
+}
+
+.matte {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  /* Paper, not black: the scene opens like curtains drawn on a bright
+     morning rather than a cinema going dark. */
+  background: var(--bg-primary);
+}
+
+.matteTop {
+  top: 0;
+  transform-origin: top;
+}
+
+.matteBottom {
+  bottom: 0;
+  transform-origin: bottom;
+}
+
+.horizonLine {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: var(--accent-gold);
+  box-shadow: 0 0 14px rgba(179, 139, 89, 0.7);
+  transform-origin: center;
 }
 
 .firstName {
   font-style: normal;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .lastName {
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-style: normal;
 }
 
 .divider {
+  transform-origin: center;
   width: 60px;
   height: 1px;
   background-color: var(--accent-gold);
   margin: 0 auto 1.5rem;
-  box-shadow: 0 0 8px rgba(179, 139, 89, 0.6);
 }
 
 .subtitle {
@@ -159,22 +230,28 @@
   font-family: var(--font-inter), sans-serif;
   font-size: clamp(0.72rem, 0.95vw, 0.88rem);
   text-transform: uppercase;
-  letter-spacing: 0.28em; 
-  color: #ffffff;
+  letter-spacing: 0.28em;
+  color: var(--text-secondary);
   font-weight: 500;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
-.diamond {
+/* A plain gold point between the phrases. The old ✦ glyph with its glow
+   read as a second star next to the compass mark. */
+.separator {
   display: inline-block;
-  margin: 0 0.8rem;
-  font-size: 0.85em;
-  color: var(--accent-gold);
-  opacity: 0.9;
-  filter: drop-shadow(0 0 5px rgba(194, 165, 126, 0.6));
+  width: 4px;
+  height: 4px;
+  margin: 0 0.9rem;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  opacity: 0.85;
 }
 
 /* CTA Buttons */
+.ctaSlot {
+  display: inline-flex;
+}
+
 .ctaGroup {
   display: flex;
   align-items: center;
@@ -189,25 +266,27 @@
   align-items: center;
   justify-content: center;
   padding: 0.9rem 2.2rem;
-  background: var(--accent-gold);
-  color: #181512 !important;
+  background: var(--text-primary);
+  color: var(--bg-primary) !important;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  border: 1px solid var(--accent-gold);
+  border: 1px solid var(--text-primary);
   border-radius: 0;
-  box-shadow: 0 8px 25px rgba(179, 139, 89, 0.45);
-  transition: all var(--transition-smooth);
+  box-shadow: 0 10px 28px rgba(24, 21, 18, 0.18);
+  /* transform is driven by the magnetic lean (useMagnetic); transitioning it
+     here would make the button lag behind the pointer. */
+  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   cursor: pointer;
 }
 
 .primaryBtn:hover {
-  background: var(--accent-gold-light);
-  color: #181512 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(179, 139, 89, 0.6);
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: var(--text-primary) !important;
+  box-shadow: 0 12px 30px rgba(179, 139, 89, 0.4);
 }
 
 .secondaryBtn {
@@ -215,30 +294,33 @@
   align-items: center;
   justify-content: center;
   padding: 0.9rem 2.2rem;
-  background: rgba(20, 14, 9, 0.55);
+  background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: #ffffff !important;
+  color: var(--text-primary) !important;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(24, 21, 18, 0.28);
   border-radius: 0;
-  transition: all var(--transition-smooth);
+  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   cursor: pointer;
 }
 
 .secondaryBtn:hover {
-  background: rgba(20, 14, 9, 0.85);
+  background: rgba(255, 255, 255, 0.85);
   border-color: var(--accent-gold);
-  color: var(--accent-gold-light) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  color: var(--accent-gold-readable) !important;
+  box-shadow: 0 8px 20px rgba(24, 21, 18, 0.08);
 }
 
-/* --- Social Icons with Animated Rotating Color Aura --- */
+/* --- Social Icons ---
+   A thin gold ring, gold on hover. They used to sit inside a spinning
+   orange-to-red conic gradient: a second and third accent on a page built on
+   one, three animations that never stopped, and a glow competing with the
+   sun in the backdrop. */
 .socialIcons {
   display: flex;
   justify-content: center;
@@ -248,139 +330,41 @@
 }
 
 .socialCapsule {
-  position: relative;
   width: 44px;
   height: 44px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2px;
-  background: transparent;
+  border: 1px solid rgba(179, 139, 89, 0.6);
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--text-primary);
   text-decoration: none;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, color 0.3s ease;
   cursor: pointer;
 }
 
-.socialCapsule:hover {
-  transform: translateY(-3px) scale(1.08);
-  box-shadow: 0 10px 25px rgba(227, 200, 150, 0.45);
-}
-
-.rotatingAura {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(
-    from 0deg,
-    #b38b59 0deg,
-    #e3c896 60deg,
-    #ff955c 120deg,
-    #e3c896 180deg,
-    #d4af37 240deg,
-    #ff7043 300deg,
-    #b38b59 360deg
-  );
-  animation: rotateAura 5s linear infinite;
-  z-index: 0;
-}
-
-@keyframes rotateAura {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.socialCapsule:hover,
+.socialCapsule:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold-readable);
 }
 
 .iconInner {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: rgba(20, 14, 9, 0.88);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-on-ink);
-  transition: all 0.3s ease;
-}
-
-.socialCapsule:hover .iconInner {
-  background: rgba(20, 14, 9, 0.65);
-  color: #ffffff;
 }
 
 .iconInner svg {
   width: 19px;
   height: 19px;
-  transition: transform 0.3s ease, filter 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .socialCapsule:hover .iconInner svg {
-  transform: scale(1.12);
-  filter: drop-shadow(0 0 6px rgba(227, 200, 150, 0.7));
-}
-
-/* Video Switcher Indicators in bottom-right corner */
-.videoSwitcher {
-  position: absolute;
-  bottom: 2rem;
-  right: 2.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  z-index: 10;
-}
-
-.switcherDot {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  transition: all 0.3s ease;
-  padding: 0.5rem 0;
-}
-
-.dotBar {
-  display: inline-block;
-  width: 24px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.3);
-  transition: all 0.4s ease;
-}
-
-.switcherDot:hover {
-  color: #ffffff;
-}
-
-.switcherDot:hover .dotBar {
-  background: rgba(255, 255, 255, 0.6);
-}
-
-.switcherDotActive {
-  color: var(--accent-gold-light);
-}
-
-.switcherDotActive .dotBar {
-  width: 44px;
-  background: var(--accent-gold);
-  box-shadow: 0 0 8px rgba(179, 139, 89, 0.6);
+  transform: scale(1.1);
 }
 
 /* Scroll Indicator */
@@ -393,8 +377,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0.35rem;
-  color: #ffffff;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+  color: var(--text-secondary);
   z-index: 10;
   cursor: pointer;
   transition: color var(--transition-smooth);
@@ -417,16 +400,20 @@
   height: 22px;
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: 200% center;
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+  /* Three phrases on three centred lines; a separator would only hang at
+     the end of a wrapped line. */
+  .subtitle {
+    flex-direction: column;
+    gap: 0.45rem;
   }
-  100% {
-    background-position: -200% center;
+
+  .separator {
+    display: none;
   }
 }
 
-/* Mobile Adjustments */
 @media (max-width: 768px) {
   .hero {
     padding-top: 5rem;
@@ -438,7 +425,7 @@
   }
 
   .name {
-    font-size: clamp(2.2rem, 9vw, 3.2rem);
+    font-size: clamp(2.7rem, 12.5vw, 3.8rem);
   }
 
   .ctaGroup {
@@ -447,12 +434,9 @@
     gap: 0.75rem;
   }
 
+  .ctaSlot,
   .primaryBtn,
   .secondaryBtn {
     width: 100%;
-  }
-
-  .videoSwitcher {
-    display: none;
   }
 }

@@ -7,12 +7,15 @@ import styles from "./Preloader.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useScrollLock } from "@/hooks/useScrollLock";
 
-const SEEN_KEY = "atilla_preloader_seen";
+import { INTRO_SEEN_KEY as SEEN_KEY, markIntroDone } from "@/lib/intro";
 
 /**
- * Whether this browser session has already played the intro.
+ * Whether this visitor has already seen the intro — ever, not just this
+ * session. It is a first impression, not a toll: someone coming back from an
+ * Instagram link a week later goes straight to the page. A visitor who asked
+ * for less motion never gets it at all.
  *
- * sessionStorage is an external store, so it is read through
+ * localStorage is an external store, so it is read through
  * useSyncExternalStore rather than in an effect. The old version started with
  * `isLoading = false` and switched it on after mount, which meant a returning
  * visitor briefly saw the page and then had it covered again — and the
@@ -25,8 +28,9 @@ function subscribeSeen(): () => void {
 }
 
 function hasSeenIntro(): boolean {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
   try {
-    return sessionStorage.getItem(SEEN_KEY) !== null;
+    return localStorage.getItem(SEEN_KEY) !== null;
   } catch {
     // Private mode or blocked storage: treat the intro as unseen.
     return false;
@@ -45,21 +49,27 @@ export default function Preloader() {
   const isLoading = !alreadySeen && !dismissed;
   useScrollLock(isLoading);
 
+  // The hero's opening waits for this. It fires as the overlay starts to
+  // leave, so the two overlap rather than play one after the other.
+  useEffect(() => {
+    if (!isLoading) markIntroDone();
+  }, [isLoading]);
+
   useEffect(() => {
     if (!isLoading) return;
 
     const markSeen = () => {
       try {
-        sessionStorage.setItem(SEEN_KEY, "true");
+        localStorage.setItem(SEEN_KEY, "true");
       } catch {
-        // Storage unavailable — the intro simply plays again next navigation.
+        // Storage unavailable — the intro simply plays again next visit.
       }
     };
 
     const timer = setTimeout(() => {
       markSeen();
       setDismissed(true);
-    }, 1400);
+    }, 900);
 
     // An overlay that only a mouse can dismiss is a trap for anyone on a
     // keyboard, so Escape closes it too.
@@ -79,7 +89,7 @@ export default function Preloader() {
 
   const handleDismiss = () => {
     try {
-      sessionStorage.setItem(SEEN_KEY, "true");
+      localStorage.setItem(SEEN_KEY, "true");
     } catch {
       // See above.
     }
@@ -98,7 +108,7 @@ export default function Preloader() {
             opacity: 0,
             y: "-100vh", 
             transition: { 
-              duration: 0.8, 
+              duration: 0.5, 
               ease: [0.76, 0, 0.24, 1] 
             } 
           }}

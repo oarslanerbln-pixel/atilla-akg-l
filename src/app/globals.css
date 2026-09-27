@@ -39,8 +39,9 @@
      Tight shares its skeleton with the body face, so the page reads as one
      voice, and the gold is left to the small eyebrow above each heading where
      it is rare enough to mean something. The narrower letterforms also give
-     long German compounds more room before they have to break. Playfair
-     stays for the brand name, the quote and the figures. */
+     long German compounds more room before they have to break. The whole
+     page now speaks in these two faces: Inter Tight for headings, figures
+     and the quote, Inter for everything else. Playfair is gone. */
   --font-display: var(--font-inter-tight), var(--font-inter), sans-serif;
 
   /* Stacking order.
@@ -51,6 +52,7 @@
      visitor with no visible pointer at all, because `cursor: none` still
      applied. Every fixed layer now takes a token from this list, and a new
      one gets a token here rather than another digit. */
+  --z-float: 800;        /* floating contact button, under the mobile sheet */
   --z-nav-panel: 900;    /* mobile sheet, deliberately under the header */
   --z-nav: 1000;         /* sticky header */
   --z-nav-trigger: 1010; /* hamburger, above the sheet it opens */
@@ -128,8 +130,8 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-playfair), serif;
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 300;
   line-height: 1.2;
   /* Long unbroken German compounds (e.g. "Zusammenarbeit") at large clamp()
      sizes were forcing grid tracks — and the whole page — wider than the
