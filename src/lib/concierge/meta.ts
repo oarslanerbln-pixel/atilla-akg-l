@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { CONCIERGE, env, type Lang } from './config';
 import { recordOutbound, rememberStaffAlert, type Contact } from './db';
+import { instagramAccessToken } from './tokens';
 
 const WHATSAPP_LIMIT = 4000;
 const INSTAGRAM_LIMIT = 1000;
@@ -133,7 +134,7 @@ export async function sendInstagramText(
   text: string,
   opts: { humanAgent?: boolean } = {},
 ): Promise<string | undefined> {
-  const json = await graphPost(instagramUrl(), env('INSTAGRAM_ACCESS_TOKEN'), {
+  const json = await graphPost(instagramUrl(), await instagramAccessToken(), {
     recipient: { id: recipientId },
     message: { text },
     // A human reply may go out up to 7 days after the customer's last message.
@@ -157,7 +158,7 @@ export async function sendInstagramPrivateReply(
   text: string,
   quickReplies: QuickReply[] = [],
 ): Promise<{ recipientId?: string; messageId?: string }> {
-  const json = await graphPost(instagramUrl(), env('INSTAGRAM_ACCESS_TOKEN'), {
+  const json = await graphPost(instagramUrl(), await instagramAccessToken(), {
     recipient: { comment_id: commentId },
     message: {
       text,
@@ -169,7 +170,7 @@ export async function sendInstagramPrivateReply(
 
 /** Public answer under the comment, so other viewers see that commenting works. */
 export async function replyToInstagramComment(commentId: string, text: string): Promise<void> {
-  await graphPost(`https://graph.instagram.com/${CONCIERGE.graphVersion}/${commentId}/replies`, env('INSTAGRAM_ACCESS_TOKEN'), {
+  await graphPost(`https://graph.instagram.com/${CONCIERGE.graphVersion}/${commentId}/replies`, await instagramAccessToken(), {
     message: text,
   });
 }
@@ -177,7 +178,7 @@ export async function replyToInstagramComment(commentId: string, text: string): 
 export async function getInstagramMedia(mediaId: string): Promise<{ permalink?: string; caption?: string }> {
   const json = await graphGet(
     `https://graph.instagram.com/${CONCIERGE.graphVersion}/${mediaId}?fields=permalink,caption`,
-    env('INSTAGRAM_ACCESS_TOKEN'),
+    await instagramAccessToken(),
   );
   return { permalink: json.permalink as string | undefined, caption: json.caption as string | undefined };
 }
