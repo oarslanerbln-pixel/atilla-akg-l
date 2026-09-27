@@ -38,6 +38,8 @@ uniform float u_time;
 uniform vec2 u_look;
 uniform float u_sunX;
 uniform float u_fade;
+// 0 at the top of the page, 1 once the hero has scrolled away.
+uniform float u_climb;
 
 const vec3 ZENITH  = vec3(0.030, 0.023, 0.017);
 const vec3 HORIZON = vec3(0.330, 0.205, 0.110);
@@ -81,8 +83,10 @@ void main() {
   float roll = 0.012 * sin(u_time * 0.23);
   uv = mat2(cos(roll), -sin(roll), sin(roll), cos(roll)) * uv;
 
-  vec3 ro = vec3(0.0, 1.05 + 0.06 * sin(u_time * 0.35), u_time * 0.6);
-  vec3 rd = normalize(vec3(uv.x + u_look.x * 0.03, uv.y + 0.12 + u_look.y * 0.015, 1.6));
+  // Scrolling away climbs like a drone: higher, a little further forward, and
+  // tilting down so the horizon rises in the frame and more sea comes in.
+  vec3 ro = vec3(0.0, 1.05 + 2.1 * u_climb + 0.06 * sin(u_time * 0.35), u_time * 0.6 + u_climb * 5.0);
+  vec3 rd = normalize(vec3(uv.x + u_look.x * 0.03, uv.y + 0.12 - 0.34 * u_climb + u_look.y * 0.015, 1.6));
 
   vec3 col;
   if (rd.y < -0.0005) {
@@ -161,6 +165,7 @@ export default function HeroHorizon() {
     const uLook = gl.getUniformLocation(program, "u_look");
     const uSunX = gl.getUniformLocation(program, "u_sunX");
     const uFade = gl.getUniformLocation(program, "u_fade");
+    const uClimb = gl.getUniformLocation(program, "u_climb");
 
     const resize = () => {
       const mobile = window.matchMedia("(max-width: 768px)").matches;
@@ -182,6 +187,7 @@ export default function HeroHorizon() {
     // stopped; it wraps well before float precision would blur the waves.
     let time = 12;
     let fade = calm ? 1 : 0;
+    let climb = 0;
     let last = 0;
     let frame = 0;
     let visible = true;
@@ -192,6 +198,7 @@ export default function HeroHorizon() {
       gl.uniform1f(uTime, time);
       gl.uniform2f(uLook, look.x, look.y);
       gl.uniform1f(uFade, fade);
+      gl.uniform1f(uClimb, climb);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
@@ -200,6 +207,9 @@ export default function HeroHorizon() {
       last = now;
       time = (time + dt) % 900;
       fade = Math.min(1, fade + dt / 1.6);
+      // Follows the scroll with a little lag, so the climb glides.
+      const target = Math.min(1, Math.max(0, window.scrollY / Math.max(1, canvas.clientHeight)));
+      climb += (target - climb) * Math.min(1, dt * 5);
       look.x += (look.tx - look.x) * 0.04;
       look.y += (look.ty - look.y) * 0.04;
       draw();

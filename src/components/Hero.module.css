@@ -103,6 +103,7 @@
 }
 
 .name {
+  position: relative;
   font-family: var(--font-inter), sans-serif;
   font-style: normal;
   font-size: clamp(2.5rem, 5.8vw, 5rem);
@@ -112,8 +113,15 @@
   margin-bottom: 1.25rem;
   text-align: center;
   filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.85));
-  
-  /* Shimmering gold luxury text */
+  /* The focus letters sit exactly over the readable name. Kerning pairs are
+     lost between separate letter boxes, so it is off for both layers. */
+  font-kerning: none;
+}
+
+/* The readable name: it sets the layout, carries the gold shimmer, and fades
+   in over the focus letters once they have landed. */
+.nameShine {
+  display: block;
   background: linear-gradient(
     110deg,
     var(--accent-gold) 0%,
@@ -126,7 +134,79 @@
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: shimmer 12s linear infinite;
+  /* Failsafe: if the script never arrives, the name still shows. */
+  animation: shimmer 12s linear infinite, nameFailsafe 0.8s ease 6s forwards;
+}
+
+@keyframes nameFailsafe {
+  to {
+    opacity: 1;
+  }
+}
+
+.nameLetters {
+  position: absolute;
+  inset: 0;
+  color: var(--accent-gold-light);
+  pointer-events: none;
+}
+
+.word {
+  white-space: nowrap;
+}
+
+/* Each glyph is drawn from data-ch, so the letters add no text to the page. */
+.letter {
+  display: inline-block;
+}
+
+.letter::before {
+  content: attr(data-ch);
+}
+
+/* --- Opening: horizon line and mattes --- */
+.shutter {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* Failsafe: without the script the mattes would never part. */
+  animation: shutterFailsafe 0.6s ease 5s forwards;
+}
+
+@keyframes shutterFailsafe {
+  to {
+    opacity: 0;
+  }
+}
+
+.matte {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: #0b0806;
+}
+
+.matteTop {
+  top: 0;
+  transform-origin: top;
+}
+
+.matteBottom {
+  bottom: 0;
+  transform-origin: bottom;
+}
+
+.horizonLine {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: var(--accent-gold);
+  box-shadow: 0 0 14px rgba(179, 139, 89, 0.7);
+  transform-origin: center;
 }
 
 .firstName {
@@ -143,6 +223,7 @@
 }
 
 .divider {
+  transform-origin: center;
   width: 60px;
   height: 1px;
   background-color: var(--accent-gold);
@@ -182,6 +263,10 @@
 }
 
 /* CTA Buttons */
+.ctaSlot {
+  display: inline-flex;
+}
+
 .ctaGroup {
   display: flex;
   align-items: center;
@@ -206,14 +291,15 @@
   border: 1px solid var(--accent-gold);
   border-radius: 0;
   box-shadow: 0 8px 25px rgba(179, 139, 89, 0.45);
-  transition: all var(--transition-smooth);
+  /* transform is driven by the magnetic lean (useMagnetic); transitioning it
+     here would make the button lag behind the pointer. */
+  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   cursor: pointer;
 }
 
 .primaryBtn:hover {
   background: var(--accent-gold-light);
   color: #181512 !important;
-  transform: translateY(-2px);
   box-shadow: 0 12px 30px rgba(179, 139, 89, 0.6);
 }
 
@@ -233,7 +319,7 @@
   letter-spacing: 0.2em;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 0;
-  transition: all var(--transition-smooth);
+  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   cursor: pointer;
 }
 
@@ -241,7 +327,6 @@
   background: rgba(20, 14, 9, 0.85);
   border-color: var(--accent-gold);
   color: var(--accent-gold-light) !important;
-  transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -373,6 +458,7 @@
     gap: 0.75rem;
   }
 
+  .ctaSlot,
   .primaryBtn,
   .secondaryBtn {
     width: 100%;

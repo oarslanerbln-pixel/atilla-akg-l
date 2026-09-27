@@ -7,7 +7,7 @@ import styles from "./Preloader.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useScrollLock } from "@/hooks/useScrollLock";
 
-import { INTRO_SEEN_KEY as SEEN_KEY } from "@/lib/intro";
+import { INTRO_SEEN_KEY as SEEN_KEY, markIntroDone } from "@/lib/intro";
 
 /**
  * Whether this visitor has already seen the intro — ever, not just this
@@ -48,6 +48,12 @@ export default function Preloader() {
 
   const isLoading = !alreadySeen && !dismissed;
   useScrollLock(isLoading);
+
+  // The hero's opening waits for this. It fires as the overlay starts to
+  // leave, so the two overlap rather than play one after the other.
+  useEffect(() => {
+    if (!isLoading) markIntroDone();
+  }, [isLoading]);
 
   useEffect(() => {
     if (!isLoading) return;
