@@ -52,16 +52,18 @@ insert into public.affiliate_offers (id, network, name, pitch, tracking_url, key
    '{gendarmenmarkt,rundgang}',
    true),
 
-  -- Inactive until the corrected search link arrives: rE1bJQ searches from BER, September to October 2026.
+  -- Deep link through Impact (u=): every destination from Germany, return, economy. No dates in the
+  -- link, so it never goes stale: Skyscanner opens on the coming month. The bare rE1bJQ link was a
+  -- saved search from BER, September to October 2026.
   ('skyscanner',
    'impact',
    '{"de": "Skyscanner", "en": "Skyscanner", "tr": "Skyscanner"}',
    '{"de": "Günstige Flüge zu allen Zielen – auf Skyscanner siehst du die aktuellen Preise für deine Reisedaten.",
      "en": "Cheap flights to every destination – Skyscanner shows the current prices for your travel dates.",
      "tr": "Tüm destinasyonlara uygun uçuşlar – Skyscanner''da seyahat tarihleriniz için güncel fiyatları görürsünüz."}',
-   'https://skyscanner.pxf.io/rE1bJQ?subId1={click_id}',
+   'https://skyscanner.pxf.io/rE1bJQ?subId1={click_id}&u=https%3A%2F%2Fwww.skyscanner.de%2Ftransport%2Ffluge-von%2Fde%2F%3Fadultsv2%3D1%26cabinclass%3Deconomy%26rtn%3D1',
    '{flug,flüge,flight,flights,ucus,uçuş}',
-   false)
+   true)
 
 on conflict (id) do update set
   network = excluded.network,

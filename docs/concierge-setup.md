@@ -65,7 +65,7 @@ Tur dışında tanıtılan ürünler `affiliate_offers` tablosunda durur ve `sup
 1. **Takip linki (`tracking_url`):** ağın linkinde sub-id parametresine `{click_id}` yazın. Tıklama kimliği yalnızca harf ve rakamdan oluşur.
    - FinanceAds (Amex): `https://financeads.net/tc.php?t=…T&subid={click_id}`
    - GetYourGuide aktivitesi: aktivite sayfasının adresi + `?partner_id=RTQEAHP&cmp={click_id}`. Her aktivite için kısa link üretmeye gerek yok.
-   - Impact (Skyscanner): `https://skyscanner.pxf.io/…?subId1={click_id}`
+   - Impact (Skyscanner): `https://skyscanner.pxf.io/…?subId1={click_id}&u=<URL-encoded skyscanner.de adresi>`. `u` olmadan kısa link kaydedilmiş aramayı (şehir ve tarihler sabit) açar; `u` ile istenen sayfaya gider ve takip korunur.
    - Sub-id taşıyamayan linkler (ör. GetYourGuide app linki) `{click_id}` olmadan da girilebilir. Tıklamalar yine bizde sayılır, sadece ağın raporuyla eşleştirilemez.
 2. **`keywords`** (küçük harf), **`pitch`** (programın onayladığı kısa metin, DE/EN/TR) ve **`active`**. Anahtar kelimeler tur kelimelerinden önce gelir, bu yüzden "berlin", "link" gibi genel kelimeler seçmeyin.
 3. **Reel:** *"Yorumlara GOLD yaz"*. Yorum yapana tanıtım metni ve **"Linki gönder"** butonu gider. Butona basınca kişiye özel bir link (`SITE/go/…`) ve reklam uyarısı gelir.
