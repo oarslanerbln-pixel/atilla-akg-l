@@ -1,0 +1,16 @@
+{
+  "kind": "flights",
+  "name": "flights-deutschland",
+  "lang": "de",
+  "partner": "Skyscanner",
+  "title": "Herbstflüge",
+  "accent": "ab Deutschland",
+  "keyword": "FLUG",
+  "asOf": "27.09.2026",
+  "deals": [
+    { "destination": "Rumänien", "detail": "Direktflug", "price": 30 },
+    { "destination": "Italien", "detail": "Direktflug", "price": 30 },
+    { "destination": "Polen", "detail": "Direktflug", "price": 30 },
+    { "destination": "Großbritannien", "detail": "Direktflug", "price": 30 }
+  ]
+}

@@ -50,3 +50,7 @@ next-env.d.ts
 
 # editor local state
 /.vscode
+
+# social images: source frames and renders stay out of git
+/social/assets/
+/social/out/

@@ -32,11 +32,11 @@ const customer = {
   // Advertising notice required for affiliate links (DE: § 5a UWG, TR: Reklam Kurulu).
   offerLink: {
     de: (name: string, url: string) =>
-      `Hier ist dein Link zu ${name}:\n${url}\n\nAnzeige: Das ist ein Partnerlink. Wenn du darüber einen Antrag stellst, erhält Atilla eine Provision – für dich ändert sich nichts. Konditionen und Beratung gibt es direkt beim Anbieter.`,
+      `Hier ist dein Link zu ${name}:\n${url}\n\nAnzeige: Das ist ein Partnerlink. Buchst oder beantragst du darüber etwas, erhält Atilla eine Provision – für dich ändert sich nichts. Konditionen und Beratung gibt es direkt beim Anbieter.`,
     en: (name: string, url: string) =>
-      `Here is your link to ${name}:\n${url}\n\nAd: this is a partner link. If you apply through it, Atilla earns a commission at no extra cost to you. Terms and advice come directly from the provider.`,
+      `Here is your link to ${name}:\n${url}\n\nAd: this is a partner link. If you book or sign up through it, Atilla earns a commission at no extra cost to you. Terms and advice come directly from the provider.`,
     tr: (name: string, url: string) =>
-      `${name} için linkiniz:\n${url}\n\nReklam: Bu bir iş ortaklığı (affiliate) linkidir. Bu link üzerinden başvurursanız Atilla komisyon alır; sizin için hiçbir şey değişmez. Koşullar ve danışmanlık için doğrudan sağlayıcıya başvurun.`,
+      `${name} için linkiniz:\n${url}\n\nReklam: Bu bir iş ortaklığı (affiliate) linkidir. Bu link üzerinden rezervasyon ya da başvuru yaparsanız Atilla komisyon alır; sizin için hiçbir şey değişmez. Koşullar ve danışmanlık için doğrudan sağlayıcıya başvurun.`,
   },
   commentReply: {
     de: 'Danke für dein Interesse! ✨ Schreib mir hier einfach, welche Tour dich reizt, wann du reisen möchtest und mit wie vielen Personen – ich stelle dir alles zusammen.',
@@ -103,8 +103,8 @@ export function bookingConfirmed(lang: Lang, booking: ConfirmedBooking): string 
 
 /** Picks a customer language from free text before we know it (e.g. an Instagram comment). */
 export function guessLang(text: string): Lang {
-  if (/[çğışöü]|\b(merhaba|fiyat|tur|kaç|nasıl)\b/i.test(text)) return 'tr';
-  if (/[äß]|\b(reise|preis|hallo|wann|wie viel)\b/i.test(text)) return 'de';
+  if (/[çğışöü]|\b(merhaba|fiyat|tur|kaç|nasıl|ucus|lutfen)\b/i.test(text)) return 'tr';
+  if (/[äß]|\b(reise|preis|hallo|wann|wie viel|bitte|danke|flug|platin)\b/i.test(text)) return 'de';
   return 'en';
 }
 

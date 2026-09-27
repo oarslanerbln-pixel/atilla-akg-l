@@ -1,0 +1,41 @@
+{
+  "kind": "cover",
+  "name": "amex-reel",
+  "lang": "de",
+  "eyebrow": "Anzeige · American Express",
+  "title": "Gold oder",
+  "accent": "Platinum?",
+  "subtitle": "Unterwegs mit Membership Rewards",
+  "tags": [
+    "Gold",
+    "Platinum"
+  ],
+  "photo": {
+    "src": "social/assets/amex-airport.webp",
+    "focus": [
+      0.64,
+      0.2
+    ],
+    "zoom": 1.2,
+    "blur": [
+      [
+        0.165,
+        0.18,
+        0.105,
+        0.1
+      ],
+      [
+        0.335,
+        0.205,
+        0.085,
+        0.085
+      ],
+      [
+        0.455,
+        0.195,
+        0.095,
+        0.145
+      ]
+    ]
+  }
+}

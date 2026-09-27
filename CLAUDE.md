@@ -102,6 +102,7 @@ src/
 ## 🤖 AI Concierge (Instagram + WhatsApp tour sales)
 - Server-only code in `src/lib/concierge/`; webhooks in `src/app/api/webhooks/{meta,stripe}/route.ts`.
 - Stack: `@anthropic-ai/sdk` (Claude tool-use loop in `agent.ts`), `@supabase/supabase-js` (CRM, schema in `supabase/migrations/`), `stripe` (deposit Checkout).
+- Partner (affiliate) offers are data in `supabase/offers.sql` (idempotent, run in the SQL Editor); a keyword in a comment, a story reply or a short DM sends the tracked `/go/<id>` link.
 - Fixed customer messages live in `src/lib/concierge/copy.ts` (DE/EN/TR), not `translations.ts`, because they are sent server-side.
 - Setup and env vars: `docs/concierge-setup.md`, `.env.example`.
 - Personal data is encrypted in the app before it reaches Supabase (`crypto.ts`, AES-256-GCM, AAD `table.column:rowId`). Never write personal fields to the DB directly: go through the mappers in `db.ts` / `bookings.ts`. Look contacts up by `external_id_hash` (blind index), never by `external_id`.
@@ -113,6 +114,7 @@ src/
 - `npm run build` - Create production build
 - `npm run lint` - Run ESLint checks
 - `npx tsc --noEmit` - Type check only
+- `npm run social -- social/briefs/<brief>.json` - Render reel covers / stories into `social/out/` (see `social/README.md`)
 
 Run `tsc --noEmit`, `next build` and `eslint` before every push; all three are
 expected to pass with zero output.
