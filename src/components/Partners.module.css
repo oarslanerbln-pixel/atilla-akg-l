@@ -43,6 +43,32 @@
   color: var(--text-secondary);
 }
 
+/* The frame: left and right rules are fixed, the top and bottom ones are
+   drawn in as the section arrives (see Partners.tsx). */
+.gridWrap {
+  position: relative;
+}
+
+.frameLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent-gold);
+  opacity: 0.55;
+  transform-origin: center;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.frameTop {
+  top: 0;
+}
+
+.frameBottom {
+  bottom: 0;
+}
+
 /* A hairline grid: the 1px gap shows the list's own background through, so
    every cell is ruled on all sides without any border being drawn twice. */
 .grid {
@@ -51,7 +77,8 @@
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 1px;
   background: var(--border-light);
-  border: 1px solid var(--border-light);
+  border-inline: 1px solid var(--border-light);
+  padding-block: 1px;
 }
 
 .cell {
@@ -59,29 +86,86 @@
   background: var(--bg-primary);
 }
 
+/* A destination plate. It wipes up into its cell on reveal, so its own
+   surface (card white on paper) reads as a plate sliding into a frame. */
 .tile {
+  position: relative;
+  overflow: hidden;
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  min-height: 190px;
-  padding: 2.25rem 1rem;
+  min-height: 250px;
+  padding: 3.25rem 1rem 2.75rem;
   text-align: center;
   color: inherit;
-  transition: background-color var(--transition-smooth);
+  background: var(--bg-card);
 }
 
 /* The global a:hover turns links gold; a whole tile going gold would shout. */
 a.tile:hover {
   color: inherit;
-  background: var(--bg-card);
 }
 
 a.tile:focus-visible {
   outline: 2px solid var(--accent-gold-readable);
   outline-offset: -4px;
+}
+
+/* Pointer light. --mx/--my are written by the pointer handler. */
+.spot {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(179, 139, 89, 0.13),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.plateTop {
+  position: absolute;
+  top: 1.1rem;
+  left: 1.2rem;
+  right: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.index {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-gold-readable);
+}
+
+.needle {
+  display: block;
+  width: 22px;
+  height: 22px;
+  color: var(--text-primary);
+}
+
+/* The hover turn lives on an inner element so it adds to the bearing the
+   outer one was rotated to, instead of replacing it. */
+.needleTurn {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.needleTurn svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* One fixed box for whatever identifies the partner. Names differ in length —
@@ -94,14 +178,33 @@ a.tile:focus-visible {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
   height: 4.6rem;
+}
+
+/* The hover lift sits on its own wrapper; the reveal owns maskInner. */
+.lift {
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The name rises from behind this edge on reveal. */
+.maskLine {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.maskInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .wordmark {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(1.25rem, 1.7vw, 1.55rem);
+  font-size: clamp(1.3rem, 1.75vw, 1.65rem);
   letter-spacing: -0.02em;
   line-height: 1.15;
   color: var(--text-primary);
@@ -125,11 +228,23 @@ a.tile:focus-visible {
 }
 
 .region {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-secondary);
+}
+
+.region::before,
+.region::after {
+  content: "";
+  width: 14px;
+  height: 1px;
+  background: var(--accent-gold);
+  opacity: 0.6;
 }
 
 .more {
@@ -149,6 +264,59 @@ a.tile:focus-visible {
   visibility: hidden;
 }
 
+.coords {
+  position: absolute;
+  bottom: 1.1rem;
+  left: 0;
+  right: 0;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  color: var(--champagne-muted);
+  transition: color 0.6s ease;
+}
+
+.underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--accent-gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover only where there is a real pointer; keyboard focus on a linked card
+   gets the same response. */
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover .spot {
+    opacity: 1;
+  }
+
+  .tile:hover .underline {
+    transform: scaleX(1);
+  }
+
+  .tile:hover .lift {
+    transform: translateY(-3px);
+  }
+
+  .tile:hover .coords {
+    color: var(--accent-gold-readable);
+  }
+
+  .tile:hover .needleTurn {
+    transform: rotate(12deg);
+  }
+}
+
+a.tile:focus-visible .underline {
+  transform: scaleX(1);
+}
+
 @media (max-width: 640px) {
   .header {
     margin-bottom: 3rem;
@@ -165,7 +333,29 @@ a.tile:focus-visible {
   }
 
   .tile {
-    min-height: 150px;
-    padding: 1.75rem 1rem;
+    min-height: 200px;
+    padding: 2.75rem 0.75rem 2.5rem;
+  }
+
+  .plateTop {
+    top: 0.85rem;
+    left: 0.9rem;
+    right: 0.9rem;
+  }
+
+  .needle {
+    width: 18px;
+    height: 18px;
+  }
+
+  .region::before,
+  .region::after {
+    width: 8px;
+  }
+
+  .coords {
+    bottom: 0.85rem;
+    font-size: 0.56rem;
+    letter-spacing: 0.08em;
   }
 }
