@@ -10,9 +10,10 @@ export const metadata: Metadata = {
 /**
  * Describes what this site actually does, nothing more: Vercel hosting, one
  * localStorage flag, self-hosted assets, the contact form (Resend), plain
- * mailto/tel/wa.me links. The Instagram/WhatsApp concierge and Stripe
- * deposits under src/lib/concierge are not live; their sections must be
- * added here before those services are switched on.
+ * mailto/tel/wa.me links, the Instagram concierge (src/lib/concierge) and
+ * partner links (/go/<id>). The WhatsApp side of the concierge, staff alerts
+ * and Stripe deposits are not live; their sections must be added here before
+ * those services are switched on.
  */
 export default function Datenschutz() {
   return (
@@ -44,6 +45,11 @@ export default function Datenschutz() {
         Dritter. Personenbezogene Daten werden nur verarbeitet, soweit dies für
         die Auslieferung der Seite technisch nötig ist oder Sie selbst Kontakt
         aufnehmen. Die Verbindung ist per TLS (HTTPS) verschlüsselt.
+      </p>
+      <p>
+        Schreiben Sie mir auf Instagram, antwortet zunächst ein KI-gestützter
+        Concierge (Abschnitt 9). Klicks auf Partnerlinks werden gezählt, damit
+        Provisionen zugeordnet werden können (Abschnitt 10).
       </p>
 
       <h2>3. Hosting und Server-Logfiles</h2>
@@ -145,7 +151,80 @@ export default function Datenschutz() {
         Telefon stehen gleichwertig zur Verfügung.
       </p>
 
-      <h2>9. Speicherdauer</h2>
+      <h2>9. Nachrichten auf Instagram (KI-Concierge)</h2>
+      <p>
+        Auf Direktnachrichten, Story-Antworten und bestimmte Kommentare unter
+        meinen Beiträgen auf Instagram antwortet zunächst ein digitaler
+        Concierge. Seine Antworten werden von einem KI-Sprachmodell erzeugt;
+        darauf weist er in seiner ersten Nachricht hin. Er beantwortet Fragen
+        zu Reisen und Partnerangeboten und bereitet Anfragen vor. Ich kann
+        jedes Gespräch einsehen und jederzeit selbst übernehmen; auf Wunsch
+        antworte ich Ihnen persönlich.
+      </p>
+      <p>
+        Verarbeitet werden Ihre Instagram-Kennung (eine Nummer, die Instagram
+        für mein Konto vergibt), gegebenenfalls Name und Benutzername, der
+        Inhalt der Nachrichten und Angaben, die Sie im Gespräch selbst machen,
+        etwa Reisezeitraum, Personenzahl oder E-Mail-Adresse, sowie über
+        welchen Beitrag das Gespräch begonnen hat. Rechtsgrundlage ist Art. 6
+        Abs. 1 lit. b DSGVO, soweit Ihre Anfrage auf einen Vertrag gerichtet
+        ist, im Übrigen Art. 6 Abs. 1 lit. f DSGVO; das berechtigte Interesse
+        liegt in der schnellen Beantwortung von Anfragen.
+      </p>
+      <p>Beteiligt sind:</p>
+      <ul>
+        <li>
+          Meta Platforms Ireland Limited, Merrion Road, Dublin 4, D04 X2K5,
+          Irland, als Betreiberin von Instagram. Für die Verarbeitung auf
+          Instagram selbst gilt die Datenschutzrichtlinie von Meta; eine
+          Übermittlung in die USA ist dabei nicht auszuschließen.
+        </li>
+        <li>
+          Anthropic, PBC, 548 Market Street, PMB 90375, San Francisco, CA
+          94104, USA, als Auftragsverarbeiter für das Sprachmodell. Anthropic
+          erhält den Gesprächsverlauf, um die Antwort zu erzeugen, und
+          verwendet ihn nach seinen Vertragsbedingungen nicht zum Training
+          seiner Modelle. Die Übermittlung in die USA erfolgt auf Grundlage
+          der EU-Standard&shy;vertrags&shy;klauseln.
+        </li>
+        <li>
+          Supabase, Inc. als Auftragsverarbeiter für die Datenbank, mit
+          Serverstandort Frankfurt am Main. Name, Kennung, Kontaktangaben und
+          Nachrichten werden dort nur verschlüsselt (AES-256) abgelegt; der
+          Schlüssel liegt nicht bei Supabase. Soweit Supabase aus Drittländern
+          auf die Systeme zugreift, geschieht dies auf Grundlage der
+          EU-Standard&shy;vertrags&shy;klauseln.
+        </li>
+        <li>Vercel (siehe Abschnitt 3), über dessen Server die Nachrichten laufen.</li>
+      </ul>
+      <p>
+        Mit Anthropic und Supabase bestehen Auftragsverarbeitungsverträge nach
+        Art. 28 DSGVO. Möchten Sie nicht mit dem Concierge schreiben, erreichen
+        Sie mich gleichwertig per Kontaktformular, E-Mail oder Telefon.
+      </p>
+
+      <h2>10. Partnerlinks</h2>
+      <p>
+        Auf Instagram erhalten Sie auf Nachfrage Links zu Angeboten von
+        Partnern, etwa Kreditkarten, Touren oder Flugsuchen. Sie sind als
+        Werbung gekennzeichnet. Kommt über einen solchen Link ein Vertrag
+        zustande, erhalte ich eine Provision; für Sie ändert sich nichts.
+      </p>
+      <p>
+        Die Links führen zunächst über diese Website (
+        <code>/go/…</code>). Dabei wird unter einer zufälligen Kennung gezählt,
+        wie oft und wann der Link zuerst geöffnet wurde, und festgehalten, aus
+        welchem Gespräch und über welchen Beitrag er stammt. Diese Kennung wird
+        an das jeweilige Partnerprogramm (etwa financeAds, GetYourGuide oder
+        Skyscanner) übergeben, damit Provisionen dem Beitrag zugeordnet werden
+        können; Name oder Instagram-Kennung erhält das Partnerprogramm nicht.
+        Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; das berechtigte
+        Interesse liegt in der Abrechnung der Provisionen. Nach der
+        Weiterleitung gilt die Datenschutzerklärung des jeweiligen Anbieters,
+        der dabei eigene Cookies setzen kann.
+      </p>
+
+      <h2>11. Speicherdauer</h2>
       <p>
         Anfragen und die zugehörige Korrespondenz werden gelöscht, sobald sie
         abschließend bearbeitet sind und keine gesetzlichen
@@ -153,17 +232,24 @@ export default function Datenschutz() {
         gelten die handels- und steuerrechtlichen Aufbewahrungsfristen (in der
         Regel sechs bis zehn Jahre, § 257 HGB, § 147 AO).
       </p>
+      <p>
+        Gespräche mit dem Instagram-Concierge werden 24 Monate nach der letzten
+        Nachricht automatisch gelöscht, zusammen mit den zugehörigen Angaben.
+        Die Zuordnung eines Partnerlinks zum Gespräch entfällt mit diesem;
+        übrig bleibt nur die anonyme Zahl der Klicks.
+      </p>
 
-      <h2>10. Pflicht zur Bereitstellung, keine automatisierte Entscheidung</h2>
+      <h2>12. Pflicht zur Bereitstellung, keine automatisierte Entscheidung</h2>
       <p>
         Sie sind weder gesetzlich noch vertraglich verpflichtet,
         personenbezogene Daten bereitzustellen; ohne Angaben kann ich eine
         Anfrage jedoch nicht beantworten. Eine automatisierte
         Entscheidungsfindung einschließlich Profiling nach Art. 22 DSGVO findet
-        nicht statt.
+        nicht statt. Der Concierge beantwortet Fragen und bereitet Anfragen
+        vor; über Buchungen entscheide ich selbst.
       </p>
 
-      <h2>11. Ihre Rechte</h2>
+      <h2>13. Ihre Rechte</h2>
       <p>Sie haben jederzeit das Recht auf</p>
       <ul>
         <li>Auskunft über die zu Ihrer Person verarbeiteten Daten (Art. 15 DSGVO),</li>
@@ -184,7 +270,7 @@ export default function Datenschutz() {
         <a href={`mailto:${contact.email}`}>{contact.email}</a>.
       </p>
 
-      <h2>12. Beschwerderecht</h2>
+      <h2>14. Beschwerderecht</h2>
       <p>
         Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu
         beschweren. Zuständig für mich ist:
@@ -199,7 +285,7 @@ export default function Datenschutz() {
         </a>
       </p>
 
-      <h2>13. Stand</h2>
+      <h2>15. Stand</h2>
       <p>
         Stand: September 2026. Diese Erklärung beschreibt den technischen Stand
         dieser Website und wird angepasst, sobald sich eingesetzte Dienste
