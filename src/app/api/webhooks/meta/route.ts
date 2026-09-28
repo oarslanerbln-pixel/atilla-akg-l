@@ -9,6 +9,23 @@ export const maxDuration = 300;
 // Meta batches at most a few hundred KB per delivery; anything larger is not from Meta.
 const MAX_BODY_BYTES = 1_000_000;
 
+/** What a delivery carried, as field names only (no ids, no text): shows why it made no job. */
+function shapeOf(payload: Parameters<typeof jobsFromMetaWebhook>[0]): string {
+  const envelope = new Set(['sender', 'recipient', 'timestamp']);
+  return (payload.entry ?? [])
+    .map((entry) => {
+      const events = ((entry.messaging as Record<string, unknown>[] | undefined) ?? []).map((event) =>
+        Object.entries(event)
+          .filter(([key]) => !envelope.has(key))
+          .map(([key, value]) => (value && typeof value === 'object' ? `${key}(${Object.keys(value).join('/')})` : key))
+          .join('+'),
+      );
+      const changes = ((entry.changes as { field?: string }[] | undefined) ?? []).map((c) => `change:${c.field}`);
+      return [...events, ...changes].join(',') || `keys:${Object.keys(entry).join('/')}`;
+    })
+    .join(' | ');
+}
+
 /** Meta's one-time subscription handshake. */
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
@@ -38,6 +55,7 @@ export async function POST(request: Request) {
 
   // Meta retries unless it gets a quick 200, so the real work happens after responding.
   const jobs = jobsFromMetaWebhook(payload);
+  console.info(`[concierge] webhook ${payload.object}: ${shapeOf(payload)} -> ${jobs.length} job(s)`);
   after(async () => {
     const results = await Promise.allSettled(jobs.map((job) => job()));
     for (const r of results) if (r.status === 'rejected') console.error('[concierge] webhook job failed', r.reason);
