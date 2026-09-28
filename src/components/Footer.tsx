@@ -75,6 +75,8 @@ export default function Footer() {
                 operated from Germany, and must be reachable from every page.
                 The translation keys existed but nothing rendered them. */}
             <div className={styles.legalLinks}>
+              <Link href="/roadmap">{t('footer_roadmap')}</Link>
+              <span aria-hidden="true">·</span>
               <Link href="/impressum">{t('footer_imprint')}</Link>
               <span aria-hidden="true">·</span>
               <Link href="/datenschutz">{t('footer_privacy')}</Link>
