@@ -8,10 +8,13 @@ export const metadata: Metadata = {
 };
 
 /**
- * Describes what this site actually does, nothing more: Vercel hosting, one
- * localStorage flag, self-hosted assets, the contact form (Resend), plain
- * mailto/tel/wa.me links, the Instagram concierge (src/lib/concierge), partner
- * links (/go/<id>) and the e-book checkout on Tentary (/roadmap). The WhatsApp
+ * Describes what this site actually does, nothing more: Vercel hosting
+ * (functions in fra1, see vercel.json), one localStorage flag, self-hosted
+ * assets, the contact form (Resend), plain mailto/tel/wa.me links, the
+ * Instagram concierge (src/lib/concierge), the Manychat keyword replies on
+ * Atilla's Instagram account, partner links (/go/<id>) and the e-book checkout
+ * on Tentary (/roadmap). Remove the Manychat passages when Manychat is
+ * disconnected, and move the region sentence if vercel.json changes. The WhatsApp
  * side of the concierge, staff alerts and Stripe deposits are not live; their sections must be added here before
  * those services are switched on.
  */
@@ -48,8 +51,10 @@ export default function Datenschutz() {
       </p>
       <p>
         Schreiben Sie mir auf Instagram, antwortet zunächst ein KI-gestützter
-        Concierge (Abschnitt 9). Klicks auf Partnerlinks werden gezählt, damit
-        Provisionen zugeordnet werden können (Abschnitt 10).
+        Concierge (Abschnitt 9); auf einzelne Stichwörter antwortet außerdem
+        der Dienst Manychat (ebenfalls Abschnitt 9). Klicks auf Partnerlinks
+        werden gezählt, damit Provisionen zugeordnet werden können (Abschnitt
+        10).
       </p>
 
       <h2>3. Hosting und Server-Logfiles</h2>
@@ -70,6 +75,12 @@ export default function Datenschutz() {
         Angemessenheitsbeschlusses zum EU-US Data Privacy Framework, unter dem
         Vercel zertifiziert ist, ergänzend auf Grundlage der
         EU-Standard&shy;vertrags&shy;klauseln.
+      </p>
+      <p>
+        Die Seiten selbst liefert Vercel über ein weltweites Servernetz aus.
+        Alles, was auf dem Server verarbeitet wird (Kontaktformular,
+        Instagram-Concierge, Partnerlinks), läuft in einem Rechenzentrum in
+        Frankfurt am Main.
       </p>
 
       <h2>4. Speicherung im Browser</h2>
@@ -151,7 +162,7 @@ export default function Datenschutz() {
         Telefon stehen gleichwertig zur Verfügung.
       </p>
 
-      <h2>9. Nachrichten auf Instagram (KI-Concierge)</h2>
+      <h2>9. Nachrichten auf Instagram (KI-Concierge, Manychat)</h2>
       <p>
         Auf Direktnachrichten, Story-Antworten und bestimmte Kommentare unter
         meinen Beiträgen auf Instagram antwortet zunächst ein digitaler
@@ -201,6 +212,24 @@ export default function Datenschutz() {
         Mit Anthropic und Supabase bestehen Auftragsverarbeitungsverträge nach
         Art. 28 DSGVO. Möchten Sie nicht mit dem Concierge schreiben, erreichen
         Sie mich gleichwertig per Kontaktformular, E-Mail oder Telefon.
+      </p>
+      <p>
+        Auf einzelne Stichwörter in Kommentaren und Nachrichten antwortet
+        außerdem ein automatisierter Nachrichtendienst: Manychat, Inc., 8605
+        Santa Monica Blvd #64372, West Hollywood, CA 90069, USA, als
+        Auftragsverarbeiter. Manychat erhält dabei Ihre Instagram-Kennung,
+        Name und Benutzername, den Kommentar oder die Nachricht sowie die
+        Angabe, ob Sie Schaltflächen oder Links in der Antwort antippen.
+        Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; das berechtigte
+        Interesse liegt darin, Anfragen, die Sie mit dem Stichwort selbst
+        auslösen, sofort zu beantworten.
+      </p>
+      <p>
+        Mit Manychat besteht ein Auftragsverarbeitungsvertrag nach Art. 28
+        DSGVO. Die Übermittlung in die USA erfolgt auf Grundlage des
+        Angemessenheitsbeschlusses zum EU-US Data Privacy Framework, unter dem
+        Manychat zertifiziert ist, ergänzend auf Grundlage der
+        EU-Standard&shy;vertrags&shy;klauseln.
       </p>
 
       <h2>10. Partnerlinks</h2>
@@ -259,6 +288,11 @@ export default function Datenschutz() {
         Nachricht automatisch gelöscht, zusammen mit den zugehörigen Angaben.
         Die Zuordnung eines Partnerlinks zum Gespräch entfällt mit diesem;
         übrig bleibt nur die anonyme Zahl der Klicks.
+      </p>
+      <p>
+        Bei Manychat bleiben die Angaben gespeichert, bis ich die Nutzung des
+        Dienstes beende; dann werden sie dort gelöscht. Eine frühere Löschung
+        können Sie jederzeit verlangen (Abschnitt 14).
       </p>
 
       <h2>13. Pflicht zur Bereitstellung, keine automatisierte Entscheidung</h2>
