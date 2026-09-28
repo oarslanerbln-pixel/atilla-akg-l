@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 /**
  * Describes what this site actually does, nothing more: Vercel hosting, one
  * localStorage flag, self-hosted assets, the contact form (Resend), plain
- * mailto/tel/wa.me links, the Instagram concierge (src/lib/concierge) and
- * partner links (/go/<id>). The WhatsApp side of the concierge, staff alerts
- * and Stripe deposits are not live; their sections must be added here before
+ * mailto/tel/wa.me links, the Instagram concierge (src/lib/concierge), partner
+ * links (/go/<id>) and the e-book checkout on Tentary (/roadmap). The WhatsApp
+ * side of the concierge, staff alerts and Stripe deposits are not live; their sections must be added here before
  * those services are switched on.
  */
 export default function Datenschutz() {
@@ -224,7 +224,29 @@ export default function Datenschutz() {
         der dabei eigene Cookies setzen kann.
       </p>
 
-      <h2>11. Speicherdauer</h2>
+      <h2>11. Kauf des E-Books (Tentary)</h2>
+      <p>
+        Die Travel Creator Roadmap und ihr kostenloser Auszug werden über die
+        Plattform Tentary verkauft und ausgeliefert: Tentary GmbH,
+        Frankenstraße 152, 90461 Nürnberg. Die Links auf <code>/roadmap</code>{" "}
+        führen direkt zum Checkout von Tentary; diese Website selbst erhebt
+        dabei keine Daten. Im Checkout geben Sie Name, E-Mail-Adresse,
+        Rechnungsland und Zahlungsdaten an; Tentary und die dort eingebundenen
+        Zahlungsdienstleister verarbeiten sie, um die Zahlung abzuwickeln und
+        Ihnen das PDF zuzusenden. Ich erhalte Name, E-Mail-Adresse und die
+        Bestelldaten, um den Vertrag zu erfüllen und meinen steuerlichen
+        Pflichten nachzukommen.
+      </p>
+      <p>
+        Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Vertrag) sowie lit. c
+        (Aufbewahrungspflichten). Für den kostenlosen Auszug gilt dasselbe für
+        Name und E-Mail-Adresse. Werbliche E-Mails erhalten Sie nur, wenn Sie
+        im Checkout ausdrücklich einwilligen (Art. 6 Abs. 1 lit. a DSGVO); die
+        Einwilligung können Sie jederzeit widerrufen. Im Übrigen gilt die
+        Datenschutzerklärung von Tentary.
+      </p>
+
+      <h2>12. Speicherdauer</h2>
       <p>
         Anfragen und die zugehörige Korrespondenz werden gelöscht, sobald sie
         abschließend bearbeitet sind und keine gesetzlichen
@@ -239,7 +261,7 @@ export default function Datenschutz() {
         übrig bleibt nur die anonyme Zahl der Klicks.
       </p>
 
-      <h2>12. Pflicht zur Bereitstellung, keine automatisierte Entscheidung</h2>
+      <h2>13. Pflicht zur Bereitstellung, keine automatisierte Entscheidung</h2>
       <p>
         Sie sind weder gesetzlich noch vertraglich verpflichtet,
         personenbezogene Daten bereitzustellen; ohne Angaben kann ich eine
@@ -249,7 +271,7 @@ export default function Datenschutz() {
         vor; über Buchungen entscheide ich selbst.
       </p>
 
-      <h2>13. Ihre Rechte</h2>
+      <h2>14. Ihre Rechte</h2>
       <p>Sie haben jederzeit das Recht auf</p>
       <ul>
         <li>Auskunft über die zu Ihrer Person verarbeiteten Daten (Art. 15 DSGVO),</li>
@@ -270,7 +292,7 @@ export default function Datenschutz() {
         <a href={`mailto:${contact.email}`}>{contact.email}</a>.
       </p>
 
-      <h2>14. Beschwerderecht</h2>
+      <h2>15. Beschwerderecht</h2>
       <p>
         Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu
         beschweren. Zuständig für mich ist:
@@ -285,7 +307,7 @@ export default function Datenschutz() {
         </a>
       </p>
 
-      <h2>15. Stand</h2>
+      <h2>16. Stand</h2>
       <p>
         Stand: September 2026. Diese Erklärung beschreibt den technischen Stand
         dieser Website und wird angepasst, sobald sich eingesetzte Dienste

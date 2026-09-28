@@ -38,6 +38,9 @@ export default function Impressum() {
         Management: <a href={`mailto:${contact.management}`}>{contact.management}</a>
       </p>
 
+      <h2>Umsatzsteuer-ID</h2>
+      <p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: DE332735552</p>
+
       <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
       <p>
         Atilla Akgül
