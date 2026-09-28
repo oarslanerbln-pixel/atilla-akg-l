@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React, { useId, useState } from "react";
 import { motion, Variants } from "framer-motion";
-import { Mail, Phone, Loader2, CheckCircle } from "lucide-react";
+import { Mail, Phone, Loader2, CheckCircle, MessageCircle } from "lucide-react";
 import styles from "./Contact.module.css";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useLanguage } from "@/context/LanguageContext";
@@ -126,9 +126,28 @@ export default function Contact() {
               <div className={styles.divider}></div>
             </motion.div>
 
+            {/* WhatsApp leads: it is where visitors from Instagram already are,
+                and a decision-maker gets an answer without opening a mail
+                client. E-mail and phone follow as the quieter alternatives. */}
+            <motion.div variants={itemVariants} className={styles.primaryChannel}>
+              <a
+                href={`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(t("whatsapp_message"))}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.whatsappPrimary}
+                onClick={() => playClickSound()}
+                data-cursor="WHATSAPP"
+              >
+                <MessageCircle className={styles.whatsappIcon} aria-hidden="true" />
+                {t("contact_whatsapp_primary")}
+              </a>
+              <p className={styles.primaryHint}>{t("contact_whatsapp_hint")}</p>
+              <p className={styles.orLabel}>{t("contact_or_email")}</p>
+            </motion.div>
+
             <motion.div variants={itemVariants} className={styles.contactLinks}>
               <a
-                href="mailto:a@barbarossafilms.de"
+                href={`mailto:${contact.email}`}
                 className={styles.contactLink}
                 onClick={() => playClickSound()}
                 data-cursor="EMAIL"
@@ -139,7 +158,7 @@ export default function Contact() {
                 <span>a@barbarossafilms.de</span>
               </a>
               <a
-                href="mailto:lisaweber@barbarossafilms.de"
+                href={`mailto:${contact.management}`}
                 className={styles.contactLink}
                 onClick={() => playClickSound()}
                 data-cursor="MANAGEMENT"

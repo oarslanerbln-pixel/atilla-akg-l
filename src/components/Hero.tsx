@@ -45,9 +45,10 @@ const T = {
   stagger: 0.04,
   divider: 1.3,
   subtitle: 1.45,
-  cta: 1.75,
-  social: 2.0,
-  scroll: 2.4,
+  value: 1.65,
+  cta: 1.85,
+  social: 2.1,
+  scroll: 2.5,
 };
 
 /**
@@ -222,38 +223,45 @@ export default function Hero() {
           />
 
           <div className={styles.subtitle}>
-            <motion.span {...rise(T.subtitle)}>{t('hero_storytelling')}</motion.span>
+            <motion.span {...rise(T.subtitle)}>{t('hero_aud_hotels')}</motion.span>
             <motion.span className={styles.separator} aria-hidden="true" {...rise(T.subtitle + 0.06)} />
-            <motion.span {...rise(T.subtitle + 0.12)}>{t('hero_excellence')}</motion.span>
+            <motion.span {...rise(T.subtitle + 0.12)}>{t('hero_aud_destinations')}</motion.span>
             <motion.span className={styles.separator} aria-hidden="true" {...rise(T.subtitle + 0.18)} />
-            <motion.span {...rise(T.subtitle + 0.24)}>{t('hero_direction')}</motion.span>
+            <motion.span {...rise(T.subtitle + 0.24)}>{t('hero_aud_brands')}</motion.span>
           </div>
 
+          {/* What the work is and what it gives a client, in one sentence and
+              only with figures the Stats section already shows. */}
+          <motion.p className={styles.value} {...rise(T.value)}>
+            {t('hero_value')}
+          </motion.p>
+
           {/* Entrance on the wrapper, the magnetic lean on the link itself, so
-              the two transforms never fight. */}
+              the two transforms never fight. The enquiry leads: a hotel or
+              tourism board arriving here has come to ask, not to browse. */}
           <div className={styles.ctaGroup}>
             <motion.div className={styles.ctaSlot} {...rise(T.cta)}>
               <motion.a
                 ref={primaryRef}
                 style={primaryLean}
-                href="#work"
+                href="#contact"
                 className={styles.primaryBtn}
                 onClick={() => playClickSound()}
-                data-cursor="PORTFOLIO"
+                data-cursor="CONTACT"
               >
-                {t('hero_cta_projects')}
+                {t('hero_cta_contact')}
               </motion.a>
             </motion.div>
             <motion.div className={styles.ctaSlot} {...rise(T.cta + 0.1)}>
               <motion.a
                 ref={secondaryRef}
                 style={secondaryLean}
-                href="#contact"
+                href="#work"
                 className={styles.secondaryBtn}
                 onClick={() => playClickSound()}
-                data-cursor="CONTACT"
+                data-cursor="PORTFOLIO"
               >
-                {t('hero_cta_contact')}
+                {t('hero_cta_projects')}
               </motion.a>
             </motion.div>
           </div>

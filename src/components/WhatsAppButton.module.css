@@ -8,9 +8,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
-  width: 56px;
-  height: 56px;
+  gap: 0.55rem;
+  height: 52px;
+  padding: 0 1.1rem 0 0.95rem;
   /* Sharp corners, like every other button here (premium-aesthetics.md). */
   border-radius: 0;
   border: 1px solid var(--accent-gold);
@@ -53,27 +53,22 @@
   flex-shrink: 0;
 }
 
-/* On a phone the icon is enough; wider screens get the word as well. */
+/* The label shows on every screen: an icon alone left visitors guessing. */
 .label {
-  display: none;
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 @media (min-width: 769px) {
   .button {
     right: 2rem;
     bottom: 2rem;
-    width: auto;
     height: 48px;
     padding: 0 1.25rem 0 1rem;
-  }
-
-  .label {
-    display: inline;
   }
 }
 

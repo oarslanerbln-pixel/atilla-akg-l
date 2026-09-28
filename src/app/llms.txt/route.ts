@@ -32,10 +32,15 @@ export function GET() {
     ),
     "",
     "## Services",
-    `- ${en.service_1_title}`,
-    `- ${en.service_2_title}`,
-    `- ${en.service_3_title}`,
-    `- ${en.service_4_title}`,
+    ...(["hotels", "dmo", "brands"] as const).map(
+      (segment) =>
+        `- ${en[`service_${segment}_for`]}: ${en[`service_${segment}_title`]} (${[
+          en[`service_${segment}_d1`],
+          en[`service_${segment}_d2`],
+          en[`service_${segment}_d3`],
+        ].join(", ")})`,
+    ),
+    "- Monthly social media packages (5, 10 or 20 videos) on request",
     "",
     "## Contact",
     `- Email: ${contact.email}`,
