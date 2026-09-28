@@ -118,13 +118,13 @@ select cron.schedule('concierge-purge', '30 3 * * *', 'select public.purge_stale
 ## 7. Vercel
 Bütün değişkenleri girin (`SITE_URL` dahil) ve yeniden deploy edin. Webhook'lar birkaç dakika sürebilen işleri cevap döndükten sonra çalıştırdığı için Fluid Compute açık kalmalı (varsayılan olarak açık).
 
-**Zamanlanmış işler (Vercel Cron):** `vercel.json` içinde tanımlıdır ve yalnızca production deploy'larında çalışır. Şu an tek iş var: pazartesi 04:00 UTC'de Instagram token yenileme (Hobby planında o saat içinde herhangi bir anda).
+**Zamanlanmış işler (Vercel Cron):** `vercel.json` içinde tanımlıdır ve yalnızca production deploy'larında çalışır. Şu an tek iş var: pazartesi 04:00 UTC'de Instagram token yenileme (Hobby planında o saat içinde herhangi bir anda). Aynı iş Instagram hesabını webhook'lara (`messages`, `messaging_postbacks`, `comments`) abone eder: Meta'daki uygulama düzeyindeki callback tek başına hiçbir şey iletmez, hesabın kendisi de abone olmalı ve panodaki *Webhook-Abonnement* düğmesi bazen hata verir.
 1. Rastgele bir metin üretin:
    ```bash
    node -e "console.log(require('crypto').randomBytes(24).toString('base64url'))"
    ```
 2. Vercel → Settings → Environment Variables → `CRON_SECRET` olarak (Production, Sensitive) girin ve yeniden deploy edin. Vercel bu değeri her cron isteğine `Authorization: Bearer …` başlığıyla ekler; `CRON_SECRET` yoksa uç nokta 503 döner ve hiçbir şey yenilenmez.
-3. Kontrol: Vercel → Settings → Cron Jobs → *Run* ile elle tetikleyin, sonra *View Logs*. Cevap `{"status":"refreshed",…}` veya token bir günden yeniyse `{"status":"too_new",…}` olmalı.
+3. Kontrol: Vercel → Settings → Cron Jobs → *Run* ile elle tetikleyin, sonra *View Logs*. Cevap `{"status":"refreshed",…}` veya token bir günden yeniyse `{"status":"too_new",…}` olmalı; `webhooks` alanı `{"status":"subscribed","accountMatches":true}` göstermeli. `accountMatches: false` ise `INSTAGRAM_ACCOUNT_ID` token'ın hesabı değildir. Yeni bir `INSTAGRAM_ACCESS_TOKEN` girildiğinde redeploy'dan sonra bir kez *Run*'a basın, pazartesiyi beklemeyin.
 
 ---
 

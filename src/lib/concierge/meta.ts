@@ -175,6 +175,30 @@ export async function replyToInstagramComment(commentId: string, text: string): 
   });
 }
 
+/** The webhook fields inbound.ts handles. */
+const INSTAGRAM_WEBHOOK_FIELDS = ['messages', 'messaging_postbacks', 'comments'];
+
+export type WebhookSubscription =
+  | { status: 'subscribed'; accountMatches: boolean }
+  | { status: 'failed'; error: string };
+
+/**
+ * Subscribes the Instagram account to this app's webhooks. The app-level callback alone delivers
+ * nothing: the account itself must be subscribed, and the dashboard toggle for it can fail.
+ * Also reports whether INSTAGRAM_ACCOUNT_ID is the token's account, without echoing either id.
+ */
+export async function subscribeInstagramWebhooks(): Promise<WebhookSubscription> {
+  try {
+    const token = await instagramAccessToken();
+    const me = `https://graph.instagram.com/${CONCIERGE.graphVersion}/me`;
+    const { user_id } = await graphGet(`${me}?fields=user_id`, token);
+    await graphPost(`${me}/subscribed_apps?subscribed_fields=${INSTAGRAM_WEBHOOK_FIELDS.join(',')}`, token, {});
+    return { status: 'subscribed', accountMatches: String(user_id) === env('INSTAGRAM_ACCOUNT_ID') };
+  } catch (error) {
+    return { status: 'failed', error: String(error).slice(0, 300) };
+  }
+}
+
 export async function getInstagramMedia(mediaId: string): Promise<{ permalink?: string; caption?: string }> {
   const json = await graphGet(
     `https://graph.instagram.com/${CONCIERGE.graphVersion}/${mediaId}?fields=permalink,caption`,
