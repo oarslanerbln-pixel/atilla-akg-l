@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, Variants } from "framer-motion";
-import { Compass, Video, PackageSearch, Copyright } from "lucide-react";
+import { BedDouble, MapPinned, Sparkles } from "lucide-react";
 import styles from "./Services.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import type { TranslationKeys } from "@/i18n/translations";
@@ -12,26 +12,40 @@ export default function Services() {
   const { t } = useLanguage();
   const { playClickSound } = useSoundDesign();
 
-  const services: { icon: React.ReactNode; titleKey: TranslationKeys; descKey: TranslationKeys }[] = [
+  // One card per kind of client, each in their own terms: the problem they
+  // bring (one line, no alarmism), what the films do about it, and what they
+  // actually receive. Generic capability lists spoke to nobody in particular.
+  const segments: {
+    icon: React.ReactNode;
+    forKey: TranslationKeys;
+    titleKey: TranslationKeys;
+    painKey: TranslationKeys;
+    descKey: TranslationKeys;
+    deliverables: TranslationKeys[];
+  }[] = [
     {
-      icon: <Compass className={styles.icon} />,
-      titleKey: "service_1_title",
-      descKey: "service_1_desc",
+      icon: <BedDouble className={styles.icon} />,
+      forKey: "service_hotels_for",
+      titleKey: "service_hotels_title",
+      painKey: "service_hotels_pain",
+      descKey: "service_hotels_desc",
+      deliverables: ["service_hotels_d1", "service_hotels_d2", "service_hotels_d3"],
     },
     {
-      icon: <Video className={styles.icon} />,
-      titleKey: "service_2_title",
-      descKey: "service_2_desc",
+      icon: <MapPinned className={styles.icon} />,
+      forKey: "service_dmo_for",
+      titleKey: "service_dmo_title",
+      painKey: "service_dmo_pain",
+      descKey: "service_dmo_desc",
+      deliverables: ["service_dmo_d1", "service_dmo_d2", "service_dmo_d3"],
     },
     {
-      icon: <PackageSearch className={styles.icon} />,
-      titleKey: "service_3_title",
-      descKey: "service_3_desc",
-    },
-    {
-      icon: <Copyright className={styles.icon} />,
-      titleKey: "service_4_title",
-      descKey: "service_4_desc",
+      icon: <Sparkles className={styles.icon} />,
+      forKey: "service_brands_for",
+      titleKey: "service_brands_title",
+      painKey: "service_brands_pain",
+      descKey: "service_brands_desc",
+      deliverables: ["service_brands_d1", "service_brands_d2", "service_brands_d3"],
     },
   ];
 
@@ -73,12 +87,19 @@ export default function Services() {
           viewport={{ once: true, margin: "-50px" }}
           className={styles.grid}
         >
-          {services.map((service, index) => (
-            <motion.div key={index} variants={itemVariants} className={styles.card}>
-              <div className={styles.iconWrapper}>{service.icon}</div>
-              <h4 className={styles.cardTitle}>{t(service.titleKey)}</h4>
-              <p className={styles.cardDesc}>{t(service.descKey)}</p>
-              
+          {segments.map((segment) => (
+            <motion.div key={segment.forKey} variants={itemVariants} className={styles.card}>
+              <div className={styles.iconWrapper}>{segment.icon}</div>
+              <p className={styles.forLabel}>{t(segment.forKey)}</p>
+              <h4 className={styles.cardTitle}>{t(segment.titleKey)}</h4>
+              <p className={styles.pain}>{t(segment.painKey)}</p>
+              <p className={styles.cardDesc}>{t(segment.descKey)}</p>
+              <ul className={styles.deliverables}>
+                {segment.deliverables.map((key) => (
+                  <li key={key}>{t(key)}</li>
+                ))}
+              </ul>
+
               <a
                 href="#contact"
                 className={styles.squareButton}

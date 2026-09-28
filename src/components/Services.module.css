@@ -134,12 +134,67 @@
   color: var(--text-primary);
 }
 
+/* Who the card is for, above the title, so a visitor finds their own card
+   before reading any of them. */
+.forLabel {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+/* The client's problem in one quiet line, set off by a gold rule. */
+.pain {
+  margin: 0 0 1.1rem;
+  padding-left: 0.9rem;
+  border-left: 1px solid var(--accent-gold);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-primary);
+}
+
+.deliverables {
+  width: 100%;
+  margin: 0 0 2rem;
+  padding: 1.25rem 0 0;
+  list-style: none;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.deliverables li {
+  position: relative;
+  padding-left: 1.2rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+/* The compass mark's point, as in the package page. */
+.deliverables li::before {
+  content: "";
+  position: absolute;
+  left: 0.1rem;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  background: var(--accent-gold);
+  transform: rotate(45deg);
+}
+
 .cardDesc {
   font-family: var(--font-inter), sans-serif;
-  font-size: 1.12rem;
+  font-size: 1rem;
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 2.5rem;
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
   flex-grow: 1;
 }
 

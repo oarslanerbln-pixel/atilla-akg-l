@@ -247,6 +247,19 @@
   opacity: 0.85;
 }
 
+/* The one sentence a hotel manager reads before deciding to scroll: what
+   the films are, for whom, and what they leave behind. Kept to body size so
+   the name stays the headline. */
+.value {
+  max-width: 34rem;
+  margin: 1.4rem auto 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--text-secondary);
+  text-wrap: balance;
+}
+
 /* CTA Buttons */
 .ctaSlot {
   display: inline-flex;

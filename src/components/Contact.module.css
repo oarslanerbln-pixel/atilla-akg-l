@@ -71,6 +71,66 @@
   border-radius: 0;
 }
 
+.primaryChannel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-bottom: 1.75rem;
+}
+
+.whatsappPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 54px;
+  padding: 0 1.5rem;
+  background: var(--bg-ink);
+  border: 1px solid var(--bg-ink);
+  color: var(--text-on-ink);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease;
+}
+
+.whatsappPrimary:hover,
+.whatsappPrimary:focus-visible {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: var(--bg-ink);
+}
+
+.whatsappIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.primaryHint {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.orLabel {
+  margin: 0.9rem 0 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--champagne-muted);
+}
+
 .contactLinks {
   display: flex;
   flex-direction: column;
