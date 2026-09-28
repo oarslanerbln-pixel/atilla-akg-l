@@ -50,7 +50,7 @@ Atilla şu an normal WhatsApp kullandığı için concierge'e **ayrı bir numara
 1. Instagram hesabı **Profesyonel** (İşletme veya İçerik Üreticisi) olmalı.
 2. Aynı Meta uygulamasına **Instagram** ürününü ekleyin → *API setup with Instagram login*.
 3. İzinler: `instagram_business_basic`, `instagram_business_manage_messages`, `instagram_business_manage_comments`.
-4. Hesabı bağlayıp token üretin → `INSTAGRAM_ACCESS_TOKEN`. Hesap kimliği → `INSTAGRAM_ACCOUNT_ID`.
+4. Hesabı bağlayıp token üretin → `INSTAGRAM_ACCESS_TOKEN`. Hesap kimliği gerekmez: sistem token'ın hesabını (`me`) kullanır.
 5. Webhook: aynı Callback URL ve aynı verify token. Alanlar: `messages`, `messaging_postbacks`, `comments`, `message_echoes`.
 6. Instagram uygulamasında Ayarlar → Mesajlar → **Bağlı araçlar / Mesaj erişimine izin ver** seçeneğini açın.
 7. Yabancı müşterilerden mesaj alabilmek için uygulamanın **App Review**'dan geçmesi ve *Live* moda alınması gerekir. İnceleme tamamlanana kadar yalnızca uygulamaya eklenmiş test hesaplarıyla çalışır.
@@ -124,7 +124,7 @@ Bütün değişkenleri girin (`SITE_URL` dahil) ve yeniden deploy edin. Webhook'
    node -e "console.log(require('crypto').randomBytes(24).toString('base64url'))"
    ```
 2. Vercel → Settings → Environment Variables → `CRON_SECRET` olarak (Production, Sensitive) girin ve yeniden deploy edin. Vercel bu değeri her cron isteğine `Authorization: Bearer …` başlığıyla ekler; `CRON_SECRET` yoksa uç nokta 503 döner ve hiçbir şey yenilenmez.
-3. Kontrol: Vercel → Settings → Cron Jobs → *Run* ile elle tetikleyin, sonra *View Logs*. Cevap `{"status":"refreshed",…}` veya token bir günden yeniyse `{"status":"too_new",…}` olmalı; `webhooks` alanı `{"status":"subscribed","accountMatches":true}` göstermeli. `accountMatches: false` ise `INSTAGRAM_ACCOUNT_ID` token'ın hesabı değildir. Yeni bir `INSTAGRAM_ACCESS_TOKEN` girildiğinde redeploy'dan sonra bir kez *Run*'a basın, pazartesiyi beklemeyin.
+3. Kontrol: Vercel → Settings → Cron Jobs → *Run* ile elle tetikleyin, sonra *View Logs*. Cevap `{"status":"refreshed",…}` veya token bir günden yeniyse `{"status":"too_new",…}` olmalı; `webhooks` alanı `{"status":"subscribed"}` göstermeli. Yeni bir `INSTAGRAM_ACCESS_TOKEN` girildiğinde redeploy'dan sonra bir kez *Run*'a basın, pazartesiyi beklemeyin.
 
 ---
 

@@ -125,8 +125,9 @@ export async function markWhatsAppRead(messageId: string): Promise<void> {
 
 // ---------- Instagram API with Instagram Login ----------
 
+// `me` is the token's own account, so no account id has to be configured (or can be mistyped).
 function instagramUrl(): string {
-  return `https://graph.instagram.com/${CONCIERGE.graphVersion}/${env('INSTAGRAM_ACCOUNT_ID')}/messages`;
+  return `https://graph.instagram.com/${CONCIERGE.graphVersion}/me/messages`;
 }
 
 export async function sendInstagramText(
@@ -178,22 +179,17 @@ export async function replyToInstagramComment(commentId: string, text: string): 
 /** The webhook fields inbound.ts handles. */
 const INSTAGRAM_WEBHOOK_FIELDS = ['messages', 'messaging_postbacks', 'comments'];
 
-export type WebhookSubscription =
-  | { status: 'subscribed'; accountMatches: boolean }
-  | { status: 'failed'; error: string };
+export type WebhookSubscription = { status: 'subscribed' } | { status: 'failed'; error: string };
 
 /**
  * Subscribes the Instagram account to this app's webhooks. The app-level callback alone delivers
  * nothing: the account itself must be subscribed, and the dashboard toggle for it can fail.
- * Also reports whether INSTAGRAM_ACCOUNT_ID is the token's account, without echoing either id.
  */
 export async function subscribeInstagramWebhooks(): Promise<WebhookSubscription> {
   try {
-    const token = await instagramAccessToken();
-    const me = `https://graph.instagram.com/${CONCIERGE.graphVersion}/me`;
-    const { user_id } = await graphGet(`${me}?fields=user_id`, token);
-    await graphPost(`${me}/subscribed_apps?subscribed_fields=${INSTAGRAM_WEBHOOK_FIELDS.join(',')}`, token, {});
-    return { status: 'subscribed', accountMatches: String(user_id) === env('INSTAGRAM_ACCOUNT_ID') };
+    const url = `https://graph.instagram.com/${CONCIERGE.graphVersion}/me/subscribed_apps`;
+    await graphPost(`${url}?subscribed_fields=${INSTAGRAM_WEBHOOK_FIELDS.join(',')}`, await instagramAccessToken(), {});
+    return { status: 'subscribed' };
   } catch (error) {
     return { status: 'failed', error: String(error).slice(0, 300) };
   }
