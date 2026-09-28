@@ -184,6 +184,8 @@ interface InstagramComment {
   commentId: string;
   text: string;
   fromId: string;
+  /** The account the webhook is for, i.e. ours: its own comments get no answer. */
+  accountId: string;
   username?: string;
   mediaId?: string;
 }
@@ -194,7 +196,7 @@ interface InstagramComment {
  * short public answer, and the reel is remembered as the source of the lead.
  */
 async function handleInstagramComment(c: InstagramComment): Promise<void> {
-  if (c.fromId === env('INSTAGRAM_ACCOUNT_ID')) return;
+  if (c.fromId === c.accountId) return;
   const words = wordsOf(c.text);
   const offer = offerForWords(words, await activeOffers());
   const keyword = offer
@@ -402,7 +404,14 @@ export function jobsFromMetaWebhook(payload: {
           media?: { id: string };
         };
         if (v.text && v.from) {
-          const comment = { commentId: v.id, text: v.text, fromId: v.from.id, username: v.from.username, mediaId: v.media?.id };
+          const comment = {
+            commentId: v.id,
+            text: v.text,
+            fromId: v.from.id,
+            accountId: String(entry.id),
+            username: v.from.username,
+            mediaId: v.media?.id,
+          };
           jobs.push(() => handleInstagramComment(comment));
         }
       }

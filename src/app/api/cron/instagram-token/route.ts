@@ -20,7 +20,7 @@ export async function GET(request: Request) {
   // Re-subscribed on every run: idempotent, and it heals a subscription lost on Meta's side.
   const webhooks = await subscribeInstagramWebhooks();
   if (webhooks.status === 'failed') console.error('[concierge] Instagram webhook subscription failed:', webhooks.error);
-  else console.info('[concierge] Instagram webhooks subscribed, account id matches:', webhooks.accountMatches);
+  else console.info('[concierge] Instagram webhooks subscribed');
 
   try {
     return Response.json({ ...(await refreshInstagramToken()), webhooks });
