@@ -232,8 +232,10 @@ mirrored into Vercel Blob (below), never embedded from Instagram.
 `/api/cron/instagram-reels` (every third day, `src/lib/reels/sync.ts`) copies
 each one, byte for byte, into Vercel Blob (`reels/<id>.mp4`, `.jpg`,
 `manifest.json`) and revalidates the `reels` tag. The home page reads the
-manifest (ISR). A caption tagged `#ad`, `#anzeige`, `#werbung`, `#sponsored`,
-`#reklam` or `#işbirliği` keeps a video off the site. A video with
+manifest (ISR). A caption marked as advertising keeps a video off the site:
+`ad`, `anzeige`, `werbung`, `sponsored`, `reklam` or `işbirliği` as a hashtag,
+in brackets (`[Anzeige]`, `(unbezahlte Werbung)`) or as the first word
+(`Anzeige | …`); `AD_MARK` in `sync.ts`. A video with
 copyrighted Instagram music has no `media_url` and cannot be mirrored; the
 cron reports it as `withoutFile`. Needs a Blob store connected to the project
 (`BLOB_READ_WRITE_TOKEN`); without one the section is absent.
