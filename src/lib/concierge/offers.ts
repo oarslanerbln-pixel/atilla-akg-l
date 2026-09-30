@@ -4,6 +4,7 @@ import { env, type Lang } from './config';
 import { db, type Contact } from './db';
 import { getInstagramMedia, sendToContact } from './meta';
 import { offerLink } from './copy';
+import { normalizeWord } from './keywords';
 
 // Partner (affiliate) offers such as American Express cards. Links go out as SITE_URL/go/<click id>,
 // so every click is counted per reel or story and, where the network takes one, the click id
@@ -41,7 +42,7 @@ export async function getOffer(id: string): Promise<Offer | null> {
 
 /** The offer whose keyword appears among the words, if any. Offers win over the tour keywords. */
 export function offerForWords(words: string[], offers: Offer[]): Offer | undefined {
-  return offers.find((o) => o.keywords.some((k) => words.includes(k.toLowerCase())));
+  return offers.find((o) => o.keywords.some((k) => words.includes(normalizeWord(k))));
 }
 
 /** A personal, countable link for this contact. */

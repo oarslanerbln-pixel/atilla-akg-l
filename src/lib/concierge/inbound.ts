@@ -45,11 +45,11 @@ import {
   sendOfferLink,
 } from './offers';
 import { runConcierge } from './agent';
+import { normalizeWord, wordsOf } from './keywords';
 
 type Job = () => Promise<void>;
 
 const displayName = (c: Contact) => c.name ?? (c.username ? `@${c.username}` : `+${c.external_id}`);
-const wordsOf = (text: string) => text.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
 /** A partner keyword counts in a DM only within a message this short ("GOLD", "Gold bitte"). */
 const MAX_KEYWORD_MESSAGE_WORDS = 3;
 
@@ -105,7 +105,7 @@ async function answerOfferKeyword(contact: Contact, msg: InboundMessage): Promis
   if (!contact.language) patch.language = guessLang(own);
   if (!contact.source_media_id && msg.storyId) {
     await rememberMedia(msg.storyId);
-    const keyword = words.find((w) => offer.keywords.some((k) => k.toLowerCase() === w));
+    const keyword = words.find((w) => offer.keywords.some((k) => normalizeWord(k) === w));
     Object.assign(patch, { source_media_id: msg.storyId, source_keyword: keyword });
   }
   const updated = Object.keys(patch).length ? await updateContact(contact.id, patch) : contact;
@@ -200,7 +200,7 @@ async function handleInstagramComment(c: InstagramComment): Promise<void> {
   const words = wordsOf(c.text);
   const offer = offerForWords(words, await activeOffers());
   const keyword = offer
-    ? words.find((w) => offer.keywords.some((k) => k.toLowerCase() === w))
+    ? words.find((w) => offer.keywords.some((k) => normalizeWord(k) === w))
     : words.find((w) => CONCIERGE.commentKeywords.includes(w));
   if (!keyword) return;
 
