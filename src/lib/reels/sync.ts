@@ -38,22 +38,34 @@ export interface ReelsSync {
   deleted: number;
 }
 
+/** Words that mark a post as advertising (DE, EN, TR), in lower case. */
+const AD_WORD = String.raw`(?:ad|anzeige|werbung|sponsored|reklam|iş ?birliği|is ?birligi)`;
+/** Letter boundaries that, unlike \b, know "ş" and "ı" are letters. */
+const START = String.raw`(?<![\p{L}\p{N}_])`;
+const END = String.raw`(?![\p{L}\p{N}_])`;
+
 /**
- * Hashtags that mark a post as advertising (DE, EN, TR). Such videos stay on
+ * An advertising label as captions write it: a hashtag ("#anzeige"), inside
+ * brackets or asterisks ("[Anzeige]", "(unbezahlte Werbung)", "*Werbung*"),
+ * or as the caption's first word ("Anzeige | …"). Such videos stay on
  * Instagram and off the portfolio; everything else is shown.
  */
-const AD_TAGS = new Set(['ad', 'anzeige', 'werbung', 'sponsored', 'reklam', 'işbirliği', 'isbirligi']);
+const AD_MARK = new RegExp(
+  [
+    String.raw`#${AD_WORD}${END}`,
+    String.raw`[\[(*][^\])*\n]*?${START}${AD_WORD}${END}[^\])*\n]*[\])*]`,
+    String.raw`^[^\p{L}\p{N}]*${AD_WORD}${END}`,
+  ].join('|'),
+  'u',
+);
 
 /**
  * Whether a video belongs on the portfolio. Called for every VIDEO post,
  * newest first, before its file is checked or copied.
  */
 function shouldShowOnSite(media: InstagramMedia): boolean {
-  for (const [, tag] of (media.caption ?? '').matchAll(/#([\p{L}\p{N}_]+)/gu)) {
-    // "İ" first: toLowerCase() would turn it into "i" plus a combining dot.
-    if (AD_TAGS.has(tag.replace(/İ/g, 'i').toLowerCase())) return false;
-  }
-  return true;
+  // "İ" first: toLowerCase() would turn it into "i" plus a combining dot.
+  return !AD_MARK.test((media.caption ?? '').replace(/İ/g, 'i').toLowerCase());
 }
 
 async function recentVideos(token: string) {
@@ -111,7 +123,7 @@ async function mirror(media: InstagramMedia): Promise<Reel> {
 export async function syncReels(): Promise<ReelsSync> {
   const deadline = Date.now() + TIME_BUDGET_MS;
   const { videos, withoutFile } = await recentVideos(await instagramAccessToken());
-  const previous = (await readManifest({ cache: 'no-store' }))?.reels ?? [];
+  const previous = (await readManifest())?.reels ?? [];
   const known = new Map(previous.map((reel) => [reel.id, reel]));
 
   const reels: Reel[] = [];
