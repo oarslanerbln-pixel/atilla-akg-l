@@ -123,7 +123,7 @@ async function mirror(media: InstagramMedia): Promise<Reel> {
 export async function syncReels(): Promise<ReelsSync> {
   const deadline = Date.now() + TIME_BUDGET_MS;
   const { videos, withoutFile } = await recentVideos(await instagramAccessToken());
-  const previous = (await readManifest({ cache: 'no-store' }))?.reels ?? [];
+  const previous = (await readManifest())?.reels ?? [];
   const known = new Map(previous.map((reel) => [reel.id, reel]));
 
   const reels: Reel[] = [];
