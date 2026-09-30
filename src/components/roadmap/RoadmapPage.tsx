@@ -115,7 +115,9 @@ export default function RoadmapPage() {
         <div className={`container ${styles.topbarInner}`}>
           <Link href="/" className={styles.brand}>
             <BrandMark className={styles.brandMark} />
-            <span>Atilla Barbarossa</span>
+            {/* Set in capitals, as in the Navbar: under lang="tr" the CSS
+                uppercase would turn the wordmark into ATİLLA. */}
+            <span>ATILLA BARBAROSSA</span>
           </Link>
           <div className={styles.topbarEnd}>
             <Link href="/" className={styles.homeLink}>
