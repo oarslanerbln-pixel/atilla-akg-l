@@ -29,7 +29,7 @@ async function graphPost(url: string, token: string, body: unknown): Promise<Rec
   return json as Record<string, unknown>;
 }
 
-async function graphGet(url: string, token: string): Promise<Record<string, unknown>> {
+export async function graphGet(url: string, token: string): Promise<Record<string, unknown>> {
   const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
   const json = (await res.json().catch(() => ({}))) as { error?: { code?: number; message?: string } };
   if (!res.ok) throw new MetaApiError(res.status, json.error?.code, json.error?.message ?? res.statusText);

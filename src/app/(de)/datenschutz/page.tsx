@@ -99,10 +99,19 @@ export default function Datenschutz() {
       <h2>5. Keine externen Ressourcen</h2>
       <p>
         Schriften, Videos, Bilder und Symbole werden ausschließlich vom eigenen
-        Server ausgeliefert. Es werden keine Google Fonts, keine CDN-Skripte,
+        Server oder aus dem Speicher meines Hosters Vercel (Abschnitt 3)
+        ausgeliefert. Es werden keine Google Fonts, keine CDN-Skripte,
         keine eingebetteten Karten oder Videos und keine externen Bilddienste
         geladen. Beim bloßen Betrachten der Seite wird Ihre IP-Adresse deshalb
         an keinen Dritten außer den Hoster übertragen.
+      </p>
+      <p>
+        Die Filme im Abschnitt „Aktuelle Filme“ stammen von meinem
+        Instagram-Konto. Mein Server lädt sie alle drei Tage von Instagram
+        herunter und legt Kopien im Speicherdienst Vercel Blob ab. Ihr Browser
+        lädt die Vorschaubilder über diese Website und die Videos von der
+        Adresse public.blob.vercel-storage.com, beides bei Vercel. Instagram
+        bzw. Meta erhält beim Ansehen keine Daten von Ihnen.
       </p>
       <p>
         Die Links zu Instagram, TikTok und YouTube sind einfache Verweise. Erst
@@ -343,7 +352,7 @@ export default function Datenschutz() {
 
       <h2>16. Stand</h2>
       <p>
-        Stand: September 2026. Diese Erklärung beschreibt den technischen Stand
+        Stand: Oktober 2026. Diese Erklärung beschreibt den technischen Stand
         dieser Website und wird angepasst, sobald sich eingesetzte Dienste
         ändern.
       </p>
