@@ -6,6 +6,7 @@ import Brands from "@/components/Brands";
 import Stats from "@/components/Stats";
 import Partners from "@/components/Partners";
 import FeaturedWork from "@/components/FeaturedWork";
+import LatestReels from "@/components/LatestReels";
 import Services from "@/components/Services";
 import CaseStudy from "@/components/CaseStudy";
 import EditorialQuote from "@/components/EditorialQuote";
@@ -33,6 +34,7 @@ export default function HomePage({ lang }: { lang: Language }) {
       <Stats />
       <Partners />
       <FeaturedWork />
+      <LatestReels />
       <Services />
       <CaseStudy />
       <EditorialQuote />

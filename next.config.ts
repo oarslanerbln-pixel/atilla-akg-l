@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    // Posters of the Instagram films mirrored into Vercel Blob
+    // (src/lib/reels). Served through /_next/image, so from this origin.
+    remotePatterns: [
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com", pathname: "/reels/**" },
+    ],
+  },
   experimental: {
     // Each language has its own root layout (src/app/(de), (en), (tr)), so an
     // unmatched address has no single layout to render in; this lets

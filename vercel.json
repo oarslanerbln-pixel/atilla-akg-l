@@ -5,6 +5,10 @@
     {
       "path": "/api/cron/instagram-token",
       "schedule": "0 4 * * 1"
+    },
+    {
+      "path": "/api/cron/instagram-reels",
+      "schedule": "30 4 */3 * *"
     }
   ]
 }

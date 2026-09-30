@@ -99,6 +99,7 @@ src/
 │   ├── Contact.tsx
 │   ├── Footer.tsx
 │   ├── Partners.tsx         # Tourism boards & institutions
+│   ├── LatestReels.tsx      # Newest Instagram films (server), ReelsRail.tsx (client)
 │   ├── BrandMark.tsx        # The compass mark, inline
 │   └── LegalPage.tsx        # Shell shared by the two legal routes
 ├── context/
@@ -223,6 +224,22 @@ Fonts. Three Pexels posters were removed for exactly this reason. Fonts come
 from `next/font`, which self-hosts them at build time. Videos, icons and
 images ship from `public/`. Keep it that way — and keep
 `src/app/datenschutz/page.tsx` honest if it ever changes.
+The one exception is the hoster's own storage: the Instagram films are
+mirrored into Vercel Blob (below), never embedded from Instagram.
+
+### Instagram films on the home page
+`LatestReels` shows the newest Instagram videos. The cron
+`/api/cron/instagram-reels` (every third day, `src/lib/reels/sync.ts`) copies
+each one, byte for byte, into Vercel Blob (`reels/<id>.mp4`, `.jpg`,
+`manifest.json`) and revalidates the `reels` tag. The home page reads the
+manifest (ISR). A caption tagged `#ad`, `#anzeige`, `#werbung`, `#sponsored`,
+`#reklam` or `#işbirliği` keeps a video off the site. A video with
+copyrighted Instagram music has no `media_url` and cannot be mirrored; the
+cron reports it as `withoutFile`. Needs a Blob store connected to the project
+(`BLOB_READ_WRITE_TOKEN`); without one the section is absent.
+Blob transfer is metered per byte downloaded (Hobby: 10 GB a month, then the
+store is blocked for 30 days), so video loads only when a card is opened:
+no hover previews, no autoplay in the rail.
 
 ### The contact endpoint never fakes success
 It previously waited 1.5 s and answered "Message securely delivered." while
