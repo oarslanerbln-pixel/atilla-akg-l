@@ -200,6 +200,7 @@ export const translations = {
     pkg_close_email: "E-Mail senden",
     pkg_wa_general: "Guten Tag Atilla, ich interessiere mich für eine Social-Media-Partnerschaft.",
     pkg_mail_general: "Anfrage: Social-Media-Partnerschaft",
+    pkg_meta_description: "Monatliche Videoproduktion und Social-Media-Betreuung – die Pakete Essential, Signature und Prestige von Atilla Barbarossa.",
     legal_back: "Zurück zur Startseite",
     
     // Footer
@@ -473,6 +474,7 @@ export const translations = {
     pkg_close_email: "Send an email",
     pkg_wa_general: "Hello Atilla, I'm interested in a social media partnership.",
     pkg_mail_general: "Enquiry: social media partnership",
+    pkg_meta_description: "Monthly video production and social media management — Essential, Signature and Prestige packages by Atilla Barbarossa.",
     legal_back: "Back to the homepage",
     
     // Footer
@@ -746,6 +748,7 @@ export const translations = {
     pkg_close_email: "E-posta gönderin",
     pkg_wa_general: "Merhaba Atilla, sosyal medya ortaklığıyla ilgileniyorum.",
     pkg_mail_general: "Talep: Sosyal medya ortaklığı",
+    pkg_meta_description: "Aylık video prodüksiyonu ve sosyal medya yönetimi — Atilla Barbarossa'dan Essential, Signature ve Prestige paketleri.",
     legal_back: "Ana sayfaya dön",
     
     // Footer

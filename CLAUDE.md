@@ -69,6 +69,7 @@ src/
 │   ├── impressum/           # § 5 DDG imprint
 │   ├── datenschutz/         # Privacy notice
 │   └── social-media/        # Private package page: noindex, unlinked, ?lang=en|tr
+│                            #   (rewritten onto en/, tr/ so the link preview is localized)
 ├── components/              # Modular UI components with *.module.css pairs
 │   ├── Preloader.tsx
 │   ├── CustomCursor.tsx
