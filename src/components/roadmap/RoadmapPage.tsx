@@ -151,7 +151,7 @@ export default function RoadmapPage() {
               <h1 className={styles.headline}>
                 <motion.span className={styles.headlineLine} {...rise(0.3)}>
                   {t("rm_title_1")}
-                </motion.span>
+                </motion.span>{" "}
                 <motion.span className={`${styles.headlineLine} ${styles.headlineSoft}`} {...rise(0.45)}>
                   {t("rm_title_2")}
                 </motion.span>

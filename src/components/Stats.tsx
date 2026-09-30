@@ -4,7 +4,7 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 import { Users, MapPin, Target, Eye } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
-import { socialProfiles } from "@/lib/site";
+import { audience, socialProfiles } from "@/lib/site";
 import styles from "./Stats.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
@@ -97,7 +97,7 @@ export default function Stats() {
         {/* Left Column: About & Philosophy */}
         <div id="about" className={styles.aboutCol}>
           <motion.div variants={itemVariants}>
-            <h3 className={styles.subtitle}>{t('stats_about_subtitle')}</h3>
+            <p className={styles.subtitle}>{t('stats_about_subtitle')}</p>
             <h2 className={styles.title}>
               {t('stats_about_title')}
             </h2>
@@ -123,7 +123,7 @@ export default function Stats() {
               <InstagramIcon className={styles.icon} />
               <div className={styles.socialText}>
                 <span className={styles.socialCount}>
-                  <AnimatedCounter to={306} suffix=" K" />
+                  <AnimatedCounter to={audience.followers.instagram / 1000} suffix=" K" />
                 </span>
                 <span className={styles.socialLabel}>{t('social_follower')}</span>
               </div>
@@ -140,7 +140,7 @@ export default function Stats() {
               <TikTokIcon className={styles.icon} />
               <div className={styles.socialText}>
                 <span className={styles.socialCount}>
-                  <AnimatedCounter to={287} suffix=" K" />
+                  <AnimatedCounter to={audience.followers.tiktok / 1000} suffix=" K" />
                 </span>
                 <span className={styles.socialLabel}>{t('social_follower')}</span>
               </div>
@@ -157,7 +157,7 @@ export default function Stats() {
               <YoutubeIcon className={styles.icon} />
               <div className={styles.socialText}>
                 <span className={styles.socialCount}>
-                  <AnimatedCounter to={20} suffix=" K" />
+                  <AnimatedCounter to={audience.followers.youtube / 1000} suffix=" K" />
                 </span>
                 <span className={styles.socialLabel}>{t('social_follower')}</span>
               </div>
@@ -175,21 +175,21 @@ export default function Stats() {
             <div className={`${styles.statCard} ${styles.darkCard}`}>
               <Users className={styles.statIcon} />
               <span className={styles.statValue}>
-                <AnimatedCounter to={83} suffix="%" />
+                <AnimatedCounter to={audience.age25to54} suffix="%" />
               </span>
               <span className={styles.statLabel}>{t('stat_age')}</span>
             </div>
             <div className={`${styles.statCard} ${styles.darkCard}`}>
               <MapPin className={styles.statIcon} />
               <span className={styles.statValue}>
-                <AnimatedCounter to={86} suffix="%" />
+                <AnimatedCounter to={audience.dach} suffix="%" />
               </span>
               <span className={styles.statLabel}>{t('stat_region')}</span>
             </div>
             <div className={`${styles.statCard} ${styles.darkCard}`}>
               <Target className={styles.statIcon} />
               <span className={styles.statValue}>
-                <AnimatedCounter to={55} suffix="%" />
+                <AnimatedCounter to={audience.female} suffix="%" />
               </span>
               <span className={styles.statLabel}>{t('stat_gender')}</span>
             </div>
@@ -203,26 +203,26 @@ export default function Stats() {
             <div className={styles.bubbleMain}>
               <Eye className={styles.bubbleIcon} />
               <span className={styles.bubbleValue}>
-                <AnimatedCounter to={1.4} decimals={1} suffix=" MIO" />
+                <AnimatedCounter to={audience.accountsReached / 1_000_000} decimals={1} suffix=" MIO" />
               </span>
               <span className={styles.bubbleLabel}>{t('stats_reach_accounts')}</span>
             </div>
             <div className={styles.bubbleSmallGrid}>
               <div className={styles.bubbleSmall}>
                 <span className={styles.bSmallVal}>
-                  <AnimatedCounter to={60} suffix="K+" />
+                  <AnimatedCounter to={audience.average.reels / 1000} suffix="K+" />
                 </span>
                 <span className={styles.bSmallLab}>{t('stats_reach_reels')}</span>
               </div>
               <div className={styles.bubbleSmall}>
                 <span className={styles.bSmallVal}>
-                  <AnimatedCounter to={15} suffix="K+" />
+                  <AnimatedCounter to={audience.average.story / 1000} suffix="K+" />
                 </span>
                 <span className={styles.bSmallLab}>{t('stats_reach_story')}</span>
               </div>
               <div className={styles.bubbleSmall}>
                 <span className={styles.bSmallVal}>
-                  <AnimatedCounter to={20} suffix="K+" />
+                  <AnimatedCounter to={audience.average.post / 1000} suffix="K+" />
                 </span>
                 <span className={styles.bSmallLab}>{t('stats_reach_post')}</span>
               </div>

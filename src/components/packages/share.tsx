@@ -4,15 +4,21 @@ import type { Metadata } from "next";
 import { ImageResponse } from "next/og";
 import { packages } from "@/lib/packages";
 import { translations, type Language } from "@/i18n/translations";
+import { fill } from "@/i18n/format";
+import { siteFacts } from "@/lib/faq";
+import { HTML_LANG } from "@/lib/locales";
+import { SITE_NAME, localizedMetadata } from "@/lib/metadata";
 
 /**
- * What a link to /social-media shows before it is opened: the title, the
- * description and the card that WhatsApp, Instagram or Mail draw under it.
+ * What a link to /social-media shows before it is opened — the title, the
+ * description and the card that WhatsApp, Instagram or Mail draw under it —
+ * and what a search result for it shows.
  *
- * The page is sent by hand, in the prospect's language, so the preview is in
- * that language too. German lives at /social-media; English and Turkish are
- * static pages at /social-media/en and /social-media/tr, each with its own
- * card, and next.config.ts rewrites the links that are actually sent
+ * The page is sent by hand, in the prospect's language, and is also found by
+ * search. German lives at /social-media; English and Turkish are static pages
+ * at /social-media/en and /social-media/tr, each with its own card, served
+ * under their own root layout so `<html lang>` matches (see the (en) and (tr)
+ * route groups). next.config.ts rewrites the links that are actually sent
  * (`?lang=en`, `?lang=tr`) onto them. Plain folders rather than a [lang]
  * segment: a share card is a route handler, and route handlers do not
  * inherit a layout's generateStaticParams, so under [lang] the cards would be
@@ -20,43 +26,25 @@ import { translations, type Language } from "@/i18n/translations";
  * Everything stays prerendered; nothing is decided per request.
  */
 
-const OG_LOCALE: Record<Language, string> = { DE: "de_DE", EN: "en_GB", TR: "tr_TR" };
-const LOCALE: Record<Language, string> = { DE: "de", EN: "en", TR: "tr" };
-
-/** The address that is sent, which is also the one the switcher writes. */
-const sharedUrl = (lang: Language) =>
-  lang === "DE" ? "/social-media" : `/social-media?lang=${lang.toLowerCase()}`;
-
 /**
- * Search engines are asked to leave the page out, and nothing on the site
- * links to it. `twitter` is set as well, or the card would carry the home
- * page's title under this page's picture.
+ * The three addresses are canonical for their language and name each other
+ * with hreflang, so a search engine shows the one in the searcher's language.
  */
 export function packagesMetadata(lang: Language): Metadata {
   const t = translations[lang];
-  const title = `${t.pkg_eyebrow} | Atilla BARBAROSSA`;
-  const description = t.pkg_meta_description;
-  return {
-    title,
-    description,
-    robots: { index: false, follow: false },
-    openGraph: {
-      title,
-      description,
-      url: sharedUrl(lang),
-      siteName: "Atilla Barbarossa",
-      locale: OG_LOCALE[lang],
-      type: "website",
-    },
-    twitter: { card: "summary_large_image", title, description },
-  };
+  return localizedMetadata({
+    page: "socialMedia",
+    lang,
+    title: `${t.pkg_meta_title} | ${SITE_NAME}`,
+    description: fill(t.pkg_meta_description, siteFacts(lang)),
+  });
 }
 
 export const CARD_SIZE = { width: 1200, height: 630 };
 export const CARD_CONTENT_TYPE = "image/png";
 
 export const cardAlt = (lang: Language) =>
-  `${translations[lang].pkg_eyebrow} — ${packages.map((pkg) => pkg.name).join(", ")} · Atilla Barbarossa`;
+  `${translations[lang].pkg_eyebrow} — ${packages.map((pkg) => pkg.name).join(", ")} · ${SITE_NAME}`;
 
 const INK = "#140f0a";
 const PAPER = "#fcfbf9";
@@ -89,7 +77,7 @@ const font = (weight: number) =>
  */
 export async function packagesCard(lang: Language) {
   const t = translations[lang];
-  const upper = (text: string) => text.toLocaleUpperCase(LOCALE[lang]);
+  const upper = (text: string) => text.toLocaleUpperCase(HTML_LANG[lang]);
 
   const [light200, light300, regular400, lockup] = await Promise.all([
     font(200),

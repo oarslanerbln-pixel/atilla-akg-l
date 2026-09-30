@@ -172,14 +172,16 @@ export default function Hero() {
         style={calm ? undefined : { y: contentY, opacity: contentOpacity, scale: contentScale }}
       >
         <div className={styles.textContent}>
-          <motion.h2
+          {/* A greeting, not a heading: the name below is the page's one h1,
+              and nothing should outrank it in the outline. */}
+          <motion.p
             className={styles.greeting}
             initial={{ opacity: 0, letterSpacing: "0.6em" }}
             animate={go ? { opacity: 1, letterSpacing: "0.32em" } : undefined}
             transition={at(T.greeting, 1.2)}
           >
             {t('hero_welcome')}
-          </motion.h2>
+          </motion.p>
 
           <h1 className={styles.name}>
             {/* The readable name. It sets the layout; the focus letters sit
@@ -190,7 +192,9 @@ export default function Hero() {
               animate={{ opacity: showShine ? 1 : 0 }}
               transition={calm ? { duration: 0 } : { duration: 1, ease: "easeInOut" }}
             >
-              <span className={styles.firstName}>Atilla</span>
+              {/* The space keeps the words apart where the line break is
+                  ignored, as it is when a crawler extracts the text. */}
+              <span className={styles.firstName}>Atilla</span>{" "}
               <br />
               <span className={styles.lastName}>Barbarossa</span>
             </motion.span>

@@ -25,6 +25,7 @@
   color: var(--accent-gold);
   margin-bottom: 1rem;
   font-weight: 600;
+  line-height: 1.2;
 }
 
 .title {
@@ -238,6 +239,30 @@
   font-size: 1.2rem;
   color: var(--text-secondary);
   line-height: 1.8;
+}
+
+.packagesLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--accent-gold);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.packagesLink:hover {
+  color: var(--text-primary);
+}
+
+.packagesLink:focus-visible {
+  outline: 1px solid var(--accent-gold);
+  outline-offset: 4px;
 }
 
 @media (max-width: 768px) {

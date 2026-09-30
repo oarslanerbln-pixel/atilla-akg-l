@@ -101,7 +101,7 @@ export default function Contact() {
           {/* Left Column: Philosophy & Process */}
           <div className={styles.infoCol}>
             <motion.div variants={itemVariants}>
-              <h3 className={styles.subtitle}>{t('contact_subtitle')}</h3>
+              <p className={styles.subtitle}>{t('contact_subtitle')}</p>
               <h2 className={styles.title}>{t('contact_title')}</h2>
               <div className={styles.divider}></div>
             </motion.div>
@@ -121,7 +121,7 @@ export default function Contact() {
           {/* Right Column: Contact Info & Form */}
           <div className={styles.contactCol}>
             <motion.div variants={itemVariants}>
-              <h3 className={styles.subtitle}>{t('contact_form_subtitle')}</h3>
+              <p className={styles.subtitle}>{t('contact_form_subtitle')}</p>
               <h2 className={styles.title}>{t('contact_form_title')}</h2>
               <div className={styles.divider}></div>
             </motion.div>
