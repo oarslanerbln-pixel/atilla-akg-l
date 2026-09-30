@@ -1,4 +1,5 @@
 import 'server-only';
+import { normalizeWord } from './keywords';
 
 export type Lang = 'de' | 'en' | 'tr';
 export type Channel = 'whatsapp' | 'instagram';
@@ -19,7 +20,7 @@ export const CONCIERGE = {
   graphVersion: process.env.META_GRAPH_VERSION ?? 'v23.0',
   commentKeywords: (process.env.IG_COMMENT_KEYWORDS ?? 'tur,tour,reise,info,preis,price,fiyat')
     .split(',')
-    .map((k) => k.trim().toLowerCase())
+    .map((k) => normalizeWord(k.trim()))
     .filter(Boolean),
 };
 

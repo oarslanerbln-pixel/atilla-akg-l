@@ -161,8 +161,7 @@ Where to stay in [city]: [hotel name] @[hotelaccount] 🏨
 ```
 
 "info", "preis", "fiyat", "tour" gibi kelimeler Instagram otomasyonunu tetikler
-(`IG_COMMENT_KEYWORDS`, bkz. `docs/automation-handover.md`). Türkçe kelimeyi açıklamada
-**küçük harfle** yazın: büyük "İ" ile yazılan "FİYAT" otomasyonda şu an eşleşmiyor.
+(`IG_COMMENT_KEYWORDS`, bkz. `docs/automation-handover.md`).
 
 **Kurallar:** İlk satırda otel/destinasyon adı + şehir. 3–5 hashtag (30 değil). Otelin ve
 turizm kurumunun hesabını etiketleyin, konum ekleyin. Kendi hashtag'iniz her gönderide:

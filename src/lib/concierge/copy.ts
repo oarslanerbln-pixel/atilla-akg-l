@@ -103,7 +103,7 @@ export function bookingConfirmed(lang: Lang, booking: ConfirmedBooking): string 
 
 /** Picks a customer language from free text before we know it (e.g. an Instagram comment). */
 export function guessLang(text: string): Lang {
-  if (/[çğışöü]|\b(merhaba|fiyat|tur|kaç|nasıl|ucus|lutfen)\b/i.test(text)) return 'tr';
+  if (/[çğıİşöü]|\b(merhaba|fiyat|tur|kaç|nasıl|ucus|lutfen)\b/i.test(text)) return 'tr';
   if (/[äß]|\b(reise|preis|hallo|wann|wie viel|bitte|danke|flug|platin)\b/i.test(text)) return 'de';
   return 'en';
 }
