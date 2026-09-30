@@ -8,8 +8,15 @@ import { useLanguage } from "@/context/LanguageContext";
 // Kazakhstan …) moved to the Partners section, where each gets the context a
 // destination client reads them for — see src/lib/partners.ts.
 // Written in their own case; the capitals come from CSS, so a screen reader
-// says "Gillette", not G-I-L-L-E-T-T-E.
-const brands = ["Rixos Hotels", "Accor Live Limitless", "Gillette", "BER Flughafen"];
+// says "Gillette", not G-I-L-L-E-T-T-E. Each carries the language it is
+// named in: CSS uppercases by the page's language, and under Turkish that
+// sets GİLLETTE and RİXOS — words no brand spells that way.
+const brands = [
+  { name: "Rixos Hotels", lang: "en" },
+  { name: "Accor Live Limitless", lang: "en" },
+  { name: "Gillette", lang: "en" },
+  { name: "BER Flughafen", lang: "de" },
+];
 
 // Reading pace in pixels per second. Around 30 the eye can follow a name from
 // edge to edge without chasing it; faster turns the band into a blur, slower
@@ -49,8 +56,10 @@ export default function Brands() {
   const renderTrack = (copy: boolean) => (
     <ul className={styles.track} aria-hidden={copy || undefined}>
       {brands.map((brand) => (
-        <li key={brand} className={styles.brandItem}>
-          <span className={styles.brandName}>{brand}</span>
+        <li key={brand.name} className={styles.brandItem}>
+          <span className={styles.brandName} lang={brand.lang}>
+            {brand.name}
+          </span>
           <span className={styles.separator} aria-hidden="true" />
         </li>
       ))}
