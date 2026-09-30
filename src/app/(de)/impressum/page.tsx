@@ -3,7 +3,7 @@ import LegalPage from "@/components/LegalPage";
 import { contact } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Impressum | Atilla BARBAROSSA",
+  title: "Impressum",
   robots: { index: false, follow: true },
 };
 

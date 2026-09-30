@@ -11,6 +11,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import { useMagnetic } from "@/hooks/useMagnetic";
 import { contact } from "@/lib/site";
+import { pagePath } from "@/lib/locales";
 import { packages, type Package } from "@/lib/packages";
 import type { Language, TranslationKeys } from "@/i18n/translations";
 import styles from "./PackagesPage.module.css";
@@ -30,30 +31,30 @@ const mail = (subject: string) =>
   `mailto:${contact.email}?subject=${encodeURIComponent(subject)}`;
 
 /**
- * Opens the page in the language the link was sent in (`?lang=tr`), or, when
- * the address carries none, in the language of the route (/social-media/tr).
- * Once only: after that the switcher decides. The switcher rewrites the
- * address, and German has no `?lang`, so re-reading it would hand a German
- * choice back to the route's language. It sits in its own Suspense boundary
- * so the rest of the page still prerenders.
+ * Opens the page in the language the link was sent in (`?lang=tr`). The
+ * route's own language (/social-media/tr) needs nothing here: its root layout
+ * starts the page in it, on the server. Once only: after that the switcher
+ * decides. The switcher rewrites the address, and German has no `?lang`, so
+ * re-reading it would hand a German choice back. It sits in its own Suspense
+ * boundary so the rest of the page still prerenders.
  */
-function LangFromUrl({ fallback }: { fallback?: Language }) {
+function LangFromUrl() {
   const params = useSearchParams();
   const { setActiveLang } = useLanguage();
   const applied = useRef(false);
   useEffect(() => {
     if (applied.current) return;
     applied.current = true;
-    const lang = params.get("lang")?.toUpperCase() ?? fallback;
+    const lang = params.get("lang")?.toUpperCase();
     if (lang && (LANGS as string[]).includes(lang)) setActiveLang(lang as Language);
-  }, [params, fallback, setActiveLang]);
+  }, [params, setActiveLang]);
   return null;
 }
 
 /**
- * /social-media — the monthly packages, as a page to send.
+ * /social-media — the monthly packages, as a page to send and to be found.
  *
- * A prospect arrives from a DM or an email, usually on a phone, and should
+ * A prospect arrives from a DM, an email or a search, usually on a phone, and should
  * understand the offer in one scroll: who, what three sizes, how it runs,
  * and one tap to ask. There are no prices on purpose — the investment is
  * quoted after a call — so every plate ends in a request, not a number.
@@ -65,7 +66,7 @@ function LangFromUrl({ fallback }: { fallback?: Language }) {
  * part of the same house. A visitor who asked for less motion gets the
  * finished page.
  */
-export default function PackagesPage({ lang }: { lang?: Language }) {
+export default function PackagesPage() {
   const { t, activeLang, setActiveLang } = useLanguage();
   const calm = usePrefersCalm();
   const { ref: waRef, style: waLean } = useMagnetic<HTMLAnchorElement>(8);
@@ -196,19 +197,19 @@ export default function PackagesPage({ lang }: { lang?: Language }) {
   return (
     <>
       <Suspense fallback={null}>
-        <LangFromUrl fallback={lang} />
+        <LangFromUrl />
       </Suspense>
 
       <header className={styles.topbar}>
         <div className={`container ${styles.topbarInner}`}>
-          <Link href="/" className={styles.brand}>
+          <Link href={pagePath("home", activeLang)} className={styles.brand}>
             <BrandMark className={styles.brandMark} />
             {/* Set in capitals, as in the Navbar: under lang="tr" the CSS
                 uppercase would turn the wordmark into ATİLLA. */}
             <span>ATILLA BARBAROSSA</span>
           </Link>
           <div className={styles.topbarEnd}>
-            <Link href="/" className={styles.homeLink}>
+            <Link href={pagePath("home", activeLang)} className={styles.homeLink}>
               {t("pkg_home")}
             </Link>
             <div className={styles.langs} role="group" aria-label={t("pkg_lang_label")}>
@@ -245,7 +246,7 @@ export default function PackagesPage({ lang }: { lang?: Language }) {
             <h1 className={styles.headline}>
               <motion.span className={styles.headlineLine} {...rise(0.35)}>
                 {t("pkg_title_1")}
-              </motion.span>
+              </motion.span>{" "}
               <motion.span className={`${styles.headlineLine} ${styles.headlineSoft}`} {...rise(0.5)}>
                 {t("pkg_title_2")}
               </motion.span>

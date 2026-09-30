@@ -61,7 +61,7 @@ export default function CaseStudy() {
           transition={{ duration: 0.8 }}
           className={styles.header}
         >
-          <h3 className={styles.subtitle}>{t('case_title')}</h3>
+          <p className={styles.subtitle}>{t('case_title')}</p>
           <h2 className={styles.title}>{t('case_subtitle')}</h2>
           <div className={styles.divider}></div>
         </motion.div>
@@ -137,9 +137,9 @@ export default function CaseStudy() {
             </motion.div>
 
             <motion.div variants={itemVariants} className={styles.statsWrapper}>
-              <h4 className={styles.statsHeader}>
+              <h3 className={styles.statsHeader}>
                 {t('case_stats_header')}
-              </h4>
+              </h3>
               <div className={styles.statsGrid}>
                 <div className={styles.statItem}>
                   <Play className={styles.statIcon} />

@@ -132,14 +132,16 @@ export default function Preloader() {
               {t('preloader_vision')}
             </motion.div>
             
-            <motion.h1 
+            {/* The wordmark on a passing overlay, not the page's title: the
+                hero's name is the one h1. */}
+            <motion.p
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
               className={styles.brandName}
             >
               ATILLA BARBAROSSA
-            </motion.h1>
+            </motion.p>
           </div>
           
           {/* Progress / Skip Indicator */}

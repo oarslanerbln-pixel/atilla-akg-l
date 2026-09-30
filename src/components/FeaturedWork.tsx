@@ -159,7 +159,7 @@ export default function FeaturedWork() {
           transition={{ duration: 0.8 }}
           className={styles.header}
         >
-          <h3 className={styles.subtitle}>{t('work_subtitle')}</h3>
+          <p className={styles.subtitle}>{t('work_subtitle')}</p>
           <h2 className={styles.title}>{t('work_title')}</h2>
           <div className={styles.divider}></div>
         </motion.div>

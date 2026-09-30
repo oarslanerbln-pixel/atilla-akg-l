@@ -8,6 +8,9 @@ import { RAYS } from "@/components/BrandMark";
  * link shared to WhatsApp, LinkedIn or a DM rendered without a preview. Next
  * picks this route up by convention and emits a real PNG, which also means the
  * card stays in step with the brand without anyone re-exporting an asset.
+ *
+ * It lives in the (de) group because a card applies down its own tree only,
+ * and each language is a tree of its own; /en and /tr re-export it.
  */
 export const alt = "Atilla BARBAROSSA — Visual Storytelling & Creative Direction";
 export const size = { width: 1200, height: 630 };

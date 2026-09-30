@@ -2,14 +2,16 @@
 
 import React from "react";
 import { motion, Variants } from "framer-motion";
-import { BedDouble, MapPinned, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, BedDouble, MapPinned, Sparkles } from "lucide-react";
 import styles from "./Services.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import type { TranslationKeys } from "@/i18n/translations";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
+import { pagePath } from "@/lib/locales";
 
 export default function Services() {
-  const { t } = useLanguage();
+  const { t, activeLang } = useLanguage();
   const { playClickSound } = useSoundDesign();
 
   // One card per kind of client, each in their own terms: the problem they
@@ -75,7 +77,7 @@ export default function Services() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className={styles.header}
         >
-          <h3 className={styles.subtitle}>{t('services_subtitle')}</h3>
+          <p className={styles.subtitle}>{t('services_subtitle')}</p>
           <h2 className={styles.title}>{t('services_title')}</h2>
           <div className={styles.divider}></div>
         </motion.div>
@@ -91,7 +93,7 @@ export default function Services() {
             <motion.div key={segment.forKey} variants={itemVariants} className={styles.card}>
               <div className={styles.iconWrapper}>{segment.icon}</div>
               <p className={styles.forLabel}>{t(segment.forKey)}</p>
-              <h4 className={styles.cardTitle}>{t(segment.titleKey)}</h4>
+              <h3 className={styles.cardTitle}>{t(segment.titleKey)}</h3>
               <p className={styles.pain}>{t(segment.painKey)}</p>
               <p className={styles.cardDesc}>{t(segment.descKey)}</p>
               <ul className={styles.deliverables}>
@@ -122,6 +124,16 @@ export default function Services() {
           <p className={styles.disclaimer}>
             {t('services_disclaimer')}
           </p>
+          {/* The monthly packages have a page of their own; this is the one
+              path to it from the portfolio, in the language on screen. */}
+          <Link
+            href={pagePath("socialMedia", activeLang)}
+            className={styles.packagesLink}
+            onClick={() => playClickSound()}
+          >
+            {t('services_packages_link')}
+            <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
         </motion.div>
       </div>
     </section>

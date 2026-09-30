@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Each language has its own root layout (src/app/(de), (en), (tr)), so an
+    // unmatched address has no single layout to render in; this lets
+    // src/app/global-not-found.tsx give it a styled 404 of its own.
+    globalNotFound: true,
+  },
   async rewrites() {
     return {
       // /social-media is sent as ?lang=en or ?lang=tr. Those links are served

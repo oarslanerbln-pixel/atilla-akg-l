@@ -50,6 +50,12 @@ Always utilize CSS variables defined in `src/app/globals.css`:
 - Custom React context located at `src/context/LanguageContext.tsx`.
 - Hook: `useLanguage()` provides `{ activeLang, setActiveLang, t }`.
 - Available languages: `DE` (Default), `EN`, `TR`.
+- Each language has its own address, rendered on the server in that language:
+  `/`, `/en`, `/tr` and `/social-media`, `/social-media/en`, `/social-media/tr`.
+  Three root layouts (`src/app/(de)`, `(en)`, `(tr)`, sharing
+  `RootDocument.tsx`) give each its own `<html lang>` and start the context in
+  it. Paths and hreflang come from `src/lib/locales.ts`. The switchers still
+  change the language in place.
 - Translation store: `src/i18n/translations.ts`.
 - **Rule:** Every user-facing text MUST be added to all 3 languages (`DE`, `EN`, `TR`) in `translations.ts` and consumed via `t('key_name')`. Never hardcode plain strings into components!
 
@@ -60,17 +66,21 @@ Always utilize CSS variables defined in `src/app/globals.css`:
 src/
 ├── app/
 │   ├── globals.css          # Design tokens, z-index scale, base styles, reset
-│   ├── layout.tsx           # Root layout, self-hosted fonts, SEO metadata
-│   ├── page.tsx             # Single page landing orchestrator
-│   ├── opengraph-image.tsx  # Share card, generated at build time by next/og
+│   ├── RootDocument.tsx     # <html lang>, fonts, site-wide JSON-LD, providers
 │   ├── Providers.tsx        # Context providers wrapper (LanguageProvider)
+│   ├── global-not-found.tsx # Trilingual 404 (no single root layout to use)
+│   ├── (de)/                # Root layout lang="de": /, impressum, datenschutz,
+│   │                        #   roadmap, social-media; opengraph-image.tsx
+│   ├── (en)/                # Root layout lang="en": /en, /social-media/en
+│   ├── (tr)/                # Root layout lang="tr": /tr, /social-media/tr
+│   │                        #   (?lang=en|tr on /social-media is rewritten onto these)
+│   ├── robots.ts, sitemap.ts
 │   ├── api/contact/route.ts # Contact form delivery (Resend)
-│   ├── llms.txt/route.ts    # Plain-text summary for AI answer engines
-│   ├── impressum/           # § 5 DDG imprint
-│   ├── datenschutz/         # Privacy notice
-│   └── social-media/        # Private package page: noindex, unlinked, ?lang=en|tr
-│                            #   (rewritten onto en/, tr/ so the link preview is localized)
+│   └── llms.txt/route.ts    # Plain-text summary for AI answer engines
 ├── components/              # Modular UI components with *.module.css pairs
+│   ├── HomePage.tsx         # The portfolio, shared by /, /en and /tr
+│   ├── JsonLd.tsx           # Renders one structured-data block
+│   ├── Faq.tsx              # FAQ section (text from lib/faq.ts)
 │   ├── Preloader.tsx
 │   ├── CustomCursor.tsx
 │   ├── Navbar.tsx
@@ -78,7 +88,8 @@ src/
 │   ├── Hero.tsx
 │   ├── HeroHorizon.tsx      # Live WebGL sea-at-sunrise backdrop
 │   ├── WhatsAppButton.tsx   # Floating wa.me link between hero and contact
-│   ├── packages/            # /social-media page (plates data in lib/packages.ts)
+│   ├── packages/            # /social-media page (plates data in lib/packages.ts,
+│                            #   metadata and share cards in share.tsx)
 │   ├── Brands.tsx           # Grey credit-line marquee, constant 30 px/s
 │   ├── Stats.tsx
 │   ├── FeaturedWork.tsx
@@ -92,6 +103,13 @@ src/
 │   └── LegalPage.tsx        # Shell shared by the two legal routes
 ├── context/
 │   └── LanguageContext.tsx  # Language state & provider
+├── lib/
+│   ├── site.ts              # URL, contact, social profiles, audience figures
+│   ├── locales.ts           # Language addresses, hreflang, html lang
+│   ├── metadata.ts          # Title, description, canonical, previews
+│   ├── structuredData.ts    # schema.org graphs per page
+│   ├── faq.ts               # FAQ entries and the facts that fill them
+│   ├── partners.ts, brands.ts, packages.ts, roadmap.ts
 ├── hooks/
 │   ├── useSoundDesign.ts    # Shared AudioContext for the click sound
 │   ├── useScrollLock.ts     # Body scroll lock, counted across overlays
@@ -160,6 +178,32 @@ and carries no tagline.
   never retype the wordmark in another font.
 - `watermark-frame.svg` (a viewfinder with an "A" peak and a gold sun) is for
   **video watermarks only**. Everywhere else the compass stands alone.
+
+## 🔎 SEO & GEO
+Search engines and AI answer engines read the server HTML, so everything a
+visitor should be found for is in it, in the page's language. Setup steps,
+the social profile playbook and next steps: `docs/seo-geo.md` (Turkish).
+
+- **Facts have one source.** Follower counts and demographics live in
+  `audience` (`src/lib/site.ts`), brands in `brands.ts`, partners in
+  `partners.ts`, packages in `packages.ts`. The Stats section, the FAQ, the
+  structured data, the page descriptions and `/llms.txt` all read them. Change
+  a figure there, never in a sentence: translations carry `{tokens}`
+  (`src/i18n/format.ts`), filled by `siteFacts()` in `src/lib/faq.ts`.
+- **Structured data states only what the page shows** (`src/lib/structuredData.ts`,
+  rendered by `JsonLd`). The Person is `name: "Atilla Barbarossa"`,
+  `alternateName: "Atilla Akgül"`, one `@id` everywhere. A new social profile
+  goes into `socialProfiles` and so into `sameAs`.
+- **A new page in three languages** gets its paths in `locales.ts`, metadata
+  through `localizedMetadata()`, an entry in `sitemap.ts`, a line in
+  `/llms.txt`, and a page file in each of `(de)`, `(en)`, `(tr)`. A page that
+  should not be found says `robots: { index: false }` and is *not* blocked in
+  `robots.ts` (a blocked page's noindex is never read).
+- **One h1 per page.** The small gold eyebrow above a section heading is a
+  `<p>`, not an `<h3>`; headings go h2 → h3 without skipping. Words split
+  across lines inside a heading keep a `{" "}` between them.
+- **Titles** come from `translations.ts` (`meta_home_title`, `pkg_meta_title`);
+  the layout template adds "| Atilla Barbarossa".
 
 ## 🔐 Environment
 `.env.example` documents the variables. Without `RESEND_API_KEY`,

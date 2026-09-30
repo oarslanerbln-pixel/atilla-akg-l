@@ -3,20 +3,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./Brands.module.css";
 import { useLanguage } from "@/context/LanguageContext";
-
-// Commercial brands only. Tourism boards and institutions (UNESCO, Visit
-// Kazakhstan …) moved to the Partners section, where each gets the context a
-// destination client reads them for — see src/lib/partners.ts.
-// Written in their own case; the capitals come from CSS, so a screen reader
-// says "Gillette", not G-I-L-L-E-T-T-E. Each carries the language it is
-// named in: CSS uppercases by the page's language, and under Turkish that
-// sets GİLLETTE and RİXOS — words no brand spells that way.
-const brands = [
-  { name: "Rixos Hotels", lang: "en" },
-  { name: "Accor Live Limitless", lang: "en" },
-  { name: "Gillette", lang: "en" },
-  { name: "BER Flughafen", lang: "de" },
-];
+import { brands } from "@/lib/brands";
 
 // Reading pace in pixels per second. Around 30 the eye can follow a name from
 // edge to edge without chasing it; faster turns the band into a blur, slower

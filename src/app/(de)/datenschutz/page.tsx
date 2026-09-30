@@ -3,7 +3,7 @@ import LegalPage from "@/components/LegalPage";
 import { contact } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Datenschutzerklärung | Atilla BARBAROSSA",
+  title: "Datenschutzerklärung",
   robots: { index: false, follow: true },
 };
 

@@ -81,6 +81,7 @@ export const translations = {
     service_brands_d3: "Nutzungsrechte nach Vereinbarung",
     services_btn: "ANFRAGE SENDEN",
     services_disclaimer: "Sämtliche Leistungen, Paketpreise und Format-Kombinationen (z. B. Story-Sequenzen, YouTube-Vlogs oder exklusive TikTok-Serien) werden individuell auf die Ziele der jeweiligen Kampagne abgestimmt.",
+    services_packages_link: "Monatliche Social-Media-Pakete ansehen",
     
     // FeaturedWork
     work_title: "Projekte",
@@ -144,7 +145,7 @@ export const translations = {
     pkg_eyebrow: "Social-Media-Partnerschaft",
     pkg_title_1: "Ihre Marke, erzählt in Film.",
     pkg_title_2: "Jeden Monat.",
-    pkg_intro: "Monatliche Videoproduktion und Kanalbetreuung aus einer Hand – konzipiert, gedreht und veröffentlicht mit dem Anspruch eines Kinofilms.",
+    pkg_intro: "Monatliche Videoproduktion und Social-Media-Betreuung für Hotels, Destinationen und Marken – konzipiert, gedreht und veröffentlicht mit dem Anspruch eines Kinofilms.",
     pkg_scroll: "Pakete ansehen",
     pkg_home: "Portfolio",
     pkg_lang_label: "Sprache",
@@ -200,9 +201,38 @@ export const translations = {
     pkg_close_email: "E-Mail senden",
     pkg_wa_general: "Guten Tag Atilla, ich interessiere mich für eine Social-Media-Partnerschaft.",
     pkg_mail_general: "Anfrage: Social-Media-Partnerschaft",
-    pkg_meta_description: "Monatliche Videoproduktion und Social-Media-Betreuung – die Pakete Essential, Signature und Prestige von Atilla Barbarossa.",
+    pkg_meta_title: "Social-Media-Betreuung für Hotels & Marken",
+    pkg_meta_description: "Monatliche Videoproduktion und Social-Media-Betreuung für Hotels, Destinationen und Marken: {counts} Videos pro Monat, in 4K, mit Nutzungsrechten.",
     legal_back: "Zurück zur Startseite",
+    not_found_title: "Seite nicht gefunden",
+    not_found_text: "Diese Adresse gibt es nicht oder nicht mehr. Das Portfolio finden Sie auf der Startseite.",
     
+    // Search & answer engines: page titles, descriptions, and the FAQ
+    // section (src/components/Faq.tsx). Tokens in braces are filled from
+    // src/lib/site.ts, partners.ts, brands.ts and packages.ts.
+    meta_home_title: "Atilla Barbarossa – Reisefilmer für Hotels & Destinationen",
+    meta_home_description: "Reisefilmer & Creative Director aus Berlin: Hotel- und Destinationsfilme für {instagram} Reisebegeisterte, {dach} % aus dem DACH-Raum. Jetzt anfragen.",
+    seo_person_description: "Reisefilmer, Creative Director und Travel Content Creator aus Berlin. Kinoreife Filme für Hotels, Tourismusverbände und Travel-Brands, mit einer Community vor allem aus dem DACH-Raum.",
+    faq_eyebrow: "Häufige Fragen",
+    faq_title: "Das Wichtigste auf einen Blick",
+    faq_1_q: "Wer ist Atilla Barbarossa?",
+    faq_1_a: "Atilla Barbarossa (bürgerlich Atilla Akgül) ist Reisefilmer, Creative Director und Travel Content Creator aus Berlin; er arbeitet zwischen Berlin und Istanbul. Er produziert kinoreife Hotel- und Destinationsfilme und veröffentlicht sie für rund {total} Follower auf Instagram, TikTok und YouTube.",
+    faq_2_q: "Mit welchen Marken und Destinationen hat Atilla Barbarossa gearbeitet?",
+    faq_2_a: "Mit nationalen Tourismusbehörden und Institutionen wie {partners} sowie mit Marken wie {brands}. Sein Reel für das Novotel Bosphorus Istanbul erreichte 559.316 Konten.",
+    faq_3_q: "Wie groß ist die Reichweite, und wer folgt ihm?",
+    faq_3_a: "{instagram} Follower auf Instagram, {tiktok} auf TikTok und {youtube} auf YouTube. {dach} % der Community kommen aus dem DACH-Raum (Deutschland, Österreich, Schweiz), {age} % sind zwischen 25 und 54 Jahre alt, {female} % sind Frauen. Ein Reel erreicht im Schnitt mehr als {reels} Konten; insgesamt wurden {reach} Konten erreicht.",
+    faq_4_q: "Welche Leistungen bietet Atilla Barbarossa an?",
+    faq_4_a: "Für Hotels und Resorts: Reels und Stories auf seinen Kanälen sowie lizenzierte Clips für Website und Anzeigen. Für Destinationen und Tourismusverbände: mehrteilige Serien mit Drohnen- und Kinoaufnahmen. Für Travel- und Premium-Brands: organische Produktintegration und ad-fähige Assets. Dazu kommen {link} mit {counts} Videos pro Monat.",
+    faq_4_link: "monatliche Social-Media-Pakete",
+    faq_5_q: "Was kostet eine Zusammenarbeit?",
+    faq_5_a: "Es gibt keine Preisliste: Jede Kampagne und jedes Paket wird auf Ziele, Umfang und Nutzungsrechte abgestimmt. Die Investition nennt Atilla nach einem kurzen Gespräch; Mediadaten gibt es auf Anfrage.",
+    faq_6_q: "Dürfen wir die Videos auf unseren eigenen Kanälen nutzen?",
+    faq_6_a: "Ja. Lizenzierte Clips für Website, Social Media und Anzeigen gehören zum Angebot; Umfang und Dauer der Nutzungsrechte werden je Projekt vereinbart. In den monatlichen Paketen wird in 4K geliefert, vertikal und horizontal.",
+    faq_7_q: "Arbeitet Atilla Barbarossa international, und in welchen Sprachen?",
+    faq_7_a: "Ja, weltweit. Er arbeitet zwischen Berlin und Istanbul und erstellt Inhalte auf Deutsch, Englisch und Türkisch.",
+    faq_8_q: "Wie läuft eine Anfrage ab?",
+    faq_8_a: "Am schnellsten per WhatsApp unter {phone} oder per E-Mail an {email}. Atilla antwortet in der Regel innerhalb von 24 Stunden. Danach folgen Briefing, Konzept, Dreh und ein Performance-Report.",
+
     // Footer
     footer_subtitle: "Ready for the next level?",
     footer_massive: "LET'S TALK",
@@ -210,6 +240,7 @@ export const translations = {
     footer_imprint: "Impressum",
     footer_privacy: "Datenschutz",
     footer_roadmap: "E-Book",
+    footer_social_media: "Social-Media-Pakete",
 
     // E-book page (/roadmap)
     rm_eyebrow: "Die Roadmap für Travel Creators",
@@ -355,6 +386,7 @@ export const translations = {
     service_brands_d3: "Usage rights as agreed",
     services_btn: "INQUIRE NOW",
     services_disclaimer: "All services, package rates, and format combinations (e.g. dedicated Story sequences, YouTube vlogs, or multi-part TikTok series) are custom-tailored to each brand's specific goals.",
+    services_packages_link: "See the monthly social media packages",
     
     // FeaturedWork
     work_title: "Work",
@@ -418,7 +450,7 @@ export const translations = {
     pkg_eyebrow: "Social Media Partnership",
     pkg_title_1: "Your brand, told in film.",
     pkg_title_2: "Every month.",
-    pkg_intro: "Monthly video production and channel management from one hand — conceived, filmed and published to the standard of cinema.",
+    pkg_intro: "Monthly video production and social media management for hotels, destinations and brands — conceived, filmed and published to the standard of cinema.",
     pkg_scroll: "View the packages",
     pkg_home: "Portfolio",
     pkg_lang_label: "Language",
@@ -474,9 +506,38 @@ export const translations = {
     pkg_close_email: "Send an email",
     pkg_wa_general: "Hello Atilla, I'm interested in a social media partnership.",
     pkg_mail_general: "Enquiry: social media partnership",
-    pkg_meta_description: "Monthly video production and social media management — Essential, Signature and Prestige packages by Atilla Barbarossa.",
+    pkg_meta_title: "Social Media Management for Hotels & Brands",
+    pkg_meta_description: "Monthly video production and social media management for hotels, destinations and brands: {counts} videos a month, in 4K, with usage rights.",
     legal_back: "Back to the homepage",
+    not_found_title: "Page not found",
+    not_found_text: "This address does not exist or is no longer in use. You will find the portfolio on the home page.",
     
+    // Search & answer engines: page titles, descriptions, and the FAQ
+    // section (src/components/Faq.tsx). Tokens in braces are filled from
+    // src/lib/site.ts, partners.ts, brands.ts and packages.ts.
+    meta_home_title: "Atilla Barbarossa – Travel Filmmaker for Hotels & Destinations",
+    meta_home_description: "Travel filmmaker and creative director from Berlin: hotel and destination films for {instagram} travel lovers, {dach}% in the DACH region. Enquire now.",
+    seo_person_description: "Travel filmmaker, creative director and travel content creator from Berlin. Cinematic films for hotels, tourism boards and travel brands, for an audience mainly in the DACH region.",
+    faq_eyebrow: "Frequently asked",
+    faq_title: "At a glance",
+    faq_1_q: "Who is Atilla Barbarossa?",
+    faq_1_a: "Atilla Barbarossa (legal name Atilla Akgül) is a travel filmmaker, creative director and travel content creator from Berlin who works between Berlin and Istanbul. He produces cinematic hotel and destination films and publishes them for around {total} followers on Instagram, TikTok and YouTube.",
+    faq_2_q: "Which brands and destinations has Atilla Barbarossa worked with?",
+    faq_2_a: "National tourism boards and institutions such as {partners}, and brands such as {brands}. His reel for Novotel Bosphorus Istanbul reached 559,316 accounts.",
+    faq_3_q: "How large is his audience, and who follows him?",
+    faq_3_a: "{instagram} followers on Instagram, {tiktok} on TikTok and {youtube} on YouTube. {dach}% of the community comes from the DACH region (Germany, Austria, Switzerland), {age}% are aged 25 to 54 and {female}% are women. A reel reaches more than {reels} accounts on average; {reach} accounts have been reached in total.",
+    faq_4_q: "What services does Atilla Barbarossa offer?",
+    faq_4_a: "For hotels and resorts: reels and stories on his channels, plus licensed clips for websites and ads. For destinations and tourism boards: multi-part series with drone and cinema footage. For travel and premium brands: organic product integration and ad-ready assets. There are also {link} with {counts} videos a month.",
+    faq_4_link: "monthly social media packages",
+    faq_5_q: "How much does a collaboration cost?",
+    faq_5_a: "There is no price list: every campaign and package is tailored to its goals, scope and usage rights. Atilla quotes the investment after a short call; the media kit is available on request.",
+    faq_6_q: "Can we use the videos on our own channels?",
+    faq_6_a: "Yes. Licensed clips for your website, social media and ads are part of the offer; the scope and duration of the usage rights are agreed per project. The monthly packages are delivered in 4K, vertical and horizontal.",
+    faq_7_q: "Does Atilla Barbarossa work internationally, and in which languages?",
+    faq_7_a: "Yes, worldwide. He works between Berlin and Istanbul and creates content in German, English and Turkish.",
+    faq_8_q: "How does an enquiry work?",
+    faq_8_a: "Fastest on WhatsApp at {phone}, or by email to {email}. Atilla usually replies within 24 hours. Briefing, concept, filming and a performance report follow.",
+
     // Footer
     footer_subtitle: "Ready for the next level?",
     footer_massive: "LET'S TALK",
@@ -484,6 +545,7 @@ export const translations = {
     footer_imprint: "Imprint",
     footer_privacy: "Privacy Policy",
     footer_roadmap: "E-book",
+    footer_social_media: "Social media packages",
 
     // E-book page (/roadmap)
     rm_eyebrow: "The roadmap for travel creators",
@@ -629,6 +691,7 @@ export const translations = {
     service_brands_d3: "Anlaşmaya göre kullanım hakları",
     services_btn: "TEKLİF ALIN",
     services_disclaimer: "Tüm hizmetler, paket fiyatları ve format kombinasyonları (örneğin özel Hikaye serileri, YouTube vlogları veya çok bölümlü TikTok serileri), her markanın özel hedeflerine göre uyarlanır.",
+    services_packages_link: "Aylık sosyal medya paketlerini incele",
     
     // FeaturedWork
     work_title: "Projeler",
@@ -692,7 +755,7 @@ export const translations = {
     pkg_eyebrow: "Sosyal Medya Ortaklığı",
     pkg_title_1: "Markanız, film diliyle.",
     pkg_title_2: "Her ay.",
-    pkg_intro: "Aylık video prodüksiyonu ve hesap yönetimi tek elden — sinema titizliğiyle kurgulanır, çekilir ve yayınlanır.",
+    pkg_intro: "Oteller, destinasyonlar ve markalar için aylık video prodüksiyonu ve sosyal medya yönetimi — sinema titizliğiyle kurgulanır, çekilir ve yayınlanır.",
     pkg_scroll: "Paketleri incele",
     pkg_home: "Portfolyo",
     pkg_lang_label: "Dil",
@@ -748,9 +811,38 @@ export const translations = {
     pkg_close_email: "E-posta gönderin",
     pkg_wa_general: "Merhaba Atilla, sosyal medya ortaklığıyla ilgileniyorum.",
     pkg_mail_general: "Talep: Sosyal medya ortaklığı",
-    pkg_meta_description: "Aylık video prodüksiyonu ve sosyal medya yönetimi — Atilla Barbarossa'dan Essential, Signature ve Prestige paketleri.",
+    pkg_meta_title: "Oteller ve Markalar için Sosyal Medya Yönetimi",
+    pkg_meta_description: "Oteller, destinasyonlar ve markalar için aylık video prodüksiyonu ve sosyal medya yönetimi: ayda {counts} video, 4K, kullanım hakları dahil.",
     legal_back: "Ana sayfaya dön",
+    not_found_title: "Sayfa bulunamadı",
+    not_found_text: "Bu adres yok ya da artık kullanılmıyor. Portfolyoyu ana sayfada bulabilirsiniz.",
     
+    // Search & answer engines: page titles, descriptions, and the FAQ
+    // section (src/components/Faq.tsx). Tokens in braces are filled from
+    // src/lib/site.ts, partners.ts, brands.ts and packages.ts.
+    meta_home_title: "Atilla Barbarossa – Otel ve Destinasyon Filmleri",
+    meta_home_description: "Berlin merkezli seyahat film yapımcısı: oteller, destinasyonlar ve markalar için sinematik filmler, ağırlıklı olarak DACH bölgesinden {instagram} takipçi. Hemen yazın.",
+    seo_person_description: "Berlin merkezli seyahat film yapımcısı, kreatif direktör ve seyahat içerik üreticisi. Oteller, turizm kurumları ve seyahat markaları için sinematik filmler; topluluğu ağırlıklı olarak DACH bölgesinden.",
+    faq_eyebrow: "Sık sorulanlar",
+    faq_title: "Kısaca bilmeniz gerekenler",
+    faq_1_q: "Atilla Barbarossa kimdir?",
+    faq_1_a: "Atilla Barbarossa (asıl adı Atilla Akgül), Berlin merkezli bir seyahat film yapımcısı, kreatif direktör ve seyahat içerik üreticisidir; Berlin ile İstanbul arasında çalışır. Sinematik otel ve destinasyon filmleri üretir ve bunları Instagram, TikTok ve YouTube'da toplam yaklaşık {total} takipçiyle paylaşır.",
+    faq_2_q: "Atilla Barbarossa hangi marka ve destinasyonlarla çalıştı?",
+    faq_2_a: "{partners} gibi ulusal turizm kurumları ve uluslararası kuruluşlarla, ayrıca {brands} gibi markalarla. Novotel Bosphorus Istanbul için hazırladığı Reel 559.316 hesaba ulaştı.",
+    faq_3_q: "Erişimi ne kadar, onu kimler takip ediyor?",
+    faq_3_a: "Instagram'da {instagram}, TikTok'ta {tiktok}, YouTube'da {youtube} takipçi. Topluluğun dağılımı: %{dach} DACH bölgesi (Almanya, Avusturya, İsviçre), %{age} 25–54 yaş, %{female} kadın. Bir Reel ortalama {reels} hesabın üzerinde erişim alır; toplam erişilen hesap sayısı {reach}.",
+    faq_4_q: "Atilla Barbarossa hangi hizmetleri sunuyor?",
+    faq_4_a: "Oteller ve tatil köyleri için: kendi kanallarında Reels ve Story'ler, ayrıca web sitesi ve reklamlar için lisanslı klipler. Destinasyonlar ve turizm kurumları için: drone ve sinema çekimleriyle çok bölümlü seriler. Seyahat ve premium markalar için: organik ürün entegrasyonu ve reklama hazır içerikler. Ayrıca ayda {counts} video içeren {link} de mevcut.",
+    faq_4_link: "sosyal medya paketleri",
+    faq_5_q: "Bir iş birliğinin maliyeti nedir?",
+    faq_5_a: "Sabit bir fiyat listesi yok: Her kampanya ve paket hedeflere, kapsama ve kullanım haklarına göre belirlenir. Atilla bütçeyi kısa bir görüşmeden sonra iletir; medya kiti talep üzerine gönderilir.",
+    faq_6_q: "Videoları kendi kanallarımızda kullanabilir miyiz?",
+    faq_6_a: "Evet. Web sitesi, sosyal medya ve reklamlar için lisanslı klipler teklifin bir parçasıdır; kullanım haklarının kapsamı ve süresi proje bazında belirlenir. Aylık paketlerde teslimat 4K, dikey ve yatay formatta yapılır.",
+    faq_7_q: "Atilla Barbarossa uluslararası çalışıyor mu, hangi dillerde?",
+    faq_7_a: "Evet, dünya genelinde. Berlin ile İstanbul arasında çalışır ve Almanca, İngilizce ve Türkçe içerik üretir.",
+    faq_8_q: "Teklif süreci nasıl işliyor?",
+    faq_8_a: "En hızlısı WhatsApp: {phone}. E-posta ile de ulaşabilirsiniz: {email}. Atilla genellikle 24 saat içinde yanıt verir. Ardından brifing, konsept, çekim ve performans raporu gelir.",
+
     // Footer
     footer_subtitle: "Ready for the next level?",
     footer_massive: "HAYDİ KONUŞALIM",
@@ -758,6 +850,7 @@ export const translations = {
     footer_imprint: "Künye",
     footer_privacy: "Gizlilik Politikası",
     footer_roadmap: "E-Kitap",
+    footer_social_media: "Sosyal medya paketleri",
 
     // E-book page (/roadmap)
     rm_eyebrow: "Travel creator'lar için yol haritası",
