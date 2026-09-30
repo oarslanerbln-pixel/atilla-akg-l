@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion, type Transition, type Variants } from "framer-motion";
@@ -30,16 +30,23 @@ const mail = (subject: string) =>
   `mailto:${contact.email}?subject=${encodeURIComponent(subject)}`;
 
 /**
- * Opens the page in the language the link was sent in (`?lang=tr`). It sits
- * in its own Suspense boundary so the rest of the page still prerenders.
+ * Opens the page in the language the link was sent in (`?lang=tr`), or, when
+ * the address carries none, in the language of the route (/social-media/tr).
+ * Once only: after that the switcher decides. The switcher rewrites the
+ * address, and German has no `?lang`, so re-reading it would hand a German
+ * choice back to the route's language. It sits in its own Suspense boundary
+ * so the rest of the page still prerenders.
  */
-function LangFromUrl() {
+function LangFromUrl({ fallback }: { fallback?: Language }) {
   const params = useSearchParams();
   const { setActiveLang } = useLanguage();
+  const applied = useRef(false);
   useEffect(() => {
-    const lang = params.get("lang")?.toUpperCase();
+    if (applied.current) return;
+    applied.current = true;
+    const lang = params.get("lang")?.toUpperCase() ?? fallback;
     if (lang && (LANGS as string[]).includes(lang)) setActiveLang(lang as Language);
-  }, [params, setActiveLang]);
+  }, [params, fallback, setActiveLang]);
   return null;
 }
 
@@ -58,7 +65,7 @@ function LangFromUrl() {
  * part of the same house. A visitor who asked for less motion gets the
  * finished page.
  */
-export default function PackagesPage() {
+export default function PackagesPage({ lang }: { lang?: Language }) {
   const { t, activeLang, setActiveLang } = useLanguage();
   const calm = usePrefersCalm();
   const { ref: waRef, style: waLean } = useMagnetic<HTMLAnchorElement>(8);
@@ -117,12 +124,15 @@ export default function PackagesPage() {
   };
 
   // The switcher keeps the address in step, so a link copied from the
-  // address bar opens in the language on screen.
-  const chooseLang = (lang: Language) => {
-    setActiveLang(lang);
+  // address bar opens in the language on screen. It always writes the form
+  // that is sent (/social-media?lang=tr), also when the page was opened at
+  // /social-media/tr, where a leftover path would outvote the choice.
+  const chooseLang = (choice: Language) => {
+    setActiveLang(choice);
     const url = new URL(window.location.href);
-    if (lang === "DE") url.searchParams.delete("lang");
-    else url.searchParams.set("lang", lang.toLowerCase());
+    url.pathname = "/social-media";
+    if (choice === "DE") url.searchParams.delete("lang");
+    else url.searchParams.set("lang", choice.toLowerCase());
     window.history.replaceState(null, "", url);
   };
 
@@ -186,7 +196,7 @@ export default function PackagesPage() {
   return (
     <>
       <Suspense fallback={null}>
-        <LangFromUrl />
+        <LangFromUrl fallback={lang} />
       </Suspense>
 
       <header className={styles.topbar}>
