@@ -11,6 +11,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import { useMagnetic } from "@/hooks/useMagnetic";
 import { roadmap } from "@/lib/roadmap";
+import { pagePath } from "@/lib/locales";
 import type { Language, TranslationKeys } from "@/i18n/translations";
 import styles from "./RoadmapPage.module.css";
 
@@ -113,14 +114,14 @@ export default function RoadmapPage() {
 
       <header className={styles.topbar}>
         <div className={`container ${styles.topbarInner}`}>
-          <Link href="/" className={styles.brand}>
+          <Link href={pagePath("home", activeLang)} className={styles.brand}>
             <BrandMark className={styles.brandMark} />
             {/* Set in capitals, as in the Navbar: under lang="tr" the CSS
                 uppercase would turn the wordmark into ATİLLA. */}
             <span>ATILLA BARBAROSSA</span>
           </Link>
           <div className={styles.topbarEnd}>
-            <Link href="/" className={styles.homeLink}>
+            <Link href={pagePath("home", activeLang)} className={styles.homeLink}>
               {t("pkg_home")}
             </Link>
             <div className={styles.langs} role="group" aria-label={t("pkg_lang_label")}>
@@ -378,7 +379,7 @@ export default function RoadmapPage() {
       <footer className={styles.footer}>
         <div className={`container ${styles.footerInner}`}>
           <span>{t("footer_copyright")}</span>
-          <nav className={styles.footerLinks} aria-label="Legal">
+          <nav className={styles.footerLinks} aria-label={t("legal_nav")}>
             <Link href="/impressum">{t("footer_imprint")}</Link>
             <Link href="/datenschutz">{t("footer_privacy")}</Link>
           </nav>

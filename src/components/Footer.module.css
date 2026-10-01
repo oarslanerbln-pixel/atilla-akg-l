@@ -36,6 +36,8 @@
   letter-spacing: 0.3em;
   color: var(--accent-gold);
   font-weight: 600;
+  /* On a phone it wraps; centred, like the title under it. */
+  text-align: center;
 }
 
 .massiveTitle {

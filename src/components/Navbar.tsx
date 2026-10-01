@@ -50,6 +50,24 @@ export default function Navbar() {
 
   useScrollLock(menuOpen);
 
+  // The sheet covers the page, so it behaves like any overlay: focus moves
+  // into it, Escape closes it, and focus returns to the button that opened it.
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    sheetRef.current?.querySelector("a")?.focus();
+
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      triggerRef.current?.focus();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [menuOpen]);
+
   // The desktop language menu opened on hover alone, so it was unreachable
   // without a pointer. It now toggles on click as well; these close it the way
   // any menu is expected to close.
@@ -112,8 +130,7 @@ export default function Navbar() {
                 type="button"
                 className={styles.langSelected}
                 aria-expanded={langOpen}
-                aria-haspopup="menu"
-                aria-label={`Sprache: ${activeLang}`}
+                aria-label={`${t("pkg_lang_label")}: ${activeLang}`}
                 onClick={(event) => {
                   // A mouse has already opened the menu on hover by the time it
                   // clicks, so toggling here shut it again under the pointer —
@@ -131,11 +148,10 @@ export default function Navbar() {
               </button>
 
               {langOpen && (
-                <div className={styles.langMenu} role="menu">
+                <div className={styles.langMenu}>
                   {languages.filter(l => l !== activeLang).map(lang => (
                     <button
                       type="button"
-                      role="menuitem"
                       key={lang}
                       className={styles.langOption}
                       onClick={() => {
@@ -169,9 +185,10 @@ export default function Navbar() {
 
           {/* Mobile / tablet menu trigger */}
           <button
+            ref={triggerRef}
             type="button"
             className={styles.hamburger}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={t(menuOpen ? "nav_menu_close" : "nav_menu_open")}
             aria-expanded={menuOpen}
             onClick={() => {
               playClickSound();
@@ -194,6 +211,7 @@ export default function Navbar() {
         {menuOpen && (
           <motion.div
             key="mobile-menu"
+            ref={sheetRef}
             className={styles.mobileMenu}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -233,11 +251,12 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.08 * (NAV_ITEMS.length + 1), ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className={styles.mobileLangRow}>
+              <div className={styles.mobileLangRow} role="group" aria-label={t("pkg_lang_label")}>
                 {languages.map((lang) => (
                   <button
                     type="button"
                     key={lang}
+                    aria-pressed={lang === activeLang}
                     className={`${styles.mobileLangOption} ${lang === activeLang ? styles.mobileLangOptionActive : ""}`}
                     onClick={() => {
                       setActiveLang(lang);
