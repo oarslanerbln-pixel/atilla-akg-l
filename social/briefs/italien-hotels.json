@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "italien-hotels",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Luxushotels · Italien",
+  "title": "3 Top Hotels",
+  "accent": "in Italien",
+  "subtitle": "Capri · Venedig · Rom",
+  "photo": { "src": "social/assets/italien-hotels.jpg", "focus": [0.4, 0.3], "zoom": 1.1 }
+}
