@@ -79,17 +79,20 @@
   margin-bottom: 3rem;
 }
 
+/* Three platforms, three columns, like the figures beside them. As a wrapping
+   row the third card fell alone onto a line of its own. */
 .socialGroup {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
 }
 
 .socialCard {
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 3rem 2.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 2.25rem 1.5rem 2rem;
   border-radius: 0;
   
   background: var(--bg-card);
@@ -161,7 +164,7 @@
 
 .socialCount {
   font-family: var(--font-display);
-  font-size: clamp(2.1rem, 3vw, 2.6rem);
+  font-size: clamp(1.9rem, 2.6vw, 2.4rem);
   font-weight: 300;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
@@ -171,9 +174,9 @@
 
 .socialLabel {
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   color: var(--text-secondary);
   margin-top: 0.5rem;
 }
@@ -377,17 +380,104 @@
   }
 }
 
+/* On a phone every figure used to take a card of its own, one under the
+   other: the section ran to more than four screens. The three-up rows of the
+   desktop stay three-up, set smaller, so each group reads at a glance as a
+   set, the way a spec sheet does. */
 @media (max-width: 768px) {
   .section {
     padding: var(--section-padding-y-mobile) 0;
   }
 
-  .demoGrid {
-    grid-template-columns: 1fr;
+  .grid {
+    gap: 3rem;
   }
 
+  .paragraphs {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    margin-bottom: 2.25rem;
+  }
+
+  .socialGroup {
+    gap: 0.75rem;
+  }
+
+  .socialCard {
+    gap: 0.9rem;
+    padding: 1.25rem 0.75rem 1.1rem;
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    transform: none;
+  }
+
+  .socialCount {
+    font-size: 1.6rem;
+  }
+
+  .socialLabel {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    margin-top: 0.3rem;
+  }
+
+  .demoGrid,
   .bubbleSmallGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .demoGrid {
+    margin-bottom: 2.25rem;
+  }
+
+  .darkCard,
+  .bubbleSmall {
+    padding: 1.4rem 0.5rem 1.25rem;
+  }
+
+  .statIcon {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 0.75rem;
+    transform: none;
+  }
+
+  .statValue {
+    font-size: 1.75rem;
+  }
+
+  .bSmallVal {
+    font-size: 1.45rem;
+  }
+
+  .statLabel,
+  .bSmallLab {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    line-height: 1.4;
+  }
+
+  .bubbleMain {
+    padding: 3rem 1.5rem;
+  }
+
+  .bubbleIcon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 1rem;
+  }
+
+  .bubbleLabel {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+  }
+
+  .reachBubbles {
+    gap: 0.75rem;
   }
 }
 
