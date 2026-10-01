@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "novotel-istanbul",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Novotel Bosphorus · Karaköy",
+  "title": "Hotel-Tipp",
+  "accent": "in Istanbul",
+  "subtitle": "Mitten in Karaköy",
+  "photo": { "src": "social/assets/novotel-aussicht.jpg", "focus": [0.5, 0.6], "zoom": 1.3 }
+}
