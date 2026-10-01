@@ -6,7 +6,7 @@ export const translations = {
     nav_work: "PROJEKTE",
     nav_services: "LEISTUNGEN",
     nav_contact: "KONTAKT",
-    nav_status: "AVAILABLE WORLDWIDE",
+    nav_status: "WELTWEIT VERFÜGBAR",
     nav_menu_open: "Menü öffnen",
     nav_menu_close: "Menü schließen",
     legal_nav: "Rechtliches",
@@ -17,8 +17,8 @@ export const translations = {
     video_mute: "Ton ausschalten",
     
     // Preloader
-    preloader_vision: "A VISION BY",
-    preloader_skip: "CLICK ANYWHERE TO SKIP",
+    preloader_vision: "EINE VISION VON",
+    preloader_skip: "ZUM ÜBERSPRINGEN KLICKEN",
     
     // Hero
     hero_welcome: "Willkommen",
@@ -94,17 +94,17 @@ export const translations = {
     
     // FeaturedWork
     work_title: "Projekte",
-    work_subtitle: "Selected Portfolio",
+    work_subtitle: "Ausgewählte Arbeiten",
     project_1_title: "Novotel Bosphorus Istanbul",
-    project_1_cat: "Hospitality & Resorts",
+    project_1_cat: "Hotellerie & Resorts",
     project_1_desc: "Exklusives Storytelling für das renommierte Designhotel im pulsierenden Karaköy-Viertel.",
-    project_1_metric: "559.316 Accounts Erreicht",
-    project_1_type: "Reels Campaign",
-    project_3_title: "Croatia Ottoman Caravanserai",
-    project_3_cat: "Heritage & History",
+    project_1_metric: "559.316 erreichte Konten",
+    project_1_type: "Reels-Kampagne",
+    project_3_title: "Osmanische Karawanserei, Kroatien",
+    project_3_cat: "Kulturerbe & Geschichte",
     project_3_desc: "Maßgeschneiderte visuelle Kampagnen für historische Architektur, jahrhundertealte Karawansereien und kulturelles Erbe.",
-    project_3_metric: "94.2% Engagement Rate",
-    project_3_type: "Documentary",
+    project_3_metric: "94,2 % Engagement-Rate",
+    project_3_type: "Dokumentarfilm",
     work_watch: "VIDEO ANSEHEN",
     work_close: "SCHLIESSEN",
 
@@ -124,10 +124,10 @@ export const translations = {
     case_meta_brand: "Marke",
     case_meta_brand_val: "Novotel Bosphorus Istanbul",
     case_meta_type: "Format",
-    case_meta_type_val: "Reels Video + Hotel Mention",
+    case_meta_type_val: "Reels-Video + Hotel-Erwähnung",
     case_caption_label: "Caption & Story",
     case_caption_text: "Mein Hoteltipp: Das Novotel Istanbul Bosphorus Hotel @novotel_bosphorus befindet sich im Zentrum des angesagten Viertels Karaköy. Die Umgebung ist geprägt von künstlerischen und kulturellen Aktivitäten. Das Goldene Horn, das historische Zentrum mit Kapali Carsi und Hagia Sophia und das Viertel Galata sind sehr nah...",
-    case_stats_header: "Accounts Erreicht: 559.316",
+    case_stats_header: "Erreichte Konten: 559.316",
     case_desc1: "Dieses Reel für das Novotel Bosphorus zeigt exemplarisch die Stärke authentischen Storytellings. Mit knapp 560.000 erreichten Konten ging das Video nicht nur viral, sondern traf genau die richtige Zielgruppe. Besonders bemerkenswert: Neben der enormen Reichweite und den vielen Speicherungen generierte der Beitrag eine außergewöhnlich hohe Interaktionsrate in den direkten Nachrichten.",
     case_desc2: "Zahlreiche Follower fragten proaktiv nach Buchungsdetails, Zimmerpreisen und Empfehlungen, was die hohe Kaufkraft und das tiefe Vertrauen der Community in meine Hotelempfehlungen unterstreicht.",
     
@@ -262,7 +262,7 @@ export const translations = {
     ebook_cta: "Zum E-Book",
 
     // Footer
-    footer_subtitle: "Ready for the next level?",
+    footer_subtitle: "Bereit für das nächste Level?",
     footer_massive: "LET'S TALK",
     footer_copyright: "© 2026 ATILLA BARBAROSSA. ALLE RECHTE VORBEHALTEN.",
     footer_imprint: "Impressum",
@@ -769,7 +769,7 @@ export const translations = {
     project_3_title: "Hırvatistan Osmanlı Kervansarayı",
     project_3_cat: "Tarihi Miras ve Kültür",
     project_3_desc: "Tarihi mimariyi, asırlık kervansarayları ve kültürel mirası gün yüzüne çıkaran özel görsel kampanya.",
-    project_3_metric: "%94.2 Etkileşim Oranı",
+    project_3_metric: "%94,2 Etkileşim Oranı",
     project_3_type: "Belgesel",
     work_watch: "FİLMİ İZLE",
     work_close: "KAPAT",
@@ -928,7 +928,7 @@ export const translations = {
     ebook_cta: "E-kitabı incele",
 
     // Footer
-    footer_subtitle: "Ready for the next level?",
+    footer_subtitle: "Bir sonraki seviyeye hazır mısınız?",
     footer_massive: "HAYDİ KONUŞALIM",
     footer_copyright: "© 2026 ATILLA BARBAROSSA. TÜM HAKLARI SAKLIDIR.",
     footer_imprint: "Künye",
