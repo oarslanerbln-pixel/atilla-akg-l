@@ -98,6 +98,16 @@ export const translations = {
     project_3_type: "Documentary",
     work_watch: "VIDEO ANSEHEN",
     work_close: "SCHLIESSEN",
+
+    // LatestReels (Instagram)
+    reels_subtitle: "Neu auf Instagram",
+    reels_title: "Aktuelle Filme",
+    reels_watch: "FILM ANSEHEN",
+    reels_open_instagram: "Auf Instagram öffnen",
+    reels_prev: "Vorheriger Film",
+    reels_next: "Nächster Film",
+    reels_scroll_back: "Zurückblättern",
+    reels_scroll_forward: "Weiterblättern",
     
     // CaseStudy
     case_title: "CASE STUDY",
@@ -403,6 +413,16 @@ export const translations = {
     project_3_type: "Documentary",
     work_watch: "WATCH FILM",
     work_close: "CLOSE",
+
+    // LatestReels (Instagram)
+    reels_subtitle: "New on Instagram",
+    reels_title: "Latest films",
+    reels_watch: "WATCH FILM",
+    reels_open_instagram: "Open on Instagram",
+    reels_prev: "Previous film",
+    reels_next: "Next film",
+    reels_scroll_back: "Scroll back",
+    reels_scroll_forward: "Scroll forward",
     
     // CaseStudy
     case_title: "CASE STUDY",
@@ -708,6 +728,16 @@ export const translations = {
     project_3_type: "Belgesel",
     work_watch: "FİLMİ İZLE",
     work_close: "KAPAT",
+
+    // LatestReels (Instagram)
+    reels_subtitle: "Instagram'da yeni",
+    reels_title: "Son filmler",
+    reels_watch: "FİLMİ İZLE",
+    reels_open_instagram: "Instagram'da aç",
+    reels_prev: "Önceki film",
+    reels_next: "Sonraki film",
+    reels_scroll_back: "Geri kaydır",
+    reels_scroll_forward: "İleri kaydır",
     
     // CaseStudy
     case_title: "VAKA İNCELEMESİ",

@@ -54,3 +54,4 @@ next-env.d.ts
 # social images: source frames and renders stay out of git
 /social/assets/
 /social/out/
+.vercel
