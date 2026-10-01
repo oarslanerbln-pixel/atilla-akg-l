@@ -55,6 +55,9 @@ export const partners: Partner[] = [
 /** Berlin — where the work sets out from. Each card's compass points from here. */
 export const BASE: Coords = { lat: 52.52, lon: 13.405 };
 
+/** BASE's label on the globe: German on every page, as each partner keeps its own name. */
+export const BASE_LABEL = { name: "Berlin · Basis", nameLang: "de" };
+
 const rad = (deg: number) => (deg * Math.PI) / 180;
 
 /**
