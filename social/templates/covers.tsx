@@ -123,6 +123,56 @@ const editorial: Template = {
   ),
 };
 
+/**
+ * Full-bleed photo under a soft vignette, everything centred low in the grid's crop: a tracked
+ * eyebrow, a serif title with an italic gold second line, a tracked subline. No logo, no rule.
+ */
+const lounge: Template = {
+  photo: { ...PORTRAIT, anchorY: 0.4 },
+  render: (b, photo) => {
+    // One size for both title lines, so the longer one still fits the 904 px text column.
+    const longest = Math.max(b.title.length, b.accent?.length ?? 0);
+    const size = Math.min(124, Math.floor(904 / (longest * 0.58)));
+    return (
+      <div style={{ display: "flex", width: "100%", height: "100%", position: "relative", backgroundColor: C.ink }}>
+        <Photo src={photo} {...PORTRAIT} style={{ top: 0, left: 0 }} />
+        <div
+          style={{
+            display: "flex",
+            position: "absolute",
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundImage:
+              "radial-gradient(ellipse at 50% 46%, rgba(20,15,10,0) 42%, rgba(20,15,10,0.5) 100%), linear-gradient(180deg, rgba(20,15,10,0.35) 0%, rgba(20,15,10,0) 22%, rgba(20,15,10,0) 46%, rgba(20,15,10,0.78) 70%, rgba(20,15,10,0.94) 100%)",
+          }}
+        />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            position: "absolute",
+            left: 88,
+            right: 88,
+            bottom: PORTRAIT.height - GRID_SAFE.bottom + 56,
+          }}
+        >
+          <div style={{ ...eyebrowStyle(C.goldLight), fontSize: 24, letterSpacing: 7, marginBottom: 30 }}>{b.eyebrow}</div>
+          <div style={{ display: "flex", fontFamily: serif, fontSize: size, lineHeight: 1.04, color: C.porcelain }}>{b.title}</div>
+          {b.accent && (
+            <div style={{ display: "flex", fontFamily: serif, fontStyle: "italic", fontSize: size, lineHeight: 1.04, color: C.goldLight }}>
+              {b.accent}
+            </div>
+          )}
+          {b.subtitle && (
+            <div style={{ ...eyebrowStyle(C.onInkSoft), fontWeight: 400, fontSize: 22, letterSpacing: 6, marginTop: 40 }}>{b.subtitle}</div>
+          )}
+        </div>
+      </div>
+    );
+  },
+};
+
 /** Porcelain page with the photo matted like a print, magazine-style title below. */
 const passepartout: Template = {
   photo: { width: 936, height: 860, anchorY: 0.34 },
@@ -278,5 +328,5 @@ const card: Template = {
   ),
 };
 
-export const COVER_TEMPLATES = { editorial, passepartout, split, card } satisfies Record<string, Template>;
+export const COVER_TEMPLATES = { lounge, editorial, passepartout, split, card } satisfies Record<string, Template>;
 export type CoverTemplate = keyof typeof COVER_TEMPLATES;
