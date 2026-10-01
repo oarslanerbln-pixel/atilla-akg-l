@@ -66,7 +66,7 @@ function measure(root: HTMLElement, stage: HTMLElement): GlobeLayout {
 }
 
 /**
- * Hero study: the compass globe. Berlin at the centre of the work, gold
+ * The desktop hero (HomeHero decides): the compass globe. Berlin at the centre of the work, gold
  * routes to the tourism boards in partners.ts, a light flying each in turn.
  * three.js arrives in its own chunk after the copy is on screen; under
  * usePrefersCalm() the globe is a single still frame with every route drawn.
@@ -284,7 +284,7 @@ export default function HeroGlobe() {
   const target = partners[course];
 
   return (
-    <section className={styles.hero} id="home" ref={rootRef} data-globe={ready ? "" : undefined}>
+    <section className={styles.hero} ref={rootRef} data-globe={ready ? "" : undefined}>
       <canvas className={styles.canvas} ref={canvasRef} aria-hidden="true" />
 
       <div className={styles.labels} aria-hidden="true">
@@ -307,7 +307,9 @@ export default function HeroGlobe() {
               labelRefs.current[i + 1] = el;
             }}
           >
-            <span className={styles.labelName}>{partner.name}</span>
+            <span className={styles.labelName} lang={partner.nameLang ?? "en"}>
+              {partner.name}
+            </span>
             <span className={styles.labelMeta}>{formatCoords(partner.coords)}</span>
           </span>
         ))}
@@ -356,7 +358,7 @@ export default function HeroGlobe() {
           </span>
           <span className={styles.hudText}>
             <span className={styles.hudEyebrow}>{t("hero_globe_route")}</span>
-            <span key={shown} className={styles.hudRoute}>
+            <span key={shown} className={styles.hudRoute} lang={target.nameLang ?? "en"}>
               {target.name}
             </span>
             <span className={styles.hudMeta}>

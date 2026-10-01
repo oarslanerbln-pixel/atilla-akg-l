@@ -18,7 +18,8 @@ function subscribe(onChange: () => void): () => void {
   return () => lists.forEach((list) => list.removeEventListener("change", onChange));
 }
 
-function getSnapshot(): boolean {
+/** The same answer, read once, for a decision taken outside a render. */
+export function prefersCalmNow(): boolean {
   const saveData =
     // Not in the DOM type definitions, and absent in Safari and Firefox.
     (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
@@ -32,5 +33,5 @@ function getServerSnapshot(): boolean {
 }
 
 export function usePrefersCalm(): boolean {
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  return useSyncExternalStore(subscribe, prefersCalmNow, getServerSnapshot);
 }

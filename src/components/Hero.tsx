@@ -106,12 +106,15 @@ function FocusWord({
  *
  * A visitor who asked for less motion gets the finished frame: no mattes, no
  * letters, no drift, no lean.
+ *
+ * `hold` keeps it at that first frame, paper and nothing else, while HomeHero
+ * finds out whether the globe takes its place.
  */
-export default function Hero() {
+export default function Hero({ hold = false }: { hold?: boolean }) {
   const { t } = useLanguage();
   const { playClickSound } = useSoundDesign();
   const calm = usePrefersCalm();
-  const go = useIntroDone();
+  const go = useIntroDone() && !hold;
   const [lettersDone, setLettersDone] = useState(false);
   const showShine = calm || lettersDone;
 
@@ -133,7 +136,7 @@ export default function Hero() {
   });
 
   return (
-    <section className={styles.hero} id="home" ref={heroRef}>
+    <section className={styles.hero} ref={heroRef}>
       {/* Live 3D backdrop; its reasoning lives in HeroHorizon.tsx. */}
       <div className={styles.backdrop}>
         <HeroHorizon />

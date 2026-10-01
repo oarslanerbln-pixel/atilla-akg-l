@@ -92,7 +92,7 @@ how the site looks and behaves.
 
 - Nothing loads from a third party at runtime: no CDN fonts, images or scripts. Fonts come from `next/font`, media from `public/`.
 - Video: `preload="none"` with a self-hosted poster. It loads on open, never on hover.
-- Anything heavy loads on visibility. A new dependency in the critical path needs its gzip weight measured and the user's approval. For scale, the hero is a few KB of shader.
+- Anything heavy loads on visibility. A new dependency in the critical path needs its gzip weight measured and the user's approval. For scale, the phone hero is a few KB of shader. The desktop globe (about 190 KB gzipped) is a dynamic import a phone never requests.
 
 ## Interaction and accessibility
 

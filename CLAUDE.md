@@ -85,8 +85,11 @@ src/
 │   ├── CustomCursor.tsx
 │   ├── Navbar.tsx
 │   ├── LiveClock.tsx
-│   ├── Hero.tsx
+│   ├── HomeHero.tsx         # Picks the hero: globe at a desk, sunrise elsewhere
+│   ├── Hero.tsx             # Sunrise hero (phones, tablets, calm visitors)
 │   ├── HeroHorizon.tsx      # Live WebGL sea-at-sunrise backdrop
+│   ├── globe/               # Desktop hero: compass globe (three.js + GSAP),
+│                            #   partner routes from lib/partners.ts
 │   ├── WhatsAppButton.tsx   # Floating wa.me link between hero and contact
 │   ├── packages/            # /social-media page (plates data in lib/packages.ts,
 │                            #   metadata and share cards in share.tsx)
@@ -250,11 +253,19 @@ sending nothing, so every inquiry was lost. A response of 200 from
 returns 503, delivery failure returns 502, and the form surfaces both.
 
 ### Mobile data is the budget
-Visitors arrive from Instagram on a phone. The hero backdrop is a live WebGL
-scene (`HeroHorizon.tsx`), not a clip: a few kilobytes of shader, rendered
-below screen resolution, stopped when off screen, and a single still frame
-under `usePrefersCalm()`. Keep it dependency-free; a 3D library would cost
-more than the scene. Project clips carry `preload="none"` and a self-hosted
+Visitors arrive from Instagram on a phone. Their hero backdrop is a live
+WebGL scene (`HeroHorizon.tsx`), not a clip: a few kilobytes of shader,
+rendered below screen resolution, stopped when off screen, and a single still
+frame under `usePrefersCalm()`. Keep it dependency-free; a 3D library would
+cost more than the scene.
+At a desk (≥ 900 px, mouse or trackpad, not calm) `HomeHero` swaps in the
+compass globe (`components/globe/`). Its three.js and GSAP (about 190 KB
+gzipped) are a dynamic import that phones, tablets and calm visitors never
+request. The server renders the sunrise for everyone; on a desk it holds its
+blank first frame (`hold`) until the globe arrives, and opens after all if
+that takes more than a second past the intro or fails. The choice is taken
+once per page load, so a resize never swaps heroes in front of the visitor.
+`#home` sits on HomeHero's wrapper, not on either section. Project clips carry `preload="none"` and a self-hosted
 poster. Anything new and heavy loads on visibility, and `usePrefersCalm()`
 decides whether it autoplays at all. The intro (`Preloader.tsx`) plays once
 per visitor, ever (localStorage), for about 1.4 s, and never under reduced
