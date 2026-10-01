@@ -136,7 +136,7 @@ daha önemli), videodaki yazı ve konuşma (otomatik altyazıdan), konum etiketi
 Hoteltipp in [Stadt]: [Hotelname] @[hotelaccount] 🏨
 [1–2 Sätze: was es besonders macht – Lage, Zimmer, Kulinarik –, mit Viertel und Stadt.]
 📍 [Viertel], [Stadt], [Land]
-💬 Fragen zu Preisen & Buchung? Kommentiere „INFO“.
+💬 Fragen zu Preisen & Buchung? Kommentiere „PREIS“.
 #hoteltipp #[stadt] #[land]reise #luxusreisen #atillabarbarossa
 ```
 
@@ -146,7 +146,7 @@ Hoteltipp in [Stadt]: [Hotelname] @[hotelaccount] 🏨
 Where to stay in [city]: [hotel name] @[hotelaccount] 🏨
 [1–2 sentences on what makes it special, naming the neighbourhood and city.]
 📍 [Neighbourhood], [City], [Country]
-💬 Questions on rates & booking? Comment "INFO".
+💬 Questions on rates & booking? Comment "PRICE".
 #hoteltip #[city] #[country]travel #luxurytravel #atillabarbarossa
 ```
 
@@ -160,8 +160,8 @@ Where to stay in [city]: [hotel name] @[hotelaccount] 🏨
 #oteltavsiyesi #[şehir] #[ülke]gezisi #lükstatil #atillabarbarossa
 ```
 
-"info", "preis", "fiyat", "tour" gibi kelimeler Instagram otomasyonunu tetikler
-(`IG_COMMENT_KEYWORDS`, bkz. `docs/automation-handover.md`).
+"preis", "price", "fiyat", "tour" gibi kelimeler yorumda tek başına yazılınca Instagram
+otomasyonunu tetikler (`IG_COMMENT_KEYWORDS`, bkz. `docs/concierge-setup.md`).
 
 **Kurallar:** İlk satırda otel/destinasyon adı + şehir. 3–5 hashtag (30 değil). Otelin ve
 turizm kurumunun hesabını etiketleyin, konum ekleyin. Kendi hashtag'iniz her gönderide:

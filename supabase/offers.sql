@@ -3,8 +3,8 @@
 -- tracking_url: the network's link. {click_id} is replaced with our click id where the network
 --   takes a sub id (FinanceAds &subid=, GetYourGuide &cmp=, Impact ?subId1=). Letters and digits only.
 -- keywords: lower case. Triggers the offer in a comment, a story reply or a DM that asks for it: the
---   keyword alone or with request words ("Gold bitte"; requestedKeywords in src/lib/concierge/keywords.ts).
---   Offers win over the tour keywords, so keep them specific.
+--   keyword alone or with request words ("Goldcard bitte"; requestedKeywords in src/lib/concierge/keywords.ts).
+--   Offers win over the tour keywords, so keep them specific: "Gold" under a sunset is praise, "Goldcard" a request.
 -- pitch: short and factual, in the programme's approved wording. No fees, interest or promises.
 -- GetYourGuide activity: any activity URL + ?partner_id=RTQEAHP&cmp={click_id}; no short link needed.
 
@@ -19,7 +19,7 @@ insert into public.affiliate_offers (id, network, name, pitch, tracking_url, key
      "en": "The American Express Gold Card with Membership Rewards (for residents of Germany) – all benefits, terms and the application directly at American Express.",
      "tr": "Membership Rewards''lı American Express Gold Card (Almanya''da ikamet edenler için) – tüm avantajlar, koşullar ve başvuru doğrudan American Express''te."}',
    'https://financeads.net/tc.php?t=66144C140128910T&subid={click_id}',
-   '{gold}',
+   '{goldcard}',
    true),
 
   ('amex-platinum',
@@ -29,7 +29,7 @@ insert into public.affiliate_offers (id, network, name, pitch, tracking_url, key
      "en": "The American Express Platinum Card with Membership Rewards (for residents of Germany), with access to airport lounges worldwide. All benefits, terms and the application directly at American Express.",
      "tr": "Membership Rewards''lı American Express Platinum Card (Almanya''da ikamet edenler için), dünya genelinde havalimanı lounge erişimiyle. Tüm avantajlar, koşullar ve başvuru doğrudan American Express''te."}',
    'https://financeads.net/tc.php?t=66144C140129719T&subid={click_id}',
-   '{platinum,platin,lounge}',
+   '{platinum,platin}',
    true),
 
   -- Paid per install through Adjust; the short link carries no sub id.
@@ -40,7 +40,7 @@ insert into public.affiliate_offers (id, network, name, pitch, tracking_url, key
      "en": "Tours, tickets and activities worldwide – with the GetYourGuide app you book on the go and keep your tickets on your phone.",
      "tr": "Dünya genelinde turlar, biletler ve aktiviteler – GetYourGuide uygulamasıyla yolda rezervasyon yapar, biletlerinizi telefonunuzda taşırsınız."}',
    'https://gyg.me/atillabarbarossa-app',
-   '{app}',
+   '{getyourguide}',
    true),
 
   ('gyg-berlin-gendarmenmarkt',
@@ -50,7 +50,7 @@ insert into public.affiliate_offers (id, network, name, pitch, tracking_url, key
      "en": "Guided walk through the hidden corners around Berlin''s Gendarmenmarkt. Dates, prices and booking directly on GetYourGuide.",
      "tr": "Berlin''de Gendarmenmarkt çevresinin gizli köşelerinde rehberli yürüyüş. Tarihler, fiyatlar ve rezervasyon doğrudan GetYourGuide''da."}',
    'https://www.getyourguide.de/berlin-l17/berlin-verborgenes-rund-um-den-gendarmenmarkt-gefuhrter-rundgang-t951089/?partner_id=RTQEAHP&cmp={click_id}',
-   '{gendarmenmarkt,rundgang}',
+   '{rundgang}',
    true),
 
   -- Deep link through Impact (u=): every destination from Germany, return, economy. No dates in the
@@ -63,7 +63,7 @@ insert into public.affiliate_offers (id, network, name, pitch, tracking_url, key
      "en": "Cheap flights to every destination – Skyscanner shows the current prices for your travel dates.",
      "tr": "Tüm destinasyonlara uygun uçuşlar – Skyscanner''da seyahat tarihleriniz için güncel fiyatları görürsünüz."}',
    'https://skyscanner.pxf.io/rE1bJQ?subId1={click_id}&u=https%3A%2F%2Fwww.skyscanner.de%2Ftransport%2Ffluge-von%2Fde%2F%3Fadultsv2%3D1%26cabinclass%3Deconomy%26rtn%3D1',
-   '{flug,flüge,flight,flights,ucus,uçuş}',
+   '{skyscanner}',
    true)
 
 on conflict (id) do update set

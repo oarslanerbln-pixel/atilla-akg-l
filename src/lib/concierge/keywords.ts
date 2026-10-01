@@ -25,9 +25,9 @@ export function normalizeWord(text: string): string {
 export const wordsOf = (text: string) => normalizeWord(text).split(/[^\p{L}\p{N}]+/u).filter(Boolean);
 
 /**
- * Words that may stand beside a keyword without turning the message into conversation: "Gold
+ * Words that may stand beside a keyword without turning the message into conversation: "Goldcard
  * bitte", "Tour please", "Lütfen fiyat". Every word here widens what counts as a request, so no
- * articles, verbs or negations ("nicht", "no", "hayır"): with one, "Gold nicht" would get the ad.
+ * articles, verbs or negations ("nicht", "no", "hayır"): with one, "Goldcard nicht" would get the ad.
  */
 const REQUEST_WORDS = new Set(
   [
@@ -43,8 +43,8 @@ const MENTION = /(?<![\w.])@[\w.]+/g;
 
 /**
  * The keywords a comment or message asks for, in the order written, or none when it says
- * anything else. Only a keyword plus request words counts, so "GOLD", "Gold bitte 🙏" and
- * "@atillabarbarossa Tour please!" ask, while "Gute Reise!" and "Which app do you use?" are
+ * anything else. Only a keyword plus request words counts, so "GOLDCARD", "Goldcard bitte 🙏" and
+ * "@atillabarbarossa Tour please!" ask, while "Die Tour war toll!" and "Was kostet die Tour?" are
  * conversation. Emoji and punctuation are not words and drop out on their own.
  */
 export function requestedKeywords(text: string, keywords: readonly string[]): string[] {

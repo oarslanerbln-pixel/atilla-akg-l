@@ -85,7 +85,7 @@ async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
 }
 
 /**
- * Story-to-DM: a reply to a story that asks for a partner offer ("GOLD", "Gold bitte") gets the
+ * Story-to-DM: a reply to a story that asks for a partner offer ("GOLDCARD", "Goldcard bitte") gets the
  * offer and its link at once, and the story is remembered as the source like a reel for comments.
  * The same request outside a story reply (WhatsApp, a plain DM) is answered the same way. Anything
  * more stays with the concierge, so a keyword in passing never hijacks a conversation.
@@ -186,8 +186,8 @@ interface InstagramComment {
 }
 
 /**
- * Comment-to-DM: a comment under a post or reel that asks for a keyword ("GOLD", "Tour bitte")
- * opens a private conversation; one that merely uses the word ("Gute Reise!") is left to Atilla.
+ * Comment-to-DM: a comment under a post or reel that asks for a keyword ("GOLDCARD", "Tour bitte")
+ * opens a private conversation; one that merely uses the word ("Die Tour war toll!") is left to Atilla.
  * Partner-offer keywords (e.g. AMEX) get the offer, tour keywords the concierge. The commenter
  * also gets a short public answer, and the reel is remembered as the source of the lead.
  */
