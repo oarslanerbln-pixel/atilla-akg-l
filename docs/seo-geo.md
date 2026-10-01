@@ -281,3 +281,66 @@ gösterimleri, dizine alınmayan sayfalar.
   takipçisi vardır ve kitlesinin %86'sı DACH bölgesindendir.
 
 Rakamlar değişince bu metinleri de `src/lib/site.ts` ile birlikte güncelleyin.
+
+---
+
+## 10. E-kitap (The Travel Creator Roadmap): Google'da bulunmak ve satmak
+
+**Sitede ne değişti (1 Ekim 2026)?** Daha önce e-kitaba yalnızca footer'daki tek bir kelime
+götürüyordu; ne ziyaretçi ne Google ona ana sayfadan ulaşabiliyordu.
+
+- Navbar'da altın çerçeveli **"E-Book"** butonu; mobil menüde ayrı, altın renkli satır.
+- Ana sayfada, Instagram filmlerinin hemen altında **kapaklı e-kitap bölümü**:
+  "Zum E-Book" → `/roadmap`, "Gratis-Auszug" → Tentary (ücretsiz bölüm, e-posta toplar).
+- Ana sayfa SSS'ine 9. soru: "Gibt es ein E-Book von Atilla Barbarossa?" (3 dilde, `/roadmap`'e
+  linkli). FAQPage verisine ve `/llms.txt`'ye kendiliğinden girer.
+- `/roadmap` yapılandırılmış verisi: ürün kodu (`TCR-DE`), marka, satıcı, durum, breadcrumb.
+  Teklifin adresi artık Tentary değil sayfanın kendisi (Merchant Center bunu ister).
+- `/en` ve `/tr`'den gelen linkler sayfayı `?lang=en|tr` ile o dilde açar; canonical hep `/roadmap`.
+
+**Bir kerelik yapılacaklar (~45 dk)**
+
+1. **Search Console** → URL Denetimi → `https://atillabarbarossa.com/roadmap` ve ana sayfa
+   → "Dizine eklenmesini iste" (yeni iç linkleri hızlı görsün).
+2. **Rich Results Test** → `/roadmap`: "Ürün snippet'leri" ve "Satıcı listelemeleri" hatasız
+   olmalı. Kargo ve iade alanları için uyarı çıkabilir; bunlar Merchant Center hesabında
+   tanımlanır (aşağıda), hata değildir.
+3. **Google Merchant Center** (merchants.google.com) – ücretsiz listeleme:
+   - Search Console ile aynı Google hesabıyla açın; alan adını doğrulayıp sahiplenin.
+   - Ürünler → "Web sitenizden ürün ekleyin": sayfadaki ürün verisini otomatik okur.
+     Elle eklenecekse: kimlik `TCR-DE`, link `https://atillabarbarossa.com/roadmap`,
+     görsel `/roadmap/cover.webp`, fiyat 49 EUR, durum yeni, marka Atilla Barbarossa.
+   - Pazarlama yöntemi olarak **yalnızca "Ücretsiz listelemeler"**. Google, e-kitapları Mayıs
+     2021'den beri **Shopping reklamlarında kabul etmiyor**; reklam kampanyası açmayın, reddedilir.
+   - Teslimat: dijital ürün, kargo ücreti 0 €. İade politikası: Tentary'deki cayma hakkı metni
+     ne diyorsa birebir aynısı (dijital içerikte, anında teslime onay verilince cayma hakkı düşer).
+   - Hedef ülke: Almanya ve Avusturya (kitap Almanca, fiyat EUR).
+4. **Fiyat değişirse:** önce Tentary, sonra `src/lib/roadmap.ts` → `price`. Sayfa ile ödeme
+   sayfası farklı fiyat gösterirse Merchant Center ürünü durdurur.
+5. İsteğe bağlı: **Google Play Kitaplar** (Partner Merkezi) – PDF'i Google'ın kendi kitap
+   mağazasında da satmak; Google aramadaki kitap sonuçlarında çıkar. Ayrı bir mağaza ve fiyat
+   yönetimi demek, bu yüzden önce Merchant Center'ın sonucunu görün.
+
+**Sitenin dışından trafik**
+
+- Instagram bio'daki link doğrudan `/roadmap`'e gitsin; story'lerde link çıkartması da.
+- YouTube: e-kitabı anlatan bir video (ör. "Wie ich kostenlos in Luxushotels übernachte"),
+  açıklamanın ilk satırında `/roadmap`. YouTube videoları Google'da ayrıca sıralanır.
+- Creator ve seyahat podcast'leri, bloglarında konuk yazı (Almanca); her biri `/roadmap`'e link.
+- Pinterest: kapak ve "Pitch-Vorlage Hotel" pinleri → `/roadmap`.
+
+**Sıradaki büyük adım: rehber makaleler.** `/roadmap` tek başına "Travel Creator werden" gibi
+geniş aramalarda zor sıralanır; Google bu sorulara rehber yazıları gösterir. Önerilen üç
+Almanca makale, her biri e-kitaba linkli:
+
+1. "Hotel-Kooperation anfragen: So schreibst du die erste Mail" (bir örnek mail ücretsiz,
+   tüm şablonlar e-kitapta)
+2. "Travel Creator werden: die ersten 90 Tage"
+3. "Wie viele Follower braucht man für Hotel-Kooperationen?"
+
+Metinler Atilla'nın kendi deneyimiyle yazılmalı (Google bunu "deneyim" sinyali olarak arar).
+Altyapı (`/blog`, Article verisi, sitemap) ayrı bir iş.
+
+**Ölçüm (ayda bir):** Search Console → Performans → sayfa `/roadmap` (gösterim, tıklama,
+sorgular); Merchant Center → ücretsiz listeleme tıklamaları; Tentary → satışlar ve
+Gratis-Auszug talepleri. Sitede analitik yok (gizlilik kuralı), satışları Tentary sayar.

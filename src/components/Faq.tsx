@@ -6,8 +6,7 @@ import { Plus } from "lucide-react";
 import styles from "./Faq.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
-import { faq } from "@/lib/faq";
-import { pagePath } from "@/lib/locales";
+import { faq, type FaqEntry } from "@/lib/faq";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -38,13 +37,13 @@ export default function Faq() {
     transition: calm ? { duration: 0 } : { duration: 0.8, ease: EASE },
   };
 
-  const renderAnswer = (answer: string, linkText: string) => {
+  const renderAnswer = ({ answer, linkText, href }: FaqEntry) => {
     const [before, after] = answer.split("{link}");
     if (after === undefined) return answer;
     return (
       <>
         {before}
-        <Link href={pagePath("socialMedia", activeLang)} className={styles.inlineLink}>
+        <Link href={href} className={styles.inlineLink}>
           {linkText}
         </Link>
         {after}
@@ -74,7 +73,7 @@ export default function Faq() {
                   <h3 className={styles.question}>{entry.question}</h3>
                   <Plus className={styles.icon} size={18} aria-hidden="true" />
                 </summary>
-                <p className={styles.answer}>{renderAnswer(entry.answer, entry.linkText)}</p>
+                <p className={styles.answer}>{renderAnswer(entry)}</p>
               </details>
             </li>
           ))}

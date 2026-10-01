@@ -242,6 +242,15 @@ export const translations = {
     faq_7_a: "Ja, weltweit. Er arbeitet zwischen Berlin und Istanbul und erstellt Inhalte auf Deutsch, Englisch und Türkisch.",
     faq_8_q: "Wie läuft eine Anfrage ab?",
     faq_8_a: "Am schnellsten per WhatsApp unter {phone} oder per E-Mail an {email}. Atilla antwortet in der Regel innerhalb von 24 Stunden. Danach folgen Briefing, Konzept, Dreh und ein Performance-Report.",
+    faq_9_q: "Gibt es ein E-Book von Atilla Barbarossa?",
+    faq_9_a: "Ja: {link}, ein Leitfaden auf Deutsch für alle, die Travel Creator werden wollen. Es enthält Pitch-Vorlagen für Hotelanfragen und eine Hotel-Strategie und zeigt, wie aus Reisen bezahlte Kooperationen werden. Das PDF kostet {price} €; Pitch-Guide und erstes Kapitel gibt es kostenlos.",
+    faq_9_link: "The Travel Creator Roadmap",
+    ebook_eyebrow: "Das E-Book",
+    ebook_title_1: "Vom Hotelgast",
+    ebook_title_2: "zum Travel Creator.",
+    ebook_lead: "In The Travel Creator Roadmap zeigt Atilla, wie er über 100 Luxushotels als Creator bereist hat: seine Pitch-Vorlagen, seine Hotel-Strategie und den Weg von kostenlosen Nächten zu bezahlten Kooperationen.",
+    ebook_meta: "PDF · Deutsch · {price} €",
+    ebook_cta: "Zum E-Book",
 
     // Footer
     footer_subtitle: "Ready for the next level?",
@@ -557,6 +566,15 @@ export const translations = {
     faq_7_a: "Yes, worldwide. He works between Berlin and Istanbul and creates content in German, English and Turkish.",
     faq_8_q: "How does an enquiry work?",
     faq_8_a: "Fastest on WhatsApp at {phone}, or by email to {email}. Atilla usually replies within 24 hours. Briefing, concept, filming and a performance report follow.",
+    faq_9_q: "Does Atilla Barbarossa have an e-book?",
+    faq_9_a: "Yes: {link}, a guide in German for anyone who wants to become a travel creator. It holds pitch templates for hotel requests and a hotel strategy, and shows how trips turn into paid collaborations. The PDF costs €{price}; the pitch guide and the first chapter are free.",
+    faq_9_link: "The Travel Creator Roadmap",
+    ebook_eyebrow: "The e-book",
+    ebook_title_1: "From hotel guest",
+    ebook_title_2: "to travel creator.",
+    ebook_lead: "In The Travel Creator Roadmap, Atilla shows how he has stayed at more than 100 luxury hotels as a creator: his pitch templates, his hotel strategy and the path from free nights to paid collaborations.",
+    ebook_meta: "PDF · in German · €{price}",
+    ebook_cta: "See the e-book",
 
     // Footer
     footer_subtitle: "Ready for the next level?",
@@ -872,6 +890,15 @@ export const translations = {
     faq_7_a: "Evet, dünya genelinde. Berlin ile İstanbul arasında çalışır ve Almanca, İngilizce ve Türkçe içerik üretir.",
     faq_8_q: "Teklif süreci nasıl işliyor?",
     faq_8_a: "En hızlısı WhatsApp: {phone}. E-posta ile de ulaşabilirsiniz: {email}. Atilla genellikle 24 saat içinde yanıt verir. Ardından brifing, konsept, çekim ve performans raporu gelir.",
+    faq_9_q: "Atilla Barbarossa'nın bir e-kitabı var mı?",
+    faq_9_a: "Evet: {link}, travel creator olmak isteyen herkes için Almanca bir rehber. Otel talepleri için pitch şablonları ve bir otel stratejisi içerir; seyahatlerin ücretli iş birliklerine nasıl dönüştüğünü gösterir. PDF'in fiyatı {price} €; pitch rehberi ve ilk bölüm ücretsizdir.",
+    faq_9_link: "The Travel Creator Roadmap",
+    ebook_eyebrow: "E-kitap",
+    ebook_title_1: "Otel misafirinden",
+    ebook_title_2: "travel creator'a.",
+    ebook_lead: "Atilla, The Travel Creator Roadmap'te 100'den fazla lüks otelde creator olarak nasıl konakladığını anlatıyor: pitch şablonları, otel stratejisi ve ücretsiz gecelerden ücretli iş birliklerine giden yol.",
+    ebook_meta: "PDF · Almanca · {price} €",
+    ebook_cta: "E-kitabı incele",
 
     // Footer
     footer_subtitle: "Ready for the next level?",

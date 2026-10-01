@@ -145,6 +145,44 @@
   box-shadow: 0 2px 8px rgba(24, 21, 18, 0.03);
 }
 
+.navEnd {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+/* Cut like the status badge, but drawn in gold: the one link in the bar that
+   leaves for a page of its own. */
+.ebook {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-inter);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--accent-gold-readable);
+  border: 1px solid var(--accent-gold);
+  padding: 0.4rem 0.9rem;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.ebook:hover {
+  background-color: var(--accent-gold);
+  color: var(--bg-card);
+}
+
+.ebook:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.menuOpen .ebook {
+  color: var(--accent-gold-light);
+  border-color: var(--accent-gold-light);
+}
+
 .pulseDot {
   width: 6px;
   height: 6px;
@@ -329,6 +367,26 @@
   color: var(--accent-gold-light);
 }
 
+/* The e-book closes the list: its own label above, its title in gold, set
+   smaller so the long name holds on one line on a phone. */
+.mobileMenuEbook {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: clamp(1.35rem, 6vw, 1.75rem);
+  color: var(--accent-gold-light);
+  padding: 1.1rem 0;
+}
+
+.mobileMenuEbookLabel {
+  font-family: var(--font-inter);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+}
+
 .mobileMenuFooter {
   display: flex;
   flex-direction: column;
@@ -387,6 +445,14 @@
 
   .hamburger {
     display: flex;
+  }
+}
+
+/* Below this the wordmark would break onto two lines beside the button; on a
+   phone the e-book stays one tap away in the menu, and has its own section. */
+@media (max-width: 520px) {
+  .ebook {
+    display: none;
   }
 }
 

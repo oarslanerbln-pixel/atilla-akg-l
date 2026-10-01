@@ -287,13 +287,30 @@ export function roadmapGraph(description: string) {
         author: ref(ids.person),
         inLanguage: "de",
         bookFormat: "https://schema.org/EBook",
+        // What Merchant Center reads to list the book for free in Google's
+        // shopping results (digital books may not run as Shopping ads, but
+        // free listings take them): an id, a brand and who sells it.
+        sku: roadmap.sku,
+        brand: { "@type": "Brand", name: "Atilla Barbarossa" },
         offers: {
           "@type": "Offer",
           price: roadmap.price,
           priceCurrency: "EUR",
           availability: "https://schema.org/InStock",
-          url: roadmap.checkout,
+          itemCondition: "https://schema.org/NewCondition",
+          seller: ref(ids.person),
+          // This page, not the Tentary checkout: a free listing has to land
+          // on the verified domain, and the price shown here is the offer.
+          url,
         },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Atilla Barbarossa", item: absolute(pagePath("home", "DE")) },
+          { "@type": "ListItem", position: 2, name: t.footer_roadmap, item: url },
+        ],
       },
       {
         "@type": "FAQPage",
