@@ -2,7 +2,8 @@
 --
 -- tracking_url: the network's link. {click_id} is replaced with our click id where the network
 --   takes a sub id (FinanceAds &subid=, GetYourGuide &cmp=, Impact ?subId1=). Letters and digits only.
--- keywords: lower case. Triggers the offer in a comment, a story reply or a DM of up to three words.
+-- keywords: lower case. Triggers the offer in a comment, a story reply or a DM that asks for it: the
+--   keyword alone or with request words ("Gold bitte"; requestedKeywords in src/lib/concierge/keywords.ts).
 --   Offers win over the tour keywords, so keep them specific.
 -- pitch: short and factual, in the programme's approved wording. No fees, interest or promises.
 -- GetYourGuide activity: any activity URL + ?partner_id=RTQEAHP&cmp={click_id}; no short link needed.
