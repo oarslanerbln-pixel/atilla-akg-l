@@ -14,8 +14,8 @@
 
 .scrolled {
   background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(24, 21, 18, 0.08);
   box-shadow: 0 10px 30px rgba(24, 21, 18, 0.04);
 }
@@ -38,12 +38,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 2rem;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
   font-family: var(--font-inter);
   font-size: 0.85rem;
   font-weight: 700;
@@ -78,6 +80,7 @@
   transition: color 0.3s ease;
   position: relative;
   padding: 0.25rem 0;
+  white-space: nowrap;
 }
 
 .navItem a:hover {
@@ -247,8 +250,8 @@
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border: 1px solid rgba(24, 21, 18, 0.1);
   padding: 0.5rem 0;
   display: flex;
@@ -432,6 +435,24 @@
 
 .mobileTime {
   font-variant-numeric: tabular-nums;
+}
+
+/* Below this the anchors, the status group and the e-book no longer share one
+   row. The clock is atmosphere; the e-book sells, so the clock gives way. */
+@media (max-width: 1440px) {
+  .liveClock {
+    display: none;
+  }
+}
+
+@media (max-width: 1280px) {
+  .statusBadge {
+    display: none;
+  }
+
+  .navLinks {
+    gap: 1.5rem;
+  }
 }
 
 @media (max-width: 1024px) {

@@ -79,6 +79,7 @@ export default function Navbar() {
   };
 
   return (
+    <>
     <header className={`${styles.navbar} ${isScrolled ? styles.scrolled : ""} ${menuOpen ? styles.menuOpen : ""}`}>
       <div className={styles.navContainer}>
         {/* Brand Logo */}
@@ -183,11 +184,16 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+    </header>
 
-      {/* Full-screen mobile / tablet menu */}
+      {/* Full-screen mobile / tablet menu. A sibling of the header, not a
+          child: the scrolled header's backdrop-filter makes it the containing
+          block of fixed descendants, which shrank this sheet to the header's
+          height whenever the page was not at the top. */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
+            key="mobile-menu"
             className={styles.mobileMenu}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -254,6 +260,6 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }
