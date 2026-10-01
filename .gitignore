@@ -55,3 +55,8 @@ next-env.d.ts
 /social/assets/
 /social/out/
 .vercel
+
+# agent state: session worktrees, local launch config, browser test output
+/.claude/worktrees/
+/.claude/launch.json
+/.playwright-mcp/
