@@ -10,7 +10,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useIntroDone } from "@/hooks/useIntroDone";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import { fill } from "@/i18n/format";
-import { BASE, bearing, formatCoords, partners } from "@/lib/partners";
+import { BASE, BASE_LABEL, bearing, formatCoords, partners } from "@/lib/partners";
 import type { GlobeFrame, GlobeLayout, GlobeScene, GlobeState } from "./GlobeScene";
 import styles from "./HeroGlobe.module.css";
 
@@ -297,7 +297,9 @@ export default function HeroGlobe() {
             labelRefs.current[0] = el;
           }}
         >
-          <span className={styles.labelName}>{t("hero_globe_base")}</span>
+          <span className={styles.labelName} lang={BASE_LABEL.nameLang}>
+            {BASE_LABEL.name}
+          </span>
         </span>
         {partners.map((partner, i) => (
           <span

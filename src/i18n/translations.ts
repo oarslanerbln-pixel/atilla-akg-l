@@ -35,7 +35,6 @@ export const translations = {
     hero_cta_contact: "ANFRAGE & MEDIADATEN",
     hero_cta_projects: "REFERENZEN ANSEHEN",
     hero_globe_route: "Kurs ab Berlin",
-    hero_globe_base: "Berlin · Basis",
     hero_globe_drag: "Drehen",
     
     // About & Stats
@@ -371,7 +370,6 @@ export const translations = {
     hero_cta_contact: "ENQUIRE & MEDIA KIT",
     hero_cta_projects: "VIEW REFERENCES",
     hero_globe_route: "Heading from Berlin",
-    hero_globe_base: "Berlin · Base",
     hero_globe_drag: "Drag",
     
     // About & Stats
@@ -707,7 +705,6 @@ export const translations = {
     hero_cta_contact: "TALEP & MEDYA KİTİ",
     hero_cta_projects: "REFERANSLARI GÖR",
     hero_globe_route: "Berlin'den rota",
-    hero_globe_base: "Berlin · Merkez",
     hero_globe_drag: "Çevir",
     
     // About & Stats
