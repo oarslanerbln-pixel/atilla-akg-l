@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { motion, useScroll, useTransform, type Transition } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { socialProfiles } from "@/lib/site";
+import { fill } from "@/i18n/format";
 import styles from "./Hero.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
@@ -280,7 +281,7 @@ export default function Hero() {
               className={styles.socialCapsule}
               data-cursor="INSTAGRAM"
               onClick={() => playClickSound()}
-              aria-label="Instagram Profile"
+              aria-label={fill(t("social_profile"), { platform: "Instagram" })}
             >
               <span className={styles.iconInner}>
                 <InstagramIcon />
@@ -294,7 +295,7 @@ export default function Hero() {
               className={styles.socialCapsule}
               data-cursor="TIKTOK"
               onClick={() => playClickSound()}
-              aria-label="TikTok Profile"
+              aria-label={fill(t("social_profile"), { platform: "TikTok" })}
             >
               <span className={styles.iconInner}>
                 <TikTokIcon />
@@ -308,7 +309,7 @@ export default function Hero() {
               className={styles.socialCapsule}
               data-cursor="YOUTUBE"
               onClick={() => playClickSound()}
-              aria-label="YouTube Channel"
+              aria-label={fill(t("social_profile"), { platform: "YouTube" })}
             >
               <span className={styles.iconInner}>
                 <YoutubeIcon />

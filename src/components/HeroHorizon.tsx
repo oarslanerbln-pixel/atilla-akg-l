@@ -135,6 +135,9 @@ export default function HeroHorizon() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const calm = usePrefersCalm();
   const [ready, setReady] = useState(false);
+  // Bumped when the browser hands a lost context back (iOS does this after the
+  // app returns from the background); the effect then rebuilds the scene.
+  const [generation, setGeneration] = useState(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -245,6 +248,7 @@ export default function HeroHorizon() {
       stop();
       setReady(false);
     };
+    const onRestored = () => setGeneration((n) => n + 1);
 
     const resizeObserver = new ResizeObserver(() => {
       resize();
@@ -269,6 +273,7 @@ export default function HeroHorizon() {
     window.addEventListener("pointermove", onPointer, { passive: true });
     document.addEventListener("visibilitychange", onVisibility);
     canvas.addEventListener("webglcontextlost", onLost);
+    canvas.addEventListener("webglcontextrestored", onRestored);
 
     return () => {
       stop();
@@ -277,13 +282,14 @@ export default function HeroHorizon() {
       window.removeEventListener("pointermove", onPointer);
       document.removeEventListener("visibilitychange", onVisibility);
       canvas.removeEventListener("webglcontextlost", onLost);
+      canvas.removeEventListener("webglcontextrestored", onRestored);
       // The context stays with the canvas: losing it here would leave a dead
       // context for the next mount (Strict Mode mounts twice).
       gl.deleteProgram(program);
       gl.deleteShader(vs);
       gl.deleteShader(fs);
     };
-  }, [calm]);
+  }, [calm, generation]);
 
   return (
     <canvas
