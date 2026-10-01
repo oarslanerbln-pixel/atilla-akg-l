@@ -38,20 +38,17 @@ import {
 import {
   activeOffers,
   createOfferLink,
-  offerForWords,
+  keywordRequest,
   OFFER_PAYLOAD,
   rememberMedia,
   sendOffer,
   sendOfferLink,
 } from './offers';
 import { runConcierge } from './agent';
-import { normalizeWord, wordsOf } from './keywords';
 
 type Job = () => Promise<void>;
 
 const displayName = (c: Contact) => c.name ?? (c.username ? `@${c.username}` : `+${c.external_id}`);
-/** A partner keyword counts in a DM only within a message this short ("GOLD", "Gold bitte"). */
-const MAX_KEYWORD_MESSAGE_WORDS = 3;
 
 // ---------- Customer messages ----------
 
@@ -88,24 +85,22 @@ async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
 }
 
 /**
- * Story-to-DM: a partner-offer keyword sent as a short reply to a story ("GOLD") gets the offer
- * and its link at once, and the story is remembered as the source like a reel for comments. The
- * same short message outside a story reply (WhatsApp, a plain DM) is answered the same way.
- * Longer messages stay with the concierge, so a keyword in passing never hijacks a conversation.
+ * Story-to-DM: a reply to a story that asks for a partner offer ("GOLDCARD", "Goldcard bitte") gets the
+ * offer and its link at once, and the story is remembered as the source like a reel for comments.
+ * The same request outside a story reply (WhatsApp, a plain DM) is answered the same way. Anything
+ * more stays with the concierge, so a keyword in passing never hijacks a conversation.
  */
 async function answerOfferKeyword(contact: Contact, msg: InboundMessage): Promise<boolean> {
   // Our own markers such as "[replied to your story]" are not the customer's words.
   const own = msg.text.replace(/\[[^\]]*\]/g, ' ');
-  const words = wordsOf(own);
-  if (!words.length || words.length > MAX_KEYWORD_MESSAGE_WORDS) return false;
-  const offer = offerForWords(words, await activeOffers());
-  if (!offer) return false;
+  const request = keywordRequest(own, await activeOffers());
+  if (!request?.offer) return false;
+  const { offer, keyword } = request;
 
   const patch: ContactPatch = {};
   if (!contact.language) patch.language = guessLang(own);
   if (!contact.source_media_id && msg.storyId) {
     await rememberMedia(msg.storyId);
-    const keyword = words.find((w) => offer.keywords.some((k) => normalizeWord(k) === w));
     Object.assign(patch, { source_media_id: msg.storyId, source_keyword: keyword });
   }
   const updated = Object.keys(patch).length ? await updateContact(contact.id, patch) : contact;
@@ -191,18 +186,16 @@ interface InstagramComment {
 }
 
 /**
- * Comment-to-DM: a keyword under a post or reel opens a private conversation. Partner-offer
- * keywords (e.g. AMEX) get the offer, tour keywords the concierge. The commenter also gets a
- * short public answer, and the reel is remembered as the source of the lead.
+ * Comment-to-DM: a comment under a post or reel that asks for a keyword ("GOLDCARD", "Tour bitte")
+ * opens a private conversation; one that merely uses the word ("Die Tour war toll!") is left to Atilla.
+ * Partner-offer keywords (e.g. AMEX) get the offer, tour keywords the concierge. The commenter
+ * also gets a short public answer, and the reel is remembered as the source of the lead.
  */
 async function handleInstagramComment(c: InstagramComment): Promise<void> {
   if (c.fromId === c.accountId) return;
-  const words = wordsOf(c.text);
-  const offer = offerForWords(words, await activeOffers());
-  const keyword = offer
-    ? words.find((w) => offer.keywords.some((k) => normalizeWord(k) === w))
-    : words.find((w) => CONCIERGE.commentKeywords.includes(w));
-  if (!keyword) return;
+  const request = keywordRequest(c.text, await activeOffers(), CONCIERGE.commentKeywords);
+  if (!request) return;
+  const { offer, keyword } = request;
 
   if (c.mediaId) await rememberMedia(c.mediaId);
   let contact = await upsertContact('instagram', c.fromId, { username: c.username });

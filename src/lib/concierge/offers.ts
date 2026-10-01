@@ -4,7 +4,7 @@ import { env, type Lang } from './config';
 import { db, type Contact } from './db';
 import { getInstagramMedia, sendToContact } from './meta';
 import { offerLink } from './copy';
-import { normalizeWord } from './keywords';
+import { normalizeWord, requestedKeywords } from './keywords';
 
 // Partner (affiliate) offers such as American Express cards. Links go out as SITE_URL/go/<click id>,
 // so every click is counted per reel or story and, where the network takes one, the click id
@@ -40,9 +40,27 @@ export async function getOffer(id: string): Promise<Offer | null> {
   return (data as Offer | null) ?? null;
 }
 
-/** The offer whose keyword appears among the words, if any. Offers win over the tour keywords. */
-export function offerForWords(words: string[], offers: Offer[]): Offer | undefined {
-  return offers.find((o) => o.keywords.some((k) => words.includes(normalizeWord(k))));
+export interface KeywordRequest {
+  /** The keyword as normalised from the customer's text. */
+  keyword: string;
+  /** The partner offer it belongs to; empty for a tour keyword. */
+  offer?: Offer;
+}
+
+/**
+ * What a comment, story reply or DM asks for, if it is a request at all (see requestedKeywords).
+ * Every entry point goes through here, so none can answer a keyword said in passing. Offers win
+ * over the tour keywords; among several, the first one written.
+ */
+export function keywordRequest(
+  text: string,
+  offers: Offer[],
+  tourKeywords: readonly string[] = [],
+): KeywordRequest | undefined {
+  const asked = requestedKeywords(text, [...offers.flatMap((o) => o.keywords), ...tourKeywords]);
+  const offerFor = (word: string) => offers.find((o) => o.keywords.some((k) => normalizeWord(k) === word));
+  const keyword = asked.find((w) => offerFor(w)) ?? asked[0];
+  return keyword ? { keyword, offer: offerFor(keyword) } : undefined;
 }
 
 /** A personal, countable link for this contact. */

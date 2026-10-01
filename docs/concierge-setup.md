@@ -60,10 +60,12 @@ Atilla şu an normal WhatsApp kullandığı için concierge'e **ayrı bir numara
 - O durumda, veya hesap yeniden bağlandığında: Meta'da yeni token üretin, Vercel'de `INSTAGRAM_ACCESS_TOKEN`'a yapıştırın ve yeniden deploy edin. Sistem değişikliği fark eder ve kayıtlı token'ı yenisiyle değiştirir.
 - Meta bir token'ı ancak en az 24 saatlik olduğunda yeniler. Yeni yapıştırılan token o hafta için fazla gençse yenileme atlanır (`too_new`) ve bir sonraki pazartesi yapılır.
 
-**Yoruma otomatik DM:** Bir post veya reel'in altına `IG_COMMENT_KEYWORDS` listesindeki kelimelerden biri (ör. "TUR", "Reise", "info") yazıldığında:
+**Yoruma otomatik DM:** Bir post veya reel'in altına `IG_COMMENT_KEYWORDS` listesindeki bir kelime tek başına veya rica kelimeleriyle (ör. "TUR", "Tour bitte", "Lütfen fiyat 🙏") yazıldığında:
 1. Yorum yapan kişiye, dilinde, **"Turları göster"** butonlu bir DM gider. Instagram, müşteri cevap verene kadar ikinci mesaja izin vermediği için buton tek dokunuşla sohbeti açar ve concierge devralır.
 2. Yorumun altına 6 farklı kısa cevaptan biri herkese açık olarak yazılır ("DM'den yazdım ✨" gibi).
 3. Yorumun hangi reel'den geldiği kaydedilir (bkz. *Hangi reel ne kazandırdı?*).
+
+Kelime bir cümlenin içinde geçiyorsa ("Die Tour war toll!", "Was kostet die Tour?") bot ne DM ne cevap yazar; o yorumlar Atilla'ya kalır. @etiketler, emoji ve noktalama sayılmaz. Rica kelimeleri (bitte, please, lütfen …) `src/lib/concierge/keywords.ts` içindeki `REQUEST_WORDS` listesindedir. Aynı kural partner tekliflerine, story cevaplarına ve DM'lere de uygulanır.
 
 ### Partner (affiliate) teklifleri – Amex, GetYourGuide, Skyscanner
 Tur dışında tanıtılan ürünler `affiliate_offers` tablosunda durur ve `supabase/offers.sql` dosyasından yönetilir. Dosyayı düzenleyip SQL Editor'de çalıştırmak yeterli; kayıtlar güncellenir.
@@ -73,9 +75,9 @@ Tur dışında tanıtılan ürünler `affiliate_offers` tablosunda durur ve `sup
    - GetYourGuide aktivitesi: aktivite sayfasının adresi + `?partner_id=RTQEAHP&cmp={click_id}`. Her aktivite için kısa link üretmeye gerek yok.
    - Impact (Skyscanner): `https://skyscanner.pxf.io/…?subId1={click_id}&u=<URL-encoded skyscanner.de adresi>`. `u` olmadan kısa link kaydedilmiş aramayı (şehir ve tarihler sabit) açar; `u` ile istenen sayfaya gider ve takip korunur.
    - Sub-id taşıyamayan linkler (ör. GetYourGuide app linki) `{click_id}` olmadan da girilebilir. Tıklamalar yine bizde sayılır, sadece ağın raporuyla eşleştirilemez.
-2. **`keywords`** (küçük harf), **`pitch`** (programın onayladığı kısa metin, DE/EN/TR) ve **`active`**. Anahtar kelimeler tur kelimelerinden önce gelir, bu yüzden "berlin", "link" gibi genel kelimeler seçmeyin.
-3. **Reel:** *"Yorumlara GOLD yaz"*. Yorum yapana tanıtım metni ve **"Linki gönder"** butonu gider. Butona basınca kişiye özel bir link (`SITE/go/…`) ve reklam uyarısı gelir.
-4. **Story:** *"Bu story'ye GOLD diye cevap ver"*. Story'ye kelimeyle cevap veren kişiye (en fazla 3 kelimelik mesaj) tanıtım metni ve link hemen DM'den gider, story de kaynak olarak kaydedilir. Aynı kısa mesaj DM'den veya WhatsApp'tan gelirse de aynısı olur. Instagram API ile story'ye link sticker'ı eklenemediği için story'de linki bu yolla dağıtıyoruz.
+2. **`keywords`** (küçük harf), **`pitch`** (programın onayladığı kısa metin, DE/EN/TR) ve **`active`**. Anahtar kelimeler tur kelimelerinden önce gelir ve yorumda tek başına yazılınca tetikler. Bu yüzden tek kelimelik bir iltifat ya da tepki olabilecek kelimeler seçmeyin: "Gold ✨" bir iltifattır, "GOLDCARD" ise bir istek. Kelime boşluksuz olmalı; "Gold Card" iki ayrı kelimedir ve tetiklemez.
+3. **Reel:** *"Yorumlara GOLDCARD yaz"*. Yorum yapana tanıtım metni ve **"Linki gönder"** butonu gider. Butona basınca kişiye özel bir link (`SITE/go/…`) ve reklam uyarısı gelir.
+4. **Story:** *"Bu story'ye GOLDCARD diye cevap ver"*. Story'ye kelimeyle cevap veren kişiye ("GOLDCARD", "Goldcard bitte"; cümle içindeki kelime sayılmaz) tanıtım metni ve link hemen DM'den gider, story de kaynak olarak kaydedilir. Aynı mesaj DM'den veya WhatsApp'tan gelirse de aynısı olur. Instagram API ile story'ye link sticker'ı eklenemediği için story'de linki bu yolla dağıtıyoruz.
 5. Concierge'e sohbet içinde soran müşteriye de aynı link gönderilir. Her tıklama sayılır.
 
 **Hukuki notlar**

@@ -18,7 +18,7 @@ export const CONCIERGE = {
   /** More customer messages than this within an hour pause the bot and alert Atilla. */
   maxMessagesPerHour: 30,
   graphVersion: process.env.META_GRAPH_VERSION ?? 'v23.0',
-  commentKeywords: (process.env.IG_COMMENT_KEYWORDS ?? 'tur,tour,reise,info,preis,price,fiyat')
+  commentKeywords: (process.env.IG_COMMENT_KEYWORDS ?? 'tur,tour,preis,price,fiyat')
     .split(',')
     .map((k) => normalizeWord(k.trim()))
     .filter(Boolean),
