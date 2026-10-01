@@ -757,6 +757,13 @@
     display: none;
   }
 
+  /* As on /social-media: at full tracking the wordmark and the switcher ran
+     past a 360 px screen. */
+  .brand {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+  }
+
   .compare {
     grid-template-columns: minmax(0, 1fr);
   }
