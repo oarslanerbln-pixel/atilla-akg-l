@@ -142,7 +142,7 @@ const lounge: Template = {
             position: "absolute",
             top: 0, left: 0, right: 0, bottom: 0,
             backgroundImage:
-              "radial-gradient(ellipse at 50% 46%, rgba(20,15,10,0) 45%, rgba(20,15,10,0.36) 100%), linear-gradient(180deg, rgba(20,15,10,0.2) 0%, rgba(20,15,10,0) 22%, rgba(20,15,10,0) 46%, rgba(20,15,10,0.78) 70%, rgba(20,15,10,0.94) 100%)",
+              "radial-gradient(ellipse at 50% 46%, rgba(20,15,10,0) 45%, rgba(20,15,10,0.36) 100%), linear-gradient(180deg, rgba(20,15,10,0.2) 0%, rgba(20,15,10,0) 22%, rgba(20,15,10,0) 38%, rgba(20,15,10,0.78) 62%, rgba(20,15,10,0.94) 100%)",
           }}
         />
         <div
@@ -154,7 +154,8 @@ const lounge: Template = {
             position: "absolute",
             left: 88,
             right: 88,
-            bottom: PORTRAIT.height - GRID_SAFE.bottom + 56,
+            // Clear of the view count Instagram prints over the tile's lower-left corner.
+            bottom: PORTRAIT.height - GRID_SAFE.bottom + 206,
           }}
         >
           <div style={{ ...eyebrowStyle(C.goldLight), fontSize: 24, letterSpacing: 7, marginBottom: 30 }}>{b.eyebrow}</div>
