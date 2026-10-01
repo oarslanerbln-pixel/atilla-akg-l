@@ -5,9 +5,11 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import BrandMark from "@/components/BrandMark";
+import { socialLinks } from "@/components/SocialIcons";
 import { useLanguage } from "@/context/LanguageContext";
 import { useIntroDone } from "@/hooks/useIntroDone";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
+import { fill } from "@/i18n/format";
 import { BASE, BASE_LABEL, bearing, formatCoords, partners } from "@/lib/partners";
 import type { GlobeFrame, GlobeLayout, GlobeScene, GlobeState } from "./GlobeScene";
 import styles from "./HeroGlobe.module.css";
@@ -343,6 +345,24 @@ export default function HeroGlobe() {
             <a href="#work" className={styles.secondaryBtn} data-cursor="PORTFOLIO">
               {t("hero_cta_projects")}
             </a>
+            {/* In the buttons' row: where they wrap, the profiles fill the
+                space beside the second one instead of adding a line. */}
+            <ul className={styles.socials}>
+              {socialLinks.map(({ platform, cursor, href, Icon }) => (
+                <li key={platform}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.social}
+                    data-cursor={cursor}
+                    aria-label={fill(t("social_profile"), { platform })}
+                  >
+                    <Icon />
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
