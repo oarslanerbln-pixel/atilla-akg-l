@@ -1,0 +1,167 @@
+/* Porcelain with a low gold glow behind the cover, the same light the
+   /roadmap opening is set in, so following the link feels like one room. */
+.section {
+  padding: var(--section-padding-y) 0;
+  background:
+    radial-gradient(ellipse 40% 70% at 22% 50%, rgba(216, 180, 130, 0.22), transparent 70%),
+    var(--bg-secondary);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(3rem, 7vw, 6rem);
+  max-width: 1040px;
+}
+
+.coverFrame {
+  position: relative;
+  justify-self: center;
+  width: 100%;
+  padding: clamp(0.85rem, 2vw, 1.25rem);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 40px 80px -40px rgba(20, 15, 10, 0.35);
+}
+
+.coverFrame::after {
+  content: "";
+  position: absolute;
+  inset: 0.4rem;
+  border: 1px solid rgba(179, 139, 89, 0.35);
+  pointer-events: none;
+}
+
+.cover {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.eyebrow {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: var(--accent-gold-readable);
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.2vw, 3.4rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.titleSoft {
+  color: var(--text-secondary);
+}
+
+.lead {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 34rem;
+  margin-bottom: 1.25rem;
+}
+
+.meta {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+  margin-bottom: 2.25rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 54px;
+  padding: 0 1.9rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease;
+}
+
+.primary {
+  background: var(--bg-ink);
+  border: 1px solid var(--bg-ink);
+  color: var(--text-on-ink);
+}
+
+.primary:hover,
+.primary:focus-visible {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: var(--bg-ink);
+}
+
+.secondary {
+  border: 1px solid rgba(24, 21, 18, 0.18);
+  color: var(--text-primary);
+}
+
+.secondary:hover,
+.secondary:focus-visible {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold-readable);
+}
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+    text-align: center;
+  }
+
+  .coverFrame {
+    width: min(55%, 260px);
+  }
+
+  .lead {
+    margin-inline: auto;
+  }
+
+  .actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .primary,
+  .secondary {
+    flex: 1 1 100%;
+  }
+}

@@ -4,7 +4,8 @@ import { audience, contact, totalFollowers } from "@/lib/site";
 import { partners } from "@/lib/partners";
 import { brands } from "@/lib/brands";
 import { packages } from "@/lib/packages";
-import { HTML_LANG } from "@/lib/locales";
+import { roadmap, roadmapPath } from "@/lib/roadmap";
+import { HTML_LANG, pagePath } from "@/lib/locales";
 
 /**
  * The facts the site states, formatted for one language, as values for the
@@ -38,18 +39,27 @@ export function siteFacts(lang: Language): Record<string, string> {
     counts: list(packages.map((pkg) => String(pkg.videos)), "disjunction"),
     phone: contact.phoneDisplay,
     email: contact.email,
+    price: number.format(roadmap.price),
   };
 }
 
 export interface FaqEntry {
   question: string;
-  /** May carry a `{link}` token, to the social media packages page. */
+  /** May carry a `{link}` token, to another page of the site. */
   answer: string;
   /** The words the `{link}` token stands for. */
   linkText: string;
+  /** Where the `{link}` token points, in the same language. */
+  href: string;
 }
 
-const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
+const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
+
+/** The answers that link on: to the packages page, and to the e-book. */
+const LINKS: Partial<Record<number, { text: TranslationKeys; href: (lang: Language) => string }>> = {
+  4: { text: "faq_4_link", href: (lang) => pagePath("socialMedia", lang) },
+  9: { text: "faq_9_link", href: roadmapPath },
+};
 
 /**
  * The questions a hotel, a tourism board or an answer engine asks first,
@@ -60,11 +70,15 @@ const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
 export function faq(lang: Language): FaqEntry[] {
   const t = translations[lang];
   const facts = siteFacts(lang);
-  return NUMBERS.map((n) => ({
-    question: t[`faq_${n}_q` as TranslationKeys],
-    answer: fill(t[`faq_${n}_a` as TranslationKeys], facts),
-    linkText: t.faq_4_link,
-  }));
+  return NUMBERS.map((n) => {
+    const link = LINKS[n];
+    return {
+      question: t[`faq_${n}_q` as TranslationKeys],
+      answer: fill(t[`faq_${n}_a` as TranslationKeys], facts),
+      linkText: link ? t[link.text] : "",
+      href: link ? link.href(lang) : "",
+    };
+  });
 }
 
 /** The answer as plain text, for structured data and /llms.txt. */

@@ -80,6 +80,12 @@ html, body {
   overflow-x: hidden;
 }
 
+/* useScrollLock hides the scrollbar while an overlay is open; the reserved
+   gutter keeps the page from shifting sideways when it does. */
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
@@ -166,8 +172,8 @@ p {
 
 .glass {
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--border-light);
 }
 

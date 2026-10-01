@@ -5,6 +5,7 @@ import { motion, Variants } from "framer-motion";
 import { Users, MapPin, Target, Eye } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
 import { audience, socialProfiles } from "@/lib/site";
+import { fill } from "@/i18n/format";
 import styles from "./Stats.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
@@ -120,6 +121,7 @@ export default function Stats() {
               data-cursor="INSTAGRAM"
               onClick={() => playClickSound()}
             >
+              <span className={styles.srOnly}>{fill(t("social_profile"), { platform: "Instagram" })}:</span>
               <InstagramIcon className={styles.icon} />
               <div className={styles.socialText}>
                 <span className={styles.socialCount}>
@@ -137,6 +139,7 @@ export default function Stats() {
               data-cursor="TIKTOK"
               onClick={() => playClickSound()}
             >
+              <span className={styles.srOnly}>{fill(t("social_profile"), { platform: "TikTok" })}:</span>
               <TikTokIcon className={styles.icon} />
               <div className={styles.socialText}>
                 <span className={styles.socialCount}>
@@ -154,6 +157,7 @@ export default function Stats() {
               data-cursor="YOUTUBE"
               onClick={() => playClickSound()}
             >
+              <span className={styles.srOnly}>{fill(t("social_profile"), { platform: "YouTube" })}:</span>
               <YoutubeIcon className={styles.icon} />
               <div className={styles.socialText}>
                 <span className={styles.socialCount}>
@@ -203,7 +207,7 @@ export default function Stats() {
             <div className={styles.bubbleMain}>
               <Eye className={styles.bubbleIcon} />
               <span className={styles.bubbleValue}>
-                <AnimatedCounter to={audience.accountsReached / 1_000_000} decimals={1} suffix=" MIO" />
+                <AnimatedCounter to={audience.accountsReached / 1_000_000} decimals={1} suffix={t("stats_million_suffix")} />
               </span>
               <span className={styles.bubbleLabel}>{t('stats_reach_accounts')}</span>
             </div>

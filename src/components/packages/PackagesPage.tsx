@@ -367,7 +367,7 @@ export default function PackagesPage() {
       <footer className={styles.footer}>
         <div className={`container ${styles.footerInner}`}>
           <span>{t("footer_copyright")}</span>
-          <nav className={styles.footerLinks} aria-label="Legal">
+          <nav className={styles.footerLinks} aria-label={t("legal_nav")}>
             <Link href="/impressum">{t("footer_imprint")}</Link>
             <Link href="/datenschutz">{t("footer_privacy")}</Link>
           </nav>

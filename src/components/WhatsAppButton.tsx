@@ -13,7 +13,8 @@ import styles from "./WhatsAppButton.module.css";
  * long scroll away and typing into it is the slowest way to ask a question.
  * The button only shows where it helps: it stays out of the hero, which has
  * its own calls to action, and steps aside once the Contact section is on
- * screen, where every channel is already laid out.
+ * screen, where every channel is already laid out. It stays away below it
+ * too: over the footer it covered the language and legal links.
  *
  * A bare icon asked visitors to guess what it does; the short label says it
  * is the way to enquire, on phones too. No reply time is promised.
@@ -27,10 +28,12 @@ export default function WhatsAppButton() {
   const { playClickSound } = useSoundDesign();
   const [heroVisible, setHeroVisible] = useState(true);
   const [contactVisible, setContactVisible] = useState(false);
+  const [footerVisible, setFooterVisible] = useState(false);
 
   useEffect(() => {
     const hero = document.getElementById("home");
     const contactSection = document.getElementById("contact");
+    const footer = document.querySelector("footer");
     const observers: IntersectionObserver[] = [];
 
     if (hero) {
@@ -48,10 +51,17 @@ export default function WhatsAppButton() {
       o.observe(contactSection);
       observers.push(o);
     }
+    // The footer follows the contact section directly, so between the two
+    // there is no point below the form where the button could come back.
+    if (footer) {
+      const o = new IntersectionObserver(([entry]) => setFooterVisible(entry.isIntersecting));
+      o.observe(footer);
+      observers.push(o);
+    }
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
-  const shown = !heroVisible && !contactVisible;
+  const shown = !heroVisible && !contactVisible && !footerVisible;
   const href = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(t("whatsapp_message"))}`;
 
   return (

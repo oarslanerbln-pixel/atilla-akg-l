@@ -102,11 +102,12 @@
   text-transform: uppercase;
   color: #fff;
   background: rgba(20, 15, 10, 0.85);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 0.35rem 0.75rem;
   z-index: 2;
+  pointer-events: none;
 }
 
 .cardContent {
@@ -164,6 +165,8 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 3;
+  /* Drawn above .cardTrigger, so it must let the click through to it. */
+  pointer-events: none;
 }
 
 .workCard:hover .playOverlay {
@@ -205,8 +208,8 @@
   left: 0;
   inset: 0;
   background: rgba(15, 10, 7, 0.9);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   z-index: var(--z-overlay);
   display: flex;
   align-items: center;
@@ -292,7 +295,8 @@
 }
 
 /* Covers the media so the whole preview is one keyboard-reachable control.
-   Sits above .playOverlay, which is decorative. */
+   .playOverlay and .categoryTag are drawn above it but take no pointer
+   events, so every click lands here. */
 .cardTrigger {
   position: absolute;
   inset: 0;

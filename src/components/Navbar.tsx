@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./Navbar.module.css";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useLanguage } from "@/context/LanguageContext";
 import { Language } from "@/i18n/translations";
 import { useScrollLock } from "@/hooks/useScrollLock";
+import { roadmapPath } from "@/lib/roadmap";
 import LiveClock from "./LiveClock";
 import BrandMark from "./BrandMark";
 
@@ -48,6 +50,24 @@ export default function Navbar() {
 
   useScrollLock(menuOpen);
 
+  // The sheet covers the page, so it behaves like any overlay: focus moves
+  // into it, Escape closes it, and focus returns to the button that opened it.
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    sheetRef.current?.querySelector("a")?.focus();
+
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      triggerRef.current?.focus();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [menuOpen]);
+
   // The desktop language menu opened on hover alone, so it was unreachable
   // without a pointer. It now toggles on click as well; these close it the way
   // any menu is expected to close.
@@ -77,6 +97,7 @@ export default function Navbar() {
   };
 
   return (
+    <>
     <header className={`${styles.navbar} ${isScrolled ? styles.scrolled : ""} ${menuOpen ? styles.menuOpen : ""}`}>
       <div className={styles.navContainer}>
         {/* Brand Logo */}
@@ -96,88 +117,101 @@ export default function Navbar() {
           </ul>
         </nav>
 
-        {/* Live Status & Clock */}
-        <div className={styles.statusWrapper}>
-          <div
-            ref={langWrapperRef}
-            className={styles.langDropdownWrapper}
-            onMouseEnter={() => setLangOpen(true)}
-            onMouseLeave={() => setLangOpen(false)}
-          >
-            <button
-              type="button"
-              className={styles.langSelected}
-              aria-expanded={langOpen}
-              aria-haspopup="menu"
-              aria-label={`Sprache: ${activeLang}`}
-              onClick={(event) => {
-                // A mouse has already opened the menu on hover by the time it
-                // clicks, so toggling here shut it again under the pointer —
-                // clicking the trigger closed the menu it had just opened.
-                // Keyboard activation arrives with detail 0 and toggles; a
-                // pointer click only makes sure the menu is open.
-                if (event.detail === 0) setLangOpen((open) => !open);
-                else setLangOpen(true);
-              }}
+        <div className={styles.navEnd}>
+          {/* Live Status & Clock */}
+          <div className={styles.statusWrapper}>
+            <div
+              ref={langWrapperRef}
+              className={styles.langDropdownWrapper}
+              onMouseEnter={() => setLangOpen(true)}
+              onMouseLeave={() => setLangOpen(false)}
             >
-              {activeLang}
-              <svg className={`${styles.chevron} ${langOpen ? styles.chevronOpen : ""}`} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path d="M6 9l6 6 6-6"/>
-              </svg>
-            </button>
+              <button
+                type="button"
+                className={styles.langSelected}
+                aria-expanded={langOpen}
+                aria-label={`${t("pkg_lang_label")}: ${activeLang}`}
+                onClick={(event) => {
+                  // A mouse has already opened the menu on hover by the time it
+                  // clicks, so toggling here shut it again under the pointer —
+                  // clicking the trigger closed the menu it had just opened.
+                  // Keyboard activation arrives with detail 0 and toggles; a
+                  // pointer click only makes sure the menu is open.
+                  if (event.detail === 0) setLangOpen((open) => !open);
+                  else setLangOpen(true);
+                }}
+              >
+                {activeLang}
+                <svg className={`${styles.chevron} ${langOpen ? styles.chevronOpen : ""}`} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </button>
 
-            {langOpen && (
-              <div className={styles.langMenu} role="menu">
-                {languages.filter(l => l !== activeLang).map(lang => (
-                  <button
-                    type="button"
-                    role="menuitem"
-                    key={lang}
-                    className={styles.langOption}
-                    onClick={() => {
-                      setActiveLang(lang);
-                      setLangOpen(false);
-                      playClickSound();
-                    }}
-                  >
-                    {lang}
-                  </button>
-                ))}
-              </div>
-            )}
+              {langOpen && (
+                <div className={styles.langMenu}>
+                  {languages.filter(l => l !== activeLang).map(lang => (
+                    <button
+                      type="button"
+                      key={lang}
+                      className={styles.langOption}
+                      onClick={() => {
+                        setActiveLang(lang);
+                        setLangOpen(false);
+                        playClickSound();
+                      }}
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className={styles.liveClock}>
+              <span>BERLIN / ISTANBUL</span>
+              <LiveClock className={styles.timeDigits} />
+            </div>
+            <div className={styles.statusBadge}>
+              <span className={styles.pulseDot}></span>
+              <span>{t('nav_status')}</span>
+            </div>
           </div>
 
-          <div className={styles.liveClock}>
-            <span>BERLIN / ISTANBUL</span>
-            <LiveClock className={styles.timeDigits} />
-          </div>
-          <div className={styles.statusBadge}>
-            <span className={styles.pulseDot}></span>
-            <span>{t('nav_status')}</span>
-          </div>
+          {/* The e-book is a page of its own, not a section of this one, so it
+              stands apart from the anchors, on every width that has room. */}
+          <Link href={roadmapPath(activeLang)} className={styles.ebook} onClick={handleLinkClick}>
+            {t("footer_roadmap")}
+          </Link>
+
+          {/* Mobile / tablet menu trigger */}
+          <button
+            ref={triggerRef}
+            type="button"
+            className={styles.hamburger}
+            aria-label={t(menuOpen ? "nav_menu_close" : "nav_menu_open")}
+            aria-expanded={menuOpen}
+            onClick={() => {
+              playClickSound();
+              setMenuOpen((open) => !open);
+            }}
+          >
+            <span className={styles.hamburgerLine} />
+            <span className={styles.hamburgerLine} />
+            <span className={styles.hamburgerLine} />
+          </button>
         </div>
-
-        {/* Mobile / tablet menu trigger */}
-        <button
-          type="button"
-          className={styles.hamburger}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={() => {
-            playClickSound();
-            setMenuOpen((open) => !open);
-          }}
-        >
-          <span className={styles.hamburgerLine} />
-          <span className={styles.hamburgerLine} />
-          <span className={styles.hamburgerLine} />
-        </button>
       </div>
+    </header>
 
-      {/* Full-screen mobile / tablet menu */}
+      {/* Full-screen mobile / tablet menu. A sibling of the header, not a
+          child: the scrolled header's backdrop-filter makes it the containing
+          block of fixed descendants, which shrank this sheet to the header's
+          height whenever the page was not at the top. */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
+            key="mobile-menu"
+            ref={sheetRef}
             className={styles.mobileMenu}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -198,19 +232,31 @@ export default function Navbar() {
                   {t(item.key)}
                 </motion.a>
               ))}
+              <motion.a
+                href={roadmapPath(activeLang)}
+                className={`${styles.mobileMenuLink} ${styles.mobileMenuEbook}`}
+                onClick={handleLinkClick}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.08 * NAV_ITEMS.length, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className={styles.mobileMenuEbookLabel}>{t("footer_roadmap")}</span>
+                {t("faq_9_link")}
+              </motion.a>
             </nav>
 
             <motion.div
               className={styles.mobileMenuFooter}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.08 * NAV_ITEMS.length, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, delay: 0.08 * (NAV_ITEMS.length + 1), ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className={styles.mobileLangRow}>
+              <div className={styles.mobileLangRow} role="group" aria-label={t("pkg_lang_label")}>
                 {languages.map((lang) => (
                   <button
                     type="button"
                     key={lang}
+                    aria-pressed={lang === activeLang}
                     className={`${styles.mobileLangOption} ${lang === activeLang ? styles.mobileLangOptionActive : ""}`}
                     onClick={() => {
                       setActiveLang(lang);
@@ -233,6 +279,6 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

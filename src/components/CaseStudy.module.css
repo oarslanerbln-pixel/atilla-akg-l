@@ -84,6 +84,21 @@
   transform: scale(1.05);
 }
 
+.playTrigger {
+  position: absolute;
+  inset: 0;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.playTrigger:focus-visible,
+.soundControl:focus-visible {
+  outline: 2px solid var(--accent-gold-light);
+  outline-offset: -4px;
+}
+
 .playButton {
   position: absolute;
   top: 50%;
@@ -92,8 +107,8 @@
   width: 80px;
   height: 80px;
   background-color: rgba(20, 15, 10, 0.85);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0;
   display: flex;
@@ -122,8 +137,8 @@
   width: 44px;
   height: 44px;
   background: rgba(20, 15, 10, 0.85);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
   display: flex;

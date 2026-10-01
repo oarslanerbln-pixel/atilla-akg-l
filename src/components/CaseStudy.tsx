@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { Play, Volume2, VolumeX, Heart, MessageCircle, Send, Bookmark } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
@@ -15,20 +15,20 @@ export default function CaseStudy() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
 
+  // isPlaying follows the element's own play/pause events, so a play() the
+  // browser refuses leaves the button saying "play" rather than lying.
   const handlePlayPause = () => {
     playClickSound();
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
+    const video = videoRef.current;
+    if (!video) return;
+    if (isPlaying) {
+      video.pause();
+    } else {
+      video.play().catch(() => {});
     }
   };
 
-  const handleToggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleToggleMute = () => {
     playClickSound();
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
@@ -77,7 +77,6 @@ export default function CaseStudy() {
           >
             <div
               className={styles.videoPlaceholder}
-              onClick={handlePlayPause}
               data-cursor={isPlaying ? "PAUSE" : "PLAY"}
             >
               {/* The poster was a stock photo pulled from images.pexels.com at
@@ -94,20 +93,33 @@ export default function CaseStudy() {
                 loop
                 playsInline
                 muted={isMuted}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
               />
-              {!isPlaying && (
-                <div className={styles.playButton}>
-                  <Play fill="white" className={styles.playIcon} />
-                </div>
-              )}
+              {/* The frame and the sound toggle were <div onClick>: out of
+                  reach without a mouse. The frame is now covered by a button,
+                  like the project cards, and the toggle sits above it. */}
+              <button
+                type="button"
+                className={styles.playTrigger}
+                onClick={handlePlayPause}
+                aria-label={t(isPlaying ? "video_pause" : "video_play")}
+              >
+                {!isPlaying && (
+                  <span className={styles.playButton}>
+                    <Play fill="white" className={styles.playIcon} />
+                  </span>
+                )}
+              </button>
               {isPlaying && (
-                <div
+                <button
+                  type="button"
                   className={styles.soundControl}
                   onClick={handleToggleMute}
-                  title={isMuted ? "Unmute" : "Mute"}
+                  aria-label={t(isMuted ? "video_unmute" : "video_mute")}
                 >
                   {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-                </div>
+                </button>
               )}
             </div>
           </motion.div>

@@ -1,7 +1,10 @@
 .hero {
   position: relative;
   min-height: 100vh;
-  width: 100vw;
+  /* The small viewport: on iOS 100vh is measured with the toolbar hidden, so
+     the scroll cue sat underneath it. */
+  min-height: 100svh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,7 +24,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100%;
   z-index: -2;
   overflow: hidden;
@@ -309,8 +312,8 @@
   justify-content: center;
   padding: 0.9rem 2.2rem;
   background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   color: var(--text-primary) !important;
   font-family: var(--font-inter), sans-serif;
   font-size: 0.75rem;

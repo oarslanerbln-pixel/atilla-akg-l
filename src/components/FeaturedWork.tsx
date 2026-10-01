@@ -8,6 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import type { TranslationKeys } from "@/i18n/translations";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useScrollLock } from "@/hooks/useScrollLock";
+import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 
 interface ProjectItem {
   id: string;
@@ -66,15 +67,15 @@ function InViewVideo({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(videoRef, { margin: "-100px" });
+  const calm = usePrefersCalm();
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Someone who asked their system for less motion did not ask for clips
-    // looping behind the copy.
-    const wantsLessMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (wantsLessMotion) {
+    // Someone who asked for less motion did not ask for clips looping behind
+    // the copy, and someone saving data did not ask for megabytes of them.
+    if (calm) {
       video.pause();
       return;
     }
@@ -84,7 +85,7 @@ function InViewVideo({
     } else {
       video.pause();
     }
-  }, [isInView]);
+  }, [isInView, calm]);
 
   return (
     <video
@@ -123,6 +124,7 @@ export default function FeaturedWork() {
   // Remembered so focus goes back to the card the visitor opened, rather than
   // to the top of the document once the lightbox closes.
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   const openModal = (project: ProjectItem, trigger: HTMLButtonElement) => {
     playClickSound();
@@ -142,6 +144,7 @@ export default function FeaturedWork() {
   // stuck inside it.
   useEffect(() => {
     if (!activeProject) return;
+    closeRef.current?.focus();
     const handleKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeModal();
     };
@@ -225,6 +228,9 @@ export default function FeaturedWork() {
         {activeProject && (
           <motion.div
             className={styles.modalBackdrop}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="work-modal-title"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -239,12 +245,12 @@ export default function FeaturedWork() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className={styles.modalHeader}>
-                <h4 className={styles.modalTitle}>{t(activeProject.titleKey)}</h4>
+                <h4 id="work-modal-title" className={styles.modalTitle}>{t(activeProject.titleKey)}</h4>
                 <button
+                  ref={closeRef}
                   type="button"
                   className={styles.modalClose}
                   onClick={closeModal}
-                  aria-label="Close video player"
                 >
                   <X size={18} />
                   <span>{t('work_close')}</span>
