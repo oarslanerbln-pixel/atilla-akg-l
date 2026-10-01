@@ -15,21 +15,23 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import JsonLd from "@/components/JsonLd";
+import type { ReactNode } from "react";
 import type { Language } from "@/i18n/translations";
 import { homeGraph } from "@/lib/structuredData";
 
 /**
  * The single-page portfolio, served at /, /en and /tr. The language comes
  * from the route's root layout; here it only picks the structured data.
+ * `hero` swaps the opening section, so /lab/hero can try one out in place.
  */
-export default function HomePage({ lang }: { lang: Language }) {
+export default function HomePage({ lang, hero = <Hero /> }: { lang: Language; hero?: ReactNode }) {
   return (
     <main>
       <JsonLd data={homeGraph(lang)} />
       <Preloader />
       <CustomCursor />
       <Navbar />
-      <Hero />
+      {hero}
       <Brands />
       <Stats />
       <Partners />
