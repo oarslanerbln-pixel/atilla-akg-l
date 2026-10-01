@@ -1,0 +1,476 @@
+/* Hero study: the compass globe. The canvas fills the section; the copy and
+   an invisible "stage" share a grid above it, and the script reads the stage
+   to place the globe. */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 60% 70% at 72% 52%, rgba(216, 180, 130, 0.14), transparent 70%),
+    var(--bg-primary);
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero[data-globe] .canvas {
+  opacity: 1;
+}
+
+/* Copy that waits for its entrance. The script marks the section ready the
+   moment it takes over; without the script the copy still shows. */
+.hero:not([data-ready]) .pending {
+  opacity: 0;
+  animation: pendingFailsafe 0.8s ease 6s forwards;
+}
+
+@keyframes pendingFailsafe {
+  to {
+    opacity: 1;
+  }
+}
+
+/* The instrument sits in the grid under the globe, so the stage (and with it
+   the globe) is sized around it and the two never meet. Its bottom lines up
+   with the scroll cue across the page. */
+.inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "copy stage"
+    "copy hud";
+  gap: 1.5rem 2rem;
+  max-width: var(--max-width);
+  min-height: inherit;
+  margin: 0 auto;
+  padding: 5.5rem 2rem 2.2rem;
+}
+
+.copy {
+  position: relative;
+  grid-area: copy;
+  align-self: center;
+  margin-block: 2.5rem;
+}
+
+.eyebrow {
+  margin-bottom: 1.1rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.name {
+  margin-bottom: 1.6rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.9rem, 6.4vw, 6rem);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+  /* Split into letters for the entrance; kerning would be lost between the
+     letter boxes, so it is off from the start and nothing shifts. */
+  font-kerning: none;
+}
+
+.nameLine {
+  display: block;
+}
+
+.audience {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.7rem, 0.9vw, 0.82rem);
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.separator {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin: 0 0.85rem;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  opacity: 0.85;
+}
+
+.value {
+  max-width: 29rem;
+  margin-top: 1.3rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 2.2rem;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 2.1rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border-radius: 0;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.primaryBtn {
+  background: var(--text-primary);
+  border: 1px solid var(--text-primary);
+  color: var(--bg-primary);
+  font-weight: 700;
+  box-shadow: 0 10px 28px rgba(24, 21, 18, 0.18);
+}
+
+.primaryBtn:hover {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+  box-shadow: 0 12px 30px rgba(179, 139, 89, 0.4);
+}
+
+.secondaryBtn {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(24, 21, 18, 0.28);
+  color: var(--text-primary);
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.secondaryBtn:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold-readable);
+}
+
+.primaryBtn:focus-visible,
+.secondaryBtn:focus-visible {
+  outline: 2px solid var(--accent-gold-readable);
+  outline-offset: 3px;
+}
+
+/* The globe's place. Transparent: it only receives drags and tells the
+   script where to draw. */
+.stage {
+  position: relative;
+  grid-area: stage;
+  min-height: 50vh;
+  touch-action: pan-y;
+}
+
+.dragHint {
+  display: none;
+}
+
+/* Place names riding on the globe, written every frame by the script. */
+.labels {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  opacity: 0;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+.label[data-side="left"] {
+  align-items: flex-end;
+}
+
+.label[data-side="top"] {
+  align-items: center;
+}
+
+.labelName {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  transition: color 0.6s ease;
+}
+
+/* A porcelain halo lifts the names off the land dots behind them. */
+.labelName,
+.labelMeta {
+  text-shadow:
+    0 0 3px var(--bg-primary),
+    0 0 10px var(--bg-primary);
+}
+
+.labelMeta {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-gold-readable);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.label[data-active] .labelMeta {
+  opacity: 1;
+}
+
+.label[data-active] .labelName {
+  color: var(--accent-gold-readable);
+}
+
+/* The instrument: the compass turns to the course being flown. */
+.hud {
+  grid-area: hud;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.hud[data-shown] {
+  opacity: 1;
+  transform: none;
+}
+
+.compass {
+  display: block;
+  width: 2.6rem;
+  height: 2.6rem;
+  color: var(--text-primary);
+  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mark {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hudText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 11rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--border-light);
+}
+
+.hudEyebrow {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.hudRoute {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  animation: hudSwap 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes hudSwap {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.hudMeta {
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.scrollCue {
+  position: absolute;
+  left: max(2rem, calc((100% - var(--max-width)) / 2 + 2rem));
+  bottom: 2.2rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.scrollLine {
+  position: relative;
+  width: 3.5rem;
+  height: 1px;
+  overflow: hidden;
+  background: var(--border-light);
+}
+
+.scrollLine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gold);
+  animation: scrollSweep 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@keyframes scrollSweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Phone: the globe first, the instrument under it, then the copy. Visitors
+   arrive from Instagram; the routes are the first thing they see. */
+@media (max-width: 899px) {
+  .hero {
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 30%, rgba(216, 180, 130, 0.16), transparent 70%),
+      var(--bg-primary);
+  }
+
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas:
+      "stage"
+      "hud"
+      "copy";
+    align-content: start;
+    gap: 0;
+    padding: 4.75rem 1.25rem 3rem;
+  }
+
+  .copy {
+    margin-block: 0;
+  }
+
+  .stage {
+    height: min(94vw, 48svh);
+    min-height: 0;
+    margin: 0 -1.25rem;
+  }
+
+  .hud {
+    justify-self: start;
+    margin: 0.4rem 0 2rem;
+  }
+
+  .actions {
+    margin-top: 1.6rem;
+  }
+
+  .primaryBtn,
+  .secondaryBtn {
+    flex: 1 1 14rem;
+  }
+
+  /* Too little globe for every name at once: only the place being flown to. */
+  .label:not([data-active]) {
+    visibility: hidden;
+  }
+
+  .labelName {
+    font-size: 0.6rem;
+  }
+
+  .scrollCue {
+    display: none;
+  }
+}
+
+/* No mouse, no custom cursor to say the globe turns: a quiet line says it. */
+@media (hover: none) {
+  .dragHint {
+    position: absolute;
+    top: 0.9rem;
+    right: 0;
+    display: block;
+    font-family: var(--font-inter), sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    opacity: 0;
+    transition: opacity 1.2s ease 1.5s;
+  }
+
+  .dragHint::before {
+    content: "\2194\00a0\00a0";
+    color: var(--accent-gold);
+  }
+
+  .hero[data-globe] .dragHint {
+    opacity: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollLine::after,
+  .hudRoute {
+    animation: none;
+  }
+}

@@ -34,6 +34,9 @@ export const translations = {
     hero_value: "Kinoreife Hotel- und Destinationsfilme für eine Community von 306.000 Reisebegeisterten – zu 86 % aus dem DACH-Raum. Mit lizenziertem Content für Ihre eigenen Kanäle.",
     hero_cta_contact: "ANFRAGE & MEDIADATEN",
     hero_cta_projects: "REFERENZEN ANSEHEN",
+    hero_globe_route: "Kurs ab Berlin",
+    hero_globe_base: "Berlin · Basis",
+    hero_globe_drag: "Drehen",
     
     // About & Stats
     stats_about_subtitle: "Content Philosophie",
@@ -367,6 +370,9 @@ export const translations = {
     hero_value: "Cinematic hotel and destination films for a community of 306,000 travel lovers — 86% from the DACH region. With licensed content for your own channels.",
     hero_cta_contact: "ENQUIRE & MEDIA KIT",
     hero_cta_projects: "VIEW REFERENCES",
+    hero_globe_route: "Heading from Berlin",
+    hero_globe_base: "Berlin · Base",
+    hero_globe_drag: "Drag",
     
     // About & Stats
     stats_about_subtitle: "Content Philosophy",
@@ -700,6 +706,9 @@ export const translations = {
     hero_value: "%86'sı DACH bölgesinden 306.000 kişilik gezgin topluluğu için sinematik otel ve destinasyon filmleri. Kendi kanallarınız için lisanslı içerik dahil.",
     hero_cta_contact: "TALEP & MEDYA KİTİ",
     hero_cta_projects: "REFERANSLARI GÖR",
+    hero_globe_route: "Berlin'den rota",
+    hero_globe_base: "Berlin · Merkez",
+    hero_globe_drag: "Çevir",
     
     // About & Stats
     stats_about_subtitle: "İçerik Felsefesi",
