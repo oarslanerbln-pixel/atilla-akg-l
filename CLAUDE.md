@@ -90,6 +90,7 @@ src/
 │   ├── HeroHorizon.tsx      # Live WebGL sea-at-sunrise backdrop
 │   ├── globe/               # Desktop hero: compass globe (three.js + GSAP),
 │                            #   partner routes from lib/partners.ts
+│   ├── SocialIcons.tsx      # Profile marks and links, shared by both heroes
 │   ├── WhatsAppButton.tsx   # Floating wa.me link between hero and contact
 │   ├── packages/            # /social-media page (plates data in lib/packages.ts,
 │                            #   metadata and share cards in share.tsx)
