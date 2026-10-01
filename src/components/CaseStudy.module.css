@@ -92,8 +92,8 @@
   width: 80px;
   height: 80px;
   background-color: rgba(20, 15, 10, 0.85);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0;
   display: flex;
@@ -122,8 +122,8 @@
   width: 44px;
   height: 44px;
   background: rgba(20, 15, 10, 0.85);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
   display: flex;

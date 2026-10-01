@@ -5,6 +5,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { socialProfiles } from "@/lib/site";
 import { HTML_LANG, LANGUAGES, LANGUAGE_NAMES, pagePath } from "@/lib/locales";
+import { roadmapPath } from "@/lib/roadmap";
 import styles from "./Footer.module.css";
 import RevealText from "./RevealText";
 import { useLanguage } from "@/context/LanguageContext";
@@ -81,7 +82,7 @@ export default function Footer() {
               <div className={styles.legalLinks}>
                 <Link href={pagePath("socialMedia", activeLang)}>{t('footer_social_media')}</Link>
                 <span aria-hidden="true">·</span>
-                <Link href="/roadmap">{t('footer_roadmap')}</Link>
+                <Link href={roadmapPath(activeLang)}>{t('footer_roadmap')}</Link>
               </div>
               <div className={styles.legalLinks}>
                 <Link href="/impressum">{t('footer_imprint')}</Link>

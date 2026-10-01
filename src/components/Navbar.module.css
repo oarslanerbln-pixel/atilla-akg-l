@@ -14,8 +14,8 @@
 
 .scrolled {
   background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(24, 21, 18, 0.08);
   box-shadow: 0 10px 30px rgba(24, 21, 18, 0.04);
 }
@@ -38,12 +38,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 2rem;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
   font-family: var(--font-inter);
   font-size: 0.85rem;
   font-weight: 700;
@@ -78,6 +80,7 @@
   transition: color 0.3s ease;
   position: relative;
   padding: 0.25rem 0;
+  white-space: nowrap;
 }
 
 .navItem a:hover {
@@ -145,6 +148,44 @@
   box-shadow: 0 2px 8px rgba(24, 21, 18, 0.03);
 }
 
+.navEnd {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+/* Cut like the status badge, but drawn in gold: the one link in the bar that
+   leaves for a page of its own. */
+.ebook {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-inter);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--accent-gold-readable);
+  border: 1px solid var(--accent-gold);
+  padding: 0.4rem 0.9rem;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.ebook:hover {
+  background-color: var(--accent-gold);
+  color: var(--bg-card);
+}
+
+.ebook:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.menuOpen .ebook {
+  color: var(--accent-gold-light);
+  border-color: var(--accent-gold-light);
+}
+
 .pulseDot {
   width: 6px;
   height: 6px;
@@ -209,8 +250,8 @@
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border: 1px solid rgba(24, 21, 18, 0.1);
   padding: 0.5rem 0;
   display: flex;
@@ -329,6 +370,26 @@
   color: var(--accent-gold-light);
 }
 
+/* The e-book closes the list: its own label above, its title in gold, set
+   smaller so the long name holds on one line on a phone. */
+.mobileMenuEbook {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: clamp(1.35rem, 6vw, 1.75rem);
+  color: var(--accent-gold-light);
+  padding: 1.1rem 0;
+}
+
+.mobileMenuEbookLabel {
+  font-family: var(--font-inter);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+}
+
 .mobileMenuFooter {
   display: flex;
   flex-direction: column;
@@ -376,6 +437,24 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Below this the anchors, the status group and the e-book no longer share one
+   row. The clock is atmosphere; the e-book sells, so the clock gives way. */
+@media (max-width: 1440px) {
+  .liveClock {
+    display: none;
+  }
+}
+
+@media (max-width: 1280px) {
+  .statusBadge {
+    display: none;
+  }
+
+  .navLinks {
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 1024px) {
   .navLinks {
     display: none;
@@ -387,6 +466,14 @@
 
   .hamburger {
     display: flex;
+  }
+}
+
+/* Below this the wordmark would break onto two lines beside the button; on a
+   phone the e-book stays one tap away in the menu, and has its own section. */
+@media (max-width: 520px) {
+  .ebook {
+    display: none;
   }
 }
 
