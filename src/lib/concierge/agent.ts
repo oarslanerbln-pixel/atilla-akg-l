@@ -86,11 +86,17 @@ async function executeTool(block: Anthropic.Beta.BetaToolUseBlock, ctx: ToolCont
 }
 
 /** Stops the bot for this customer, tells them Atilla will answer and alerts Atilla. */
-async function escalate(ctx: ToolContext): Promise<void> {
+async function escalate(ctx: ToolContext, alert: (who: string) => string = staff.refusal): Promise<void> {
   const contact = await updateContact(ctx.contact.id, { bot_paused: true });
-  await sendToContact(contact, fallbackReply(contact.language ?? 'en'));
-  await alertStaff(env('STAFF_WHATSAPP'), staff.refusal(contact.name ?? contact.username ?? contact.external_id), contact);
+  // Atilla must hear about it even when the customer cannot be reached.
+  await sendToContact(contact, fallbackReply(contact.language ?? 'en')).catch((e) =>
+    console.error('[concierge] fallback reply failed', e),
+  );
+  await alertStaff(env('STAFF_WHATSAPP'), alert(contact.name ?? contact.username ?? contact.external_id), contact);
 }
+
+const describeError = (error: unknown) =>
+  (error instanceof Anthropic.APIError ? `${error.status ?? '-'} ${error.message}` : String(error)).slice(0, 300);
 
 async function deliver(ctx: ToolContext, reply: string): Promise<void> {
   if (!reply) return;
@@ -112,18 +118,27 @@ export async function runConcierge(contactId: string): Promise<void> {
   const ctx: ToolContext = { contact, handedOff: false };
 
   for (let i = 0; i < CONCIERGE.maxAgentIterations; i++) {
-    const response = await client().beta.messages.create({
-      model: CONCIERGE.model,
-      max_tokens: 16000,
-      thinking: { type: 'adaptive' },
-      output_config: { effort: 'medium' },
-      cache_control: { type: 'ephemeral' },
-      system: SYSTEM_PROMPT,
-      tools: TOOLS,
-      messages,
-      betas: ['server-side-fallback-2026-07-01'],
-      fallbacks: 'default',
-    });
+    let response: Anthropic.Beta.BetaMessage;
+    try {
+      response = await client().beta.messages.create({
+        model: CONCIERGE.model,
+        max_tokens: 16000,
+        thinking: { type: 'adaptive' },
+        output_config: { effort: 'medium' },
+        cache_control: { type: 'ephemeral' },
+        system: SYSTEM_PROMPT,
+        tools: TOOLS,
+        messages,
+        betas: ['server-side-fallback-2026-07-01'],
+        fallbacks: 'default',
+      });
+    } catch (error) {
+      // The SDK has already retried. What is left (a bad key, a spend limit, a long outage) would
+      // fail the next message too, so the conversation goes to Atilla once instead of failing silently.
+      console.error(`[concierge] Claude call failed for contact ${contactId}`, error);
+      await escalate(ctx, (who) => staff.aiFailed(who, describeError(error)));
+      return;
+    }
 
     if (response.stop_reason === 'refusal') {
       console.warn('[concierge] refusal', response.stop_details);
