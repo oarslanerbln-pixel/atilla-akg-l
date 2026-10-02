@@ -37,6 +37,8 @@ console.anthropic.com → API Keys → `ANTHROPIC_API_KEY`. Model: `claude-opus-
 
 Değişiklik ancak yeniden deploy ile geçerli olur.
 
+**Claude'a ulaşılamazsa** (geçersiz anahtar, dolan harcama limiti, uzun kesinti; SDK kısa hataları kendisi tekrar dener) müşteri cevapsız kalmaz. Ona Atilla'nın döneceği yazılır, bot o sohbette durur ve Atilla'ya hatanın sebebiyle tek bir WhatsApp uyarısı gider. Böylece her yeni mesaj yeni bir uyarı doğurmaz. Sorun giderilince Atilla uyarıyı *bot* diye yanıtlayarak botu o müşteri için tekrar açar.
+
 ## 3. WhatsApp Business Platform
 Atilla şu an normal WhatsApp kullandığı için concierge'e **ayrı bir numara** (yeni SIM veya sanal numara) ayırmak en temizi. Cloud API'ye bağlanan numara artık normal WhatsApp uygulamasında kullanılamaz.
 

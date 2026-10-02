@@ -117,6 +117,8 @@ export const staff = {
   botResumed: (who: string) => `🤖 Bot ${who} için tekrar aktif.`,
   help: 'Bir müşteriye yazmak için ilgili bildirim mesajını yanıtla (mesaja basılı tut → Yanıtla).',
   refusal: (who: string) => `⚠️ Bot ${who} ile sohbette cevap veremedi, sohbeti sana devrettim.`,
+  aiFailed: (who: string, error: string) =>
+    `⚠️ *Yapay zekâya ulaşılamadı* – ${who}\nMüşteriye senin döneceğini yazdım ve bot bu sohbette durdu; cevabı sen ver. Tekrar açmak için bu mesajı *bot* diye yanıtla.\nAnahtar veya harcama limiti olabilir: Anthropic Console'u ve Vercel'deki ANTHROPIC_API_KEY'i kontrol et.\nHata: ${error}`,
   bookingPaid: (who: string, b: ConfirmedBooking) =>
     `💶 *Kapora ödendi* – ${b.ref}\n${who}\n${b.tourName}\n${b.startsAt} · ${b.guests} kişi\nKapora ${b.depositEur} € · Kalan ${b.balanceEur} €${b.guideName ? `\nRehber: ${b.guideName}` : '\n⚠️ Rehber atanmadı!'}`,
   guideAssigned: (b: ConfirmedBooking, customerName: string) =>
