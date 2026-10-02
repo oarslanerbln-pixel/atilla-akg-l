@@ -267,7 +267,8 @@
   align-items: flex-end;
 }
 
-.label[data-side="top"] {
+.label[data-side="top"],
+.label[data-side="bottom"] {
   align-items: center;
 }
 
@@ -305,6 +306,13 @@
 
 .label[data-active] .labelName {
   color: var(--accent-gold-readable);
+}
+
+/* A hotel is named only while the light visits it (the script fades the
+   whole label), so its place line stays with the name to the end. */
+.label[data-stay] .labelMeta {
+  opacity: 1;
+  font-style: italic;
 }
 
 /* The instrument: the compass turns to the course being flown. */

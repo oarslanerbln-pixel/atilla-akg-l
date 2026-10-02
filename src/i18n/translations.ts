@@ -36,6 +36,14 @@ export const translations = {
     hero_cta_projects: "REFERENZEN ANSEHEN",
     hero_globe_route: "Kurs ab Berlin",
     hero_globe_drag: "Drehen",
+    hero_globe_stay: "Hotel · Kurs ab Berlin",
+    stays_place_dubai: "Dubai · VAE",
+    stays_place_abudhabi: "Abu Dhabi · VAE",
+    stays_place_muscat: "Maskat · Oman",
+    stays_place_granada: "Granada · Spanien",
+    stays_place_raa: "Raa-Atoll · Malediven",
+    stays_place_kemer: "Kemer · Türkei",
+    stays_place_vrana: "Vrana · Kroatien",
     
     // About & Stats
     stats_about_subtitle: "Content Philosophie",
@@ -371,6 +379,14 @@ export const translations = {
     hero_cta_projects: "VIEW REFERENCES",
     hero_globe_route: "Heading from Berlin",
     hero_globe_drag: "Drag",
+    hero_globe_stay: "Hotel · Heading from Berlin",
+    stays_place_dubai: "Dubai · UAE",
+    stays_place_abudhabi: "Abu Dhabi · UAE",
+    stays_place_muscat: "Muscat · Oman",
+    stays_place_granada: "Granada · Spain",
+    stays_place_raa: "Raa Atoll · Maldives",
+    stays_place_kemer: "Kemer · Türkiye",
+    stays_place_vrana: "Vrana · Croatia",
     
     // About & Stats
     stats_about_subtitle: "Content Philosophy",
@@ -706,6 +722,14 @@ export const translations = {
     hero_cta_projects: "REFERANSLARI GÖR",
     hero_globe_route: "Berlin'den rota",
     hero_globe_drag: "Çevir",
+    hero_globe_stay: "Otel · Berlin'den rota",
+    stays_place_dubai: "Dubai · BAE",
+    stays_place_abudhabi: "Abu Dabi · BAE",
+    stays_place_muscat: "Maskat · Umman",
+    stays_place_granada: "Granada · İspanya",
+    stays_place_raa: "Raa Atolü · Maldivler",
+    stays_place_kemer: "Kemer · Türkiye",
+    stays_place_vrana: "Vrana · Hırvatistan",
     
     // About & Stats
     stats_about_subtitle: "İçerik Felsefesi",
