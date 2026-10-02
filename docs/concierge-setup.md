@@ -30,6 +30,13 @@ Bütün anahtarlar `.env.example` dosyasında listeli. Yerelde `.env.local` dosy
 ## 2. Claude
 console.anthropic.com → API Keys → `ANTHROPIC_API_KEY`. Model: `claude-opus-5-5`. Anthropic'in önerdiği şekilde, bir istek güvenlik nedeniyle reddedilirse otomatik olarak başka bir modelle tekrar denenir (server-side fallback).
 
+**Yapay zekâyı açmak:** Concierge müşterilere yalnızca Vercel'de `CONCIERGE_AI=on` tanımlıysa cevap verir. Değişken yoksa (veya başka bir değerdeyse) sistem **yalnızca partner modunda** çalışır:
+- Partner anahtar kelimesi soran yorum, story cevabı veya DM linkini alır (aşağıda *Partner teklifleri*).
+- Tur kelimeleri (`IG_COMMENT_KEYWORDS`) ve diğer bütün mesajlar Atilla'ya kalır. Bu mesajlar veritabanına **kaydedilmez**, Claude'a da gönderilmez.
+- Atilla'nın Instagram uygulamasından yazdığı mesajlar işlenmez, bildirim gitmez.
+
+Değişiklik ancak yeniden deploy ile geçerli olur.
+
 ## 3. WhatsApp Business Platform
 Atilla şu an normal WhatsApp kullandığı için concierge'e **ayrı bir numara** (yeni SIM veya sanal numara) ayırmak en temizi. Cloud API'ye bağlanan numara artık normal WhatsApp uygulamasında kullanılamaz.
 
@@ -60,7 +67,7 @@ Atilla şu an normal WhatsApp kullandığı için concierge'e **ayrı bir numara
 - O durumda, veya hesap yeniden bağlandığında: Meta'da yeni token üretin, Vercel'de `INSTAGRAM_ACCESS_TOKEN`'a yapıştırın ve yeniden deploy edin. Sistem değişikliği fark eder ve kayıtlı token'ı yenisiyle değiştirir.
 - Meta bir token'ı ancak en az 24 saatlik olduğunda yeniler. Yeni yapıştırılan token o hafta için fazla gençse yenileme atlanır (`too_new`) ve bir sonraki pazartesi yapılır.
 
-**Yoruma otomatik DM:** Bir post veya reel'in altına `IG_COMMENT_KEYWORDS` listesindeki bir kelime tek başına veya rica kelimeleriyle (ör. "TUR", "Tour bitte", "Lütfen fiyat 🙏") yazıldığında:
+**Yoruma otomatik DM** (tur kelimeleri yalnızca `CONCIERGE_AI=on` iken; partner kelimeleri her zaman): Bir post veya reel'in altına `IG_COMMENT_KEYWORDS` listesindeki bir kelime tek başına veya rica kelimeleriyle (ör. "TUR", "Tour bitte", "Lütfen fiyat 🙏") yazıldığında:
 1. Yorum yapan kişiye, dilinde, **"Turları göster"** butonlu bir DM gider. Instagram, müşteri cevap verene kadar ikinci mesaja izin vermediği için buton tek dokunuşla sohbeti açar ve concierge devralır.
 2. Yorumun altına 6 farklı kısa cevaptan biri herkese açık olarak yazılır ("DM'den yazdım ✨" gibi).
 3. Yorumun hangi reel'den geldiği kaydedilir (bkz. *Hangi reel ne kazandırdı?*).

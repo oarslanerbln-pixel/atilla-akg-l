@@ -18,6 +18,11 @@ export const CONCIERGE = {
   /** More customer messages than this within an hour pause the bot and alert Atilla. */
   maxMessagesPerHour: 30,
   graphVersion: process.env.META_GRAPH_VERSION ?? 'v23.0',
+  /**
+   * The AI concierge answers only with CONCIERGE_AI=on. Without it the account runs on partner
+   * offers alone: a keyword comment or DM gets its link, everything else is left to Atilla.
+   */
+  aiReplies: process.env.CONCIERGE_AI === 'on',
   commentKeywords: (process.env.IG_COMMENT_KEYWORDS ?? 'tur,tour,preis,price,fiyat')
     .split(',')
     .map((k) => normalizeWord(k.trim()))

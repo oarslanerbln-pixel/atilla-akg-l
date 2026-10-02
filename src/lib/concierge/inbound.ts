@@ -49,6 +49,8 @@ import { runConcierge } from './agent';
 type Job = () => Promise<void>;
 
 const displayName = (c: Contact) => c.name ?? (c.username ? `@${c.username}` : `+${c.external_id}`);
+/** Our own markers such as "[replied to your story]" are not the customer's words. */
+const customerWords = (text: string) => text.replace(/\[[^\]]*\]/g, ' ');
 
 // ---------- Customer messages ----------
 
@@ -66,6 +68,8 @@ interface InboundMessage {
 }
 
 async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
+  // Without the AI only partner-offer requests concern us; anything else is not even stored.
+  if (!CONCIERGE.aiReplies && !(await asksForOffer(msg))) return;
   const contact = await upsertContact(msg.channel, msg.externalId, {
     name: msg.name,
     username: msg.username,
@@ -79,9 +83,16 @@ async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
   // The link request is answered directly; a paused or removed offer falls through to the concierge.
   if (msg.offerId && (await sendOfferLink(contact, msg.offerId))) return;
   if (await answerOfferKeyword(contact, msg)) return;
+  if (!CONCIERGE.aiReplies) return;
 
   await sleep(CONCIERGE.debounceMs);
   await answerWhenFree(contact.id);
+}
+
+/** A tap on a "send me the link" button, or a message that answerOfferKeyword would answer. */
+async function asksForOffer(msg: InboundMessage): Promise<boolean> {
+  if (msg.offerId) return true;
+  return Boolean(keywordRequest(customerWords(msg.text), await activeOffers())?.offer);
 }
 
 /**
@@ -91,8 +102,7 @@ async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
  * more stays with the concierge, so a keyword in passing never hijacks a conversation.
  */
 async function answerOfferKeyword(contact: Contact, msg: InboundMessage): Promise<boolean> {
-  // Our own markers such as "[replied to your story]" are not the customer's words.
-  const own = msg.text.replace(/\[[^\]]*\]/g, ' ');
+  const own = customerWords(msg.text);
   const request = keywordRequest(own, await activeOffers());
   if (!request?.offer) return false;
   const { offer, keyword } = request;
@@ -164,6 +174,8 @@ async function handleStaffMessage(metaMessageId: string, text: string, replyToId
 
 /** Atilla replied from the Instagram app: log it and step the bot back for this customer. */
 async function handleInstagramEcho(customerId: string, mid: string, text: string): Promise<void> {
+  // Without the AI there is no bot to step back, and Atilla's own chats are none of our business.
+  if (!CONCIERGE.aiReplies) return;
   // Our own API sends echo back too; give recordOutbound a moment to store their ids.
   await sleep(3000);
   if (await messageExists(mid)) return;
@@ -188,12 +200,13 @@ interface InstagramComment {
 /**
  * Comment-to-DM: a comment under a post or reel that asks for a keyword ("GOLDCARD", "Tour bitte")
  * opens a private conversation; one that merely uses the word ("Die Tour war toll!") is left to Atilla.
- * Partner-offer keywords (e.g. AMEX) get the offer, tour keywords the concierge. The commenter
- * also gets a short public answer, and the reel is remembered as the source of the lead.
+ * Partner-offer keywords (e.g. AMEX) get the offer, tour keywords the concierge (only with the AI
+ * on). The commenter also gets a short public answer, and the reel is remembered as the source.
  */
 async function handleInstagramComment(c: InstagramComment): Promise<void> {
   if (c.fromId === c.accountId) return;
-  const request = keywordRequest(c.text, await activeOffers(), CONCIERGE.commentKeywords);
+  const tourKeywords = CONCIERGE.aiReplies ? CONCIERGE.commentKeywords : [];
+  const request = keywordRequest(c.text, await activeOffers(), tourKeywords);
   if (!request) return;
   const { offer, keyword } = request;
 
