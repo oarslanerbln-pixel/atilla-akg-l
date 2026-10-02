@@ -11,12 +11,12 @@ export const metadata: Metadata = {
  * Describes what this site actually does, nothing more: Vercel hosting
  * (functions in fra1, see vercel.json), one localStorage flag, self-hosted
  * assets, the contact form (Resend), plain mailto/tel/wa.me links, the
- * Instagram concierge (src/lib/concierge), the Manychat keyword replies on
- * Atilla's Instagram account, partner links (/go/<id>) and the e-book checkout
- * on Tentary (/roadmap). Remove the Manychat passages when Manychat is
- * disconnected, and move the region sentence if vercel.json changes. The WhatsApp
- * side of the concierge, staff alerts and Stripe deposits are not live; their sections must be added here before
- * those services are switched on.
+ * partner-link replies on Instagram (src/lib/concierge with CONCIERGE_AI off),
+ * partner links (/go/<id>) and the e-book checkout on Tentary (/roadmap). Move
+ * the region sentence if vercel.json changes. The AI concierge (Anthropic), its
+ * WhatsApp side, staff alerts and Stripe deposits are not live; their sections
+ * must be added here before those services are switched on for customers (the
+ * Anthropic passage is in the git history of this file).
  */
 export default function Datenschutz() {
   return (
@@ -50,11 +50,10 @@ export default function Datenschutz() {
         aufnehmen. Die Verbindung ist per TLS (HTTPS) verschlüsselt.
       </p>
       <p>
-        Schreiben Sie mir auf Instagram, antwortet zunächst ein KI-gestützter
-        Concierge (Abschnitt 9); auf einzelne Stichwörter antwortet außerdem
-        der Dienst Manychat (ebenfalls Abschnitt 9). Klicks auf Partnerlinks
-        werden gezählt, damit Provisionen zugeordnet werden können (Abschnitt
-        10).
+        Fragen Sie auf Instagram mit einem Stichwort nach einem Partnerlink,
+        erhalten Sie ihn automatisch (Abschnitt 9); alle anderen Nachrichten
+        beantworte ich selbst. Klicks auf Partnerlinks werden gezählt, damit
+        Provisionen zugeordnet werden können (Abschnitt 10).
       </p>
 
       <h2>3. Hosting und Server-Logfiles</h2>
@@ -79,7 +78,7 @@ export default function Datenschutz() {
       <p>
         Die Seiten selbst liefert Vercel über ein weltweites Servernetz aus.
         Alles, was auf dem Server verarbeitet wird (Kontaktformular,
-        Instagram-Concierge, Partnerlinks), läuft in einem Rechenzentrum in
+        automatische Antworten auf Instagram, Partnerlinks), läuft in einem Rechenzentrum in
         Frankfurt am Main.
       </p>
 
@@ -171,25 +170,25 @@ export default function Datenschutz() {
         Telefon stehen gleichwertig zur Verfügung.
       </p>
 
-      <h2>9. Nachrichten auf Instagram (KI-Concierge, Manychat)</h2>
+      <h2>9. Automatische Antworten auf Instagram</h2>
       <p>
-        Auf Direktnachrichten, Story-Antworten und bestimmte Kommentare unter
-        meinen Beiträgen auf Instagram antwortet zunächst ein digitaler
-        Concierge. Seine Antworten werden von einem KI-Sprachmodell erzeugt;
-        darauf weist er in seiner ersten Nachricht hin. Er beantwortet Fragen
-        zu Reisen und Partnerangeboten und bereitet Anfragen vor. Ich kann
-        jedes Gespräch einsehen und jederzeit selbst übernehmen; auf Wunsch
-        antworte ich Ihnen persönlich.
+        Unter einigen Beiträgen nenne ich ein Stichwort, etwa „GOLDCARD“.
+        Fragen Sie in einem Kommentar, einer Story-Antwort oder einer
+        Direktnachricht mit diesem Stichwort nach dem Angebot, erhalten Sie
+        automatisch eine kurze Beschreibung und auf Wunsch den Link dazu
+        (Abschnitt 10); unter einem Kommentar erscheint zusätzlich ein kurzer
+        öffentlicher Hinweis auf die Nachricht. Alle anderen Kommentare und
+        Nachrichten beantworte ich persönlich. Mein Server prüft sie nur auf
+        das Stichwort und speichert sie nicht.
       </p>
       <p>
-        Verarbeitet werden Ihre Instagram-Kennung (eine Nummer, die Instagram
-        für mein Konto vergibt), gegebenenfalls Name und Benutzername, der
-        Inhalt der Nachrichten und Angaben, die Sie im Gespräch selbst machen,
-        etwa Reisezeitraum, Personenzahl oder E-Mail-Adresse, sowie über
-        welchen Beitrag das Gespräch begonnen hat. Rechtsgrundlage ist Art. 6
-        Abs. 1 lit. b DSGVO, soweit Ihre Anfrage auf einen Vertrag gerichtet
-        ist, im Übrigen Art. 6 Abs. 1 lit. f DSGVO; das berechtigte Interesse
-        liegt in der schnellen Beantwortung von Anfragen.
+        Zu einer solchen Anfrage werden Ihre Instagram-Kennung (eine Nummer,
+        die Instagram für mein Konto vergibt), gegebenenfalls Name und
+        Benutzername, Ihr Kommentar oder Ihre Nachricht, die erkannte Sprache,
+        meine Antwort und der Beitrag, unter dem Sie gefragt haben,
+        gespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; das
+        berechtigte Interesse liegt darin, Anfragen, die Sie mit dem Stichwort
+        selbst auslösen, sofort und nur einmal zu beantworten.
       </p>
       <p>Beteiligt sind:</p>
       <ul>
@@ -198,14 +197,6 @@ export default function Datenschutz() {
           Irland, als Betreiberin von Instagram. Für die Verarbeitung auf
           Instagram selbst gilt die Datenschutzrichtlinie von Meta; eine
           Übermittlung in die USA ist dabei nicht auszuschließen.
-        </li>
-        <li>
-          Anthropic, PBC, 548 Market Street, PMB 90375, San Francisco, CA
-          94104, USA, als Auftragsverarbeiter für das Sprachmodell. Anthropic
-          erhält den Gesprächsverlauf, um die Antwort zu erzeugen, und
-          verwendet ihn nach seinen Vertragsbedingungen nicht zum Training
-          seiner Modelle. Die Übermittlung in die USA erfolgt auf Grundlage
-          der EU-Standard&shy;vertrags&shy;klauseln.
         </li>
         <li>
           Supabase, Inc. als Auftragsverarbeiter für die Datenbank, mit
@@ -218,27 +209,10 @@ export default function Datenschutz() {
         <li>Vercel (siehe Abschnitt 3), über dessen Server die Nachrichten laufen.</li>
       </ul>
       <p>
-        Mit Anthropic und Supabase bestehen Auftragsverarbeitungsverträge nach
-        Art. 28 DSGVO. Möchten Sie nicht mit dem Concierge schreiben, erreichen
-        Sie mich gleichwertig per Kontaktformular, E-Mail oder Telefon.
-      </p>
-      <p>
-        Auf einzelne Stichwörter in Kommentaren und Nachrichten antwortet
-        außerdem ein automatisierter Nachrichtendienst: Manychat, Inc., 8605
-        Santa Monica Blvd #64372, West Hollywood, CA 90069, USA, als
-        Auftragsverarbeiter. Manychat erhält dabei Ihre Instagram-Kennung,
-        Name und Benutzername, den Kommentar oder die Nachricht sowie die
-        Angabe, ob Sie Schaltflächen oder Links in der Antwort antippen.
-        Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; das berechtigte
-        Interesse liegt darin, Anfragen, die Sie mit dem Stichwort selbst
-        auslösen, sofort zu beantworten.
-      </p>
-      <p>
-        Mit Manychat besteht ein Auftragsverarbeitungsvertrag nach Art. 28
-        DSGVO. Die Übermittlung in die USA erfolgt auf Grundlage des
-        Angemessenheitsbeschlusses zum EU-US Data Privacy Framework, unter dem
-        Manychat zertifiziert ist, ergänzend auf Grundlage der
-        EU-Standard&shy;vertrags&shy;klauseln.
+        Mit Supabase besteht ein Auftragsverarbeitungsvertrag nach Art. 28
+        DSGVO. Möchten Sie keine automatische Antwort, schreiben Sie ohne
+        Stichwort; ich antworte Ihnen dann persönlich. Gleichwertig erreichen
+        Sie mich per Kontaktformular, E-Mail oder Telefon.
       </p>
 
       <h2>10. Partnerlinks</h2>
@@ -293,15 +267,11 @@ export default function Datenschutz() {
         Regel sechs bis zehn Jahre, § 257 HGB, § 147 AO).
       </p>
       <p>
-        Gespräche mit dem Instagram-Concierge werden 24 Monate nach der letzten
-        Nachricht automatisch gelöscht, zusammen mit den zugehörigen Angaben.
-        Die Zuordnung eines Partnerlinks zum Gespräch entfällt mit diesem;
-        übrig bleibt nur die anonyme Zahl der Klicks.
-      </p>
-      <p>
-        Bei Manychat bleiben die Angaben gespeichert, bis ich die Nutzung des
-        Dienstes beende; dann werden sie dort gelöscht. Eine frühere Löschung
-        können Sie jederzeit verlangen (Abschnitt 14).
+        Gespeicherte Anfragen von Instagram (Abschnitt 9) werden 24 Monate
+        nach der letzten Nachricht automatisch gelöscht, zusammen mit den
+        zugehörigen Angaben. Die Zuordnung eines Partnerlinks zur Anfrage
+        entfällt mit dieser; übrig bleibt nur die anonyme Zahl der Klicks.
+        Eine frühere Löschung können Sie jederzeit verlangen (Abschnitt 14).
       </p>
 
       <h2>13. Pflicht zur Bereitstellung, keine automatisierte Entscheidung</h2>
@@ -310,8 +280,8 @@ export default function Datenschutz() {
         personenbezogene Daten bereitzustellen; ohne Angaben kann ich eine
         Anfrage jedoch nicht beantworten. Eine automatisierte
         Entscheidungsfindung einschließlich Profiling nach Art. 22 DSGVO findet
-        nicht statt. Der Concierge beantwortet Fragen und bereitet Anfragen
-        vor; über Buchungen entscheide ich selbst.
+        nicht statt. Die automatische Antwort auf Instagram sendet nur den
+        Link, nach dem Sie gefragt haben.
       </p>
 
       <h2>14. Ihre Rechte</h2>
