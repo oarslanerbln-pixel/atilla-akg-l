@@ -11,30 +11,55 @@ import { useIntroDone } from "@/hooks/useIntroDone";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import { fill } from "@/i18n/format";
 import { BASE, BASE_LABEL, bearing, formatCoords, partners } from "@/lib/partners";
+import { stays } from "@/lib/stays";
 import type { GlobeFrame, GlobeLayout, GlobeScene, GlobeState } from "./GlobeScene";
 import styles from "./HeroGlobe.module.css";
 
 /** Seconds from Berlin to touchdown, and on the ground before the next flight. */
 const FLIGHT = 2.6;
 const LAYOVER = 0.8;
+/** A hotel keeps the light longer: its name is only on the globe while it is visited. */
+const STAY = 2.2;
 /** Dots this many CSS pixels apart, whatever the globe's size. */
 const DOT_GAP = 6.4;
 
-/** The course from Berlin to each partner, in whole degrees. */
-const HEADINGS = partners.map((p) => Math.round(bearing(BASE, p.coords)));
-type Side = "top" | "left" | "right";
-/** Berlin's label sits above it, clear of every route; places west of it carry theirs on the left. */
-const SIDES: Side[] = ["top", ...partners.map((p): Side => (p.coords.lon < BASE.lon ? "left" : "right"))];
+/** Every place the light flies to: the partners, then the hotels. Route i leads to place i. */
+const PLACES = [
+  ...partners.map((p) => ({ name: p.name, nameLang: p.nameLang, region: p.region, coords: p.coords, stay: false })),
+  ...stays.map((s) => ({ name: s.name, nameLang: s.nameLang, region: s.place, coords: s.coords, stay: true })),
+];
+/**
+ * The order the light flies them: the hotels spread evenly between the
+ * partners, a partner first, so no two hotels follow each other.
+ */
+const slot = (i: number) =>
+  i < partners.length ? i / partners.length : (i - partners.length + 0.5) / Math.max(stays.length, 1);
+const STOPS = PLACES.map((_, i) => i).sort((a, b) => slot(a) - slot(b));
+
+/** The course from Berlin to each place, in whole degrees. */
+const HEADINGS = PLACES.map((p) => Math.round(bearing(BASE, p.coords)));
+type Side = "top" | "bottom" | "left" | "right";
+/**
+ * Berlin's label sits above it, clear of every route; partners west of it
+ * carry theirs on the left. A hotel's hangs below, clear of the partners'.
+ */
+const SIDES: Side[] = [
+  "top",
+  ...PLACES.map((p): Side => (p.stay ? "bottom" : p.coords.lon < BASE.lon ? "left" : "right")),
+];
 /** Between a marker and its label, and the least room left to the screen edge. */
 const GAP = 12;
 const MARGIN = 8;
+/** A hotel in focus quiets the labels whose markers sit this close to its own. */
+const CROWD = 72;
 const OFFSET: Record<Side, (x: number, y: number) => string> = {
   top: (x, y) => `translate3d(${x.toFixed(1)}px, ${(y - GAP).toFixed(1)}px, 0) translate(-50%, -100%)`,
+  bottom: (x, y) => `translate3d(${x.toFixed(1)}px, ${(y + GAP).toFixed(1)}px, 0) translate(-50%, 0)`,
   left: (x, y) => `translate3d(${(x - GAP).toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-100%, -50%)`,
   right: (x, y) => `translate3d(${(x + GAP).toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(0, -50%)`,
 };
 
-/** A label keeps its side while it fits on screen; else it goes above, else across. */
+/** A label keeps its side while it fits on screen; else it goes above (or across), else across. */
 function fit(side: Side, x: number, labelWidth: number, width: number): Side {
   const fits = (s: Side) =>
     s === "right"
@@ -42,12 +67,22 @@ function fit(side: Side, x: number, labelWidth: number, width: number): Side {
       : s === "left"
         ? x - GAP - labelWidth >= MARGIN
         : x - labelWidth / 2 >= MARGIN && x + labelWidth / 2 <= width - MARGIN;
-  const order: Side[] = [side, "top", side === "left" ? "right" : "left"];
+  const order: Side[] =
+    side === "bottom"
+      ? [side, x > width / 2 ? "left" : "right"]
+      : [side, "top", side === "left" ? "right" : "left"];
   return order.find(fits) ?? side;
 }
 
 function initialState(): GlobeState {
-  return { reveal: 0, routes: partners.map(() => ({ draw: 0 })), flight: -1, head: 0, climb: 0 };
+  return {
+    reveal: 0,
+    routes: PLACES.map(() => ({ draw: 0, tail: 0, focus: 0 })),
+    marks: 0,
+    flight: -1,
+    head: 0,
+    climb: 0,
+  };
 }
 
 /**
@@ -97,8 +132,8 @@ export default function HeroGlobe() {
     if (!root || !canvas || !stage || !copy) return;
     const state = (stateRef.current ??= initialState());
     if (calm) {
-      Object.assign(state, { reveal: 1, flight: -1, climb: 0 });
-      state.routes.forEach((route) => (route.draw = 1));
+      Object.assign(state, { reveal: 1, marks: 1, flight: -1, climb: 0 });
+      state.routes.forEach((route, i) => (route.draw = PLACES[i].stay ? 0 : 1));
     }
 
     let cancelled = false;
@@ -110,13 +145,22 @@ export default function HeroGlobe() {
     const widths: number[] = [];
     let width = root.clientWidth;
     const placeLabels = ({ markers }: GlobeFrame) => {
+      // markers[0] is Berlin, so place i is marker i + 1.
+      const hush = markers.map(() => 1);
+      markers.forEach((stay, i) => {
+        if (!PLACES[i - 1]?.stay || stay.visible === 0) return;
+        markers.forEach((marker, j) => {
+          if (PLACES[j - 1]?.stay || Math.hypot(marker.x - stay.x, marker.y - stay.y) > CROWD) return;
+          hush[j] = Math.min(hush[j], 1 - 0.92 * stay.visible);
+        });
+      });
       markers.forEach((marker, i) => {
         const label = labels[i];
         if (!label) return;
         const side = fit(SIDES[i], marker.x, widths[i] ?? 0, width);
         if (label.dataset.side !== side) label.dataset.side = side;
         label.style.transform = OFFSET[side](marker.x, marker.y);
-        label.style.opacity = marker.visible.toFixed(3);
+        label.style.opacity = (marker.visible * hush[i]).toFixed(3);
       });
     };
 
@@ -129,6 +173,7 @@ export default function HeroGlobe() {
         globe = new GlobeScene(canvas, {
           base: BASE,
           destinations: partners.map((p) => p.coords),
+          stays: stays.map((s) => s.coords),
           state,
           spacing: Math.min(2, Math.max(1, ((DOT_GAP / layout.r) * 180) / Math.PI)),
           onFrame: placeLabels,
@@ -249,31 +294,59 @@ export default function HeroGlobe() {
   }, [introDone, calm]);
 
   // The globe's own choreography, once both the intro and three.js are done:
-  // a ripple of land out of Berlin, the routes drawn one after another, then
-  // a light flying them in turn, for as long as the page is open.
+  // a ripple of land out of Berlin, the partners' routes drawn one after
+  // another, the hotels' diamonds, then a light flying to each place in turn,
+  // for as long as the page is open. A hotel's route is drawn by the light
+  // itself and, once it has landed, gathers back into the hotel.
   useEffect(() => {
     const state = stateRef.current;
     if (!state || !ready || !introDone || calm) return;
     const ctx = gsap.context(() => {
       const flights = gsap.timeline({ repeat: -1, repeatDelay: LAYOVER });
-      partners.forEach((_, i) => {
-        const at = i * (FLIGHT + LAYOVER);
+      let at = 0;
+      STOPS.forEach((route, stop) => {
+        const flightPath = { duration: FLIGHT, ease: "power1.inOut" };
         flights
           .call(
             () => {
-              state.flight = i;
-              setFlight(i);
+              state.flight = route;
+              setFlight(stop);
             },
             [],
             at,
           )
-          .fromTo(state, { head: 0 }, { head: 1.3, duration: FLIGHT, ease: "power1.inOut" }, at);
+          .fromTo(state, { head: 0 }, { head: 1.3, ...flightPath }, at);
+        if (!PLACES[route].stay) {
+          at += FLIGHT + LAYOVER;
+          return;
+        }
+        // Later tweens of the same leg must not render their start values
+        // before their turn, or every hotel would open in the spotlight.
+        const later = { immediateRender: false };
+        const leg = state.routes[route];
+        flights
+          .fromTo(leg, { draw: 0, tail: 0 }, { draw: 1.3, tail: 0, ...flightPath }, at)
+          .fromTo(leg, { focus: 0 }, { focus: 1, duration: 0.6, ease: "power2.out", ...later }, at + FLIGHT * 0.6)
+          .fromTo(leg, { tail: 0 }, { tail: 1.01, duration: 1.1, ease: "power2.inOut", ...later }, at + FLIGHT)
+          .fromTo(
+            leg,
+            { focus: 1 },
+            { focus: 0, duration: 0.7, ease: "power2.in", ...later },
+            at + FLIGHT + STAY - 0.7,
+          );
+        at += FLIGHT + STAY;
       });
       gsap
         .timeline()
         .fromTo(state, { reveal: 0 }, { reveal: 1, duration: 2.8, ease: "power2.inOut" })
-        .fromTo(state.routes, { draw: 0 }, { draw: 1, duration: 1.3, ease: "power3.inOut", stagger: 0.3 }, 1.1)
-        .add(flights, "+=0.4");
+        .fromTo(
+          state.routes.filter((_, i) => !PLACES[i].stay),
+          { draw: 0 },
+          { draw: 1, duration: 1.3, ease: "power3.inOut", stagger: 0.3 },
+          1.1,
+        )
+        .fromTo(state, { marks: 0 }, { marks: 1, duration: 1.6, ease: "power2.out" }, "-=0.5")
+        .add(flights, "-=0.6");
     });
     return () => ctx.revert();
   }, [ready, introDone, calm]);
@@ -282,8 +355,9 @@ export default function HeroGlobe() {
   const flying = shown >= 0;
   // Before the first flight the instrument is already set, hidden, on the
   // first course: it keeps its height, so the globe is sized only once.
-  const course = Math.max(shown, 0);
-  const target = partners[course];
+  const course = STOPS[Math.max(shown, 0)];
+  const target = PLACES[course];
+  const active = flying ? STOPS[shown] : -1;
 
   return (
     <section className={styles.hero} ref={rootRef} data-globe={ready ? "" : undefined}>
@@ -301,20 +375,21 @@ export default function HeroGlobe() {
             {BASE_LABEL.name}
           </span>
         </span>
-        {partners.map((partner, i) => (
+        {PLACES.map((place, i) => (
           <span
-            key={partner.name}
+            key={place.name}
             className={styles.label}
-            data-active={shown === i ? "" : undefined}
+            data-active={active === i ? "" : undefined}
+            data-stay={place.stay ? "" : undefined}
             data-side={SIDES[i + 1]}
             ref={(el) => {
               labelRefs.current[i + 1] = el;
             }}
           >
-            <span className={styles.labelName} lang={partner.nameLang ?? "en"}>
-              {partner.name}
+            <span className={styles.labelName} lang={place.nameLang ?? "en"}>
+              {place.name}
             </span>
-            <span className={styles.labelMeta}>{formatCoords(partner.coords)}</span>
+            <span className={styles.labelMeta}>{place.stay ? t(place.region) : formatCoords(place.coords)}</span>
           </span>
         ))}
       </div>
@@ -375,11 +450,11 @@ export default function HeroGlobe() {
         </div>
 
         <div className={styles.hud} data-shown={ready && flying ? "" : undefined} aria-hidden="true">
-          <span className={styles.compass} style={{ transform: `rotate(${flying ? HEADINGS[shown] : 0}deg)` }}>
+          <span className={styles.compass} style={{ transform: `rotate(${flying ? HEADINGS[course] : 0}deg)` }}>
             <BrandMark className={styles.mark} />
           </span>
           <span className={styles.hudText}>
-            <span className={styles.hudEyebrow}>{t("hero_globe_route")}</span>
+            <span className={styles.hudEyebrow}>{t(target.stay ? "hero_globe_stay" : "hero_globe_route")}</span>
             <span key={shown} className={styles.hudRoute} lang={target.nameLang ?? "en"}>
               {target.name}
             </span>

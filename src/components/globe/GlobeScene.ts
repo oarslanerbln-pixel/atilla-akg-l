@@ -35,8 +35,15 @@ import { isLand } from "./land";
 export interface GlobeState {
   /** 0–1: the ripple of dots spreading out from Berlin. */
   reveal: number;
-  /** One per destination, 0–1: how much of its route is drawn. */
-  routes: { draw: number }[];
+  /**
+   * One per destination, then one per stay. `draw`: how much of the route is
+   * drawn from Berlin (a stay's runs to 1.3, in step with `head`). `tail`:
+   * how much has been taken back again, so a stay's route gathers into it.
+   * `focus`, 0–1: a stay in the spotlight, its name shown.
+   */
+  routes: { draw: number; tail: number; focus: number }[];
+  /** 0–1: the stays' marks appearing, one after another. */
+  marks: number;
   /** Index of the route the light is flying, or -1. */
   flight: number;
   /** 0–1.3: the light's position along that route; past 1 its trail fades out. */
@@ -58,18 +65,20 @@ export interface GlobeLayout {
 export interface GlobeMarker {
   x: number;
   y: number;
-  /** 0–1: facing the viewer and, for a destination, reached by its route. */
+  /** 0–1: facing the viewer and, for a destination, reached by its route; for a stay, in the spotlight. */
   visible: number;
 }
 
 export interface GlobeFrame {
-  /** Berlin first, then each destination. */
+  /** Berlin first, then each destination, then each stay. */
   markers: GlobeMarker[];
 }
 
 interface GlobeOptions {
   base: Coords;
   destinations: Coords[];
+  /** Hotels: a diamond each, a route only while the light flies it. */
+  stays: Coords[];
   state: GlobeState;
   /** Degrees between neighbouring dots. */
   spacing: number;
@@ -85,6 +94,9 @@ const INK = new Color("#181512");
 const GOLD = new Color("#b38b59");
 const GOLD_LIGHT = new Color("#d8b482");
 const GOLD_DEEP = new Color("#7c5423");
+/** A stay's diamond at rest, and how much it grows in the spotlight. */
+const STAY_SIZE = 13;
+const STAY_GROW = 7;
 
 function toVector(lat: number, lon: number, radius = 1): Vector3 {
   const phi = lat * DEG;
@@ -202,15 +214,16 @@ const ROUTE_VERTEX = /* glsl */ `
   }
 `;
 
-// Drawn up to uDraw; a hot trail runs behind the flying light.
+// Drawn from uTail up to uDraw; a hot trail runs behind the flying light.
 const ROUTE_FRAGMENT = /* glsl */ `
   uniform float uDraw;
+  uniform float uTail;
   uniform float uHead;
   uniform vec3 uColor;
   uniform vec3 uHot;
   varying float vAlong;
   void main() {
-    if (vAlong > uDraw) discard;
+    if (vAlong > uDraw || vAlong < uTail) discard;
     float trail = smoothstep(uHead - 0.22, uHead, vAlong) * step(vAlong, uHead);
     gl_FragColor = vec4(mix(uColor, uHot, trail), 0.5 + 0.5 * trail);
     #include <colorspace_fragment>
@@ -221,28 +234,35 @@ const SPOT_VERTEX = /* glsl */ `
   attribute float aSize;
   attribute vec3 aColor;
   attribute float aAlpha;
+  attribute float aShape;
   uniform float uDepth;
   uniform float uDpr;
   varying vec3 vColor;
   varying float vAlpha;
+  varying float vShape;
   void main() {
     vec4 mv = modelViewMatrix * vec4(position, 1.0);
     vColor = aColor;
     vAlpha = aAlpha;
+    vShape = aShape;
     gl_PointSize = aSize * uDpr * (uDepth / -mv.z);
     gl_Position = projectionMatrix * mv;
   }
 `;
 
-// A solid core inside a soft halo: the markers and the flying light.
+// A solid core inside a soft halo: the markers and the flying light. A
+// stay's core is a diamond, with less halo, so it reads as a different kind
+// of place from the destinations' gold dots.
 const SPOT_FRAGMENT = /* glsl */ `
   varying vec3 vColor;
   varying float vAlpha;
+  varying float vShape;
   void main() {
-    float d = length(gl_PointCoord - 0.5);
+    vec2 c = gl_PointCoord - 0.5;
+    float d = mix(length(c), (abs(c.x) + abs(c.y)) * 0.8, vShape);
     if (d > 0.5) discard;
     float core = smoothstep(0.2, 0.14, d);
-    float halo = smoothstep(0.5, 0.0, d) * 0.3;
+    float halo = smoothstep(0.5, 0.0, d) * 0.3 * (1.0 - 0.6 * vShape);
     gl_FragColor = vec4(vColor, (core + halo) * vAlpha);
     #include <colorspace_fragment>
   }
@@ -261,8 +281,11 @@ export class GlobeScene {
   private readonly curves: RouteCurve[] = [];
   private readonly spots: Points<BufferGeometry, ShaderMaterial>;
   private readonly pulses: Mesh<RingGeometry, MeshBasicMaterial>[] = [];
-  /** Berlin, then each destination, on the unit sphere. */
+  /** Berlin, then each destination, then each stay, on the unit sphere. */
   private readonly anchors: Vector3[];
+  /** The anchor index of the first stay. */
+  private readonly firstStay: number;
+  private readonly tint = new Color();
 
   private layout: GlobeLayout = { width: 1, height: 1, cx: 0.5, cy: 0.5, r: 0.25 };
   private readonly pointer = { x: 0, y: 0 };
@@ -285,7 +308,8 @@ export class GlobeScene {
     this.tilt.add(this.spin);
 
     const base = toVector(options.base.lat, options.base.lon);
-    this.anchors = [base, ...options.destinations.map((c) => toVector(c.lat, c.lon))];
+    this.anchors = [base, ...[...options.destinations, ...options.stays].map((c) => toVector(c.lat, c.lon))];
+    this.firstStay = 1 + options.destinations.length;
 
     // The body. Opaque, so it hides whatever lies on the far side.
     this.spin.add(
@@ -320,8 +344,8 @@ export class GlobeScene {
     this.land = this.buildLand(options.spacing, base);
     this.spin.add(this.land);
 
-    // The routes, each a fine tube along its great circle.
-    for (const to of this.anchors.slice(1)) {
+    // The routes, each a fine tube along its great circle; a stay's finer still.
+    this.anchors.slice(1).forEach((to, i) => {
       const curve = new RouteCurve(base, to);
       const material = new ShaderMaterial({
         vertexShader: ROUTE_VERTEX,
@@ -330,6 +354,7 @@ export class GlobeScene {
         depthWrite: false,
         uniforms: {
           uDraw: { value: 0 },
+          uTail: { value: 0 },
           uHead: { value: -1 },
           uColor: { value: GOLD },
           uHot: { value: GOLD_DEEP },
@@ -337,8 +362,9 @@ export class GlobeScene {
       });
       this.curves.push(curve);
       this.routes.push(material);
-      this.spin.add(new Mesh(new TubeGeometry(curve, 96, 0.0042, 6, false), material));
-    }
+      const radius = this.isStay(i + 1) ? 0.003 : 0.0042;
+      this.spin.add(new Mesh(new TubeGeometry(curve, 96, radius, 6, false), material));
+    });
 
     // Rings that ripple out from each place, lying flat on the surface.
     const up = new Vector3(0, 0, 1);
@@ -353,15 +379,19 @@ export class GlobeScene {
       this.spin.add(ring);
     }
 
-    // The markers (Berlin in ink, destinations in gold) and, last, the light.
+    // The markers (Berlin in ink, destinations in gold, stays as ink
+    // diamonds) and, last, the light.
     const count = this.anchors.length + 1;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     const sizes = new Float32Array(count);
+    const shapes = new Float32Array(count);
     this.anchors.forEach((anchor, i) => {
       anchor.clone().multiplyScalar(1.004).toArray(positions, i * 3);
-      (i === 0 ? INK : GOLD_DEEP).toArray(colors, i * 3);
-      sizes[i] = i === 0 ? 20 : 16;
+      const stay = this.isStay(i);
+      (i === 0 || stay ? INK : GOLD_DEEP).toArray(colors, i * 3);
+      sizes[i] = i === 0 ? 20 : stay ? STAY_SIZE : 16;
+      shapes[i] = stay ? 1 : 0;
     });
     GOLD_DEEP.toArray(colors, (count - 1) * 3);
     sizes[count - 1] = 30;
@@ -370,6 +400,7 @@ export class GlobeScene {
     spotGeometry.setAttribute("aColor", new BufferAttribute(colors, 3));
     spotGeometry.setAttribute("aSize", new BufferAttribute(sizes, 1));
     spotGeometry.setAttribute("aAlpha", new BufferAttribute(new Float32Array(count), 1));
+    spotGeometry.setAttribute("aShape", new BufferAttribute(shapes, 1));
     this.spots = new Points(
       spotGeometry,
       new ShaderMaterial({
@@ -381,6 +412,19 @@ export class GlobeScene {
       }),
     );
     this.spin.add(this.spots);
+  }
+
+  private isStay(anchor: number): boolean {
+    return anchor >= this.firstStay;
+  }
+
+  /** 0–1: how far an anchor has appeared. Berlin with the ripple, a destination when its route lands, the stays in turn. */
+  private arrived(anchor: number): number {
+    const { state } = this;
+    if (anchor === 0) return smoothstep(0, 0.08, state.reveal);
+    if (!this.isStay(anchor)) return smoothstep(0.9, 1, state.routes[anchor - 1]?.draw ?? 0);
+    const start = ((anchor - this.firstStay) / (this.anchors.length - this.firstStay)) * 0.5;
+    return smoothstep(start, start + 0.5, state.marks);
   }
 
   /** One dot per land cell on rows of equal spacing, each tagged with its distance from Berlin. */
@@ -498,14 +542,26 @@ export class GlobeScene {
 
     this.routes.forEach((material, i) => {
       material.uniforms.uDraw.value = state.routes[i]?.draw ?? 0;
+      material.uniforms.uTail.value = state.routes[i]?.tail ?? 0;
       material.uniforms.uHead.value = state.flight === i ? state.head : -1;
     });
 
-    // Markers: Berlin appears with the ripple, a destination when its route lands.
-    const arrived = (i: number) =>
-      i === 0 ? smoothstep(0, 0.08, state.reveal) : smoothstep(0.9, 1, state.routes[i - 1]?.draw ?? 0);
+    const arrived = (i: number) => this.arrived(i);
+    const focus = (i: number) => (this.isStay(i) ? (state.routes[i - 1]?.focus ?? 0) : 1);
     const alpha = this.spots.geometry.getAttribute("aAlpha") as BufferAttribute;
     this.anchors.forEach((_, i) => alpha.setX(i, arrived(i)));
+
+    // A stay in the spotlight warms from ink to gold and grows a little.
+    const colors = this.spots.geometry.getAttribute("aColor") as BufferAttribute;
+    const sizes = this.spots.geometry.getAttribute("aSize") as BufferAttribute;
+    for (let i = this.firstStay; i < this.anchors.length; i++) {
+      const f = focus(i);
+      this.tint.copy(INK).lerp(GOLD_DEEP, f);
+      colors.setXYZ(i, this.tint.r, this.tint.g, this.tint.b);
+      sizes.setX(i, STAY_SIZE + STAY_GROW * f);
+    }
+    colors.needsUpdate = true;
+    sizes.needsUpdate = true;
 
     // The light, at the same arc-length position the route's trail uses.
     const light = this.anchors.length;
@@ -519,12 +575,15 @@ export class GlobeScene {
     alpha.setX(light, flying ? smoothstep(0, 0.05, state.head) * (1 - smoothstep(0.95, 1, state.head)) : 0);
     alpha.needsUpdate = true;
 
-    // A slow pulse from every reached place, and a wide one where the light lands.
+    // A slow pulse from every reached place, and a wide one where the light
+    // lands. Stays pulse only then, so the globe keeps its quiet.
     this.pulses.forEach((ring, i) => {
       const landing = i > 0 && state.flight === i - 1 ? smoothstep(0.96, 1.3, state.head) : 0;
       if (landing > 0) {
         ring.scale.setScalar(0.02 + landing * 0.1);
         ring.material.opacity = arrived(i) * (1 - landing) * 0.9;
+      } else if (this.isStay(i)) {
+        ring.material.opacity = 0;
       } else {
         const phase = (time * 0.45 + i * 0.29) % 1;
         ring.scale.setScalar(0.012 + phase * 0.045);
@@ -541,7 +600,7 @@ export class GlobeScene {
       return {
         x: ((world.x + 1) / 2) * layout.width,
         y: ((1 - world.y) / 2) * layout.height,
-        visible: arrived(i) * smoothstep(0.15, 0.4, facing),
+        visible: arrived(i) * focus(i) * smoothstep(0.15, 0.4, facing),
       };
     });
     this.onFrame({ markers });
