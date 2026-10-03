@@ -60,3 +60,6 @@ next-env.d.ts
 /.claude/worktrees/
 /.claude/launch.json
 /.playwright-mcp/
+
+# rate cards carry prices; the repo is public
+/social/briefs/private/

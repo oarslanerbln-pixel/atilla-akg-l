@@ -39,6 +39,14 @@ price feed, and reading their pages by script is not allowed. `keyword` must be
 one of the partner offer's keywords in `supabase/offers.sql`; the story asks
 people to reply with it and the concierge answers with the tracked link.
 
+`kind: "rates"` (`templates/rates.tsx`): a 1080×1350 rate card for shoot and
+edit, sent by hand in DMs, one per market. `currency` (`EUR` or `CHF`; Swiss
+cards group digits as 1’190), `title`, `accent` (the market), three `offers`
+(`name`, `includes`, `price`, one `featured`), up to two `proof` reels with
+their views on `asOf`, and `terms` (travel). The audience figures come from
+`src/lib/site.ts`. Rate briefs go in `social/briefs/private/`, which git
+ignores: the repo is public and the site quotes no prices.
+
 ## Rules
 
 - Partner content carries the ad label: the eyebrow starts with "Anzeige"

@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { contactSheet, framePhoto, renderPng } from "./kit";
 import { COVER_TEMPLATES, type CoverBrief, type CoverTemplate } from "./templates/covers";
 import { flightsStory, type FlightsBrief } from "./templates/flights";
+import { RATE_CARD, rateCard, type RatesBrief } from "./templates/rates";
 
 // npm run social -- social/briefs/<brief>.json
 // Renders the brief's images into social/out/. See social/README.md.
@@ -31,7 +32,7 @@ async function renderCovers(brief: CoverBrief) {
 async function main() {
   const path = process.argv[2];
   if (!path) throw new Error("Usage: npm run social -- social/briefs/<brief>.json");
-  const brief = JSON.parse(readFileSync(path, "utf8")) as CoverBrief | FlightsBrief;
+  const brief = JSON.parse(readFileSync(path, "utf8")) as CoverBrief | FlightsBrief | RatesBrief;
 
   let files: string[];
   if (brief.kind === "cover") {
@@ -39,6 +40,10 @@ async function main() {
   } else if (brief.kind === "flights") {
     const file = join(OUT, `${brief.name}.png`);
     await renderPng(flightsStory(brief), file);
+    files = [file];
+  } else if (brief.kind === "rates") {
+    const file = join(OUT, `${brief.name}.png`);
+    await renderPng(rateCard(brief), file, RATE_CARD);
     files = [file];
   } else {
     throw new Error(`Unknown brief kind in ${path}`);
