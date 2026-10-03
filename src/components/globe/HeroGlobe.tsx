@@ -174,6 +174,7 @@ export default function HeroGlobe() {
           base: BASE,
           destinations: partners.map((p) => p.coords),
           stays: stays.map((s) => s.coords),
+          headings: HEADINGS,
           state,
           spacing: Math.min(2, Math.max(1, ((DOT_GAP / layout.r) * 180) / Math.PI)),
           onFrame: placeLabels,
