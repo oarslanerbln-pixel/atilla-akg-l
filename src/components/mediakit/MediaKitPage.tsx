@@ -1,12 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, type Transition } from "framer-motion";
 import { ArrowUpRight, Play } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
+import { fill } from "@/i18n/format";
 import { contact } from "@/lib/site";
 import { brands } from "@/lib/brands";
 import { partners } from "@/lib/partners";
@@ -25,6 +27,17 @@ type Segment = (typeof SEGMENTS)[number];
 const segmentKey = (segment: Segment, part: string) => `mk_${segment}_${part}` as TranslationKeys;
 
 /**
+ * Each segment is shown with footage of its own kind: the hotel film itself,
+ * and for restaurants and brands a still from the Caravanserai film (its
+ * restaurant, its courtyard), captioned as a still from that film so it never
+ * reads as a client of that segment.
+ */
+const SEGMENT_STILLS: Record<Exclude<Segment, "hotels">, string> = {
+  restaurants: "/media-kit/restaurant.webp",
+  brands: "/media-kit/courtyard.webp",
+};
+
+/**
  * The portfolio states each case result as one phrase ("559.316 erreichte
  * Konten", "94.2% Engagement Rate", "%94,2 Etkileşim Oranı"). Here the figure
  * is set large and the words under it, so the phrase is split at the end of
@@ -36,11 +49,23 @@ const splitMetric = (text: string) => {
 };
 
 /**
- * A film in a cinema band: the self-hosted still until the visitor asks for
- * it, then the clip with the browser's own controls. `preload="none"`, so a
- * visitor who never presses play downloads nothing but the poster.
+ * A film: the self-hosted still until the visitor asks for it, then the clip
+ * with the browser's own controls. `preload="none"`, so a visitor who never
+ * presses play downloads nothing but the poster.
  */
-function Film({ src, poster, title, meta }: { src: string; poster: string; title: string; meta?: string }) {
+function Film({
+  src,
+  poster,
+  title,
+  meta,
+  frameClass,
+}: {
+  src: string;
+  poster: string;
+  title: string;
+  meta?: string;
+  frameClass?: string;
+}) {
   const { t } = useLanguage();
   const video = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -57,14 +82,14 @@ function Film({ src, poster, title, meta }: { src: string; poster: string; title
 
   return (
     <figure className={styles.film}>
-      <div className={styles.frame} data-playing={playing || undefined}>
+      <div className={`${styles.frame} ${frameClass ?? ""}`} data-playing={playing || undefined}>
         <video ref={video} className={styles.video} src={src} poster={poster} preload="none" playsInline />
         {!playing && (
           <button type="button" className={styles.play} onClick={start} aria-label={`${t("mk_film_play")}: ${title}`}>
             <span className={styles.playIcon} aria-hidden="true">
-              <Play size={16} />
+              <Play size={18} strokeWidth={1.25} />
             </span>
-            {t("mk_film_play")}
+            <span className={styles.playLabel}>{t("mk_film_play")}</span>
           </button>
         )}
       </div>
@@ -81,11 +106,12 @@ function Film({ src, poster, title, meta }: { src: string; poster: string; title
  *
  * A decision-maker opens it once, usually at a desk, and should know within a
  * screen who this is, whom the films reach and what working together looks
- * like.
- * So it is shorter and quieter than the portfolio: porcelain ground, hairlines
- * instead of shadowed cards, the films in dark bands at full width, figures
- * that stand still, and one way to reply. No intro, no custom cursor, no
- * floating button, no prices (quoted after a call, as on /social-media).
+ * like. It is laid out like a printed media kit: a cover still with the
+ * headline set in its sky, numbered chapters on porcelain, the segments as
+ * alternating spreads of footage and text, the person behind the camera, and
+ * an ink close that runs the references like end credits. No intro, no custom
+ * cursor, no floating button, no prices (quoted after a call, as on
+ * /social-media).
  *
  * Everything a fact rests on is read from its one source: the audience from
  * lib/site.ts, the references from brands.ts and partners.ts, the two case
@@ -108,6 +134,13 @@ export default function MediaKitPage() {
     viewport: { once: true, margin: "-80px" },
     transition: at(delay, 0.9),
   });
+  // Footage opens like a curtain rising, rather than sliding in.
+  const unveil = (delay = 0) => ({
+    initial: { clipPath: "inset(0 0 100% 0)" },
+    whileInView: { clipPath: "inset(0 0 0% 0)" },
+    viewport: { once: true, margin: "-80px" },
+    transition: at(delay, 1.4),
+  });
 
   // In place, like the other switchers; the address follows, so a link copied
   // from the bar opens in the language on screen.
@@ -117,16 +150,15 @@ export default function MediaKitPage() {
   };
 
   const figures = mediaKitFigures(activeLang);
+  const novotel = { name: t("project_1_title"), lang: "en" };
 
   const references: Record<Segment, { name: string; lang: string }[]> = {
-    hotels: [
-      { name: t("project_1_title"), lang: "en" },
-      ...brands.filter((brand) => brand.segment === "hotels"),
-    ],
+    hotels: [novotel, ...brands.filter((brand) => brand.segment === "hotels")],
     restaurants: [],
     brands: brands.filter((brand) => brand.segment === "brands"),
   };
 
+  const stillCaption = fill(t("mk_still"), { title: t("project_3_title") });
   const mailHref = `mailto:${contact.email}?subject=${encodeURIComponent(t("mk_mail_subject"))}`;
   const whatsappHref = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(t("mk_wa_message"))}`;
 
@@ -162,33 +194,57 @@ export default function MediaKitPage() {
       </header>
 
       <main className={styles.page}>
-        {/* Opening */}
-        <section className={styles.opening}>
-          <div className={`container ${styles.openingInner}`}>
-            <motion.p className={styles.eyebrow} {...rise(0.1)}>
+        {/* Cover: the still carries the page; the headline sits in its sky. */}
+        <section className={styles.cover}>
+          <motion.div
+            className={styles.coverStill}
+            initial={{ scale: calm ? 1 : 1.06 }}
+            animate={{ scale: 1 }}
+            transition={calm ? { duration: 0 } : { duration: 2.8, ease: EASE }}
+          >
+            {/* Served as encoded (50 KB): the optimizer's re-encode at q75
+                bands the sky the headline is set in. */}
+            <Image
+              src="/media-kit/cover.webp"
+              alt=""
+              fill
+              priority
+              unoptimized
+              sizes="100vw"
+              className={styles.coverImage}
+            />
+          </motion.div>
+          <div className={`container ${styles.coverInner}`}>
+            <motion.p className={styles.coverEyebrow} {...rise(0.2)}>
               {t("mk_eyebrow")}
             </motion.p>
             <h1 className={styles.headline}>
-              <motion.span className={styles.headlineLine} {...rise(0.2)}>
+              <motion.span className={styles.headlineLine} {...rise(0.35)}>
                 {t("mk_title_1")}
               </motion.span>{" "}
-              <motion.span className={`${styles.headlineLine} ${styles.headlineSoft}`} {...rise(0.32)}>
+              <motion.span className={`${styles.headlineLine} ${styles.headlineSoft}`} {...rise(0.5)}>
                 {t("mk_title_2")}
               </motion.span>
             </h1>
-            <motion.div className={styles.openingFoot} {...rise(0.5)}>
-              <p className={styles.lead}>{t("mk_intro")}</p>
-              <div className={styles.actions}>
-                <a href={mailHref} className={styles.primary}>
-                  {t("mk_cta")}
-                  <ArrowUpRight size={15} aria-hidden="true" />
-                </a>
-                <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={styles.secondary}>
-                  {t("mk_whatsapp")}
-                </a>
-              </div>
+          </div>
+        </section>
+
+        {/* Statement and figures */}
+        <section className={styles.statement}>
+          <div className={`container ${styles.statementInner}`}>
+            <motion.p className={styles.statementText} {...reveal()}>
+              {t("mk_intro")}
+            </motion.p>
+            <motion.div className={styles.actions} {...reveal(0.1)}>
+              <a href={mailHref} className={styles.primary}>
+                {t("mk_cta")}
+                <ArrowUpRight size={15} aria-hidden="true" />
+              </a>
+              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={styles.secondary}>
+                {t("mk_whatsapp")}
+              </a>
             </motion.div>
-            <motion.dl className={styles.figures} aria-label={t("mk_figures_label")} {...rise(0.65)}>
+            <motion.dl className={styles.figures} aria-label={t("mk_figures_label")} {...reveal(0.2)}>
               {figures.map((figure) => (
                 <div key={figure.label} className={styles.figure}>
                   <dt className={styles.figureLabel}>{figure.label}</dt>
@@ -199,9 +255,9 @@ export default function MediaKitPage() {
           </div>
         </section>
 
-        {/* The first film */}
+        {/* The film */}
         <section className={styles.band}>
-          <motion.div className="container" {...reveal()}>
+          <motion.div className={styles.wide} {...reveal()}>
             <Film
               src="/caravanserai-documentary.mp4"
               poster="/posters/caravanserai-documentary.webp"
@@ -211,8 +267,8 @@ export default function MediaKitPage() {
           </motion.div>
         </section>
 
-        {/* Results */}
-        <section className={styles.section} aria-labelledby="results-title">
+        {/* I — Results */}
+        <section className={`${styles.section} ${styles.chapter}`} aria-labelledby="results-title">
           <div className="container">
             <motion.div className={styles.sectionHead} {...reveal()}>
               <p className={styles.eyebrow}>{t("mk_results_eyebrow")}</p>
@@ -229,13 +285,13 @@ export default function MediaKitPage() {
               ).map(({ n, text }, i) => {
                 const metric = splitMetric(t(`project_${n}_metric`));
                 return (
-                  <motion.li key={n} className={styles.case} {...reveal(i * 0.1)}>
-                    <p className={styles.caseCategory}>{t(`project_${n}_cat`)}</p>
-                    <h3 className={styles.caseName}>{t(`project_${n}_title`)}</h3>
+                  <motion.li key={n} className={styles.case} {...reveal(i * 0.12)}>
                     <p className={styles.caseMetric}>
                       <span className={styles.caseValue}>{metric.value}</span>{" "}
                       {metric.label && <span className={styles.caseLabel}>{metric.label}</span>}
                     </p>
+                    <p className={styles.caseCategory}>{t(`project_${n}_cat`)}</p>
+                    <h3 className={styles.caseName}>{t(`project_${n}_title`)}</h3>
                     <p className={styles.caseText}>{t(text)}</p>
                   </motion.li>
                 );
@@ -244,8 +300,8 @@ export default function MediaKitPage() {
           </div>
         </section>
 
-        {/* Formats, by segment */}
-        <section className={styles.section} aria-labelledby="segments-title">
+        {/* II — Formats, by segment */}
+        <section className={`${styles.section} ${styles.chapter}`} aria-labelledby="segments-title">
           <div className="container">
             <motion.div className={styles.sectionHead} {...reveal()}>
               <p className={styles.eyebrow}>{t("mk_segments_eyebrow")}</p>
@@ -255,41 +311,86 @@ export default function MediaKitPage() {
             </motion.div>
             <ol className={styles.segments}>
               {SEGMENTS.map((segment, i) => (
-                <motion.li key={segment} className={styles.segment} {...reveal(i * 0.1)}>
-                  <span className={styles.index}>{String(i + 1).padStart(2, "0")}</span>
-                  <h3 className={styles.segmentName}>{t(segmentKey(segment, "name"))}</h3>
-                  <p className={styles.segmentLead}>{t(segmentKey(segment, "lead"))}</p>
-                  <ul className={styles.formats}>
-                    {FORMATS.map((n) => (
-                      <li key={n}>{t(segmentKey(segment, `f${n}`))}</li>
-                    ))}
-                  </ul>
-                  {references[segment].length > 0 && (
-                    <p className={styles.refs}>
-                      <span className={styles.refsLabel}>{t("mk_refs")}</span>
-                      {references[segment].map((ref, j) => (
-                        <span key={ref.name} lang={ref.lang}>
-                          {j > 0 && ", "}
-                          {ref.name}
-                        </span>
+                <li key={segment} className={styles.segment}>
+                  <motion.div className={styles.segmentVisual} {...unveil()}>
+                    {segment === "hotels" ? (
+                      <Film
+                        src="/hero-reel.mp4"
+                        poster="/media-kit/hotel.webp"
+                        title={t("mk_film_hotel")}
+                        frameClass={styles.frameSpread}
+                      />
+                    ) : (
+                      <figure className={styles.still}>
+                        <div className={styles.stillFrame}>
+                          <Image
+                            src={SEGMENT_STILLS[segment]}
+                            alt=""
+                            fill
+                            sizes="(max-width: 900px) 100vw, 680px"
+                            className={styles.stillImage}
+                          />
+                        </div>
+                        <figcaption className={styles.stillCaption}>{stillCaption}</figcaption>
+                      </figure>
+                    )}
+                  </motion.div>
+                  <motion.div className={styles.segmentBody} {...reveal(0.15)}>
+                    <span className={styles.index}>{String(i + 1).padStart(2, "0")}</span>
+                    <h3 className={styles.segmentName}>{t(segmentKey(segment, "name"))}</h3>
+                    <p className={styles.segmentLead}>{t(segmentKey(segment, "lead"))}</p>
+                    <ul className={styles.formats}>
+                      {FORMATS.map((n) => (
+                        <li key={n}>{t(segmentKey(segment, `f${n}`))}</li>
                       ))}
-                    </p>
-                  )}
-                </motion.li>
+                    </ul>
+                    {references[segment].length > 0 && (
+                      <p className={styles.refs}>
+                        <span className={styles.refsLabel}>{t("mk_refs")}</span>
+                        {references[segment].map((ref, j) => (
+                          <span key={ref.name} lang={ref.lang}>
+                            {j > 0 && ", "}
+                            {ref.name}
+                          </span>
+                        ))}
+                      </p>
+                    )}
+                  </motion.div>
+                </li>
               ))}
             </ol>
           </div>
         </section>
 
-        {/* The second film */}
-        <section className={styles.band}>
-          <motion.div className="container" {...reveal()}>
-            <Film src="/hero-reel.mp4" poster="/posters/hero-reel.webp" title={t("mk_film_hotel")} />
-          </motion.div>
+        {/* III — Behind the camera */}
+        <section className={`${styles.about} ${styles.chapter}`} aria-labelledby="about-title">
+          <div className={`container ${styles.aboutInner}`}>
+            <motion.div className={styles.portrait} {...unveil()}>
+              <Image
+                src="/roadmap/atilla.webp"
+                alt={t("mk_about_alt")}
+                fill
+                sizes="(max-width: 900px) 100vw, 460px"
+                className={styles.portraitImage}
+              />
+            </motion.div>
+            <motion.div className={styles.aboutBody} {...reveal(0.15)}>
+              <p className={styles.eyebrow}>{t("mk_about_eyebrow")}</p>
+              <h2 id="about-title" className={styles.sectionTitle}>
+                {t("mk_about_title")}
+              </h2>
+              <p className={styles.aboutText}>{t("mk_about_text")}</p>
+              <p className={styles.signature}>
+                <BrandMark className={styles.signatureMark} />
+                <span className={styles.signatureName}>Atilla Barbarossa</span>
+                <span className={styles.signatureRole}>{t("mk_about_role")}</span>
+              </p>
+            </motion.div>
+          </div>
         </section>
 
-        {/* Process */}
-        <section className={styles.section} aria-labelledby="process-title">
+        {/* IV — Process */}
+        <section className={`${styles.section} ${styles.chapter}`} aria-labelledby="process-title">
           <div className="container">
             <motion.div className={styles.sectionHead} {...reveal()}>
               <p className={styles.eyebrow}>{t("mk_process_eyebrow")}</p>
@@ -299,8 +400,8 @@ export default function MediaKitPage() {
             </motion.div>
             <ol className={styles.steps}>
               {STEPS.map((n, i) => (
-                <motion.li key={n} className={styles.step} {...reveal(i * 0.1)}>
-                  <span className={styles.index}>{String(n).padStart(2, "0")}</span>
+                <motion.li key={n} className={styles.step} {...reveal(i * 0.12)}>
+                  <span className={styles.stepIndex}>{String(n).padStart(2, "0")}</span>
                   <h3 className={styles.stepTitle}>{t(`mk_step_${n}_t`)}</h3>
                   <p className={styles.stepText}>{t(`mk_step_${n}_d`)}</p>
                 </motion.li>
@@ -309,32 +410,45 @@ export default function MediaKitPage() {
           </div>
         </section>
 
-        {/* Destinations and institutions */}
-        <section className={styles.credits}>
-          <div className="container">
-            <p className={`${styles.eyebrow} ${styles.center}`}>{t("mk_credits")}</p>
-            <ul className={styles.creditList}>
-              {partners.map((partner) => (
-                <li key={partner.name} lang={partner.nameLang}>
-                  {partner.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* Closing */}
+        {/* Close: the references run like end credits, then one way to reply. */}
         <section className={styles.close} aria-labelledby="close-title">
           <div className={`container ${styles.closeInner}`}>
-            <motion.h2 id="close-title" className={styles.closeTitle} {...reveal()}>
+            <motion.div className={styles.credits} {...reveal()}>
+              <div className={styles.creditGroup}>
+                <p className={styles.creditHead}>{t("mk_credits")}</p>
+                <ul className={styles.creditList}>
+                  {partners.map((partner) => (
+                    <li key={partner.name} lang={partner.nameLang}>
+                      {partner.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className={styles.creditGroup}>
+                <p className={styles.creditHead}>{t("mk_credits_brands")}</p>
+                <ul className={styles.creditList}>
+                  {[novotel, ...brands].map((brand) => (
+                    <li key={brand.name} lang={brand.lang}>
+                      {brand.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+
+            <motion.div className={styles.closeMark} {...reveal(0.1)} aria-hidden="true">
+              <BrandMark className={styles.closeMarkSvg} />
+            </motion.div>
+            <motion.h2 id="close-title" className={styles.closeTitle} {...reveal(0.15)}>
               {t("mk_close_title")}
             </motion.h2>
-            <motion.p className={styles.closeNote} {...reveal(0.1)}>
+            <motion.p className={styles.closeNote} {...reveal(0.2)}>
               {t("mk_close_note")}
             </motion.p>
-            <motion.div className={styles.closeActions} {...reveal(0.2)}>
+            <motion.div className={styles.closeActions} {...reveal(0.25)}>
               <a href={mailHref} className={styles.closePrimary}>
                 {t("mk_cta")}
+                <ArrowUpRight size={15} aria-hidden="true" />
               </a>
               <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={styles.closeSecondary}>
                 {t("mk_whatsapp")}
