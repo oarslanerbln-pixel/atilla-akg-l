@@ -29,12 +29,14 @@ export const LANGUAGE_NAMES: Record<Language, string> = { DE: "Deutsch", EN: "En
 
 /**
  * The pages that exist in all three languages. /social-media keeps the
- * suffix form (/social-media/en) it was first sent with; the home page takes
- * a prefix (/en), as there is nothing to suffix.
+ * suffix form (/social-media/en) it was first sent with, and /media-kit
+ * follows it; the home page takes a prefix (/en), as there is nothing to
+ * suffix.
  */
 const PAGES = {
   home: { DE: "/", EN: "/en", TR: "/tr" },
   socialMedia: { DE: "/social-media", EN: "/social-media/en", TR: "/social-media/tr" },
+  mediaKit: { DE: "/media-kit", EN: "/media-kit/en", TR: "/media-kit/tr" },
 } as const satisfies Record<string, Record<Language, string>>;
 
 export type LocalizedPage = keyof typeof PAGES;
