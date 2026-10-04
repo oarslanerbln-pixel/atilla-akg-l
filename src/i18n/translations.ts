@@ -390,7 +390,14 @@ export const translations = {
     mk_step_3_d: "Das Reel erscheint als Collab auf Ihrem und meinem Profil, als Anzeige gekennzeichnet. Nach sieben Tagen erhalten Sie die Statistik.",
     mk_credits: "Destinationen & Institutionen",
     mk_close_title: "Erzählen wir Ihre Geschichte.",
-    mk_close_note: "Schreiben Sie mir, was Sie vorhaben. Sie erhalten ein kurzes Konzept und die Konditionen."
+    mk_close_note: "Schreiben Sie mir, was Sie vorhaben. Sie erhalten ein kurzes Konzept und die Konditionen.",
+    mk_still: "Still aus „{title}“",
+    mk_about_eyebrow: "Hinter der Kamera",
+    mk_about_title: "Ein Filmemacher zwischen Berlin und Istanbul",
+    mk_about_text: "Ich bin studierter Filmemacher und Creative Director. Für Tourismusbehörden, Hotelgruppen und Marken erzähle ich Orte so, wie Reisende sie erleben möchten – auf Deutsch, Englisch und Türkisch, überall auf der Welt.",
+    mk_about_role: "Filmemacher & Creative Director",
+    mk_about_alt: "Atilla Barbarossa, Porträt",
+    mk_credits_brands: "Marken & Häuser"
   },
   
   EN: {
@@ -784,7 +791,14 @@ export const translations = {
     mk_step_3_d: "The Reel goes live as a Collab on your profile and mine, labelled as an ad. After seven days you receive the statistics.",
     mk_credits: "Destinations & institutions",
     mk_close_title: "Let's tell your story.",
-    mk_close_note: "Tell me what you have in mind. You'll receive a short concept and the terms."
+    mk_close_note: "Tell me what you have in mind. You'll receive a short concept and the terms.",
+    mk_still: "Still from “{title}”",
+    mk_about_eyebrow: "Behind the camera",
+    mk_about_title: "A filmmaker between Berlin and Istanbul",
+    mk_about_text: "I am a trained filmmaker and creative director. For tourism boards, hotel groups and brands, I tell places the way travellers want to experience them – in German, English and Turkish, anywhere in the world.",
+    mk_about_role: "Filmmaker & Creative Director",
+    mk_about_alt: "Atilla Barbarossa, portrait",
+    mk_credits_brands: "Brands & hotels"
   },
   
   TR: {
@@ -1178,7 +1192,14 @@ export const translations = {
     mk_step_3_d: "Reel, reklam olarak işaretlenip hem sizin hem benim profilimde Collab olarak yayınlanır. Yedi gün sonra istatistikleri alırsınız.",
     mk_credits: "Destinasyonlar ve kurumlar",
     mk_close_title: "Hikâyenizi birlikte anlatalım.",
-    mk_close_note: "Ne planladığınızı yazın; size kısa bir konsept ve koşulları göndereyim."
+    mk_close_note: "Ne planladığınızı yazın; size kısa bir konsept ve koşulları göndereyim.",
+    mk_still: "“{title}” filminden bir kare",
+    mk_about_eyebrow: "Kameranın arkasında",
+    mk_about_title: "Berlin ile İstanbul arasında bir film yapımcısı",
+    mk_about_text: "Eğitimli bir film yapımcısı ve kreatif direktörüm. Turizm kurumları, otel grupları ve markalar için mekânları, seyahat edenlerin yaşamak istediği gibi anlatıyorum – Almanca, İngilizce ve Türkçe, dünyanın her yerinde.",
+    mk_about_role: "Film Yapımcısı & Kreatif Direktör",
+    mk_about_alt: "Atilla Barbarossa, portre",
+    mk_credits_brands: "Markalar ve oteller"
   }
 };
 
