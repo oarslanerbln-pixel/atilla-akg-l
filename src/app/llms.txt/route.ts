@@ -41,6 +41,10 @@ export function GET() {
       (lang) =>
         `- [Monthly social media packages (${LANGUAGE_NAMES[lang]})](${absolute(pagePath("socialMedia", lang))})`,
     ),
+    ...LANGUAGES.map(
+      (lang) =>
+        `- [Media kit for hotels, restaurants and brands (${LANGUAGE_NAMES[lang]})](${absolute(pagePath("mediaKit", lang))})`,
+    ),
     `- [The Travel Creator Roadmap, e-book (Deutsch)](${absolute("/roadmap")})`,
     "",
     "## Audience",

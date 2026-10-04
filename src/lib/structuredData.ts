@@ -268,6 +268,38 @@ export function socialMediaGraph(lang: Language) {
 }
 
 /**
+ * /media-kit: a page about the person, for hotels, restaurants and brands.
+ * It restates nothing the site graph does not already carry, so it is a
+ * WebPage pointing at the Person, with its place in the site.
+ */
+export function mediaKitGraph(lang: Language) {
+  const t = translations[lang];
+  const url = absolute(pagePath("mediaKit", lang));
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}#page`,
+        url,
+        name: t.mk_meta_title,
+        description: fill(t.mk_meta_description, siteFacts(lang)),
+        inLanguage: HTML_LANG[lang],
+        isPartOf: ref(ids.website),
+        about: ref(ids.person),
+        breadcrumb: {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Atilla Barbarossa", item: absolute(pagePath("home", lang)) },
+            { "@type": "ListItem", position: 2, name: t.mk_eyebrow, item: url },
+          ],
+        },
+      },
+    ],
+  };
+}
+
+/**
  * /roadmap: the e-book, with the price its checkout charges, and the page's
  * own questions. German, like the page's address and the book itself.
  */

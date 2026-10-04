@@ -5,8 +5,8 @@ import { HTML_LANG, LANGUAGES, pagePath, type LocalizedPage } from "@/lib/locale
 const absolute = (path: string) => new URL(path, siteUrl).href;
 
 /**
- * Every address meant to be found. The home page and /social-media exist in
- * three languages; each language is listed with its siblings as hreflang
+ * Every address meant to be found. The home page, /social-media and
+ * /media-kit exist in three languages; each language is listed with its siblings as hreflang
  * alternates, the same set the pages declare in their <head>. The e-book is
  * German. The legal pages are left out: they are noindex.
  */
@@ -30,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...localized("home", 1),
     ...localized("socialMedia", 0.8),
+    ...localized("mediaKit", 0.8),
     {
       url: absolute("/roadmap"),
       lastModified,
