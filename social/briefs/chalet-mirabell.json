@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "chalet-mirabell",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Hotel-Tipp · Südtirol",
+  "title": "Chalet Mirabell",
+  "accent": "bei Meran",
+  "subtitle": "5-Sterne-Luxus in Hafling",
+  "photo": { "src": "social/assets/chalet-mirabell.jpg", "focus": [0.45, 0.62], "zoom": 1.5 }
+}

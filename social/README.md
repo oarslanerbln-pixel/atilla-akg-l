@@ -30,7 +30,7 @@ full-resolution frame exported from the video, not a screenshot: a cover is
 
 `kind: "cover"` (`templates/covers.tsx`): `eyebrow`, `title`, `accent` (the
 second title line in gold), `subtitle`, `tags`, `photo`, optionally
-`templates` to render only some of `editorial`, `passepartout`, `split`, `card`.
+`templates` to render only some of `lounge`, `editorial`, `passepartout`, `split`, `card`.
 
 `kind: "flights"` (`templates/flights.tsx`): a story with up to four
 destinations and prices, cheapest first. The prices are typed in from the

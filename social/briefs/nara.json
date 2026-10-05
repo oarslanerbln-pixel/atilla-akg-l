@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "nara",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Anzeige · Nara Holzkohle Grill",
+  "title": "Döner nach",
+  "accent": "Mitternacht?",
+  "subtitle": "München · Leopoldstraße 31",
+  "photo": { "src": "social/assets/nara.jpg", "focus": [0.5, 0.5], "zoom": 1 }
+}

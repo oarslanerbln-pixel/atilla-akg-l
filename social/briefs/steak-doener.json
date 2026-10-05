@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "steak-doener",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Anzeige · Steak Döner",
+  "title": "Steak Döner",
+  "accent": "in Germering",
+  "subtitle": "Teil 2 der Steak-Döner-Serie",
+  "photo": { "src": "social/assets/steak-doener.jpg", "focus": [0.5, 0.5], "zoom": 1 }
+}
