@@ -82,12 +82,14 @@ export default function Footer() {
               <div className={styles.legalLinks}>
                 <Link href={pagePath("socialMedia", activeLang)}>{t('footer_social_media')}</Link>
                 <span aria-hidden="true">·</span>
+                <Link href={pagePath("mediaKit", activeLang)}>{t('footer_media_kit')}</Link>
+                <span aria-hidden="true">·</span>
                 <Link href={roadmapPath(activeLang)}>{t('footer_roadmap')}</Link>
               </div>
               <div className={styles.legalLinks}>
                 <Link href="/impressum">{t('footer_imprint')}</Link>
                 <span aria-hidden="true">·</span>
-                <Link href="/datenschutz">{t('footer_privacy')}</Link>
+                <Link href={pagePath("privacy", activeLang)}>{t('footer_privacy')}</Link>
               </div>
 
               {/* Each language has its own address (see lib/locales.ts). The

@@ -55,9 +55,10 @@ export interface FaqEntry {
 
 const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 
-/** The answers that link on: to the packages page, and to the e-book. */
+/** The answers that link on: to the packages page, the media kit and the e-book. */
 const LINKS: Partial<Record<number, { text: TranslationKeys; href: (lang: Language) => string }>> = {
   4: { text: "faq_4_link", href: (lang) => pagePath("socialMedia", lang) },
+  5: { text: "faq_5_link", href: (lang) => pagePath("mediaKit", lang) },
   9: { text: "faq_9_link", href: roadmapPath },
 };
 

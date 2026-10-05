@@ -155,7 +155,14 @@
     align-items: center;
   }
 
+  /* Three links wrap at phone width; a separator left at the end of a line
+     reads as a stray mark, so the gap alone separates them here. */
   .legalLinks {
     justify-content: center;
+    column-gap: 1.25rem;
+  }
+
+  .legalLinks span[aria-hidden="true"] {
+    display: none;
   }
 }

@@ -70,9 +70,11 @@ src/
 │   ├── Providers.tsx        # Context providers wrapper (LanguageProvider)
 │   ├── global-not-found.tsx # Trilingual 404 (no single root layout to use)
 │   ├── (de)/                # Root layout lang="de": /, impressum, datenschutz,
-│   │                        #   roadmap, social-media; opengraph-image.tsx
-│   ├── (en)/                # Root layout lang="en": /en, /social-media/en
-│   ├── (tr)/                # Root layout lang="tr": /tr, /social-media/tr
+│   │                        #   roadmap, social-media, media-kit; opengraph-image.tsx
+│   ├── (en)/                # Root layout lang="en": /en, /social-media/en,
+│   │                        #   /media-kit/en, /datenschutz/en
+│   ├── (tr)/                # Root layout lang="tr": /tr, /social-media/tr,
+│   │                        #   /media-kit/tr, /datenschutz/tr
 │   │                        #   (?lang=en|tr on /social-media is rewritten onto these)
 │   ├── robots.ts, sitemap.ts
 │   ├── api/contact/route.ts # Contact form delivery (Resend)
@@ -159,6 +161,10 @@ partner there and all three follow.
 - **Link:** set `url` to the published collaboration (the reel or film). The
   tile then links to it, and the structured data states the relationship as a
   `CreativeWork` created by Atilla about that partner.
+- **Website:** set `website` to the organisation's official site (brands in
+  `brands.ts` carry one too). The structured data and `/llms.txt` state it,
+  so an engine ties the name to the right organisation. Leave it out rather
+  than guess.
 - The name always stays on the page as text, logo or not: search engines and
   AI answer engines read text, not the pixels of a wordmark.
 - **Coordinates:** every partner carries `coords` (capital or headquarters).
@@ -208,7 +214,13 @@ the social profile playbook and next steps: `docs/seo-geo.md` (Turkish).
   `<p>`, not an `<h3>`; headings go h2 → h3 without skipping. Words split
   across lines inside a heading keep a `{" "}` between them.
 - **Titles** come from `translations.ts` (`meta_home_title`, `pkg_meta_title`);
-  the layout template adds "| Atilla Barbarossa".
+  the layout template adds "| Atilla Barbarossa". Keep a full title within
+  about 60 characters and a description within about 155, measured with the
+  figures filled in; longer ones are cut off in results.
+- **Legal pages:** the imprint is German only and also covers the social
+  profiles (each bio links to `/impressum`). The privacy policy exists in DE,
+  EN and TR (`privacy` in `locales.ts`); German is binding, and the three
+  files change together. Both are noindex, with their own description.
 
 ## 🔐 Environment
 `.env.example` documents the variables. Without `RESEND_API_KEY`,
@@ -227,7 +239,8 @@ consent exists, and that is the same class of defect as embedding Google
 Fonts. Three Pexels posters were removed for exactly this reason. Fonts come
 from `next/font`, which self-hosts them at build time. Videos, icons and
 images ship from `public/`. Keep it that way — and keep
-`src/app/datenschutz/page.tsx` honest if it ever changes.
+the privacy policy (`src/app/(de)/datenschutz/page.tsx` and its `/en` and
+`/tr` versions) honest if it ever changes.
 The one exception is the hoster's own storage: the Instagram films are
 mirrored into Vercel Blob (below), never embedded from Instagram.
 

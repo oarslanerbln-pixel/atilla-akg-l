@@ -57,11 +57,13 @@ export function GET() {
     "## Tourism boards and institutions worked with",
     ...partners.map(
       (partner) =>
-        `- ${partner.name} (${en[partner.region]})${partner.url ? `: ${partner.url}` : ""}`,
+        `- ${partner.name} (${en[partner.region]})${partner.website ? `, ${partner.website}` : ""}${
+          partner.url ? `; collaboration: ${partner.url}` : ""
+        }`,
     ),
     "",
     "## Brands worked with",
-    ...brands.map((brand) => `- ${brand.name}`),
+    ...brands.map((brand) => `- ${brand.name}, ${brand.website}`),
     "- Novotel Bosphorus Istanbul: reel campaign, 559,316 accounts reached",
     "",
     "## Services",
@@ -88,6 +90,13 @@ export function GET() {
     `- Phone / WhatsApp: ${contact.phoneDisplay}`,
     `- Website: ${absolute("/")}`,
     ...Object.values(socialProfiles).map((url) => `- ${url}`),
+    "",
+    "## Legal",
+    "- Operator: Atilla Akgül (publishing as Atilla Barbarossa), Berlin, Germany",
+    `- Imprint (Deutsch): ${absolute("/impressum")}`,
+    ...LANGUAGES.map(
+      (lang) => `- Privacy policy (${LANGUAGE_NAMES[lang]}): ${absolute(pagePath("privacy", lang))}`,
+    ),
     "",
   ];
 
