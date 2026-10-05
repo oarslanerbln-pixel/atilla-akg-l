@@ -1,204 +1,130 @@
+/* Projects as spreads — see FeaturedWork.tsx. Footage and text alternate
+   sides, the way a printed kit lays out its case pages. */
 .section {
-  padding: var(--section-padding-y) 0;
-  background-color: transparent;
-  color: var(--text-primary);
-  position: relative;
   border-top: 1px solid var(--border-light);
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 5rem;
+.spreads {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4.5rem, 9vw, 8rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.subtitle {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: var(--accent-gold);
-  margin-bottom: 1rem;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 4.2vw, 3.6rem);
-  font-weight: 300;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  color: var(--text-primary);
-  margin-bottom: 1.5rem;
-}
-
-.divider {
-  width: 50px;
-  height: 2px;
-  background: linear-gradient(to right, var(--accent-gold), transparent);
-  margin: 0 auto;
-}
-
-/* Two projects: two columns, so no card sits beside an empty cell. */
-.grid {
+.spread {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2rem;
-  /* Capped so the tall cards stay the width they had in three columns. */
-  max-width: 880px;
-  margin: 0 auto;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-items: center;
+  gap: 2.5rem clamp(2.5rem, 6vw, 6rem);
 }
 
-.grid > * {
+/* Every second spread turns round. */
+.spread:nth-child(even) {
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+
+.spread:nth-child(even) .visual {
+  order: 2;
+}
+
+.visual,
+.body {
   min-width: 0;
 }
 
-.workCard {
-  background: #ffffff;
-  border: 1px solid rgba(24, 21, 18, 0.08);
-  display: flex;
-  flex-direction: column;
+/* The clips are wide films: a 3:2 frame keeps the picture. */
+.frame {
   position: relative;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
-  box-shadow: 0 15px 35px rgba(24, 21, 18, 0.05);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  cursor: pointer;
+  background: var(--bg-ink);
 }
 
-.workCard:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 50px rgba(24, 21, 18, 0.09);
-}
-
-.mediaWrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 9 / 14;
-  overflow: hidden;
-  background-color: var(--bg-secondary);
-}
-
-.mediaVideo,
-.mediaImage {
+.video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.workCard:hover .mediaVideo,
-.workCard:hover .mediaImage {
-  transform: scale(1.05);
+.frame:hover .video {
+  transform: scale(1.03);
 }
 
-.categoryTag {
+/* The whole frame is one control; the square mark sits at its centre. */
+.trigger {
   position: absolute;
-  top: 1.25rem;
-  left: 1.25rem;
-  font-family: var(--font-inter);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #fff;
-  background: rgba(20, 15, 10, 0.85);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 0.35rem 0.75rem;
-  z-index: 2;
-  pointer-events: none;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 45%,
+    color-mix(in srgb, var(--bg-ink) 35%, transparent)
+  );
+  cursor: pointer;
 }
 
-.cardContent {
-  padding: 2rem 1.75rem;
+.trigger:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: -6px;
+}
+
+.body {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  background: #ffffff;
-  border-top: 1px solid rgba(24, 21, 18, 0.06);
-  flex-grow: 1;
+  align-items: flex-start;
 }
 
-.projectTitle {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 1.4rem;
-  font-weight: 700;
+.name {
+  margin: 1.25rem 0 0.9rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
-.projectDesc {
-  font-family: var(--font-inter);
+.meta {
+  margin: 0;
+  font-size: 0.66rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.desc {
+  max-width: 460px;
+  margin: 1.5rem 0 2.25rem;
   font-size: 1.05rem;
-  line-height: 1.6;
+  line-height: 1.75;
   color: var(--text-secondary);
 }
 
-.metricBadge {
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(24, 21, 18, 0.06);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: var(--font-inter);
-  font-size: 0.78rem;
-  color: var(--accent-gold-readable);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-}
-
-/* Hover Play Overlay */
-.playOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.35);
+/* The result, between hairlines, as on the figures page. */
+.metric {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 0.75rem;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 3;
-  /* Drawn above .cardTrigger, so it must let the click through to it. */
-  pointer-events: none;
+  width: 100%;
+  max-width: 460px;
+  margin: 0;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
 }
 
-.workCard:hover .playOverlay {
-  opacity: 1;
-}
-
-.playBtnCircle {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--accent-gold);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  transform: scale(0.9);
-  transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.workCard:hover .playBtnCircle {
-  transform: scale(1);
-  background: var(--accent-gold-light);
-}
-
-.playText {
-  font-family: var(--font-inter);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  color: #ffffff;
-  text-transform: uppercase;
+.metricValue {
+  font-size: clamp(2rem, 3.6vw, 3rem);
 }
 
 /* Lightbox Modal */
@@ -278,45 +204,19 @@
   object-fit: contain;
 }
 
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-  
-  .section {
-    padding: var(--section-padding-y-mobile) 0;
+@media (max-width: 900px) {
+  .spread,
+  .spread:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .playOverlay {
-    opacity: 1;
-    background: rgba(0, 0, 0, 0.25);
+  .spread:nth-child(even) .visual {
+    order: 0;
   }
 }
 
-/* Covers the media so the whole preview is one keyboard-reachable control.
-   .playOverlay and .categoryTag are drawn above it but take no pointer
-   events, so every click lands here. */
-.cardTrigger {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-}
-
-.cardTrigger:focus-visible {
-  outline: 2px solid var(--accent-gold-readable);
-  outline-offset: -4px;
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+@media (max-width: 640px) {
+  .desc {
+    margin: 1.25rem 0 1.75rem;
+  }
 }

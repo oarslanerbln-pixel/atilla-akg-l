@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import ed from "./editorial.module.css";
 import styles from "./RoadmapTeaser.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
@@ -37,7 +38,7 @@ export default function RoadmapTeaser() {
   });
 
   return (
-    <section id="ebook" className={styles.section} aria-labelledby="ebook-title">
+    <section id="ebook" className={`${ed.section} ${styles.section}`} aria-labelledby="ebook-title">
       <div className={`container ${styles.grid}`}>
         <motion.div className={styles.coverFrame} {...reveal()}>
           <Image
@@ -51,8 +52,8 @@ export default function RoadmapTeaser() {
         </motion.div>
 
         <motion.div {...reveal(0.12)}>
-          <p className={styles.eyebrow}>{t("ebook_eyebrow")}</p>
-          <h2 id="ebook-title" className={styles.title}>
+          <p className={ed.eyebrow}>{t("ebook_eyebrow")}</p>
+          <h2 id="ebook-title" className={ed.title}>
             {t("ebook_title_1")}{" "}
             <span className={styles.titleSoft}>{t("ebook_title_2")}</span>
           </h2>
@@ -60,11 +61,11 @@ export default function RoadmapTeaser() {
           <p className={styles.meta}>{fill(t("ebook_meta"), { price: roadmap.price })}</p>
 
           <div className={styles.actions}>
-            <Link href={roadmapPath(activeLang)} className={styles.primary}>
+            <Link href={roadmapPath(activeLang)} className={ed.primary}>
               {t("ebook_cta")}
               <ArrowRight size={15} aria-hidden="true" />
             </Link>
-            <a href={roadmap.sample} target="_blank" rel="noopener noreferrer" className={styles.secondary}>
+            <a href={roadmap.sample} target="_blank" rel="noopener noreferrer" className={ed.textLink}>
               {t("rm_sample_cta")}
               <ArrowUpRight size={15} aria-hidden="true" />
             </a>

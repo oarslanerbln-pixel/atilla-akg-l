@@ -1,48 +1,29 @@
 .section {
-  padding: var(--section-padding-y) 0;
-  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-light);
   color: var(--text-primary);
 }
 
-.container {
-  max-width: 920px;
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: start;
+  gap: 2.5rem clamp(2.5rem, 6vw, 6rem);
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 4rem;
+.layout > * {
+  min-width: 0;
 }
 
-.subtitle {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: var(--accent-gold);
-  margin-bottom: 1rem;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 4.2vw, 3.6rem);
-  font-weight: 300;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  color: var(--text-primary);
-  margin-bottom: 1.5rem;
-}
-
-.divider {
-  width: 50px;
-  height: 2px;
-  background: linear-gradient(to right, var(--accent-gold), transparent);
-  margin: 0 auto;
+/* Below the fixed navbar while the questions scroll past. */
+.head {
+  position: sticky;
+  top: 7rem;
 }
 
 /* A plain ruled list: one hairline between questions, none around them. */
 .list {
+  margin: 0;
+  padding: 0;
   list-style: none;
   border-top: 1px solid var(--border-light);
 }
@@ -77,6 +58,8 @@
 }
 
 .question {
+  margin: 0;
+  font-family: var(--font-display);
   font-size: clamp(1.15rem, 1.8vw, 1.4rem);
   font-weight: 400;
   letter-spacing: -0.015em;
@@ -132,15 +115,17 @@
   color: var(--text-primary);
 }
 
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .head {
+    position: static;
+  }
+}
+
 @media (max-width: 768px) {
-  .section {
-    padding: var(--section-padding-y-mobile) 0;
-  }
-
-  .header {
-    margin-bottom: 2.5rem;
-  }
-
   .summary {
     grid-template-columns: 2rem 1fr auto;
     gap: 0.75rem;

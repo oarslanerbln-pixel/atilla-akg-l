@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
+import ed from "./editorial.module.css";
 import styles from "./Faq.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
@@ -31,10 +32,10 @@ export default function Faq() {
   const entries = faq(activeLang);
 
   const reveal = {
-    initial: { opacity: 0, y: 20 },
+    initial: { opacity: 0, y: 24 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: "-80px" },
-    transition: calm ? { duration: 0 } : { duration: 0.8, ease: EASE },
+    transition: calm ? { duration: 0 } : { duration: 0.9, ease: EASE },
   };
 
   const renderAnswer = ({ answer, linkText, href }: FaqEntry) => {
@@ -52,14 +53,15 @@ export default function Faq() {
   };
 
   return (
-    <section id="faq" className={styles.section} aria-labelledby="faq-title">
-      <div className={`container ${styles.container}`}>
-        <motion.div className={styles.header} {...reveal}>
-          <p className={styles.subtitle}>{t("faq_eyebrow")}</p>
-          <h2 id="faq-title" className={styles.title}>
+    <section id="faq" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="faq-title">
+      {/* Two columns, as a kit sets its questions: the head stays in view
+          on the left while the list runs down the right. */}
+      <div className={`container ${styles.layout}`}>
+        <motion.div className={styles.head} {...reveal}>
+          <p className={ed.eyebrow}>{t("faq_eyebrow")}</p>
+          <h2 id="faq-title" className={ed.title}>
             {t("faq_title")}
           </h2>
-          <div className={styles.divider} />
         </motion.div>
 
         <ul className={styles.list}>

@@ -48,6 +48,7 @@ export const translations = {
     // About & Stats
     stats_about_subtitle: "Content Philosophie",
     stats_about_title: "Authentisches Storytelling & Visuelle Perfektion",
+    stats_title: "Wen meine Filme erreichen",
     stats_about_badge: "CREATIVE DIRECTOR & FILMMAKER",
     stats_about_p1: "Reisen bedeutet für mich mehr als nur das Abhaken von Orten. Es geht um Kultur, Geschichte und authentische Erlebnisse. Als studierter Filmemacher und Travel Content Creator liegt mein Fokus auf starkem, fesselndem Storytelling.",
     stats_about_p2: "Ich nehme meine kaufkräftige Community aus dem DACH-Raum mit auf visuell beeindruckende Abenteuer; von historischen Bauwerken bis hin zu einzigartigen Luxushotel-Erlebnissen.",
@@ -137,7 +138,10 @@ export const translations = {
     case_meta_type_val: "Reels-Video + Hotel-Erwähnung",
     case_caption_label: "Caption & Story",
     case_caption_text: "Mein Hoteltipp: Das Novotel Istanbul Bosphorus Hotel @novotel_bosphorus befindet sich im Zentrum des angesagten Viertels Karaköy. Die Umgebung ist geprägt von künstlerischen und kulturellen Aktivitäten. Das Goldene Horn, das historische Zentrum mit Kapali Carsi und Hagia Sophia und das Viertel Galata sind sehr nah...",
-    case_stats_header: "Erreichte Konten: 559.316",
+    case_metric_likes: "Likes",
+    case_metric_comments: "Kommentare",
+    case_metric_shares: "Geteilt",
+    case_metric_saves: "Gespeichert",
     case_desc1: "Dieses Reel für das Novotel Bosphorus zeigt exemplarisch die Stärke authentischen Storytellings. Mit knapp 560.000 erreichten Konten ging das Video nicht nur viral, sondern traf genau die richtige Zielgruppe. Besonders bemerkenswert: Neben der enormen Reichweite und den vielen Speicherungen generierte der Beitrag eine außergewöhnlich hohe Interaktionsrate in den direkten Nachrichten.",
     case_desc2: "Zahlreiche Follower fragten proaktiv nach Buchungsdetails, Zimmerpreisen und Empfehlungen, was die hohe Kaufkraft und das tiefe Vertrauen der Community in meine Hotelempfehlungen unterstreicht.",
     
@@ -452,6 +456,7 @@ export const translations = {
     // About & Stats
     stats_about_subtitle: "Content Philosophy",
     stats_about_title: "Authentic Storytelling & Visual Perfection",
+    stats_title: "Who my films reach",
     stats_about_badge: "CREATIVE DIRECTOR & FILMMAKER",
     stats_about_p1: "For me, traveling means far more than just ticking off destinations. It's about culture, heritage, and authentic experiences. As a filmmaker and travel content creator, my focus is on powerful, captivating storytelling.",
     stats_about_p2: "I take my high-purchasing-power audience from the DACH region along on visually stunning adventures; from architectural landmarks to unique luxury hotel experiences.",
@@ -541,7 +546,10 @@ export const translations = {
     case_meta_type_val: "Reels Video + Hotel Mention",
     case_caption_label: "Caption & Story",
     case_caption_text: "My hotel tip: The Novotel Istanbul Bosphorus Hotel @novotel_bosphorus is right in the heart of Karaköy. The neighborhood is alive with arts and culture, just moments from the Golden Horn, Galata, and the historic center...",
-    case_stats_header: "Accounts Reached: 559,316",
+    case_metric_likes: "Likes",
+    case_metric_comments: "Comments",
+    case_metric_shares: "Shares",
+    case_metric_saves: "Saves",
     case_desc1: "This Reel for Novotel Bosphorus shows the strength of authentic storytelling. Reaching nearly 560,000 accounts, the video didn't just travel far — it reached exactly the right audience. Beyond the reach and the many saves, it drew an unusually high level of engagement in direct messages.",
     case_desc2: "Many followers proactively asked about booking details, room rates and recommendations — a sign of the purchasing power and the trust my community places in my hotel recommendations.",
     
@@ -856,6 +864,7 @@ export const translations = {
     // About & Stats
     stats_about_subtitle: "İçerik Felsefesi",
     stats_about_title: "Otantik Hikayecilik ve Görsel Mükemmellik",
+    stats_title: "Filmlerim kime ulaşıyor",
     stats_about_badge: "KREATİF DİREKTÖR & YÖNETMEN",
     stats_about_p1: "Benim için seyahat etmek, sadece yerleri işaretlemekten çok daha fazlasıdır. Kültür, tarih ve sahici deneyimlerle ilgilidir. Eğitimli bir film yapımcısı ve seyahat içerik üreticisi olarak odak noktam güçlü, büyüleyici hikaye anlatımıdır.",
     stats_about_p2: "DACH bölgesindeki yüksek alım gücüne sahip topluluğumu, tarihi anıtlardan seçkin lüks otel deneyimlerine kadar görsel olarak büyüleyici maceralara çıkarıyorum.",
@@ -945,7 +954,10 @@ export const translations = {
     case_meta_type_val: "Reels Video + Otel Etiketi",
     case_caption_label: "Açıklama ve Hikaye",
     case_caption_text: "Otel önerim: Novotel Istanbul Bosphorus @novotel_bosphorus, sanat ve kültürün kalbi Karaköy'ün tam merkezinde yer alıyor. Haliç, Tarihi Yarımada, Kapalıçarşı, Ayasofya ve Galata'ya yürüme mesafesinde...",
-    case_stats_header: "Ulaşılan Hesap: 559.316",
+    case_metric_likes: "Beğeni",
+    case_metric_comments: "Yorum",
+    case_metric_shares: "Paylaşım",
+    case_metric_saves: "Kaydetme",
     case_desc1: "Novotel Bosphorus için hazırlanan bu Reel, sahici hikaye anlatımının gücünü açıkça göstermektedir. 560 bine yakın hesaba ulaşan video sadece viral olmakla kalmadı, tam olarak doğru kitleye temas etti. Yüksek erişim ve kaydetmelerin yanı sıra doğrudan mesajlarda yoğun bir rezervasyon ilgisi oluşturdu.",
     case_desc2: "Çok sayıda takipçi fiyatlar, oda tipleri ve rezervasyon detayları hakkında mesaj göndererek topluluğumun alım gücünü ve tavsiyelerime duyduğu derin güveni kanıtladı.",
     

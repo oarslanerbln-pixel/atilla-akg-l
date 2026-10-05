@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import ed from "./editorial.module.css";
 import styles from "./Partners.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
@@ -89,21 +90,26 @@ export default function Partners() {
   };
 
   return (
-    <section id="partners" className={styles.section} aria-labelledby="partners-title">
-      <div className={`container ${styles.container}`}>
+    <section
+      id="partners"
+      className={`${ed.section} ${ed.chapter} ${styles.section}`}
+      aria-labelledby="partners-title"
+    >
+      <div className="container">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={calm ? quick : { duration: 0.8, ease: EASE }}
-          className={styles.header}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={calm ? quick : { duration: 0.9, ease: EASE }}
+          className={ed.headSplit}
         >
-          <p className={styles.subtitle}>{t("partners_subtitle")}</p>
-          <h2 id="partners-title" className={styles.title}>
-            {t("partners_title")}
-          </h2>
-          <div className={styles.divider} />
-          <p className={styles.intro}>
+          <div>
+            <p className={ed.eyebrow}>{t("partners_subtitle")}</p>
+            <h2 id="partners-title" className={ed.title}>
+              {t("partners_title")}
+            </h2>
+          </div>
+          <p className={ed.lede}>
             {introBefore}
             {names}
             {introAfter}

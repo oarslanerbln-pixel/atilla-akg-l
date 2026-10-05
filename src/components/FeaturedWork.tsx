@@ -1,14 +1,18 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { motion, Variants, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Play, X } from "lucide-react";
+import ed from "./editorial.module.css";
 import styles from "./FeaturedWork.module.css";
 import { useLanguage } from "@/context/LanguageContext";
+import { splitMetric } from "@/i18n/format";
 import type { TranslationKeys } from "@/i18n/translations";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 interface ProjectItem {
   id: string;
@@ -106,19 +110,20 @@ export default function FeaturedWork() {
   const { playClickSound } = useSoundDesign();
   const [activeProject, setActiveProject] = useState<ProjectItem | null>(null);
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+  const calm = usePrefersCalm();
+  const at = (delay: number, duration: number) => (calm ? { duration: 0 } : { duration, ease: EASE, delay });
+  const reveal = (delay = 0) => ({
+    initial: { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: "-80px" },
+    transition: at(delay, 0.9),
+  });
+  // Footage opens like a curtain rising, rather than sliding in.
+  const unveil = {
+    initial: { clipPath: "inset(0 0 100% 0)" },
+    whileInView: { clipPath: "inset(0 0 0% 0)" },
+    viewport: { once: true, margin: "-80px" },
+    transition: at(0, 1.4),
   };
 
   // Remembered so focus goes back to the card the visitor opened, rather than
@@ -153,74 +158,63 @@ export default function FeaturedWork() {
   }, [activeProject, closeModal]);
 
   return (
-    <section id="work" className={styles.section}>
+    <section id="work" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="work-title">
       <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className={styles.header}
-        >
-          <p className={styles.subtitle}>{t('work_subtitle')}</p>
-          <h2 className={styles.title}>{t('work_title')}</h2>
-          <div className={styles.divider}></div>
+        <motion.div className={ed.head} {...reveal()}>
+          <p className={ed.eyebrow}>{t("work_subtitle")}</p>
+          <h2 id="work-title" className={ed.title}>
+            {t("work_title")}
+          </h2>
         </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className={styles.grid}
-        >
-          {rawProjects.map((project) => (
-            <motion.article
-              key={project.id}
-              variants={itemVariants}
-              className={styles.workCard}
-              data-cursor="PLAY"
-            >
-              <div className={styles.mediaWrapper}>
-                <span className={styles.categoryTag}>{t(project.categoryKey)}</span>
-                <InViewVideo
-                  src={project.videoSrc}
-                  poster={project.poster}
-                  className={styles.mediaVideo}
-                />
-                <div className={styles.playOverlay}>
-                  <div className={styles.playBtnCircle}>
-                    <Play size={22} fill="currentColor" />
+        {/* Each project is a spread, footage and text alternating sides, as
+            in a printed kit. The clips are wide films; the old portrait cards
+            cut away two thirds of every frame. */}
+        <ol className={styles.spreads}>
+          {rawProjects.map((project, i) => {
+            const metric = splitMetric(t(project.metricKey));
+            return (
+              <li key={project.id} className={styles.spread}>
+                <motion.div className={styles.visual} {...unveil}>
+                  <div className={styles.frame} data-cursor="PLAY">
+                    <InViewVideo src={project.videoSrc} poster={project.poster} className={styles.video} />
+                    {/* The whole frame is the control: a button over the
+                        footage, named with the project, opening the film
+                        with sound in the lightbox. */}
+                    <button
+                      type="button"
+                      className={`${styles.trigger} ${ed.playHost}`}
+                      onClick={(event) => openModal(project, event.currentTarget)}
+                      aria-label={`${t("work_watch")}: ${t(project.titleKey)}`}
+                    >
+                      <span className={ed.play}>
+                        <span className={ed.playIcon} aria-hidden="true">
+                          <Play size={18} strokeWidth={1.25} />
+                        </span>
+                        <span className={ed.playLabel}>{t("work_watch")}</span>
+                      </span>
+                    </button>
                   </div>
-                  <span className={styles.playText}>{t('work_watch')}</span>
-                </div>
+                </motion.div>
 
-                {/* The card used to be a <div onClick>: reachable by mouse
-                    only. A button cannot legally wrap the heading and copy
-                    below, so it covers the media instead and carries the
-                    project title as its accessible name. */}
-                <button
-                  type="button"
-                  className={styles.cardTrigger}
-                  onClick={(event) => openModal(project, event.currentTarget)}
-                >
-                  <span className={styles.srOnly}>
-                    {t('work_watch')}: {t(project.titleKey)}
-                  </span>
-                </button>
-              </div>
-
-              <div className={styles.cardContent}>
-                <h3 className={styles.projectTitle}>{t(project.titleKey)}</h3>
-                <p className={styles.projectDesc}>{t(project.descKey)}</p>
-                <div className={styles.metricBadge}>
-                  <span>{t(project.metricKey)}</span>
-                  <span>{t(project.typeKey)}</span>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </motion.div>
+                <motion.div className={styles.body} {...reveal(0.15)}>
+                  <span className={ed.index}>{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className={styles.name}>{t(project.titleKey)}</h3>
+                  <p className={styles.meta}>
+                    {t(project.categoryKey)}
+                    <span aria-hidden="true"> · </span>
+                    {t(project.typeKey)}
+                  </p>
+                  <p className={styles.desc}>{t(project.descKey)}</p>
+                  <p className={styles.metric}>
+                    <span className={`${ed.figureValue} ${styles.metricValue}`}>{metric.value}</span>{" "}
+                    {metric.label && <span className={ed.figureLabel}>{metric.label}</span>}
+                  </p>
+                </motion.div>
+              </li>
+            );
+          })}
+        </ol>
       </div>
 
       {/* Interactive Lightbox Video Modal */}
@@ -241,7 +235,7 @@ export default function FeaturedWork() {
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.35, ease: EASE }}
               onClick={(e) => e.stopPropagation()}
             >
               <div className={styles.modalHeader}>

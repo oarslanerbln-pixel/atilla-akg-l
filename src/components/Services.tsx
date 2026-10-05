@@ -1,24 +1,34 @@
 "use client";
 
-import React from "react";
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowUpRight, BedDouble, MapPinned, Sparkles } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import ed from "./editorial.module.css";
 import styles from "./Services.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import type { TranslationKeys } from "@/i18n/translations";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
+import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import { pagePath } from "@/lib/locales";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 export default function Services() {
   const { t, activeLang } = useLanguage();
   const { playClickSound } = useSoundDesign();
+  const calm = usePrefersCalm();
 
-  // One card per kind of client, each in their own terms: the problem they
+  const reveal = (delay = 0) => ({
+    initial: { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: "-80px" },
+    transition: calm ? { duration: 0 } : { duration: 0.9, ease: EASE, delay },
+  });
+
+  // One column per kind of client, each in their own terms: the problem they
   // bring (one line, no alarmism), what the films do about it, and what they
   // actually receive. Generic capability lists spoke to nobody in particular.
   const segments: {
-    icon: React.ReactNode;
     forKey: TranslationKeys;
     titleKey: TranslationKeys;
     painKey: TranslationKeys;
@@ -26,7 +36,6 @@ export default function Services() {
     deliverables: TranslationKeys[];
   }[] = [
     {
-      icon: <BedDouble className={styles.icon} />,
       forKey: "service_hotels_for",
       titleKey: "service_hotels_title",
       painKey: "service_hotels_pain",
@@ -34,7 +43,6 @@ export default function Services() {
       deliverables: ["service_hotels_d1", "service_hotels_d2", "service_hotels_d3"],
     },
     {
-      icon: <MapPinned className={styles.icon} />,
       forKey: "service_dmo_for",
       titleKey: "service_dmo_title",
       painKey: "service_dmo_pain",
@@ -42,7 +50,6 @@ export default function Services() {
       deliverables: ["service_dmo_d1", "service_dmo_d2", "service_dmo_d3"],
     },
     {
-      icon: <Sparkles className={styles.icon} />,
       forKey: "service_brands_for",
       titleKey: "service_brands_title",
       painKey: "service_brands_pain",
@@ -51,87 +58,56 @@ export default function Services() {
     },
   ];
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-  };
-
   return (
-    <section id="services" className={styles.section}>
-      <div className={`container ${styles.container}`}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className={styles.header}
-        >
-          <p className={styles.subtitle}>{t('services_subtitle')}</p>
-          <h2 className={styles.title}>{t('services_title')}</h2>
-          <div className={styles.divider}></div>
+    <section id="services" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="services-title">
+      <div className="container">
+        <motion.div className={ed.head} {...reveal()}>
+          <p className={ed.eyebrow}>{t("services_subtitle")}</p>
+          <h2 id="services-title" className={ed.title}>
+            {t("services_title")}
+          </h2>
         </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className={styles.grid}
-        >
-          {segments.map((segment) => (
-            <motion.div key={segment.forKey} variants={itemVariants} className={styles.card}>
-              <div className={styles.iconWrapper}>{segment.icon}</div>
-              <p className={styles.forLabel}>{t(segment.forKey)}</p>
-              <h3 className={styles.cardTitle}>{t(segment.titleKey)}</h3>
+        {/* Three columns between hairlines, as on the offer page of a printed
+            kit: no cards, no icons, the words carry it. */}
+        <ol className={styles.columns}>
+          {segments.map((segment, i) => (
+            <motion.li key={segment.forKey} className={styles.column} {...reveal(i * 0.1)}>
+              <p className={styles.for}>
+                <span className={ed.index}>{String(i + 1).padStart(2, "0")}</span>
+                {t(segment.forKey)}
+              </p>
+              <h3 className={styles.name}>{t(segment.titleKey)}</h3>
               <p className={styles.pain}>{t(segment.painKey)}</p>
-              <p className={styles.cardDesc}>{t(segment.descKey)}</p>
+              <p className={styles.desc}>{t(segment.descKey)}</p>
               <ul className={styles.deliverables}>
                 {segment.deliverables.map((key) => (
                   <li key={key}>{t(key)}</li>
                 ))}
               </ul>
-
               <a
                 href="#contact"
-                className={styles.squareButton}
+                className={`${ed.textLink} ${styles.inquire}`}
                 onClick={() => playClickSound()}
                 data-cursor="INQUIRE"
               >
-                {t('services_btn')}
+                {t("services_btn")}
+                <ArrowUpRight size={14} aria-hidden="true" />
               </a>
-            </motion.div>
+            </motion.li>
           ))}
-        </motion.div>
+        </ol>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className={styles.disclaimerWrapper}
-        >
-          <p className={styles.disclaimer}>
-            {t('services_disclaimer')}
-          </p>
+        <motion.div className={styles.note} {...reveal(0.2)}>
+          <p className={styles.disclaimer}>{t("services_disclaimer")}</p>
           {/* The monthly packages have a page of their own; this is the one
               path to it from the portfolio, in the language on screen. */}
           <Link
             href={pagePath("socialMedia", activeLang)}
-            className={styles.packagesLink}
+            className={ed.primary}
             onClick={() => playClickSound()}
           >
-            {t('services_packages_link')}
+            {t("services_packages_link")}
             <ArrowUpRight size={15} aria-hidden="true" />
           </Link>
         </motion.div>
