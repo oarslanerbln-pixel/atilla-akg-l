@@ -37,6 +37,7 @@ const PAGES = {
   home: { DE: "/", EN: "/en", TR: "/tr" },
   socialMedia: { DE: "/social-media", EN: "/social-media/en", TR: "/social-media/tr" },
   mediaKit: { DE: "/media-kit", EN: "/media-kit/en", TR: "/media-kit/tr" },
+  privacy: { DE: "/datenschutz", EN: "/datenschutz/en", TR: "/datenschutz/tr" },
 } as const satisfies Record<string, Record<Language, string>>;
 
 export type LocalizedPage = keyof typeof PAGES;

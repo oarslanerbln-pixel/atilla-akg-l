@@ -381,7 +381,7 @@ export default function RoadmapPage() {
           <span>{t("footer_copyright")}</span>
           <nav className={styles.footerLinks} aria-label={t("legal_nav")}>
             <Link href="/impressum">{t("footer_imprint")}</Link>
-            <Link href="/datenschutz">{t("footer_privacy")}</Link>
+            <Link href={pagePath("privacy", activeLang)}>{t("footer_privacy")}</Link>
           </nav>
         </div>
       </footer>

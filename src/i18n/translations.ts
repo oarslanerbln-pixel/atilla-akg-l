@@ -237,6 +237,7 @@ export const translations = {
     pkg_meta_title: "Social-Media-Betreuung für Hotels & Marken",
     pkg_meta_description: "Monatliche Videoproduktion und Social-Media-Betreuung für Hotels, Destinationen und Marken: {counts} Videos pro Monat, in 4K, mit Nutzungsrechten.",
     legal_back: "Zurück zur Startseite",
+    legal_languages: "Sprachfassungen",
     not_found_title: "Seite nicht gefunden",
     not_found_text: "Diese Adresse gibt es nicht oder nicht mehr. Das Portfolio finden Sie auf der Startseite.",
     
@@ -258,7 +259,8 @@ export const translations = {
     faq_4_a: "Für Hotels und Resorts: Reels und Stories auf seinen Kanälen sowie lizenzierte Clips für Website und Anzeigen. Für Destinationen und Tourismusverbände: mehrteilige Serien mit Drohnen- und Kinoaufnahmen. Für Travel- und Premium-Brands: organische Produktintegration und ad-fähige Assets. Dazu kommen {link} mit {counts} Videos pro Monat.",
     faq_4_link: "monatliche Social-Media-Pakete",
     faq_5_q: "Was kostet eine Zusammenarbeit?",
-    faq_5_a: "Es gibt keine Preisliste: Jede Kampagne und jedes Paket wird auf Ziele, Umfang und Nutzungsrechte abgestimmt. Die Investition nennt Atilla nach einem kurzen Gespräch; Mediadaten gibt es auf Anfrage.",
+    faq_5_a: "Es gibt keine Preisliste: Jede Kampagne und jedes Paket wird auf Ziele, Umfang und Nutzungsrechte abgestimmt. Die Investition nennt Atilla nach einem kurzen Gespräch; Reichweite, Formate und Ablauf zeigt das {link}.",
+    faq_5_link: "Media Kit",
     faq_6_q: "Dürfen wir die Videos auf unseren eigenen Kanälen nutzen?",
     faq_6_a: "Ja. Lizenzierte Clips für Website, Social Media und Anzeigen gehören zum Angebot; Umfang und Dauer der Nutzungsrechte werden je Projekt vereinbart. In den monatlichen Paketen wird in 4K geliefert, vertikal und horizontal.",
     faq_7_q: "Arbeitet Atilla Barbarossa international, und in welchen Sprachen?",
@@ -283,6 +285,7 @@ export const translations = {
     footer_privacy: "Datenschutz",
     footer_roadmap: "E-Book",
     footer_social_media: "Social-Media-Pakete",
+    footer_media_kit: "Media Kit",
 
     // E-book page (/roadmap)
     rm_eyebrow: "Die Roadmap für Travel Creators",
@@ -346,7 +349,7 @@ export const translations = {
     rm_sticky_button: "Sichern · {price} €",
     // Media kit for hotels, restaurants and brands (/media-kit)
     mk_meta_title: "Media Kit für Hotels, Restaurants & Marken",
-    mk_meta_description: "Filmische Reels für Hotels, Restaurants und Marken, gedreht von Atilla Barbarossa und veröffentlicht für {instagram} Follower auf Instagram, {dach} % aus dem DACH-Raum. Formate, Ablauf und Ergebnisse.",
+    mk_meta_description: "Filmische Reels für Hotels, Restaurants und Marken: Atilla Barbarossa dreht und veröffentlicht für {instagram} Follower, {dach} % aus dem DACH-Raum.",
     mk_eyebrow: "Media Kit",
     mk_title_1: "Filme, nach denen",
     mk_title_2: "Gäste fragen.",
@@ -642,6 +645,7 @@ export const translations = {
     pkg_meta_title: "Social Media Management for Hotels & Brands",
     pkg_meta_description: "Monthly video production and social media management for hotels, destinations and brands: {counts} videos a month, in 4K, with usage rights.",
     legal_back: "Back to the homepage",
+    legal_languages: "Language versions",
     not_found_title: "Page not found",
     not_found_text: "This address does not exist or is no longer in use. You will find the portfolio on the home page.",
     
@@ -663,7 +667,8 @@ export const translations = {
     faq_4_a: "For hotels and resorts: reels and stories on his channels, plus licensed clips for websites and ads. For destinations and tourism boards: multi-part series with drone and cinema footage. For travel and premium brands: organic product integration and ad-ready assets. There are also {link} with {counts} videos a month.",
     faq_4_link: "monthly social media packages",
     faq_5_q: "How much does a collaboration cost?",
-    faq_5_a: "There is no price list: every campaign and package is tailored to its goals, scope and usage rights. Atilla quotes the investment after a short call; the media kit is available on request.",
+    faq_5_a: "There is no price list: every campaign and package is tailored to its goals, scope and usage rights. Atilla quotes the investment after a short call; the {link} shows reach, formats and process.",
+    faq_5_link: "media kit",
     faq_6_q: "Can we use the videos on our own channels?",
     faq_6_a: "Yes. Licensed clips for your website, social media and ads are part of the offer; the scope and duration of the usage rights are agreed per project. The monthly packages are delivered in 4K, vertical and horizontal.",
     faq_7_q: "Does Atilla Barbarossa work internationally, and in which languages?",
@@ -688,6 +693,7 @@ export const translations = {
     footer_privacy: "Privacy Policy",
     footer_roadmap: "E-book",
     footer_social_media: "Social media packages",
+    footer_media_kit: "Media kit",
 
     // E-book page (/roadmap)
     rm_eyebrow: "The roadmap for travel creators",
@@ -751,7 +757,7 @@ export const translations = {
     rm_sticky_button: "Get it · €{price}",
     // Media kit for hotels, restaurants and brands (/media-kit/en)
     mk_meta_title: "Media Kit for Hotels, Restaurants & Brands",
-    mk_meta_description: "Cinematic Reels for hotels, restaurants and brands, filmed by Atilla Barbarossa and published to {instagram} Instagram followers, {dach}% in the DACH region. Formats, process and results.",
+    mk_meta_description: "Cinematic Reels for hotels, restaurants and brands: Atilla Barbarossa films and publishes them to {instagram} Instagram followers, {dach}% in the DACH region.",
     mk_eyebrow: "Media Kit",
     mk_title_1: "Films your guests",
     mk_title_2: "will ask about.",
@@ -1044,9 +1050,10 @@ export const translations = {
     pkg_close_email: "E-posta gönderin",
     pkg_wa_general: "Merhaba Atilla, sosyal medya ortaklığıyla ilgileniyorum.",
     pkg_mail_general: "Talep: Sosyal medya ortaklığı",
-    pkg_meta_title: "Oteller ve Markalar için Sosyal Medya Yönetimi",
+    pkg_meta_title: "Sosyal Medya Yönetimi: Oteller ve Markalar",
     pkg_meta_description: "Oteller, destinasyonlar ve markalar için aylık video prodüksiyonu ve sosyal medya yönetimi: ayda {counts} video, 4K, kullanım hakları dahil.",
     legal_back: "Ana sayfaya dön",
+    legal_languages: "Dil seçenekleri",
     not_found_title: "Sayfa bulunamadı",
     not_found_text: "Bu adres yok ya da artık kullanılmıyor. Portfolyoyu ana sayfada bulabilirsiniz.",
     
@@ -1054,7 +1061,7 @@ export const translations = {
     // section (src/components/Faq.tsx). Tokens in braces are filled from
     // src/lib/site.ts, partners.ts, brands.ts and packages.ts.
     meta_home_title: "Atilla Barbarossa – Otel ve Destinasyon Filmleri",
-    meta_home_description: "Berlin merkezli seyahat film yapımcısı: oteller, destinasyonlar ve markalar için sinematik filmler, ağırlıklı olarak DACH bölgesinden {instagram} takipçi. Hemen yazın.",
+    meta_home_description: "Berlin merkezli seyahat film yapımcısı: oteller, destinasyonlar ve markalar için sinematik filmler, çoğu DACH bölgesinden {instagram} takipçi. Hemen yazın.",
     seo_person_description: "Berlin merkezli seyahat film yapımcısı, kreatif direktör ve seyahat içerik üreticisi. Oteller, turizm kurumları ve seyahat markaları için sinematik filmler; topluluğu ağırlıklı olarak DACH bölgesinden.",
     faq_eyebrow: "Sık sorulanlar",
     faq_title: "Kısaca bilmeniz gerekenler",
@@ -1068,7 +1075,8 @@ export const translations = {
     faq_4_a: "Oteller ve tatil köyleri için: kendi kanallarında Reels ve Story'ler, ayrıca web sitesi ve reklamlar için lisanslı klipler. Destinasyonlar ve turizm kurumları için: drone ve sinema çekimleriyle çok bölümlü seriler. Seyahat ve premium markalar için: organik ürün entegrasyonu ve reklama hazır içerikler. Ayrıca ayda {counts} video içeren {link} de mevcut.",
     faq_4_link: "sosyal medya paketleri",
     faq_5_q: "Bir iş birliğinin maliyeti nedir?",
-    faq_5_a: "Sabit bir fiyat listesi yok: Her kampanya ve paket hedeflere, kapsama ve kullanım haklarına göre belirlenir. Atilla bütçeyi kısa bir görüşmeden sonra iletir; medya kiti talep üzerine gönderilir.",
+    faq_5_a: "Sabit bir fiyat listesi yok: Her kampanya ve paket hedeflere, kapsama ve kullanım haklarına göre belirlenir. Atilla bütçeyi kısa bir görüşmeden sonra iletir; erişim, formatlar ve süreç {link} sayfasında.",
+    faq_5_link: "medya kiti",
     faq_6_q: "Videoları kendi kanallarımızda kullanabilir miyiz?",
     faq_6_a: "Evet. Web sitesi, sosyal medya ve reklamlar için lisanslı klipler teklifin bir parçasıdır; kullanım haklarının kapsamı ve süresi proje bazında belirlenir. Aylık paketlerde teslimat 4K, dikey ve yatay formatta yapılır.",
     faq_7_q: "Atilla Barbarossa uluslararası çalışıyor mu, hangi dillerde?",
@@ -1093,6 +1101,7 @@ export const translations = {
     footer_privacy: "Gizlilik Politikası",
     footer_roadmap: "E-Kitap",
     footer_social_media: "Sosyal medya paketleri",
+    footer_media_kit: "Medya kiti",
 
     // E-book page (/roadmap)
     rm_eyebrow: "Travel creator'lar için yol haritası",
@@ -1155,8 +1164,8 @@ export const translations = {
     rm_sticky_label: "Travel Creator Roadmap",
     rm_sticky_button: "Al · {price} €",
     // Media kit for hotels, restaurants and brands (/media-kit/tr)
-    mk_meta_title: "Oteller, Restoranlar ve Markalar için Medya Kiti",
-    mk_meta_description: "Oteller, restoranlar ve markalar için sinematik Reels: Atilla Barbarossa çeker ve Instagram'da {instagram} takipçiye yayınlar (kitlenin %{dach} oranı DACH bölgesinde). Formatlar, süreç ve sonuçlar.",
+    mk_meta_title: "Medya Kiti: Oteller, Restoranlar, Markalar",
+    mk_meta_description: "Oteller, restoranlar ve markalar için sinematik Reels: Atilla Barbarossa çeker ve Instagram'da {instagram} takipçiye yayınlar. Formatlar, süreç ve sonuçlar.",
     mk_eyebrow: "Medya Kiti",
     mk_title_1: "Misafirlerinizin",
     mk_title_2: "soracağı filmler.",

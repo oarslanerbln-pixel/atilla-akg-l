@@ -23,6 +23,11 @@ import type { TranslationKeys } from "@/i18n/translations";
  * present the tile links to it, which is the proof a prospective client
  * actually wants.
  *
+ * `website` is the organisation's own official site. The structured data and
+ * /llms.txt state it, so an engine reading "Visit Malta" ties the name to the
+ * tourism authority and not to some other page of that name. Leave it out
+ * rather than guess: Visit Romania has none confirmed yet.
+ *
  * `coords` are factual (capital or headquarters). The card prints them and
  * turns its compass needle to the bearing from BASE, so each card carries a
  * small, true detail about the place rather than decoration.
@@ -41,15 +46,38 @@ export interface Partner {
   coords: Coords;
   logo?: { src: string; width: number; height: number };
   url?: string;
+  /** The organisation's official website. */
+  website?: string;
 }
 
 export const partners: Partner[] = [
-  { name: "Visit Malta", region: "partners_region_mt", coords: { lat: 35.8989, lon: 14.5146 } },
-  { name: "Visit Kazakhstan", region: "partners_region_kz", coords: { lat: 51.1694, lon: 71.4491 } },
-  { name: "Go Türkiye", nameLang: "tr", region: "partners_region_tr", coords: { lat: 39.9334, lon: 32.8597 } },
+  {
+    name: "Visit Malta",
+    region: "partners_region_mt",
+    coords: { lat: 35.8989, lon: 14.5146 },
+    website: "https://www.visitmalta.com",
+  },
+  {
+    name: "Visit Kazakhstan",
+    region: "partners_region_kz",
+    coords: { lat: 51.1694, lon: 71.4491 },
+    website: "https://kazakhstan.travel",
+  },
+  {
+    name: "Go Türkiye",
+    nameLang: "tr",
+    region: "partners_region_tr",
+    coords: { lat: 39.9334, lon: 32.8597 },
+    website: "https://goturkiye.com",
+  },
   { name: "Visit Romania", region: "partners_region_ro", coords: { lat: 44.4268, lon: 26.1025 } },
   // UNESCO's headquarters, Place de Fontenoy, Paris.
-  { name: "UNESCO", region: "partners_region_intl", coords: { lat: 48.8497, lon: 2.3063 } },
+  {
+    name: "UNESCO",
+    region: "partners_region_intl",
+    coords: { lat: 48.8497, lon: 2.3063 },
+    website: "https://www.unesco.org",
+  },
 ];
 
 /** Berlin — where the work sets out from. Each card's compass points from here. */

@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { contact } from "@/lib/site";
+import { contact, socialProfiles } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Impressum",
+  description:
+    "Impressum von atillabarbarossa.com: Anbieterkennzeichnung nach § 5 DDG für Atilla Akgül (Atilla Barbarossa), Berlin, mit Kontakt und Umsatzsteuer-ID.",
   robots: { index: false, follow: true },
+  alternates: { canonical: "/impressum" },
 };
 
 /**
  * Provider identification under § 5 DDG. Phone and e-mail come from
  * src/lib/site.ts so the imprint can never drift from the contact section.
+ *
+ * Business profiles on social networks need an imprint of their own; it may
+ * be this page, if the profile links here and the page says it covers the
+ * profile. Hence the "Geltungsbereich" section: each bio links to /impressum.
  *
  * The EU online dispute resolution (ODR) platform was shut down on
  * 20 July 2025 (Regulation (EU) 2024/3228), so the former link to it and the
@@ -48,6 +55,24 @@ export default function Impressum() {
         Neuendorfer Straße 54, 13585 Berlin
       </p>
 
+      <h2>Geltungsbereich</h2>
+      <p>
+        Dieses Impressum gilt für die Website atillabarbarossa.com und
+        ebenso für meine Profile auf{" "}
+        <a href={socialProfiles.instagram} target="_blank" rel="noopener noreferrer">
+          Instagram
+        </a>
+        ,{" "}
+        <a href={socialProfiles.tiktok} target="_blank" rel="noopener noreferrer">
+          TikTok
+        </a>{" "}
+        und{" "}
+        <a href={socialProfiles.youtube} target="_blank" rel="noopener noreferrer">
+          YouTube
+        </a>{" "}
+        (jeweils @atillabarbarossa).
+      </p>
+
       <h2>Verbraucher&shy;streitbeilegung</h2>
       <p>
         Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungs&shy;verfahren
@@ -81,6 +106,13 @@ export default function Impressum() {
         Kontrolle der verlinkten Seiten ist ohne konkrete Anhaltspunkte einer
         Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von
         Rechtsverletzungen werde ich derartige Links umgehend entfernen.
+      </p>
+
+      <h2>Partnerlinks</h2>
+      <p>
+        Partnerlinks, für die ich bei einem Abschluss eine Provision erhalte,
+        sind als Werbung gekennzeichnet; für Sie entstehen dadurch keine
+        Mehrkosten.
       </p>
 
       <h2>Urheberrecht</h2>

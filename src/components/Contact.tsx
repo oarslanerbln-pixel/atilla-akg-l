@@ -10,6 +10,7 @@ import styles from "./Contact.module.css";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useLanguage } from "@/context/LanguageContext";
 import { contact } from "@/lib/site";
+import { pagePath } from "@/lib/locales";
 import type { TranslationKeys } from "@/i18n/translations";
 
 const DIRECT_MAIL = "a@barbarossafilms.de";
@@ -28,7 +29,7 @@ const ERROR_MESSAGES: Record<string, TranslationKeys> = {
 };
 
 export default function Contact() {
-  const { t } = useLanguage();
+  const { t, activeLang } = useLanguage();
   const fieldId = useId();
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   // Honeypot. A real visitor never sees the field, so anything typed into it
@@ -266,7 +267,7 @@ export default function Contact() {
                 />
                 <label className={styles.consentLabel} htmlFor={`${fieldId}-consent`}>
                   {consentBefore}
-                  <Link href="/datenschutz" className={styles.consentLink}>
+                  <Link href={pagePath("privacy", activeLang)} className={styles.consentLink}>
                     {t('contact_privacy_link')}
                   </Link>
                   {consentAfter}

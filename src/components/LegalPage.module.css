@@ -14,9 +14,18 @@
   padding: 0 2rem;
 }
 
+/* Back link on the left, the language versions on the right. */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: 3rem;
+}
+
 .back {
   display: inline-block;
-  margin-bottom: 3rem;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -26,6 +35,40 @@
 
 .back:hover {
   color: var(--accent-gold-readable);
+}
+
+.languages {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.back,
+.languages a {
+  padding: 0.25rem 0;
+}
+
+.languages a {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border-bottom: 1px solid transparent;
+}
+
+.languages a:hover {
+  color: var(--accent-gold-readable);
+}
+
+.languages a[aria-current="page"] {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent-gold);
+}
+
+.back:focus-visible,
+.languages a:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
 }
 
 .title {
@@ -90,4 +133,31 @@
   .inner {
     padding: 0 1.5rem;
   }
+}
+
+/* Imprint and privacy policy point at each other, as every other page does
+   from its footer. */
+.legalLinks {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.legalLinks a {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.legalLinks a:hover {
+  color: var(--accent-gold-readable);
+}
+
+.legalLinks a:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
 }

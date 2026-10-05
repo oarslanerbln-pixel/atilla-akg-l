@@ -1,6 +1,6 @@
 # SEO & GEO Rehberi – atillabarbarossa.com ve sosyal medya
 
-**Durum tarihi: 30 Eylül 2026.** SEO: Google/Bing'de bulunmak. GEO (Generative Engine
+**Durum tarihi: 5 Ekim 2026** (ilk sürüm 30 Eylül 2026; son değişiklikler bölüm 11'de). SEO: Google/Bing'de bulunmak. GEO (Generative Engine
 Optimization): ChatGPT, Perplexity, Google AI Overviews/AI Mode, Gemini ve Copilot gibi
 yapay zekâ motorlarının Atilla'yı doğru tanıması, doğru anlatması ve siteyi kaynak göstermesi.
 İkisinin temeli aynı: **her yerde aynı kimlik, aynı gerçekler, okunabilir metin.**
@@ -18,10 +18,10 @@ Koddaki kurallar `CLAUDE.md` → "SEO & GEO" bölümündedir. Bu dosya ekip içi
 | Başlık ve açıklama İngilizce ve genel ("Visual Storytelling"), sayfa ise Almanca. | Her dilde, arama niyetine göre yazılmış başlık ve açıklama; rakamlar (306.000, %86) otomatik dolduruluyor. | Arama sonucunda tıklanma oranı ve doğru eşleşme. |
 | Ana sayfada 3 tane `h1`, etiketler (ör. "SELECTED PORTFOLIO") başlık olarak işaretliydi. | Sayfa başına tek `h1` ("Atilla Barbarossa"), düzgün h2 → h3 sırası. | Motorlar sayfanın neyle ilgili olduğunu başlık yapısından okur. |
 | Yapılandırılmış veri: kişi + partner listesi. | WebSite, Person (fotoğraf, Berlin, dil, uzmanlık, Instagram/TikTok/YouTube bağlantıları, hizmet kataloğu), ProfilePage, FAQPage, marka listesi, sosyal medya hizmeti + 3 paket, e-kitap (Book/Product, 49 €), breadcrumb. | Google Bilgi Grafiği ve yapay zekâ motorları "Atilla Barbarossa = bu kişi, bu işi yapıyor, bu profiller onun" bağlantısını kurar. |
-| Yapay zekânın alıntılayabileceği tam cümle yoktu (rakamlar sayaçlarda, markalar kayan bantta). | Ana sayfada 3 dilde 8 soruluk **SSS bölümü** ("Atilla Barbarossa kimdir?", "Hangi markalarla çalıştı?", "Kitlesi kim?", "Ne kadar tutar?"…). | Yapay zekâ motorları tek başına anlamlı cümleleri alıntılar. Her cevap Atilla'nın adını içerir. |
+| Yapay zekânın alıntılayabileceği tam cümle yoktu (rakamlar sayaçlarda, markalar kayan bantta). | Ana sayfada 3 dilde 9 soruluk **SSS bölümü** ("Atilla Barbarossa kimdir?", "Hangi markalarla çalıştı?", "Kitlesi kim?", "Ne kadar tutar?"…). | Yapay zekâ motorları tek başına anlamlı cümleleri alıntılar. Her cevap Atilla'nın adını içerir. |
 | `/llms.txt` kısa bir özetti. | Sayfalar (3 dil), kitle rakamları, partnerler, markalar, hizmetler, paketler, SSS ve iletişim. | Bazı yapay zekâ tarayıcıları bu dosyayı doğrudan okur. |
 | `robots.txt` Impressum/Datenschutz'u engelliyordu (bu yüzden "noindex" hiç okunamıyordu). | Yasal sayfalar taranabilir ama noindex; `/go/` (partner linkleri, tıklama sayar) engelli. Tüm yapay zekâ tarayıcılarına izin var. | Doğru teknik uygulama; botlar partner tıklama sayılarını şişirmez. |
-| Sitemap: 2 adres. | 7 adres + dil alternatifleri. | Yeni sayfalar hızlı keşfedilir. |
+| Sitemap: 2 adres. | 10 adres (ana sayfa, sosyal medya paketleri ve medya kiti üçer dilde, e-kitap) + dil alternatifleri. | Yeni sayfalar hızlı keşfedilir. |
 | 404 sayfası yoktu (varsayılan). | Markalı, üç dilli 404. | |
 
 **Rakamlar tek yerde:** Instagram/TikTok/YouTube takipçi sayıları ve demografi
@@ -39,12 +39,16 @@ yazılı; onu da unutmayın.)
      ör. Vercel → Domains). Alternatif: "URL öneki" + HTML etiketi → etiketteki `content`
      değerini Vercel'de `GOOGLE_SITE_VERIFICATION` olarak kaydedip yeniden deploy edin.
    - Sitemaps → `https://atillabarbarossa.com/sitemap.xml` gönderin.
-   - URL Denetimi → `/`, `/en`, `/tr`, `/social-media`, `/social-media/en`, `/social-media/tr`
+   - URL Denetimi → `/`, `/en`, `/tr`, `/social-media`, `/social-media/en`, `/social-media/tr`,
+     `/media-kit`, `/media-kit/en`, `/media-kit/tr`
      için "Dizine eklenmesini iste".
 2. **Bing Webmaster Tools** (bing.com/webmasters) – **GEO için şart:** ChatGPT arama ve
    Copilot büyük ölçüde Bing dizinini kullanır.
    - "Google Search Console'dan içe aktar" ile tek tıkla kurulur (ya da `BING_SITE_VERIFICATION`).
    - Sitemap'i orada da gönderin.
+   - Önemli bir sayfa değişince adresini **URL Submission** ile gönderin (Bing'in IndexNow
+     altyapısı); Bing ve onun dizinini kullanan ChatGPT arama ile Copilot değişikliği daha
+     hızlı görür.
 3. **Kontrol testleri**
    - search.google.com/test/rich-results ve validator.schema.org: ana sayfa, `/en`,
      `/social-media`, `/roadmap`. Hata olmamalı.
@@ -116,8 +120,9 @@ Berlin ⇄ İstanbul · DE/EN/TR
 👇 İş birlikleri & medya kiti
 ```
 
-**Linkler** (Instagram 5 link destekler): 1) `atillabarbarossa.com` 2) `atillabarbarossa.com/social-media`
-3) `atillabarbarossa.com/roadmap`.
+**Linkler** (Instagram 5 link destekler): 1) `atillabarbarossa.com` 2) `atillabarbarossa.com/media-kit`
+3) `atillabarbarossa.com/social-media` 4) `atillabarbarossa.com/roadmap` 5) başlığı **„Impressum“** olan
+`atillabarbarossa.com/impressum` (yasal zorunluluk, bkz. bölüm 11).
 
 **Ayarlar**
 - Hesap gizliliği → "Herkese açık fotoğraf ve videoların arama motoru sonuçlarında görünmesine
@@ -178,7 +183,7 @@ linki ve "Mediadaten auf Anfrage").
 
 - Ad: "Atilla Barbarossa". Biyografi (80 karakter):
   `Reisefilmer 🎬 Hotels & Destinationen · Berlin ⇄ Istanbul`
-- Web sitesi alanı: `atillabarbarossa.com` (işletme hesabında açılır).
+- Web sitesi alanı: `atillabarbarossa.com` (işletme hesabında açılır). Impressum için bkz. bölüm 11.
 - TikTok araması ve Google, TikTok videolarını şu sırayla anlar: **ilk 3 saniyede söylenen
   kelime**, ekrandaki yazı, açıklamanın ilk satırı, 3–5 hashtag. Açıklamayı 2–3 cümlelik
   gerçek bir metin yapın (otel adı, şehir, ülke); tek kelimelik açıklama kullanmayın.
@@ -229,8 +234,8 @@ Google AI Overviews ve Gemini YouTube'u çok sık kaynak gösterir; yapay zekâ 
    hedef, yapılan iş, video, rakamlar (559.316 hesap), müşteri yorumu. Yapay zekâ motorları
    somut rakam içeren sayfaları kaynak gösterir; en büyük GEO kaldıracı budur.
 2. **Partner linkleri** (bkz. bölüm 3).
-3. **Mediadaten sayfası** (`/mediadaten`): "Atilla Barbarossa Mediadaten" arayanlar için;
-   PDF indirilebilir.
+3. ~~Mediadaten sayfası~~ **Yapıldı:** `/media-kit`, üç dilde (Ekim 2026); footer'dan ve SSS'den
+   link alıyor. İndirilebilir PDF sürümü isteğe bağlı.
 4. **Müşteri referansları** (izinli, isim + unvan + otel) – ana sayfaya ve vaka sayfalarına.
 5. **Basın:** DACH otelcilik/turizm sektör yayınlarında (ör. AHGZ, fvw|TravelTalk, Tophotel)
    röportaj veya konuk yazı; Türkiye'de turizm sektör siteleri. Her haber siteye link verirse hem
@@ -252,6 +257,7 @@ Her ay aynı soruları sorun, tabloya yazın: Atilla anılıyor mu? Site kaynak 
 | DE | Social-Media-Betreuung mit Videoproduktion für Hotels – wer bietet das an? |
 | EN | Travel filmmaker for a tourism board targeting the DACH market? |
 | EN | Has Atilla Barbarossa worked with Visit Malta? |
+| EN | Atilla Barbarossa media kit |
 | TR | Atilla Barbarossa kimdir? |
 | TR | Almanya merkezli, Türkçe de içerik üreten seyahat film yapımcıları kimler? |
 
@@ -344,3 +350,50 @@ Altyapı (`/blog`, Article verisi, sitemap) ayrı bir iş.
 **Ölçüm (ayda bir):** Search Console → Performans → sayfa `/roadmap` (gösterim, tıklama,
 sorgular); Merchant Center → ücretsiz listeleme tıklamaları; Tentary → satışlar ve
 Gratis-Auszug talepleri. Sitede analitik yok (gizlilik kuralı), satışları Tentary sayar.
+
+---
+
+## 11. 5 Ekim 2026: hukuk sayfaları ve SEO/GEO güncellemesi
+
+**Sitede değişenler**
+
+- **Gizlilik politikası üç dilde:** `/datenschutz`, `/datenschutz/en`, `/datenschutz/tr`;
+  bağlayıcı olan Almanca metin. Sayfalar birbirini hreflang ile gösterir; footer, iletişim
+  formu ve diğer sayfalar ziyaretçinin dilindeki sürüme link verir. Impressum yalnızca
+  Almanca. Hepsi noindex ve her birinin kendi açıklaması var (önceden ana sayfanın
+  açıklamasını kullanıyorlardı).
+- **Impressum profilleri de kapsıyor:** "Geltungsbereich" bölümü Instagram, TikTok ve
+  YouTube profillerini sayıyor.
+- **Medya kiti artık link alıyor:** `/media-kit` önce yalnızca sitemap'teydi; şimdi ana
+  sayfanın footer'ında ve SSS 5'te ("Ne kadar tutar?") linki var. SSS 5 artık "medya kiti
+  talep üzerine" demiyor, sayfayı gösteriyor.
+- **Yapılandırılmış veri:** partner ve markalara resmî web siteleri eklendi (`url`); böylece
+  "Visit Malta" adı doğru kuruma bağlanır. Visit Romania'nın resmî sitesi teyit edilemedi,
+  boş bırakıldı. Kişiye çalışma yerleri eklendi (Berlin, İstanbul).
+- **`/llms.txt`:** partner ve marka siteleri, ayrıca "Legal" bölümü (işletmeci, Impressum,
+  üç dilde gizlilik politikası).
+- **Başlık ve açıklama uzunlukları:** medya kitinin üç dildeki açıklaması, Türkçe ana sayfa
+  açıklaması, Türkçe paket ve medya kiti başlıkları kısaltıldı. Ölçü: başlık ~60, açıklama
+  ~155 karakter (rakamlar doldurulmuş hâliyle); fazlası arama sonucunda kesilir.
+
+**Sosyal profillerde Impressum (§ 5 DDG)**
+
+Almanya'dan ticari olarak yönetilen profillerin de Impressum'u olmalı: kolay bulunur, açıkça
+"Impressum" diye adlandırılmış ve en fazla iki tıkla ulaşılır. Sitenin Impressum'u profilleri
+artık kapsıyor; geriye profillerden link vermek kalıyor:
+
+- **Instagram:** link listesine başlığı „Impressum“ olan `atillabarbarossa.com/impressum`.
+- **YouTube:** Studio → Özelleştirme → Linkler: „Impressum“ → aynı adres.
+- **TikTok:** biyografi 80 karakter ve tıklanabilir tek link web sitesi alanı. Alan ana
+  sayfaya gidiyorsa Impressum her sayfanın altında, iki tık uzakta. Biyografiye "Impressum:
+  Website" gibi kısa bir not eklemek bunu görünür kılar. Bu çözümün yeterli olup olmadığını
+  bir hukukçuya teyit ettirin.
+- Sosyal profillerle ilgili veri işleme gizlilik politikasında anlatılıyor:
+  `atillabarbarossa.com/datenschutz#social-media`.
+
+**Bir kerelik kontrol (~15 dk)**
+
+1. Search Console → URL Denetimi: `/media-kit`, `/media-kit/en`, `/media-kit/tr` →
+   "Dizine eklenmesini iste".
+2. Rich Results Test ve validator.schema.org: `/` ve `/en` hatasız olmalı.
+3. Bing Webmaster Tools → URL Submission: aynı adresler.
