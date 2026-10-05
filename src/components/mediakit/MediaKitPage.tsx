@@ -8,7 +8,7 @@ import { ArrowUpRight, Play } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
-import { fill } from "@/i18n/format";
+import { fill, splitMetric } from "@/i18n/format";
 import { contact } from "@/lib/site";
 import { brands } from "@/lib/brands";
 import { partners } from "@/lib/partners";
@@ -35,17 +35,6 @@ const segmentKey = (segment: Segment, part: string) => `mk_${segment}_${part}` a
 const SEGMENT_STILLS: Record<Exclude<Segment, "hotels">, string> = {
   restaurants: "/media-kit/restaurant.webp",
   brands: "/media-kit/courtyard.webp",
-};
-
-/**
- * The portfolio states each case result as one phrase ("559.316 erreichte
- * Konten", "94.2% Engagement Rate", "%94,2 Etkileşim Oranı"). Here the figure
- * is set large and the words under it, so the phrase is split at the end of
- * the figure; anything else is shown whole.
- */
-const splitMetric = (text: string) => {
-  const match = /^(%?\d[\d.,]*(?:\s?%|K)?)\s+(.+)$/.exec(text);
-  return match ? { value: match[1], label: match[2] } : { value: text, label: "" };
 };
 
 /**

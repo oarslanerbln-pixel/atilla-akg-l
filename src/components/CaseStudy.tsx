@@ -1,19 +1,47 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, Variants } from "framer-motion";
-import { Play, Volume2, VolumeX, Heart, MessageCircle, Send, Bookmark } from "lucide-react";
+import { motion } from "framer-motion";
+import { Play, Volume2, VolumeX } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
+import ed from "./editorial.module.css";
 import styles from "./CaseStudy.module.css";
+import type { TranslationKeys } from "@/i18n/translations";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
+import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+// The reel's own insights, as Instagram reported them.
+const METRICS: { value: number; grouped?: boolean; label: TranslationKeys }[] = [
+  { value: 559316, grouped: true, label: "stats_reach_accounts" },
+  { value: 9655, grouped: true, label: "case_metric_likes" },
+  { value: 174, label: "case_metric_comments" },
+  { value: 55, label: "case_metric_shares" },
+  { value: 12228, grouped: true, label: "case_metric_saves" },
+];
+
+/**
+ * One reel told as a case page: brand and format beside the heading, the film
+ * across the full measure, its insights between hairlines, then the caption
+ * it went out with and what followed.
+ */
 export default function CaseStudy() {
   const { t } = useLanguage();
   const { playClickSound } = useSoundDesign();
+  const calm = usePrefersCalm();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+
+  const at = (delay: number, duration: number) => (calm ? { duration: 0 } : { duration, ease: EASE, delay });
+  const reveal = (delay = 0) => ({
+    initial: { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: "-80px" },
+    transition: at(delay, 0.9),
+  });
 
   // isPlaying follows the element's own play/pause events, so a play() the
   // browser refuses leaves the button saying "play" rather than lying.
@@ -36,160 +64,102 @@ export default function CaseStudy() {
     }
   };
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  };
-
   return (
-    <section id="case-study" className={styles.section}>
-      <div className={`container ${styles.container}`}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className={styles.header}
-        >
-          <p className={styles.subtitle}>{t('case_title')}</p>
-          <h2 className={styles.title}>{t('case_subtitle')}</h2>
-          <div className={styles.divider}></div>
+    <section id="case-study" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="case-title">
+      <div className="container">
+        <motion.div className={ed.headSplit} {...reveal()}>
+          <div>
+            <p className={ed.eyebrow}>{t("case_title")}</p>
+            <h2 id="case-title" className={ed.title}>
+              {t("case_subtitle")}
+            </h2>
+          </div>
+          <dl className={styles.meta}>
+            <div>
+              <dt>{t("case_meta_brand")}</dt>
+              <dd>{t("case_meta_brand_val")}</dd>
+            </div>
+            <div>
+              <dt>{t("case_meta_type")}</dt>
+              <dd>{t("case_meta_type_val")}</dd>
+            </div>
+          </dl>
         </motion.div>
 
-        <div className={styles.contentGrid}>
-          {/* Left Column: Image/Video Interactive Preview */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className={styles.imageCol}
+        {/* Footage opens like a curtain rising. */}
+        <motion.div
+          className={styles.film}
+          data-cursor={isPlaying ? "PAUSE" : "PLAY"}
+          initial={{ clipPath: "inset(0 0 100% 0)" }}
+          whileInView={{ clipPath: "inset(0 0 0% 0)" }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={at(0, 1.4)}
+        >
+          {/* A self-hosted still cut from the clip; nothing of the video is
+              fetched until the visitor presses play. */}
+          <video
+            ref={videoRef}
+            src="/hero-reel.mp4"
+            poster="/posters/hero-reel.webp"
+            preload="none"
+            className={styles.video}
+            loop
+            playsInline
+            muted={isMuted}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+          />
+          <button
+            type="button"
+            className={`${styles.playTrigger} ${ed.playHost}`}
+            data-playing={isPlaying || undefined}
+            onClick={handlePlayPause}
+            aria-label={t(isPlaying ? "video_pause" : "video_play")}
           >
-            <div
-              className={styles.videoPlaceholder}
-              data-cursor={isPlaying ? "PAUSE" : "PLAY"}
+            {!isPlaying && (
+              <span className={ed.play}>
+                <span className={ed.playIcon} aria-hidden="true">
+                  <Play size={18} strokeWidth={1.25} />
+                </span>
+                <span className={ed.playLabel} aria-hidden="true">
+                  {t("video_play")}
+                </span>
+              </span>
+            )}
+          </button>
+          {isPlaying && (
+            <button
+              type="button"
+              className={styles.soundControl}
+              onClick={handleToggleMute}
+              aria-label={t(isMuted ? "video_unmute" : "video_mute")}
             >
-              {/* The poster was a stock photo pulled from images.pexels.com at
-                  runtime — a third-party request on every visit, standing in for
-                  the reel it sits on top of. It is now a self-hosted still cut
-                  from the clip, which also means nothing of the video is
-                  fetched until the visitor presses play. */}
-              <video
-                ref={videoRef}
-                src="/hero-reel.mp4"
-                poster="/posters/hero-reel.webp"
-                preload="none"
-                className={styles.image}
-                loop
-                playsInline
-                muted={isMuted}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-              />
-              {/* The frame and the sound toggle were <div onClick>: out of
-                  reach without a mouse. The frame is now covered by a button,
-                  like the project cards, and the toggle sits above it. */}
-              <button
-                type="button"
-                className={styles.playTrigger}
-                onClick={handlePlayPause}
-                aria-label={t(isPlaying ? "video_pause" : "video_play")}
-              >
-                {!isPlaying && (
-                  <span className={styles.playButton}>
-                    <Play fill="white" className={styles.playIcon} />
-                  </span>
-                )}
-              </button>
-              {isPlaying && (
-                <button
-                  type="button"
-                  className={styles.soundControl}
-                  onClick={handleToggleMute}
-                  aria-label={t(isMuted ? "video_unmute" : "video_mute")}
-                >
-                  {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-                </button>
-              )}
-            </div>
-          </motion.div>
+              {isMuted ? <VolumeX size={18} strokeWidth={1.5} /> : <Volume2 size={18} strokeWidth={1.5} />}
+            </button>
+          )}
+        </motion.div>
 
-          {/* Right Column: Details & Stats */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            className={styles.detailsCol}
-          >
-            <motion.div variants={itemVariants} className={styles.metadata}>
-              <div className={styles.metaItem}>
-                <span className={styles.metaLabel}>{t('case_meta_brand')}</span>
-                <span className={styles.metaValue}>{t('case_meta_brand_val')}</span>
-              </div>
-              <div className={styles.metaItem}>
-                <span className={styles.metaLabel}>{t('case_meta_type')}</span>
-                <span className={styles.metaValue}>{t('case_meta_type_val')}</span>
-              </div>
-            </motion.div>
+        <motion.ul className={styles.figures} {...reveal()}>
+          {METRICS.map((metric) => (
+            <li key={metric.label} className={styles.figure}>
+              <span className={`${ed.figureValue} ${styles.value}`}>
+                <AnimatedCounter to={metric.value} formatNumber={metric.grouped} />
+              </span>
+              <span className={ed.figureLabel}>{t(metric.label)}</span>
+            </li>
+          ))}
+        </motion.ul>
 
-            <motion.div variants={itemVariants} className={styles.captionBox}>
-              <span className={styles.captionLabel}>{t('case_caption_label')}</span>
-              <p className={styles.captionText}>{t('case_caption_text')}</p>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.statsWrapper}>
-              <h3 className={styles.statsHeader}>
-                {t('case_stats_header')}
-              </h3>
-              <div className={styles.statsGrid}>
-                <div className={styles.statItem}>
-                  <Play className={styles.statIcon} />
-                  <span className={styles.statNum}>
-                    <AnimatedCounter to={559316} formatNumber={true} />
-                  </span>
-                </div>
-                <div className={styles.statItem}>
-                  <Heart className={styles.statIcon} />
-                  <span className={styles.statNum}>
-                    <AnimatedCounter to={9655} formatNumber={true} />
-                  </span>
-                </div>
-                <div className={styles.statItem}>
-                  <MessageCircle className={styles.statIcon} />
-                  <span className={styles.statNum}>
-                    <AnimatedCounter to={174} />
-                  </span>
-                </div>
-                <div className={styles.statItem}>
-                  <Send className={styles.statIcon} />
-                  <span className={styles.statNum}>
-                    <AnimatedCounter to={55} />
-                  </span>
-                </div>
-                <div className={styles.statItem}>
-                  <Bookmark className={styles.statIcon} />
-                  <span className={styles.statNum}>
-                    <AnimatedCounter to={12228} formatNumber={true} />
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.descriptionBox}>
-              <p>{t('case_desc1')}</p>
-              <p>{t('case_desc2')}</p>
-            </motion.div>
+        <div className={styles.story}>
+          <motion.figure className={styles.caption} {...reveal()}>
+            <figcaption className={ed.kicker}>{t("case_caption_label")}</figcaption>
+            <blockquote className={styles.captionText}>
+              <p>{t("case_caption_text")}</p>
+            </blockquote>
+          </motion.figure>
+          <motion.div className={styles.desc} {...reveal(0.15)}>
+            <p>{t("case_desc1")}</p>
+            <p>{t("case_desc2")}</p>
           </motion.div>
         </div>
       </div>

@@ -1,276 +1,167 @@
+/* The offer — see Services.tsx. Three ruled columns, after the e-book's
+   porcelain band, so on the gallery white. */
 .section {
-  padding: var(--section-padding-y) 0;
-  background: transparent;
-  color: var(--text-primary);
-  position: relative;
-  overflow: hidden;
+  border-top: 1px solid var(--border-light);
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 5rem;
-}
-
-.subtitle {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: var(--accent-gold);
-  margin-bottom: 1rem;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 4.2vw, 3.6rem);
-  font-weight: 300;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  color: var(--text-primary);
-  margin-bottom: 1.5rem;
-}
-
-.divider {
-  width: 50px;
-  height: 2px;
-  background: linear-gradient(to right, var(--accent-gold), transparent);
-  margin: 0 auto;
-}
-
-.grid {
+.columns {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  width: 100%;
-  margin-bottom: 4rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border-light);
 }
 
-.grid > * {
+/* The columns share their rows, so the titles, the leads and the lists line
+   up across all three however long a German label runs. */
+.column {
+  display: grid;
+  grid-row: span 6;
+  grid-template-rows: subgrid;
+  justify-items: start;
+  align-content: start;
   min-width: 0;
+  padding: 2.5rem clamp(1.5rem, 2.6vw, 2.5rem) 0;
 }
 
-.card {
-  position: relative;
-  background: #ffffff;
-  padding: 3rem 2rem;
-  border-radius: 0;
+.column:first-child {
+  padding-left: 0;
+}
+
+.column:last-child {
+  padding-right: 0;
+}
+
+.column + .column {
+  border-left: 1px solid var(--border-light);
+}
+
+.for {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  box-shadow: 0 12px 30px rgba(24, 21, 18, 0.05);
-  border: 1px solid rgba(24, 21, 18, 0.06);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* Subtle silver & gold animated edge border */
-.card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(transparent, transparent 75%, rgba(255, 255, 255, 0.9), #d8b482, var(--accent-gold), transparent);
-  animation: spinBorder 8s linear infinite;
-  z-index: -2;
-}
-
-/* Inner card white background */
-.card::after {
-  content: '';
-  position: absolute;
-  inset: 1px;
-  background: #ffffff;
-  z-index: -1;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 45px rgba(24, 21, 18, 0.08);
-}
-
-@keyframes spinBorder {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.iconWrapper {
-  margin-bottom: 2rem;
-  color: var(--accent-gold);
-  position: relative;
-  z-index: 2;
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 12px rgba(194, 165, 126, 0.3));
-  transition: all 0.5s ease;
-}
-
-.card:hover .iconWrapper {
-  transform: scale(1.15);
-}
-
-.icon {
-  width: 32px;
-  height: 32px;
-  color: var(--accent-gold);
-}
-
-.cardTitle {
-  font-family: var(--font-display);
-  font-size: 1.6rem;
-  margin-bottom: 1rem;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  min-height: 56px;
-  color: var(--text-primary);
-}
-
-/* Who the card is for, above the title, so a visitor finds their own card
-   before reading any of them. */
-.forLabel {
-  margin: 0 0 0.75rem;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.72rem;
+  align-items: baseline;
+  gap: 0.9rem;
+  margin: 0;
+  font-size: 0.66rem;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  line-height: 1.5;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--accent-gold-readable);
 }
 
-/* The client's problem in one quiet line, set off by a gold rule. */
-.pain {
-  margin: 0 0 1.1rem;
-  padding-left: 0.9rem;
-  border-left: 1px solid var(--accent-gold);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.55;
+.name {
+  margin: 1.5rem 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 2.3vw, 2rem);
+  font-weight: 300;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
   color: var(--text-primary);
+  text-wrap: balance;
+}
+
+/* The client's problem, in one line, set as the column's lead. */
+.pain {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.desc {
+  margin: 0 0 1.75rem;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
 }
 
 .deliverables {
   width: 100%;
   margin: 0 0 2rem;
-  padding: 1.25rem 0 0;
+  padding: 0;
   list-style: none;
-  border-top: 1px solid var(--border-light);
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
 }
 
 .deliverables li {
-  position: relative;
-  padding-left: 1.2rem;
-  font-family: var(--font-inter), sans-serif;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--border-light);
   font-size: 0.92rem;
-  line-height: 1.45;
-  color: var(--text-secondary);
-}
-
-/* The compass mark's point, as in the package page. */
-.deliverables li::before {
-  content: "";
-  position: absolute;
-  left: 0.1rem;
-  top: 0.55em;
-  width: 5px;
-  height: 5px;
-  background: var(--accent-gold);
-  transform: rotate(45deg);
-}
-
-.cardDesc {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 1rem;
-  color: var(--text-secondary);
-  line-height: 1.65;
-  margin-bottom: 1.5rem;
-  flex-grow: 1;
-}
-
-.squareButton {
-  margin-top: auto;
-  background-color: var(--text-primary);
-  color: #ffffff !important;
-  border: 1px solid var(--text-primary);
-  border-radius: 0;
-  padding: 0.85rem 1.5rem;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-  text-align: center;
-  display: inline-block;
-  text-decoration: none;
-}
-
-.squareButton:hover {
-  background-color: var(--accent-gold);
-  border-color: var(--accent-gold);
-  color: #ffffff !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(179, 139, 89, 0.3);
-}
-
-.disclaimerWrapper {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.disclaimer {
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: 1.2rem;
-  color: var(--text-secondary);
-  line-height: 1.8;
-}
-
-.packagesLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-  padding-bottom: 0.35rem;
-  border-bottom: 1px solid var(--accent-gold);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent-gold-readable);
-}
-
-.packagesLink:hover {
+  line-height: 1.5;
   color: var(--text-primary);
 }
 
-.packagesLink:focus-visible {
-  outline: 1px solid var(--accent-gold);
-  outline-offset: 4px;
+.deliverables li:last-child {
+  border-bottom: 1px solid var(--border-light);
 }
 
-@media (max-width: 768px) {
-  .section {
-    padding: var(--section-padding-y-mobile) 0;
+.inquire {
+  align-self: end;
+}
+
+/* The fine print and the way to the packages, closing the section. */
+.note {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.75rem clamp(2.5rem, 6vw, 6rem);
+  margin-top: clamp(3.5rem, 6vw, 5rem);
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.note > * {
+  min-width: 0;
+}
+
+.note > a {
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.disclaimer {
+  max-width: 620px;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 900px) {
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
   }
-  
-  .card {
-    padding: 2rem 1.5rem;
+
+  .column,
+  .column:first-child,
+  .column:last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2.5rem 0;
+  }
+
+  .column + .column {
+    border-left: 0;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .note {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .note > a {
+    justify-self: start;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .note > a {
+    width: 100%;
+    padding: 0 1.25rem;
   }
 }

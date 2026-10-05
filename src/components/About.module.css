@@ -1,0 +1,56 @@
+.section {
+  background: var(--bg-secondary);
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 6.5rem);
+}
+
+.portrait {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.portraitImage {
+  object-fit: cover;
+  object-position: 62% 50%;
+}
+
+.body {
+  min-width: 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 540px;
+  margin: 2rem 0 2.75rem;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .portrait {
+    width: 100%;
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 640px) {
+  .text {
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+}

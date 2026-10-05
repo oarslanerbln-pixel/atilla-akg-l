@@ -3,6 +3,7 @@ import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
 import HomeHero from "@/components/HomeHero";
 import Brands from "@/components/Brands";
+import About from "@/components/About";
 import Stats from "@/components/Stats";
 import Partners from "@/components/Partners";
 import FeaturedWork from "@/components/FeaturedWork";
@@ -18,6 +19,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import JsonLd from "@/components/JsonLd";
 import type { Language } from "@/i18n/translations";
 import { homeGraph } from "@/lib/structuredData";
+import ed from "@/components/editorial.module.css";
 
 /**
  * The single-page portfolio, served at /, /en and /tr. The language comes
@@ -25,13 +27,14 @@ import { homeGraph } from "@/lib/structuredData";
  */
 export default function HomePage({ lang }: { lang: Language }) {
   return (
-    <main>
+    <main className={ed.chapters}>
       <JsonLd data={homeGraph(lang)} />
       <Preloader />
       <CustomCursor />
       <Navbar />
       <HomeHero />
       <Brands />
+      <About />
       <Stats />
       <Partners />
       <FeaturedWork />

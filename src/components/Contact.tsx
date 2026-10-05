@@ -4,6 +4,8 @@ import Link from "next/link";
 import React, { useId, useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { Mail, Phone, Loader2, CheckCircle, MessageCircle } from "lucide-react";
+import BrandMark from "./BrandMark";
+import ed from "./editorial.module.css";
 import styles from "./Contact.module.css";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useLanguage } from "@/context/LanguageContext";
@@ -89,7 +91,7 @@ export default function Contact() {
   const [consentBefore, consentAfter] = t('contact_consent').split("{link}");
 
   return (
-    <section id="contact" className={styles.section}>
+    <section id="contact" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="contact-title">
       <div className={`container ${styles.container}`}>
         <motion.div
           variants={containerVariants}
@@ -101,29 +103,31 @@ export default function Contact() {
           {/* Left Column: Philosophy & Process */}
           <div className={styles.infoCol}>
             <motion.div variants={itemVariants}>
-              <p className={styles.subtitle}>{t('contact_subtitle')}</p>
-              <h2 className={styles.title}>{t('contact_title')}</h2>
-              <div className={styles.divider}></div>
+              <p className={ed.eyebrow}>{t('contact_subtitle')}</p>
+              <h2 id="contact-title" className={ed.title}>
+                {t('contact_title')}
+              </h2>
             </motion.div>
 
             <motion.div variants={itemVariants} className={styles.paragraphs}>
               <p>{t('contact_p1')}</p>
               <p>{t('contact_p2')}</p>
               <p>{t('contact_p3')}</p>
-              <p className={styles.closing}>
-                {t('contact_closing')}
-                <br />
-                <strong>Atilla BARBAROSSA</strong>
-              </p>
+              <p className={styles.closing}>{t('contact_closing')}</p>
             </motion.div>
+
+            <motion.p variants={itemVariants} className={`${ed.signature} ${styles.signature}`}>
+              <BrandMark className={ed.signatureMark} />
+              <span className={ed.signatureName}>Atilla Barbarossa</span>
+              <span className={ed.signatureRole}>{t('quote_role')}</span>
+            </motion.p>
           </div>
 
           {/* Right Column: Contact Info & Form */}
           <div className={styles.contactCol}>
             <motion.div variants={itemVariants}>
-              <p className={styles.subtitle}>{t('contact_form_subtitle')}</p>
-              <h2 className={styles.title}>{t('contact_form_title')}</h2>
-              <div className={styles.divider}></div>
+              <p className={ed.kicker}>{t('contact_form_subtitle')}</p>
+              <h3 className={styles.formTitle}>{t('contact_form_title')}</h3>
             </motion.div>
 
             {/* WhatsApp leads: it is where visitors from Instagram already are,

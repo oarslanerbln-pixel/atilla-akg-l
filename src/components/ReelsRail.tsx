@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
+import ed from "./editorial.module.css";
 import styles from "./ReelsRail.module.css";
 import { useLanguage } from "@/context/LanguageContext";
 import { HTML_LANG } from "@/lib/locales";
@@ -141,18 +142,19 @@ export default function ReelsRail({ reels }: { reels: Reel[] }) {
   const active = openIndex === null ? null : reels[openIndex];
 
   return (
-    <section id="reels" className={styles.section}>
+    <section id="reels" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="reels-title">
       <div className="container">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: EASE }}
-          className={styles.header}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={calm ? { duration: 0 } : { duration: 0.9, ease: EASE }}
+          className={ed.head}
         >
-          <p className={styles.subtitle}>{t("reels_subtitle")}</p>
-          <h2 className={styles.title}>{t("reels_title")}</h2>
-          <div className={styles.divider}></div>
+          <p className={ed.eyebrow}>{t("reels_subtitle")}</p>
+          <h2 id="reels-title" className={ed.title}>
+            {t("reels_title")}
+          </h2>
         </motion.div>
 
         <ul ref={railRef} className={styles.rail} onScroll={updateEdges}>

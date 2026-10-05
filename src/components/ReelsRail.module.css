@@ -1,41 +1,7 @@
 .section {
-  padding: var(--section-padding-y) 0;
   position: relative;
   border-top: 1px solid var(--border-light);
   color: var(--text-primary);
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 4rem;
-}
-
-.subtitle {
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: var(--accent-gold);
-  margin-bottom: 1rem;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 4.2vw, 3.6rem);
-  font-weight: 300;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  color: var(--text-primary);
-  margin-bottom: 1.5rem;
-}
-
-.divider {
-  width: 50px;
-  height: 2px;
-  background: linear-gradient(to right, var(--accent-gold), transparent);
-  margin: 0 auto;
 }
 
 /* Portrait films in a row, the way they were made to be seen: one swipe per
@@ -330,14 +296,6 @@
 }
 
 @media (max-width: 768px) {
-  .section {
-    padding: var(--section-padding-y-mobile) 0;
-  }
-
-  .header {
-    margin-bottom: 2.5rem;
-  }
-
   .card {
     flex-basis: 62vw;
     scroll-snap-align: center;
