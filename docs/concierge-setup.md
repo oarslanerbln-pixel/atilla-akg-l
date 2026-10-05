@@ -98,7 +98,7 @@ Tur dışında tanıtılan ürünler `affiliate_offers` tablosunda durur ve `sup
 Supabase'deki `source_performance` görünümünde her post/reel/story için şunlar listelenir: link, açılan sohbet sayısı, ödenmiş rezervasyonlar, tur cirosu, gönderilen ve açılan partner linkleri.
 
 ## 5. Stripe
-1. Stripe hesabı → para birimi EUR. Settings → Payment methods'ta kart, Apple Pay, Google Pay, PayPal ve SEPA'yı açın.
+1. Stripe hesabı → para birimi EUR. Settings → Payment methods'ta kart, Apple Pay, Google Pay ve PayPal'ı açın. SEPA Direct Debit'i (ve onayı günler sonra gelen diğer yöntemleri) açmayın. Rezervasyon koltuğu yalnızca ödeme linkinin süresi boyunca tutar; süre dolunca koltuk başkasına satılabilir. Geç gelen onay ise rezervasyonu yer kontrolü yapmadan geri getirir (`confirmDeposit`).
 2. Developers → API keys → `STRIPE_SECRET_KEY`.
 3. Developers → Webhooks → endpoint: `https://SITE/api/webhooks/stripe`. Olaylar: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.expired`. Signing secret → `STRIPE_WEBHOOK_SECRET`.
 
