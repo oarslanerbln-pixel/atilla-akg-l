@@ -96,6 +96,11 @@ export function siteGraph(lang: Language) {
         email: `mailto:${contact.email}`,
         telephone: contact.phone,
         address: { "@type": "PostalAddress", addressLocality: "Berlin", addressCountry: "DE" },
+        // "Between Berlin and Istanbul", as the FAQ and the media kit put it.
+        workLocation: [
+          { "@type": "City", name: "Berlin", containedInPlace: { "@type": "Country", name: "Germany" } },
+          { "@type": "City", name: "Istanbul", containedInPlace: { "@type": "Country", name: "Türkiye" } },
+        ],
         knowsLanguage: LANGUAGES.map((l) => HTML_LANG[l]),
         knowsAbout: [
           "Travel filmmaking",
@@ -151,6 +156,7 @@ export function siteGraph(lang: Language) {
           item: {
             "@type": "Organization",
             name: partner.name,
+            ...(partner.website && { url: partner.website }),
             ...(partner.url && {
               subjectOf: {
                 "@type": "CreativeWork",
@@ -168,7 +174,7 @@ export function siteGraph(lang: Language) {
         itemListElement: brands.map((brand, index) => ({
           "@type": "ListItem",
           position: index + 1,
-          item: { "@type": "Organization", name: brand.name },
+          item: { "@type": "Organization", name: brand.name, url: brand.website },
         })),
       },
     ],

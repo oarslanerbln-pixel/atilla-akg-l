@@ -1,26 +1,36 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { contact } from "@/lib/site";
+import { contact, socialProfiles } from "@/lib/site";
+import { languageAlternates } from "@/lib/locales";
 
 export const metadata: Metadata = {
   title: "Datenschutzerklärung",
+  description:
+    "Datenschutzerklärung von atillabarbarossa.com: welche Daten beim Besuch, im Kontaktformular und bei Instagram-Anfragen verarbeitet werden, und Ihre Rechte.",
   robots: { index: false, follow: true },
+  alternates: languageAlternates("privacy", "DE"),
 };
 
 /**
  * Describes what this site actually does, nothing more: Vercel hosting
  * (functions in fra1, see vercel.json), one localStorage flag, self-hosted
  * assets, the contact form (Resend), plain mailto/tel/wa.me links, the
- * Instagram concierge (src/lib/concierge), the Manychat keyword replies on
- * Atilla's Instagram account, partner links (/go/<id>) and the e-book checkout
- * on Tentary (/roadmap). Remove the Manychat passages when Manychat is
- * disconnected, and move the region sentence if vercel.json changes. The WhatsApp
- * side of the concierge, staff alerts and Stripe deposits are not live; their sections must be added here before
- * those services are switched on.
+ * partner-link replies on Instagram (src/lib/concierge with CONCIERGE_AI off),
+ * the Manychat keyword replies on Atilla's Instagram account, partner links
+ * (/go/<id>), the e-book checkout on Tentary (/roadmap) and Atilla's social
+ * media profiles.
+ *
+ * This German text is binding; /datenschutz/en and /datenschutz/tr translate
+ * it section by section, so every change here is made in all three files.
+ * Remove the Manychat passages when Manychat is disconnected, and move the
+ * region sentence if vercel.json changes. The AI concierge (Anthropic), its
+ * WhatsApp side and Stripe deposits are not live; their sections must be
+ * added here before those services are switched on for customers (the
+ * Anthropic passage is in the git history of this file).
  */
 export default function Datenschutz() {
   return (
-    <LegalPage title="Datenschutzerklärung">
+    <LegalPage title="Datenschutzerklärung" page="privacy" lang="DE">
       <h2>1. Verantwortlicher</h2>
       <p>
         Verantwortlich im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:
@@ -47,14 +57,16 @@ export default function Datenschutz() {
         Analyse-Werkzeuge, keine Werbe-Pixel, keine eingebetteten Inhalte
         Dritter. Personenbezogene Daten werden nur verarbeitet, soweit dies für
         die Auslieferung der Seite technisch nötig ist oder Sie selbst Kontakt
-        aufnehmen. Die Verbindung ist per TLS (HTTPS) verschlüsselt.
+        aufnehmen. Ich verkaufe keine personenbezogenen Daten. Die Verbindung
+        ist per TLS (HTTPS) verschlüsselt.
       </p>
       <p>
-        Schreiben Sie mir auf Instagram, antwortet zunächst ein KI-gestützter
-        Concierge (Abschnitt 9); auf einzelne Stichwörter antwortet außerdem
-        der Dienst Manychat (ebenfalls Abschnitt 9). Klicks auf Partnerlinks
-        werden gezählt, damit Provisionen zugeordnet werden können (Abschnitt
-        10).
+        Fragen Sie auf Instagram mit einem Stichwort nach einem Partnerlink,
+        erhalten Sie ihn automatisch; auf einzelne Stichwörter antwortet
+        außerdem der Dienst Manychat (beides Abschnitt 9). Alle anderen
+        Nachrichten beantworte ich selbst. Klicks auf Partnerlinks werden
+        gezählt, damit Provisionen zugeordnet werden können (Abschnitt 10).
+        Für meine Profile auf Instagram, TikTok und YouTube gilt Abschnitt 12.
       </p>
 
       <h2>3. Hosting und Server-Logfiles</h2>
@@ -64,23 +76,25 @@ export default function Datenschutz() {
         technisch notwendige Verbindungsdaten in Server-Logfiles: IP-Adresse,
         Datum und Uhrzeit des Zugriffs, abgerufene Datei, übertragene
         Datenmenge, Referrer sowie Browser- und Betriebssystemkennung. Diese
-        Daten werden nicht mit anderen Daten zusammengeführt und nach kurzer
-        Zeit automatisch gelöscht.
+        Daten werden nicht mit anderen Daten zusammengeführt. Die
+        Protokolle dieser Website löscht Vercel nach spätestens einem Tag;
+        zur Abwehr von Angriffen kann Vercel Verbindungsdaten nach seiner
+        eigenen Datenschutzerklärung länger aufbewahren.
       </p>
       <p>
         Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; das berechtigte
         Interesse liegt im sicheren und stabilen Betrieb der Website. Mit
         Vercel besteht ein Auftragsverarbeitungsvertrag nach Art. 28 DSGVO. Die
         Übermittlung in die USA erfolgt auf Grundlage des
-        Angemessenheitsbeschlusses zum EU-US Data Privacy Framework, unter dem
-        Vercel zertifiziert ist, ergänzend auf Grundlage der
-        EU-Standard&shy;vertrags&shy;klauseln.
+        Angemessenheitsbeschlusses zum EU-US Data Privacy Framework (Art. 45
+        DSGVO), unter dem Vercel zertifiziert ist, ergänzend auf Grundlage der
+        EU-Standard&shy;vertrags&shy;klauseln (Art. 46 Abs. 2 lit. c DSGVO).
       </p>
       <p>
         Die Seiten selbst liefert Vercel über ein weltweites Servernetz aus.
         Alles, was auf dem Server verarbeitet wird (Kontaktformular,
-        Instagram-Concierge, Partnerlinks), läuft in einem Rechenzentrum in
-        Frankfurt am Main.
+        automatische Antworten auf Instagram, Partnerlinks), läuft in einem
+        Rechenzentrum in Frankfurt am Main.
       </p>
 
       <h2>4. Speicherung im Browser</h2>
@@ -127,14 +141,17 @@ export default function Datenschutz() {
         ist Art. 6 Abs. 1 lit. a DSGVO (Ihre Einwilligung über das
         Bestätigungsfeld) sowie Art. 6 Abs. 1 lit. b DSGVO, soweit die Anfrage
         auf einen Vertragsschluss gerichtet ist. Die Einwilligung können Sie
-        jederzeit mit Wirkung für die Zukunft widerrufen.
+        jederzeit mit Wirkung für die Zukunft widerrufen; eine formlose
+        Nachricht genügt.
       </p>
       <p>
-        Für den Versand wird der Dienst Resend (Plus Five Five, Inc., 2261
-        Market Street, San Francisco, CA 94114, USA) als Auftragsverarbeiter
-        eingesetzt. Ein Auftragsverarbeitungsvertrag nach Art. 28 DSGVO liegt
-        vor; die Übermittlung in die USA erfolgt auf Grundlage der
-        EU-Standard&shy;vertrags&shy;klauseln.
+        Für den Versand an mein E-Mail-Postfach wird der Dienst Resend (Plus
+        Five Five, Inc., 2261 Market Street, San Francisco, CA 94114, USA) als
+        Auftragsverarbeiter eingesetzt. Ein Auftragsverarbeitungsvertrag nach
+        Art. 28 DSGVO liegt vor. Die Übermittlung in die USA erfolgt auf
+        Grundlage des Angemessenheitsbeschlusses zum EU-US Data Privacy
+        Framework, unter dem Resend zertifiziert ist, ergänzend auf Grundlage
+        der EU-Standard&shy;vertrags&shy;klauseln.
       </p>
       <p>
         Zur Abwehr automatisierter Massenzusendungen wird die Anzahl der
@@ -165,47 +182,45 @@ export default function Datenschutz() {
         Ireland Limited (Merrion Road, Dublin 4, D04 X2K5, Irland), ein
         Unternehmen der Meta-Gruppe, Ihre Telefonnummer, Ihren Profilnamen und
         die Nachricht; eine Übermittlung in die USA ist dabei nicht
-        auszuschließen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, soweit
-        Ihre Anfrage auf einen Vertrag gerichtet ist, im Übrigen Art. 6 Abs. 1
-        lit. f DSGVO. Die Nutzung ist freiwillig; Kontaktformular, E-Mail und
-        Telefon stehen gleichwertig zur Verfügung.
+        auszuschließen. Meta Platforms, Inc. ist unter dem EU-US Data Privacy
+        Framework zertifiziert. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO,
+        soweit Ihre Anfrage auf einen Vertrag gerichtet ist, im Übrigen Art. 6
+        Abs. 1 lit. f DSGVO. Die Nutzung ist freiwillig; Kontaktformular,
+        E-Mail und Telefon stehen gleichwertig zur Verfügung.
       </p>
 
-      <h2>9. Nachrichten auf Instagram (KI-Concierge, Manychat)</h2>
+      <h2 id="instagram">9. Automatische Antworten auf Instagram</h2>
       <p>
-        Auf Direktnachrichten, Story-Antworten und bestimmte Kommentare unter
-        meinen Beiträgen auf Instagram antwortet zunächst ein digitaler
-        Concierge. Seine Antworten werden von einem KI-Sprachmodell erzeugt;
-        darauf weist er in seiner ersten Nachricht hin. Er beantwortet Fragen
-        zu Reisen und Partnerangeboten und bereitet Anfragen vor. Ich kann
-        jedes Gespräch einsehen und jederzeit selbst übernehmen; auf Wunsch
-        antworte ich Ihnen persönlich.
+        Unter einigen Beiträgen nenne ich ein Stichwort, etwa „GOLDCARD“.
+        Fragen Sie in einem Kommentar, einer Story-Antwort oder einer
+        Direktnachricht mit diesem Stichwort nach dem Angebot, erhalten Sie
+        automatisch eine kurze Beschreibung und auf Wunsch den Link dazu
+        (Abschnitt 10); unter einem Kommentar erscheint zusätzlich ein kurzer
+        öffentlicher Hinweis auf die Nachricht. Alle anderen Kommentare und
+        Nachrichten beantworte ich persönlich. Mein Server prüft sie nur auf
+        das Stichwort und speichert sie nicht.
       </p>
       <p>
-        Verarbeitet werden Ihre Instagram-Kennung (eine Nummer, die Instagram
-        für mein Konto vergibt), gegebenenfalls Name und Benutzername, der
-        Inhalt der Nachrichten und Angaben, die Sie im Gespräch selbst machen,
-        etwa Reisezeitraum, Personenzahl oder E-Mail-Adresse, sowie über
-        welchen Beitrag das Gespräch begonnen hat. Rechtsgrundlage ist Art. 6
-        Abs. 1 lit. b DSGVO, soweit Ihre Anfrage auf einen Vertrag gerichtet
-        ist, im Übrigen Art. 6 Abs. 1 lit. f DSGVO; das berechtigte Interesse
-        liegt in der schnellen Beantwortung von Anfragen.
+        Zu einer solchen Anfrage werden Ihre Instagram-Kennung (eine Nummer,
+        die Instagram für mein Konto vergibt), gegebenenfalls Name und
+        Benutzername, Ihr Kommentar oder Ihre Nachricht, die erkannte Sprache,
+        meine Antwort und der Beitrag, unter dem Sie gefragt haben,
+        gespeichert. Schreibt ein Konto in kurzer Zeit ungewöhnlich viele
+        Nachrichten, pausiert die automatische Antwort, und ich erhalte einen
+        Hinweis mit dem Namen des Kontos per WhatsApp. Rechtsgrundlage ist
+        Art. 6 Abs. 1 lit. f DSGVO; das berechtigte Interesse liegt darin,
+        Anfragen, die Sie mit dem Stichwort selbst auslösen, sofort und nur
+        einmal zu beantworten und Missbrauch abzuwehren.
       </p>
       <p>Beteiligt sind:</p>
       <ul>
         <li>
           Meta Platforms Ireland Limited, Merrion Road, Dublin 4, D04 X2K5,
-          Irland, als Betreiberin von Instagram. Für die Verarbeitung auf
-          Instagram selbst gilt die Datenschutzrichtlinie von Meta; eine
-          Übermittlung in die USA ist dabei nicht auszuschließen.
-        </li>
-        <li>
-          Anthropic, PBC, 548 Market Street, PMB 90375, San Francisco, CA
-          94104, USA, als Auftragsverarbeiter für das Sprachmodell. Anthropic
-          erhält den Gesprächsverlauf, um die Antwort zu erzeugen, und
-          verwendet ihn nach seinen Vertragsbedingungen nicht zum Training
-          seiner Modelle. Die Übermittlung in die USA erfolgt auf Grundlage
-          der EU-Standard&shy;vertrags&shy;klauseln.
+          Irland, als Betreiberin von Instagram und WhatsApp. Für die
+          Verarbeitung auf Instagram selbst gilt die Datenschutzrichtlinie von
+          Meta; eine Übermittlung in die USA ist dabei nicht auszuschließen.
+          Meta Platforms, Inc. ist unter dem EU-US Data Privacy Framework
+          zertifiziert.
         </li>
         <li>
           Supabase, Inc. als Auftragsverarbeiter für die Datenbank, mit
@@ -218,9 +233,10 @@ export default function Datenschutz() {
         <li>Vercel (siehe Abschnitt 3), über dessen Server die Nachrichten laufen.</li>
       </ul>
       <p>
-        Mit Anthropic und Supabase bestehen Auftragsverarbeitungsverträge nach
-        Art. 28 DSGVO. Möchten Sie nicht mit dem Concierge schreiben, erreichen
-        Sie mich gleichwertig per Kontaktformular, E-Mail oder Telefon.
+        Mit Supabase besteht ein Auftragsverarbeitungsvertrag nach Art. 28
+        DSGVO. Möchten Sie keine automatische Antwort, schreiben Sie ohne
+        Stichwort; ich antworte Ihnen dann persönlich. Gleichwertig erreichen
+        Sie mich per Kontaktformular, E-Mail oder Telefon.
       </p>
       <p>
         Auf einzelne Stichwörter in Kommentaren und Nachrichten antwortet
@@ -252,7 +268,7 @@ export default function Datenschutz() {
         Die Links führen zunächst über diese Website (
         <code>/go/…</code>). Dabei wird unter einer zufälligen Kennung gezählt,
         wie oft und wann der Link zuerst geöffnet wurde, und festgehalten, aus
-        welchem Gespräch und über welchen Beitrag er stammt. Diese Kennung wird
+        welcher Anfrage und über welchen Beitrag er stammt. Diese Kennung wird
         an das jeweilige Partnerprogramm (etwa financeAds, GetYourGuide oder
         Skyscanner) übergeben, damit Provisionen dem Beitrag zugeordnet werden
         können; Name oder Instagram-Kennung erhält das Partnerprogramm nicht.
@@ -284,7 +300,91 @@ export default function Datenschutz() {
         Datenschutzerklärung von Tentary.
       </p>
 
-      <h2>12. Speicherdauer</h2>
+      <h2 id="social-media">12. Meine Profile in sozialen Netzwerken</h2>
+      <p>
+        Ich zeige meine Arbeit auf eigenen Profilen bei{" "}
+        <a href={socialProfiles.instagram} target="_blank" rel="noopener noreferrer">
+          Instagram
+        </a>
+        ,{" "}
+        <a href={socialProfiles.tiktok} target="_blank" rel="noopener noreferrer">
+          TikTok
+        </a>{" "}
+        und{" "}
+        <a href={socialProfiles.youtube} target="_blank" rel="noopener noreferrer">
+          YouTube
+        </a>
+        . Diese Erklärung gilt auch für diese Profile. Besuchen Sie eines
+        davon, verarbeitet der jeweilige Anbieter Ihre Daten nach seinen
+        eigenen Bedingungen, auch für Werbung und Analysen und unabhängig
+        davon, ob Sie dort ein Konto haben; darauf habe ich keinen Einfluss.
+        Ich selbst sehe nur, was Sie dort mit mir teilen (Kommentare,
+        Erwähnungen, Nachrichten), und zusammengefasste Statistiken zur
+        Reichweite meiner Beiträge, die keinen Rückschluss auf einzelne
+        Personen zulassen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO;
+        das berechtigte Interesse liegt darin, meine Arbeit zu zeigen und mit
+        Publikum, Interessenten und Kunden zu kommunizieren.
+      </p>
+      <ul>
+        <li>
+          <strong>Instagram:</strong> Meta Platforms Ireland Limited, Merrion
+          Road, Dublin 4, D04 X2K5, Irland. Für die Statistiken
+          („Insights“), die Meta mir zu meinem Profil bereitstellt, sind Meta
+          und ich gemeinsam verantwortlich (Art. 26 DSGVO). Meta hat in einer{" "}
+          <a
+            href="https://www.facebook.com/legal/terms/page_controller_addendum"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Vereinbarung
+          </a>{" "}
+          die primäre Verantwortung dafür übernommen, auch für die Erfüllung
+          Ihrer Rechte. Meta Platforms, Inc. ist unter dem EU-US Data Privacy
+          Framework zertifiziert.{" "}
+          <a href="https://privacycenter.instagram.com/policy" target="_blank" rel="noopener noreferrer">
+            Datenschutzrichtlinie
+          </a>
+        </li>
+        <li>
+          <strong>TikTok:</strong> TikTok Technology Limited, 10 Earlsfort
+          Terrace, Dublin, D02 T380, Irland. Soweit TikTok mir Statistiken
+          bereitstellt (TikTok Analytics), sind wir dafür gemeinsam
+          verantwortlich; die Einzelheiten regelt TikTok in einer{" "}
+          <a
+            href="https://www.tiktok.com/legal/page/global/tiktok-analytics-joint-controller-addendum/en"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Vereinbarung
+          </a>
+          . TikTok übermittelt Daten auch in Länder außerhalb der EU, für die
+          kein Angemessenheitsbeschluss besteht.{" "}
+          <a
+            href="https://www.tiktok.com/legal/page/eea/privacy-policy/de"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Datenschutzrichtlinie
+          </a>
+        </li>
+        <li>
+          <strong>YouTube:</strong> Google Ireland Limited, Gordon House,
+          Barrow Street, Dublin 4, Irland. Google verarbeitet die Daten in
+          eigener Verantwortung; Google LLC ist unter dem EU-US Data Privacy
+          Framework zertifiziert.{" "}
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+            Datenschutzerklärung
+          </a>
+        </li>
+      </ul>
+      <p>
+        Ihre Rechte (Abschnitt 15) können Sie mir gegenüber und gegenüber dem
+        jeweiligen Anbieter geltend machen. Am schnellsten wirkt das beim
+        Anbieter selbst, denn nur er hat Zugriff auf die Daten seiner Nutzer;
+        Anfragen, die bei mir eingehen, leite ich an ihn weiter.
+      </p>
+
+      <h2>13. Speicherdauer</h2>
       <p>
         Anfragen und die zugehörige Korrespondenz werden gelöscht, sobald sie
         abschließend bearbeitet sind und keine gesetzlichen
@@ -293,28 +393,28 @@ export default function Datenschutz() {
         Regel sechs bis zehn Jahre, § 257 HGB, § 147 AO).
       </p>
       <p>
-        Gespräche mit dem Instagram-Concierge werden 24 Monate nach der letzten
-        Nachricht automatisch gelöscht, zusammen mit den zugehörigen Angaben.
-        Die Zuordnung eines Partnerlinks zum Gespräch entfällt mit diesem;
-        übrig bleibt nur die anonyme Zahl der Klicks.
+        Gespeicherte Anfragen von Instagram (Abschnitt 9) werden 24 Monate
+        nach der letzten Nachricht automatisch gelöscht, zusammen mit den
+        zugehörigen Angaben. Die Zuordnung eines Partnerlinks zur Anfrage
+        entfällt mit dieser; übrig bleibt nur die anonyme Zahl der Klicks.
       </p>
       <p>
         Bei Manychat bleiben die Angaben gespeichert, bis ich die Nutzung des
         Dienstes beende; dann werden sie dort gelöscht. Eine frühere Löschung
-        können Sie jederzeit verlangen (Abschnitt 14).
+        können Sie jederzeit verlangen (Abschnitt 15).
       </p>
 
-      <h2>13. Pflicht zur Bereitstellung, keine automatisierte Entscheidung</h2>
+      <h2>14. Pflicht zur Bereitstellung, keine automatisierte Entscheidung</h2>
       <p>
         Sie sind weder gesetzlich noch vertraglich verpflichtet,
         personenbezogene Daten bereitzustellen; ohne Angaben kann ich eine
         Anfrage jedoch nicht beantworten. Eine automatisierte
         Entscheidungsfindung einschließlich Profiling nach Art. 22 DSGVO findet
-        nicht statt. Der Concierge beantwortet Fragen und bereitet Anfragen
-        vor; über Buchungen entscheide ich selbst.
+        nicht statt. Die automatische Antwort auf Instagram sendet nur den
+        Link, nach dem Sie gefragt haben.
       </p>
 
-      <h2>14. Ihre Rechte</h2>
+      <h2 id="rights">15. Ihre Rechte</h2>
       <p>Sie haben jederzeit das Recht auf</p>
       <ul>
         <li>Auskunft über die zu Ihrer Person verarbeiteten Daten (Art. 15 DSGVO),</li>
@@ -328,17 +428,23 @@ export default function Datenschutz() {
         <strong>Widerspruchsrecht (Art. 21 DSGVO):</strong> Soweit eine
         Verarbeitung auf Art. 6 Abs. 1 lit. f DSGVO beruht, können Sie ihr aus
         Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit
-        widersprechen.
+        widersprechen. Ich verarbeite die Daten dann nicht mehr, es sei denn,
+        ich kann zwingende schutzwürdige Gründe nachweisen, die Ihre
+        Interessen überwiegen, oder die Verarbeitung dient der Geltendmachung,
+        Ausübung oder Verteidigung von Rechtsansprüchen.
       </p>
       <p>
         Für die Ausübung Ihrer Rechte genügt eine formlose Nachricht an{" "}
-        <a href={`mailto:${contact.email}`}>{contact.email}</a>.
+        <a href={`mailto:${contact.email}`}>{contact.email}</a>. Ich antworte
+        innerhalb eines Monats (Art. 12 Abs. 3 DSGVO).
       </p>
 
-      <h2>15. Beschwerderecht</h2>
+      <h2>16. Beschwerderecht</h2>
       <p>
         Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu
-        beschweren. Zuständig für mich ist:
+        beschweren, insbesondere in dem Mitgliedstaat Ihres Aufenthaltsorts,
+        Ihres Arbeitsplatzes oder des mutmaßlichen Verstoßes (Art. 77 DSGVO).
+        Zuständig für mich ist:
       </p>
       <p>
         Berliner Beauftragte für Datenschutz und Informationsfreiheit
@@ -350,11 +456,12 @@ export default function Datenschutz() {
         </a>
       </p>
 
-      <h2>16. Stand</h2>
+      <h2>17. Stand und Sprachfassungen</h2>
       <p>
         Stand: Oktober 2026. Diese Erklärung beschreibt den technischen Stand
         dieser Website und wird angepasst, sobald sich eingesetzte Dienste
-        ändern.
+        ändern. Sie liegt auch auf Englisch und Türkisch vor; maßgeblich ist
+        die deutsche Fassung.
       </p>
     </LegalPage>
   );
