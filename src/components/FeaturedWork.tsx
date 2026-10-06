@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Play, X } from "lucide-react";
 import ed from "./editorial.module.css";
 import styles from "./FeaturedWork.module.css";
@@ -11,6 +11,7 @@ import type { TranslationKeys } from "@/i18n/translations";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
+import InViewVideo from "./InViewVideo";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -48,63 +49,6 @@ const rawProjects: ProjectItem[] = [
   },
 ];
 
-/**
- * Card preview for one project.
- *
- * The poster was a stock photo fetched from images.pexels.com on every page
- * view — a third-party request handing the visitor's IP to a US host before
- * any consent, and stock imagery standing in for the work it illustrated.
- * Asking the browser to paint the clip's own first frame replaced it, but that
- * only ever worked by request. It is now a self-hosted still cut from the
- * clip, so the card needs nothing from the video until it scrolls into view:
- * `preload="none"` means a visitor who never reaches this section downloads
- * not one frame of it.
- */
-function InViewVideo({
-  src,
-  poster,
-  className,
-}: {
-  src: string;
-  poster: string;
-  className?: string;
-}) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const isInView = useInView(videoRef, { margin: "-100px" });
-  const calm = usePrefersCalm();
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    // Someone who asked for less motion did not ask for clips looping behind
-    // the copy, and someone saving data did not ask for megabytes of them.
-    if (calm) {
-      video.pause();
-      return;
-    }
-
-    if (isInView) {
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-    }
-  }, [isInView, calm]);
-
-  return (
-    <video
-      ref={videoRef}
-      src={src}
-      poster={poster}
-      preload="none"
-      loop
-      muted
-      playsInline
-      className={className}
-    />
-  );
-}
-
 export default function FeaturedWork() {
   const { t } = useLanguage();
   const { playClickSound } = useSoundDesign();
@@ -118,11 +62,14 @@ export default function FeaturedWork() {
     viewport: { once: true, margin: "-80px" },
     transition: at(delay, 0.9),
   });
-  // Footage opens like a curtain rising, rather than sliding in.
+  // Footage opens like a curtain rising, rather than sliding in. The spread
+  // around it watches the viewport: the clipped frame itself has no height
+  // to intersect with, and on a phone it never opened.
   const unveil = {
-    initial: { clipPath: "inset(0 0 100% 0)" },
-    whileInView: { clipPath: "inset(0 0 0% 0)" },
-    viewport: { once: true, margin: "-80px" },
+    variants: {
+      hidden: { clipPath: "inset(0 0 100% 0)" },
+      shown: { clipPath: "inset(0 0 0% 0)" },
+    },
     transition: at(0, 1.4),
   };
 
@@ -158,7 +105,7 @@ export default function FeaturedWork() {
   }, [activeProject, closeModal]);
 
   return (
-    <section id="work" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="work-title">
+    <section id="work" className={`${ed.section} ${ed.chapter} ${ed.ink} ${styles.section}`} aria-labelledby="work-title">
       <div className="container">
         <motion.div className={ed.head} {...reveal()}>
           <p className={ed.eyebrow}>{t("work_subtitle")}</p>
@@ -167,14 +114,20 @@ export default function FeaturedWork() {
           </h2>
         </motion.div>
 
-        {/* Each project is a spread, footage and text alternating sides, as
-            in a printed kit. The clips are wide films; the old portrait cards
-            cut away two thirds of every frame. */}
+        {/* Each project is a wide frame with its title set over the footage,
+            like a title card, and its story and result beneath. The second
+            frame steps in from the left, so the two do not read as a grid. */}
         <ol className={styles.spreads}>
           {rawProjects.map((project, i) => {
             const metric = splitMetric(t(project.metricKey));
             return (
-              <li key={project.id} className={styles.spread}>
+              <motion.li
+                key={project.id}
+                className={styles.spread}
+                initial="hidden"
+                whileInView="shown"
+                viewport={{ once: true, margin: "-80px" }}
+              >
                 <motion.div className={styles.visual} {...unveil}>
                   <div className={styles.frame} data-cursor="PLAY">
                     <InViewVideo src={project.videoSrc} poster={project.poster} className={styles.video} />
@@ -191,27 +144,29 @@ export default function FeaturedWork() {
                         <span className={ed.playIcon} aria-hidden="true">
                           <Play size={18} strokeWidth={1.25} />
                         </span>
-                        <span className={ed.playLabel}>{t("work_watch")}</span>
+                        <span className={`${ed.playLabel} ${styles.playLabel}`}>{t("work_watch")}</span>
                       </span>
                     </button>
+                    <div className={styles.caption}>
+                      <span className={ed.index}>{String(i + 1).padStart(2, "0")}</span>
+                      <h3 className={styles.name}>{t(project.titleKey)}</h3>
+                      <p className={styles.meta}>
+                        {t(project.categoryKey)}
+                        <span aria-hidden="true"> · </span>
+                        {t(project.typeKey)}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
 
                 <motion.div className={styles.body} {...reveal(0.15)}>
-                  <span className={ed.index}>{String(i + 1).padStart(2, "0")}</span>
-                  <h3 className={styles.name}>{t(project.titleKey)}</h3>
-                  <p className={styles.meta}>
-                    {t(project.categoryKey)}
-                    <span aria-hidden="true"> · </span>
-                    {t(project.typeKey)}
-                  </p>
                   <p className={styles.desc}>{t(project.descKey)}</p>
                   <p className={styles.metric}>
                     <span className={`${ed.figureValue} ${styles.metricValue}`}>{metric.value}</span>{" "}
                     {metric.label && <span className={ed.figureLabel}>{metric.label}</span>}
                   </p>
                 </motion.div>
-              </li>
+              </motion.li>
             );
           })}
         </ol>

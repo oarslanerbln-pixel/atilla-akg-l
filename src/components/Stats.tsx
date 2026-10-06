@@ -75,7 +75,7 @@ export default function Stats() {
   ];
 
   return (
-    <section id="stats" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="stats-title">
+    <section id="stats" className={`${ed.section} ${ed.chapter} ${ed.ink} ${styles.section}`} aria-labelledby="stats-title">
       <div className="container">
         <motion.div className={ed.headSplit} {...reveal()}>
           <div>
