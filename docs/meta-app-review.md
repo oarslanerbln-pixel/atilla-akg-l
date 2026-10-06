@@ -14,10 +14,10 @@ Meta'nın webhook kurulum rehberi (developers.facebook.com → Instagram Platfor
 
 | Şart | Durum | Kim |
 |---|---|---|
-| Uygulama ikonu 1024 × 1024 | eksik | kullanıcı |
+| Uygulama ikonu 1024 × 1024 | yüklendi (2026-10-06, Flow logosu) | tamam |
 | Gizlilik politikası URL'si: `https://atillabarbarossa.com/datenschutz` | güncel: §9 yalnızca partner linklerini anlatıyor (Manychat ve yapay zekâ pasajları çıkarıldı). İnceleyen, politikayı başvurudaki kullanımla karşılaştırır. | tamam |
 | Uygulama kategorisi | *Business and Pages* ya da panelin önerdiği en yakın kategori | kullanıcı |
-| İş e-postası | Meta'nın sonuçları gönderdiği adres; doğru olmalı | kullanıcı |
+| İş e-postası | uygulama iletişim adresi ayarlandı (2026-10-06) | tamam |
 | İşletme doğrulaması | açık | Atilla |
 | Her izin için en az bir başarılı API çağrısı | `instagram_business_basic`: her üç günde bir film senkronu (`me/media`), sağlanmış. `manage_comments` ve `manage_messages`: tester testindeki yorum cevabı ve DM bunları sağlar. | tester testi |
 | Manychat'in Instagram bağlantısı | kesildi (2026-10-06); hesaba bağlı tek uygulama bu | tamam |
