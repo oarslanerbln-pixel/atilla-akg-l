@@ -54,8 +54,7 @@ export default function PrivacyEnglish() {
       </p>
       <p>
         If you ask for a partner link on Instagram using a keyword, you receive
-        it automatically; the service Manychat also replies to certain
-        keywords (both section 9). I answer all other messages myself. Clicks
+        it automatically (section 9). I answer all other messages myself. Clicks
         on partner links are counted so that commissions can be attributed
         (section 10). Section 12 covers my profiles on Instagram, TikTok and
         YouTube.
@@ -218,22 +217,6 @@ export default function PrivacyEnglish() {
         keyword and I will answer you personally. You can equally reach me via
         the contact form, email or phone.
       </p>
-      <p>
-        An automated messaging service also replies to certain keywords in
-        comments and messages: Manychat, Inc., 8605 Santa Monica Blvd #64372,
-        West Hollywood, CA 90069, USA, acting as processor. Manychat receives
-        your Instagram ID, name and username, the comment or message, and
-        whether you tap buttons or links in the reply. The legal basis is Art.
-        6(1)(f) GDPR; the legitimate interest lies in answering requests that
-        you trigger yourself with the keyword immediately.
-      </p>
-      <p>
-        A data processing agreement under Art. 28 GDPR is in place with
-        Manychat. Data is transferred to the USA on the basis of the adequacy
-        decision for the EU-US Data Privacy Framework, under which Manychat is
-        certified, and additionally on the basis of the EU standard
-        contractual clauses.
-      </p>
 
       <h2>10. Partner links</h2>
       <p>
@@ -371,11 +354,6 @@ export default function PrivacyEnglish() {
         24 months after the last message, together with the related details.
         The link between a partner link and the request ends with it; only
         the anonymous click count remains.
-      </p>
-      <p>
-        At Manychat, the data remains stored until I stop using the service;
-        it is then deleted there. You can request earlier deletion at any time
-        (section 15).
       </p>
 
       <h2>14. Obligation to provide data, no automated decision-making</h2>

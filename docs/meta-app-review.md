@@ -15,12 +15,12 @@ Meta'nın webhook kurulum rehberi (developers.facebook.com → Instagram Platfor
 | Şart | Durum | Kim |
 |---|---|---|
 | Uygulama ikonu 1024 × 1024 | eksik | kullanıcı |
-| Gizlilik politikası URL'si: `https://atillabarbarossa.com/datenschutz` | **güncellenmeli**: §9 hâlâ yapay zekâ concierge'ini ve Manychat'i anlatıyor. İnceleyen, politikayı başvurudaki kullanımla karşılaştırır. | PR (Manychat geçişiyle birlikte) |
+| Gizlilik politikası URL'si: `https://atillabarbarossa.com/datenschutz` | güncel: §9 yalnızca partner linklerini anlatıyor (Manychat ve yapay zekâ pasajları çıkarıldı). İnceleyen, politikayı başvurudaki kullanımla karşılaştırır. | tamam |
 | Uygulama kategorisi | *Business and Pages* ya da panelin önerdiği en yakın kategori | kullanıcı |
 | İş e-postası | Meta'nın sonuçları gönderdiği adres; doğru olmalı | kullanıcı |
 | İşletme doğrulaması | açık | Atilla |
 | Her izin için en az bir başarılı API çağrısı | `instagram_business_basic`: her üç günde bir film senkronu (`me/media`), sağlanmış. `manage_comments` ve `manage_messages`: tester testindeki yorum cevabı ve DM bunları sağlar. | tester testi |
-| Manychat'in Instagram bağlantısı | Live'dan önce kesilmeli; yoksa DM'lerin birincil alıcısı Manychat olur ve uygulama yalnızca `standby` görür | kullanıcı |
+| Manychat'in Instagram bağlantısı | kesildi (2026-10-06); hesaba bağlı tek uygulama bu | tamam |
 
 İstenmeyecekler: `instagram_business_content_publishing` (uygulama paylaşım yapmıyor) ve *Human Agent* (partner modunda kullanılmıyor). Meta, kullanılmayan bir izin istendiğinde başvurunun tamamını reddeder.
 
@@ -103,5 +103,5 @@ Linke kayıtta **tıklanmaz**: tıklama, partner ağında gerçek bir tıklama o
 
 ## Sonra
 
-- Başvuru onaylanınca uygulama *Live* moda alınır, Manychat'in kesildiği doğrulanır ve ilk gerçek yorumda loglar kontrol edilir (`docs/concierge-setup.md`).
+- Başvuru onaylanınca uygulama *Live* moda alınır ve ilk gerçek yorumda loglar kontrol edilir (`docs/concierge-setup.md`).
 - Yapay zekâ concierge'i açıldığında (`CONCIERGE_AI=on`) başvuru metinleri tur danışmanlığını da anlatacak şekilde güncellenir. Atilla'nın WhatsApp'tan 24 saat sonrasına cevap verebilmesi gerekiyorsa *Human Agent* o zaman istenir.

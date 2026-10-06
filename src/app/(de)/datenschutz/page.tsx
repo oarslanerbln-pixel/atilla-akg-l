@@ -16,14 +16,12 @@ export const metadata: Metadata = {
  * (functions in fra1, see vercel.json), one localStorage flag, self-hosted
  * assets, the contact form (Resend), plain mailto/tel/wa.me links, the
  * partner-link replies on Instagram (src/lib/concierge with CONCIERGE_AI off),
- * the Manychat keyword replies on Atilla's Instagram account, partner links
- * (/go/<id>), the e-book checkout on Tentary (/roadmap) and Atilla's social
- * media profiles.
+ * partner links (/go/<id>), the e-book checkout on Tentary (/roadmap) and
+ * Atilla's social media profiles.
  *
  * This German text is binding; /datenschutz/en and /datenschutz/tr translate
  * it section by section, so every change here is made in all three files.
- * Remove the Manychat passages when Manychat is disconnected, and move the
- * region sentence if vercel.json changes. The AI concierge (Anthropic), its
+ * Move the region sentence if vercel.json changes. The AI concierge (Anthropic), its
  * WhatsApp side and Stripe deposits are not live; their sections must be
  * added here before those services are switched on for customers (the
  * Anthropic passage is in the git history of this file).
@@ -62,9 +60,8 @@ export default function Datenschutz() {
       </p>
       <p>
         Fragen Sie auf Instagram mit einem Stichwort nach einem Partnerlink,
-        erhalten Sie ihn automatisch; auf einzelne Stichwörter antwortet
-        außerdem der Dienst Manychat (beides Abschnitt 9). Alle anderen
-        Nachrichten beantworte ich selbst. Klicks auf Partnerlinks werden
+        erhalten Sie ihn automatisch (Abschnitt 9). Alle anderen Nachrichten
+        beantworte ich selbst. Klicks auf Partnerlinks werden
         gezählt, damit Provisionen zugeordnet werden können (Abschnitt 10).
         Für meine Profile auf Instagram, TikTok und YouTube gilt Abschnitt 12.
       </p>
@@ -238,24 +235,6 @@ export default function Datenschutz() {
         Stichwort; ich antworte Ihnen dann persönlich. Gleichwertig erreichen
         Sie mich per Kontaktformular, E-Mail oder Telefon.
       </p>
-      <p>
-        Auf einzelne Stichwörter in Kommentaren und Nachrichten antwortet
-        außerdem ein automatisierter Nachrichtendienst: Manychat, Inc., 8605
-        Santa Monica Blvd #64372, West Hollywood, CA 90069, USA, als
-        Auftragsverarbeiter. Manychat erhält dabei Ihre Instagram-Kennung,
-        Name und Benutzername, den Kommentar oder die Nachricht sowie die
-        Angabe, ob Sie Schaltflächen oder Links in der Antwort antippen.
-        Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; das berechtigte
-        Interesse liegt darin, Anfragen, die Sie mit dem Stichwort selbst
-        auslösen, sofort zu beantworten.
-      </p>
-      <p>
-        Mit Manychat besteht ein Auftragsverarbeitungsvertrag nach Art. 28
-        DSGVO. Die Übermittlung in die USA erfolgt auf Grundlage des
-        Angemessenheitsbeschlusses zum EU-US Data Privacy Framework, unter dem
-        Manychat zertifiziert ist, ergänzend auf Grundlage der
-        EU-Standard&shy;vertrags&shy;klauseln.
-      </p>
 
       <h2>10. Partnerlinks</h2>
       <p>
@@ -397,11 +376,6 @@ export default function Datenschutz() {
         nach der letzten Nachricht automatisch gelöscht, zusammen mit den
         zugehörigen Angaben. Die Zuordnung eines Partnerlinks zur Anfrage
         entfällt mit dieser; übrig bleibt nur die anonyme Zahl der Klicks.
-      </p>
-      <p>
-        Bei Manychat bleiben die Angaben gespeichert, bis ich die Nutzung des
-        Dienstes beende; dann werden sie dort gelöscht. Eine frühere Löschung
-        können Sie jederzeit verlangen (Abschnitt 15).
       </p>
 
       <h2>14. Pflicht zur Bereitstellung, keine automatisierte Entscheidung</h2>

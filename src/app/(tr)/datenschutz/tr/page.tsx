@@ -53,9 +53,8 @@ export default function PrivacyTurkish() {
       </p>
       <p>
         Instagram&apos;da bir anahtar kelimeyle partner linki isterseniz link
-        size otomatik olarak gönderilir; bazı anahtar kelimelere ayrıca
-        Manychat hizmeti yanıt verir (ikisi de 9. bölüm). Diğer tüm mesajları
-        kendim yanıtlarım. Komisyonların eşleştirilebilmesi için partner
+        size otomatik olarak gönderilir (9. bölüm). Diğer tüm mesajları kendim
+        yanıtlarım. Komisyonların eşleştirilebilmesi için partner
         linklerine yapılan tıklamalar sayılır (10. bölüm). Instagram, TikTok
         ve YouTube&apos;daki profillerim için 12. bölüm geçerlidir.
       </p>
@@ -215,22 +214,6 @@ export default function PrivacyTurkish() {
         size bizzat yanıt veririm. Bana iletişim formu, e-posta veya telefonla
         da aynı şekilde ulaşabilirsiniz.
       </p>
-      <p>
-        Yorum ve mesajlardaki bazı anahtar kelimelere ayrıca otomatik bir
-        mesajlaşma hizmeti yanıt verir: veri işleyen sıfatıyla Manychat, Inc.,
-        8605 Santa Monica Blvd #64372, West Hollywood, CA 90069, ABD. Manychat
-        bu sırada Instagram kimliğinizi, adınızı ve kullanıcı adınızı, yorumu
-        ya da mesajı ve yanıttaki butonlara veya linklere dokunup
-        dokunmadığınızı alır. Hukuki dayanak GDPR m. 6/1-f&apos;dir; meşru
-        menfaat, anahtar kelimeyle kendinizin başlattığı talepleri hemen
-        yanıtlamaktır.
-      </p>
-      <p>
-        Manychat ile GDPR m. 28 uyarınca bir veri işleme sözleşmesi mevcuttur.
-        ABD&apos;ye aktarım, Manychat&apos;in sertifikalı olduğu AB-ABD Veri
-        Gizliliği Çerçevesi yeterlilik kararına, ek olarak AB standart
-        sözleşme maddelerine dayanır.
-      </p>
 
       <h2>10. Partner linkleri</h2>
       <p>
@@ -370,11 +353,6 @@ export default function PrivacyTurkish() {
         ay sonra ilgili bilgilerle birlikte otomatik olarak silinir. Bir
         partner linkinin taleple ilişkisi de bununla sona erer; geriye
         yalnızca anonim tıklama sayısı kalır.
-      </p>
-      <p>
-        Manychat&apos;teki bilgiler, hizmeti kullanmayı bırakana kadar saklanır;
-        ardından orada silinir. Daha erken silinmesini her zaman talep
-        edebilirsiniz (15. bölüm).
       </p>
 
       <h2>14. Veri verme yükümlülüğü, otomatik karar verme yok</h2>
