@@ -13,6 +13,8 @@
   --accent-gold-light: #d8b482; /* Soft gold highlight */
   --accent-gold-dark: #825b29;  /* Shadow / depth stop */
   --accent-gold-readable: #7c5423; /* High-contrast accessible gold on white */
+  --brand-teal: #38787b; /* The brand mark's horizon needles, nowhere else */
+  --brand-teal-on-ink: #7fb8b8; /* The same needles on ink grounds */
   --champagne-muted: #8c827a;   /* Subtle muted text */
 
   --border-light: rgba(24, 21, 18, 0.08); /* Crisp architectural border */

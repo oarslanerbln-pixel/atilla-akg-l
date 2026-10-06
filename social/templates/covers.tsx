@@ -258,7 +258,7 @@ const split: Template = {
   ),
 };
 
-/** Full-bleed photo with a champagne card floating over it; the compass mark sits where a chip would. */
+/** Full-bleed photo with a champagne card floating over it; the brand mark sits where a chip would. */
 const card: Template = {
   photo: { ...PORTRAIT, anchorY: 0.27 },
   render: (b, photo) => (

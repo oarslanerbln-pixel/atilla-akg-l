@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { RAYS } from "@/components/BrandMark";
+import { MARK_FINE } from "@/components/brandMarkPaths";
 
 /**
  * The share card, generated at build time.
@@ -32,14 +32,16 @@ export default function OpenGraphImage() {
           position: "relative",
         }}
       >
-        {/* The compass mark (see BrandMark.tsx), drawn with literal colours
-            because the card is rendered outside the page's CSS. */}
+        {/* The brand mark (see BrandMark.tsx) in its finer cut, drawn with
+            literal colours because the card is rendered outside the page's CSS. */}
         <svg width="120" height="120" viewBox="0 0 100 100" style={{ marginBottom: 40 }}>
-          <circle cx="50" cy="50" r="40" fill="none" stroke="#fcfbf9" strokeWidth="1.2" />
-          {RAYS.map(([dark, gold]) => [
-            <polygon key={dark} points={dark} fill="#fcfbf9" />,
-            <polygon key={gold} points={gold} fill="#b38b59" />,
-          ])}
+          {MARK_FINE.ink.map((d) => (
+            <path key={d} d={d} fill="#fcfbf9" />
+          ))}
+          {MARK_FINE.teal.map((d) => (
+            <path key={d} d={d} fill="#7fb8b8" />
+          ))}
+          <circle cx={MARK_FINE.sun.cx} cy={MARK_FINE.sun.cy} r={MARK_FINE.sun.r} fill="#d8b482" />
         </svg>
 
         <div style={{ display: "flex", fontSize: 84, letterSpacing: 4, fontWeight: 300 }}>

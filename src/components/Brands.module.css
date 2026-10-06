@@ -69,7 +69,7 @@
   color: var(--text-secondary);
 }
 
-/* A small diamond, a quiet echo of the compass mark. */
+/* A small diamond, a quiet accent. */
 .separator {
   flex-shrink: 0;
   width: 5px;
