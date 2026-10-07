@@ -347,7 +347,7 @@
   line-height: 1.45;
 }
 
-/* A small gold diamond, the compass mark's point. */
+/* A small gold diamond, a quiet accent. */
 .features li::before {
   content: "";
   position: absolute;

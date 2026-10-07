@@ -1,33 +1,25 @@
-/**
- * The compass mark — the brand's icon.
- *
- * A four-point north star whose north ray breaks out of its ring: direction,
- * travel, the one fixed point a destination film is built around. Each ray is
- * split into a dark half and a gold half, alternating clockwise, so the star
- * reads as one turning figure rather than a plus sign.
- *
- * The dark halves and the ring take `currentColor`, so the mark follows
- * whatever text colour its parent sets (white over the hero, ink once the
- * header turns solid). The gold halves stay gold everywhere. Exported artwork
- * for print and social lives in public/brand/.
- */
-export const RAYS: Array<[string, string]> = [
-  ["50,1 46,46 50,50", "50,1 54,46 50,50"],
-  ["80,50 54,46 50,50", "80,50 54,54 50,50"],
-  ["50,80 54,54 50,50", "50,80 46,54 50,50"],
-  ["20,50 46,54 50,50", "20,50 46,46 50,50"],
-];
+import { MARK } from "./brandMarkPaths";
 
+/**
+ * The brand mark: an A drawn as a spire of hairlines, its crossbar two teal
+ * needles on a horizon, a gold sun where they would meet.
+ *
+ * The paths are generated from social/brand/mark.ts (`npm run brand`) at a
+ * line weight that stays legible from 22 px up. The ink lines take
+ * `currentColor`, so the mark follows its parent's text colour (white over
+ * the hero, ink once the header turns solid); the needles stay teal and the
+ * sun gold. Exported artwork for print and social lives in public/brand/.
+ */
 export default function BrandMark({ className }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false">
-      <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="2.4" />
-      {RAYS.map(([dark, gold]) => (
-        <g key={dark}>
-          <polygon points={dark} fill="currentColor" />
-          <polygon points={gold} fill="var(--accent-gold)" />
-        </g>
+    <svg className={className} viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      {MARK.ink.map((d) => (
+        <path key={d} d={d} fill="currentColor" />
       ))}
+      {MARK.teal.map((d) => (
+        <path key={d} d={d} fill="var(--brand-teal)" />
+      ))}
+      <circle cx={MARK.sun.cx} cy={MARK.sun.cy} r={MARK.sun.r} fill="var(--accent-gold)" />
     </svg>
   );
 }

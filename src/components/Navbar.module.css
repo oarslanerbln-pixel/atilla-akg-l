@@ -29,6 +29,7 @@
 
 .menuOpen .brand {
   color: var(--text-on-ink);
+  --brand-teal: var(--brand-teal-on-ink);
 }
 
 .navContainer {
@@ -55,11 +56,11 @@
   transition: color 0.3s ease;
 }
 
-/* Sized to the wordmark beside it; the north ray rises just past its cap
-   height, which is the point of the mark. */
+/* Sized to the wordmark beside it: the A stands about twice its cap height,
+   the horizon needles reaching out on either side. */
 .mark {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.875rem;
+  height: 1.875rem;
   flex-shrink: 0;
 }
 
