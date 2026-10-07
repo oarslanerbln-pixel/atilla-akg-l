@@ -66,6 +66,21 @@
   gap: 0.8rem;
 }
 
+/* A hairline track and its gold share, under a percentage. */
+.meter {
+  display: block;
+  height: 2px;
+  background: var(--border-light);
+  overflow: hidden;
+}
+
+.meterFill {
+  display: block;
+  height: 100%;
+  background: var(--accent-gold);
+  transform-origin: left center;
+}
+
 .label {
   display: inline-flex;
   align-items: center;

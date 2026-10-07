@@ -63,6 +63,32 @@
   white-space: nowrap;
 }
 
+/* On a phone it sits over the content it scrolls past, so it is set
+   lighter: lower, finer type, a softer shadow, the page faintly through it. */
+@media (max-width: 768px) {
+  .button {
+    height: 44px;
+    padding: 0 0.95rem 0 0.8rem;
+    gap: 0.5rem;
+    border-color: color-mix(in srgb, var(--accent-gold) 75%, transparent);
+    background: color-mix(in srgb, var(--bg-ink) 93%, transparent);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 18px rgba(20, 15, 10, 0.18);
+  }
+
+  .icon {
+    width: 19px;
+    height: 19px;
+  }
+
+  .label {
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+  }
+}
+
 @media (min-width: 769px) {
   .button {
     right: 2rem;

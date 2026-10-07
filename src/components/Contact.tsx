@@ -92,7 +92,7 @@ export default function Contact() {
   const [consentBefore, consentAfter] = t('contact_consent').split("{link}");
 
   return (
-    <section id="contact" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="contact-title">
+    <section id="contact" className={`${ed.section} ${ed.chapter} ${ed.horizon} ${styles.section}`} aria-labelledby="contact-title">
       <div className={`container ${styles.container}`}>
         <motion.div
           variants={containerVariants}

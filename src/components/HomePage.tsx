@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import HomeHero from "@/components/HomeHero";
 import Brands from "@/components/Brands";
 import About from "@/components/About";
+import FilmBand from "@/components/FilmBand";
 import Stats from "@/components/Stats";
 import Partners from "@/components/Partners";
 import FeaturedWork from "@/components/FeaturedWork";
@@ -35,6 +36,7 @@ export default function HomePage({ lang }: { lang: Language }) {
       <HomeHero />
       <Brands />
       <About />
+      <FilmBand />
       <Stats />
       <Partners />
       <FeaturedWork />

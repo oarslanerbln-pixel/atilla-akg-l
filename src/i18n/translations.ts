@@ -117,6 +117,9 @@ export const translations = {
     project_3_metric: "94,2 % Engagement-Rate",
     project_3_type: "Dokumentarfilm",
     work_watch: "VIDEO ANSEHEN",
+    film_band_label: "Showreel",
+    film_band_line: "Jeder Ort hat sein eigenes Licht. Ich bringe es auf die Leinwand.",
+    film_band_cta: "Projekte ansehen",
     work_close: "SCHLIESSEN",
 
     // LatestReels (Instagram)
@@ -525,6 +528,9 @@ export const translations = {
     project_3_metric: "94.2% Engagement Rate",
     project_3_type: "Documentary",
     work_watch: "WATCH FILM",
+    film_band_label: "Showreel",
+    film_band_line: "Every place has its own light. I bring it to the screen.",
+    film_band_cta: "View projects",
     work_close: "CLOSE",
 
     // LatestReels (Instagram)
@@ -933,6 +939,9 @@ export const translations = {
     project_3_metric: "%94,2 Etkileşim Oranı",
     project_3_type: "Belgesel",
     work_watch: "FİLMİ İZLE",
+    film_band_label: "Showreel",
+    film_band_line: "Her yerin kendine ait bir ışığı var. Ben onu ekrana taşıyorum.",
+    film_band_cta: "Projeleri gör",
     work_close: "KAPAT",
 
     // LatestReels (Instagram)

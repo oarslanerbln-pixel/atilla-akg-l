@@ -1,7 +1,5 @@
-/* One reel as a case page — see CaseStudy.tsx. */
-.section {
-  border-top: 1px solid var(--border-light);
-}
+/* One reel as a case page — see CaseStudy.tsx. Its top edge is the shared
+   horizon (editorial.module.css). */
 
 /* Brand and format beside the heading, between hairlines. */
 .meta {
