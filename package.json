@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "social": "tsx social/render.tsx"
+    "social": "tsx social/render.tsx",
+    "brand": "tsx social/brand/export.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",

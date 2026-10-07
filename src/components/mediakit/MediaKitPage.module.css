@@ -875,6 +875,7 @@
 .closeMark {
   margin-bottom: 2.25rem;
   color: var(--text-on-ink);
+  --brand-teal: var(--brand-teal-on-ink);
 }
 
 .closeMarkSvg {

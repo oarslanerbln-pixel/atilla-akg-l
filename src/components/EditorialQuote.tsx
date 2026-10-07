@@ -10,7 +10,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
  * The one ink page in the run of chapters: the line he works by, set large,
- * signed with the compass the way /media-kit closes its statement.
+ * signed with the brand mark the way /media-kit closes its statement.
  */
 export default function EditorialQuote() {
   const { t } = useLanguage();

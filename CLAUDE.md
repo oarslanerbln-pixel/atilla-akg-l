@@ -106,7 +106,7 @@ src/
 │   ├── Footer.tsx
 │   ├── Partners.tsx         # Tourism boards & institutions
 │   ├── LatestReels.tsx      # Newest Instagram films (server), ReelsRail.tsx (client)
-│   ├── BrandMark.tsx        # The compass mark, inline
+│   ├── BrandMark.tsx        # The brand mark, inline (paths: brandMarkPaths.ts, generated)
 │   └── LegalPage.tsx        # Shell shared by the two legal routes
 ├── context/
 │   └── LanguageContext.tsx  # Language state & provider
@@ -172,23 +172,33 @@ partner there and all three follow.
   `BASE` (Berlin), computed by `bearing()` — never typed in by hand.
 
 ## 🧭 Brand mark
-The logo is the **compass**: a four-point north star whose north ray breaks
-out of its ring, each ray half ink, half gold, alternating clockwise. The
-wordmark is `ATILLA BARBAROSSA` in Cormorant Garamond 400, tracked 0.26em,
-and carries no tagline.
+The logo is the **spire A** (traced from the Google Flow artwork, October
+2026): an A drawn as tapered hairlines meeting at a point, a fourth line
+rising inside its left leg, two teal needles as the crossbar (a horizon) and
+a gold sun between them. The wordmark is `ATILLA BARBAROSSA` in Cormorant
+Garamond 400, tracked 0.26em, and carries no tagline.
 
-- On the site the mark is `src/components/BrandMark.tsx` (inline SVG, dark
-  halves in `currentColor`, gold halves in `--accent-gold`). The share card
-  imports its geometry from there, so the two cannot drift apart.
+- **One geometry source:** `social/brand/mark.ts` (centrelines plus width
+  profiles). `npm run brand` writes everything else from it: the site's
+  paths (`src/components/brandMarkPaths.ts`, generated, never edit), the
+  artwork in `public/brand/` and the app icons. Change the mark there, run
+  the script, commit the output. `npx tsx social/brand/preview.ts` renders
+  the trace over the original and a size sheet into `social/out/brand/`.
+- **Line weight grows as the mark shrinks**, or the hairlines vanish: the site
+  cut (22–64 px), a finer cut for the share card, heavier still for the app
+  icons and favicon. The weights live in `export.ts`.
+- On the site the mark is `src/components/BrandMark.tsx`: ink lines in
+  `currentColor`, needles in `--brand-teal`, the sun in `--accent-gold`. On an
+  ink ground set `--brand-teal: var(--brand-teal-on-ink)` on the parent.
 - `src/app/icon.svg`, `apple-icon.png` and `favicon.ico` are the app icons;
   Next links them by convention.
-- `public/brand/` holds the exported artwork: the mark, stacked and
-  horizontal lockups, each in colour, reverse (for dark grounds), black and
-  white. The wordmark in them is outlined, so they render without the font.
-  Outside the site header (print, social, decks, video), use these files;
-  never retype the wordmark in another font.
+- `public/brand/` holds the exported artwork: the mark (`mark*.svg`), stacked
+  and horizontal lockups, each in colour, reverse (for dark grounds), black
+  and white. The wordmark in them is outlined, so they render without the
+  font. Outside the site header (print, social, decks, video), use these
+  files; never retype the wordmark in another font.
 - `watermark-frame.svg` (a viewfinder with an "A" peak and a gold sun) is for
-  **video watermarks only**. Everywhere else the compass stands alone.
+  **video watermarks only**. Everywhere else the mark stands alone.
 
 ## 🔎 SEO & GEO
 Search engines and AI answer engines read the server HTML, so everything a

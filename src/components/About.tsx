@@ -12,7 +12,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
  * The person behind the camera, straight after the hero: the portrait, the
- * philosophy in his own words, and a signature with the compass, as on
+ * philosophy in his own words, and a signature with the brand mark, as on
  * /media-kit. The figures that used to share this section have one of their
  * own (Stats), so the text can be read rather than squeezed beside cards.
  */

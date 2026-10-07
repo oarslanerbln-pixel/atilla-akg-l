@@ -62,8 +62,8 @@ const svgUri = (path: string) => `data:image/svg+xml;base64,${read(path).toStrin
 export const brand = {
   logoOnInk: { src: svgUri("public/brand/logo-horizontal-reverse.svg"), ratio: 514.38 / 64 },
   logoOnLight: { src: svgUri("public/brand/logo-horizontal.svg"), ratio: 514.38 / 64 },
-  markOnInk: svgUri("public/brand/compass-mark-reverse.svg"),
-  markOnLight: svgUri("public/brand/compass-mark.svg"),
+  markOnInk: svgUri("public/brand/mark-reverse.svg"),
+  markOnLight: svgUri("public/brand/mark.svg"),
 };
 
 export interface PhotoSpec {
