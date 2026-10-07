@@ -1,7 +1,8 @@
-import { readFileSync, rmSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import sharp from "sharp";
 import { COLOURS, markPaths, markSvg } from "./mark";
+import { WORDMARK } from "../../src/components/brandWordmarkPaths";
 
 // Writes every copy of the mark from mark.ts:
 //   src/components/brandMarkPaths.ts   the site component's paths (generated)
@@ -34,32 +35,39 @@ writeFileSync(
     `/** The finer cut for large display, such as the share card. */\nexport const MARK_FINE = ${set(WEIGHT.share)};\n`,
 );
 
-// 2. Artwork. The lockups keep their outlined Cormorant wordmark; only the mark is redrawn.
-const wordmark = (file: string) => {
-  const src = readFileSync(join(BRAND, file), "utf8");
-  const m = src.match(/<path transform="[^"]*" d="[^"]*" fill="[^"]*"\/>/);
-  if (!m) throw new Error(`no wordmark in ${file}`);
-  return m[0];
-};
+// 2. Artwork. The lockups set the mark beside or above the outlined wordmark
+// (brandWordmarkPaths.ts), measured in the mark's own units. Stacked keeps the Flow
+// artwork's proportions; horizontal centres the capitals on the horizon, so
+// the right needle points into the name.
 const header = (w: number, h: number) =>
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="Atilla Barbarossa"><title>Atilla Barbarossa</title>`;
-const lockups: Record<string, string> = {};
-for (const suffix of Object.keys(WAYS)) {
-  for (const kind of ["horizontal", "stacked"] as const) lockups[`${kind}${suffix}`] = wordmark(`logo-${kind}${suffix}.svg`);
-}
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${r2(w)} ${r2(h)}" role="img" aria-label="Atilla Barbarossa"><title>Atilla Barbarossa</title>`;
+const r2 = (n: number) => Math.round(n * 100) / 100;
+/** The mark's ink, from apex to feet and needle tip to needle tip. */
+const INK_BOX = { x0: 3.89, x1: 96.11, y0: 11.55, y1: 88.45 };
+type Lockup = { cap: number; x: number; baseline: number; box: { x0: number; x1: number; y0: number; y1: number }; scale: number };
+const LOCKUPS: Record<"horizontal" | "stacked", Lockup> = {
+  horizontal: (() => {
+    const cap = 20, x = INK_BOX.x1 + 12;
+    return { cap, x, baseline: 58.831 + cap / 2, box: { ...INK_BOX, x1: x + (WORDMARK.width * cap) / WORDMARK.capHeight }, scale: 1 };
+  })(),
+  stacked: (() => {
+    const cap = 5.74, w = (WORDMARK.width * cap) / WORDMARK.capHeight, x = 50 - w / 2;
+    return { cap, x, baseline: 106.05, box: { x0: x, x1: x + w, y0: INK_BOX.y0, y1: 106.05 }, scale: 6 };
+  })(),
+};
 for (const [suffix, colours] of Object.entries(WAYS)) {
   const mark = markSvg(WEIGHT.artwork, colours);
   writeFileSync(join(BRAND, `mark${suffix}.svg`), mark);
-  rmSync(join(BRAND, `compass-mark${suffix}.svg`), { force: true });
   const body = svgBody(mark);
-  writeFileSync(
-    join(BRAND, `logo-horizontal${suffix}.svg`),
-    `${header(514.38, 64)}<g transform="scale(0.64)">${body}</g>${lockups[`horizontal${suffix}`]}</svg>`,
-  );
-  writeFileSync(
-    join(BRAND, `logo-stacked${suffix}.svg`),
-    `${header(735.59, 196.5)}<g transform="translate(302.8 0) scale(1.3)">${body}</g>${lockups[`stacked${suffix}`]}</svg>`,
-  );
+  for (const [kind, l] of Object.entries(LOCKUPS)) {
+    const k = l.cap / WORDMARK.capHeight;
+    const word = `<path transform="translate(${r2(l.x)} ${r2(l.baseline)}) scale(${r2(k * 1e4) / 1e4})" d="${WORDMARK.d}" fill="${colours.ink}"/>`;
+    writeFileSync(
+      join(BRAND, `logo-${kind}${suffix}.svg`),
+      `${header((l.box.x1 - l.box.x0) * l.scale, (l.box.y1 - l.box.y0) * l.scale)}` +
+        `<g transform="scale(${l.scale}) translate(${r2(-l.box.x0)} ${r2(-l.box.y0)})">${body}${word}</g></svg>`,
+    );
+  }
 }
 
 // 3. App icons: the colour mark on a paper tile.

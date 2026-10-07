@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { motion, type Transition, type Variants } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
+import BrandWordmark from "@/components/BrandWordmark";
 import Brands from "@/components/Brands";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
@@ -204,9 +205,7 @@ export default function PackagesPage() {
         <div className={`container ${styles.topbarInner}`}>
           <Link href={pagePath("home", activeLang)} className={styles.brand}>
             <BrandMark className={styles.brandMark} />
-            {/* Set in capitals, as in the Navbar: under lang="tr" the CSS
-                uppercase would turn the wordmark into ATİLLA. */}
-            <span>ATILLA BARBAROSSA</span>
+            <BrandWordmark className={styles.wordmark} />
           </Link>
           <div className={styles.topbarEnd}>
             <Link href={pagePath("home", activeLang)} className={styles.homeLink}>
