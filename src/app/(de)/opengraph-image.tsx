@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { MARK_FINE } from "@/components/brandMarkPaths";
+import { WORDMARK } from "@/components/brandWordmarkPaths";
 
 /**
  * The share card, generated at build time.
@@ -44,12 +45,13 @@ export default function OpenGraphImage() {
           <circle cx={MARK_FINE.sun.cx} cy={MARK_FINE.sun.cy} r={MARK_FINE.sun.r} fill="#d8b482" />
         </svg>
 
-        <div style={{ display: "flex", fontSize: 84, letterSpacing: 4, fontWeight: 300 }}>
-          Atilla
-        </div>
-        <div style={{ display: "flex", fontSize: 84, letterSpacing: 16, fontWeight: 700 }}>
-          BARBAROSSA
-        </div>
+        {/* The wordmark as outlined from the logo (see BrandWordmark.tsx). */}
+
+        <svg width="840" height={(840 * 104) / WORDMARK.width} viewBox={`0 -102 ${WORDMARK.width} 104`}>
+
+          <path d={WORDMARK.d} fill="#fcfbf9" />
+
+        </svg>
 
         <div
           style={{

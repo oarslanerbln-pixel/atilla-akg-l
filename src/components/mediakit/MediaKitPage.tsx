@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, type Transition } from "framer-motion";
 import { ArrowUpRight, Play } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
+import BrandWordmark from "@/components/BrandWordmark";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import { fill, splitMetric } from "@/i18n/format";
@@ -157,9 +158,7 @@ export default function MediaKitPage() {
         <div className={`container ${styles.topbarInner}`}>
           <Link href={pagePath("home", activeLang)} className={styles.brand}>
             <BrandMark className={styles.brandMark} />
-            {/* Set in capitals, as in the Navbar: under lang="tr" the CSS
-                uppercase would turn the wordmark into ATİLLA. */}
-            <span>ATILLA BARBAROSSA</span>
+            <BrandWordmark className={styles.wordmark} />
           </Link>
           <div className={styles.topbarEnd}>
             <Link href={pagePath("home", activeLang)} className={styles.homeLink}>

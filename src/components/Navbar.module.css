@@ -45,13 +45,7 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  white-space: nowrap;
-  font-family: var(--font-inter);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
+  gap: 0.75rem;
   color: var(--text-primary);
   transition: color 0.3s ease;
 }
@@ -61,6 +55,14 @@
 .mark {
   width: 1.875rem;
   height: 1.875rem;
+  flex-shrink: 0;
+}
+
+/* The wordmark as drawn in the logo, not retyped: thin capitals, widely
+   tracked, their cap height about a third of the A's. */
+.wordmark {
+  height: 0.72rem;
+  width: auto;
   flex-shrink: 0;
 }
 

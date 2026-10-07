@@ -3,11 +3,24 @@
 import React, { useEffect, useState, useSyncExternalStore } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Preloader.module.css";
+import BrandWordmark from "./BrandWordmark";
+import { WORDMARK } from "./brandWordmarkPaths";
 
 import { useLanguage } from "@/context/LanguageContext";
 import { useScrollLock } from "@/hooks/useScrollLock";
 
 import { INTRO_SEEN_KEY as SEEN_KEY, markIntroDone } from "@/lib/intro";
+
+/** The gold light across the wordmark: white peaks read cleanly on ink. */
+const SHINE: Array<[string, string]> = [
+  ["0%", "var(--accent-gold)"],
+  ["15%", "var(--accent-gold-light)"],
+  ["30%", "#ffffff"],
+  ["45%", "var(--accent-gold-dark)"],
+  ["60%", "var(--accent-gold)"],
+  ["75%", "#ffffff"],
+  ["100%", "var(--accent-gold-light)"],
+];
 
 /**
  * Whether this visitor has already seen the intro — ever, not just this
@@ -133,14 +146,53 @@ export default function Preloader() {
             </motion.div>
             
             {/* The wordmark on a passing overlay, not the page's title: the
-                hero's name is the one h1. */}
+                hero's name is the one h1. Gold light runs across it, as it once
+                did across the typed name, drawn by the gradient it is filled with. */}
             <motion.p
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
               className={styles.brandName}
             >
-              ATILLA BARBAROSSA
+              <BrandWordmark className={styles.wordmark} fill="url(#preloader-shine)">
+
+                <defs>
+
+                  <linearGradient id="preloader-shine" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={2 * WORDMARK.width} y2="0">
+
+                    {SHINE.map(([offset, colour]) => (
+
+                      <stop key={offset} offset={offset} style={{ stopColor: colour }} />
+
+                    ))}
+
+                    <animateTransform
+
+                      attributeName="gradientTransform"
+
+                      type="translate"
+
+                      from={`${-2 * WORDMARK.width} 0`}
+
+                      to={`${2 * WORDMARK.width} 0`}
+
+                      dur="4s"
+
+                      calcMode="spline"
+
+                      keyTimes="0;1"
+
+                      keySplines="0.16 1 0.3 1"
+
+                      repeatCount="indefinite"
+
+                    />
+
+                  </linearGradient>
+
+                </defs>
+
+              </BrandWordmark>
             </motion.p>
           </div>
           

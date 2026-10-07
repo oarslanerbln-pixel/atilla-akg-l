@@ -11,6 +11,7 @@ import { useScrollLock } from "@/hooks/useScrollLock";
 import { roadmapPath } from "@/lib/roadmap";
 import LiveClock from "./LiveClock";
 import BrandMark from "./BrandMark";
+import BrandWordmark from "./BrandWordmark";
 
 const NAV_ITEMS = [
   { href: "#about", key: "nav_about" },
@@ -103,7 +104,7 @@ export default function Navbar() {
         {/* Brand Logo */}
         <a href="#" className={styles.brand} onClick={handleLinkClick}>
           <BrandMark className={styles.mark} />
-          <span>ATILLA BARBAROSSA</span>
+          <BrandWordmark className={styles.wordmark} />
         </a>
 
         {/* Center Navigation Links */}

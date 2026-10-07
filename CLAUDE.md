@@ -107,6 +107,7 @@ src/
 │   ├── Partners.tsx         # Tourism boards & institutions
 │   ├── LatestReels.tsx      # Newest Instagram films (server), ReelsRail.tsx (client)
 │   ├── BrandMark.tsx        # The brand mark, inline (paths: brandMarkPaths.ts, generated)
+│   ├── BrandWordmark.tsx    # The wordmark, outlined (paths: brandWordmarkPaths.ts)
 │   └── LegalPage.tsx        # Shell shared by the two legal routes
 ├── context/
 │   └── LanguageContext.tsx  # Language state & provider
@@ -175,8 +176,9 @@ partner there and all three follow.
 The logo is the **spire A** (traced from the Google Flow artwork, October
 2026): an A drawn as tapered hairlines meeting at a point, a fourth line
 rising inside its left leg, two teal needles as the crossbar (a horizon) and
-a gold sun between them. The wordmark is `ATILLA BARBAROSSA` in Cormorant
-Garamond 400, tracked 0.26em, and carries no tagline.
+a gold sun between them. The wordmark is the artwork's own: `ATILLA
+BARBAROSSA` in Montserrat Light (300), tracked 0.18em, and carries no
+tagline (the artwork's "TRAVEL · MEDIA" stays off the site).
 
 - **One geometry source:** `social/brand/mark.ts` (centrelines plus width
   profiles). `npm run brand` writes everything else from it: the site's
@@ -187,6 +189,11 @@ Garamond 400, tracked 0.26em, and carries no tagline.
 - **Line weight grows as the mark shrinks**, or the hairlines vanish: the site
   cut (22–64 px), a finer cut for the share card, heavier still for the app
   icons and favicon. The weights live in `export.ts`.
+- **The wordmark is drawn, not typed.** `src/components/brandWordmarkPaths.ts`
+  holds its outlines (cap height 100); `BrandWordmark.tsx` draws them in
+  `currentColor` wherever the name stands as the logo (header, page top
+  bars, intro, share card), so no font is downloaded for it. Size it by
+  height. The name in running text and signatures stays ordinary type.
 - On the site the mark is `src/components/BrandMark.tsx`: ink lines in
   `currentColor`, needles in `--brand-teal`, the sun in `--accent-gold`. On an
   ink ground set `--brand-teal: var(--brand-teal-on-ink)` on the parent.

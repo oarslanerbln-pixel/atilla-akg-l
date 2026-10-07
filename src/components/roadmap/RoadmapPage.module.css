@@ -22,12 +22,12 @@
   gap: 0.6rem;
   color: var(--text-primary);
   text-decoration: none;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  white-space: nowrap;
+}
+
+.wordmark {
+  height: 0.66rem;
+  width: auto;
+  flex-shrink: 0;
 }
 
 .brandMark {
@@ -759,9 +759,8 @@
 
   /* As on /social-media: at full tracking the wordmark and the switcher ran
      past a 360 px screen. */
-  .brand {
-    font-size: 0.68rem;
-    letter-spacing: 0.18em;
+  .wordmark {
+    height: 0.58rem;
   }
 
   .compare {

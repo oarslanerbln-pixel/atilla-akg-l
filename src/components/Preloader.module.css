@@ -51,31 +51,13 @@
 }
 
 .brandName {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 6vw, 5rem);
-  font-weight: 300;
-  line-height: 1.2;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
   margin: 0;
-  
-  /* Shimmering gold text — white specular peaks read cleanly against the
-     solid ink background, unlike on the hero's photo/glass panel. */
-  background: linear-gradient(
-    110deg,
-    var(--accent-gold) 0%,
-    var(--accent-gold-light) 15%,
-    #ffffff 30%,
-    var(--accent-gold-dark) 45%,
-    var(--accent-gold) 60%,
-    #ffffff 75%,
-    var(--accent-gold-light) 100%
-  );
-  background-size: 200% auto;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: shine 4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  line-height: 0;
+}
+
+.wordmark {
+  width: min(86vw, 46rem);
+  height: auto;
 }
 
 .director {
@@ -132,20 +114,6 @@
   width: 0%;
   background: rgba(255, 255, 255, 0.6);
   animation: fillBar 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes shine {
-  0% {
-    background-position: 200% center;
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    background-position: -200% center;
-    opacity: 1;
-  }
 }
 
 @keyframes fadeIn {
