@@ -65,7 +65,7 @@ export default function CaseStudy() {
   };
 
   return (
-    <section id="case-study" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="case-title">
+    <section id="case-study" className={`${ed.section} ${ed.chapter} ${ed.horizon}`} aria-labelledby="case-title">
       <div className="container">
         <motion.div className={ed.headSplit} {...reveal()}>
           <div>

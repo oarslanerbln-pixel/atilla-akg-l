@@ -59,7 +59,7 @@ export default function FeaturedWork() {
   const reveal = (delay = 0) => ({
     initial: { opacity: 0, y: 24 },
     whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: "-80px" },
+    viewport: { once: true, margin: "-80px 0px" },
     transition: at(delay, 0.9),
   });
   // Footage opens like a curtain rising, rather than sliding in. The spread
@@ -126,7 +126,7 @@ export default function FeaturedWork() {
                 className={styles.spread}
                 initial="hidden"
                 whileInView="shown"
-                viewport={{ once: true, margin: "-80px" }}
+                viewport={{ once: true, margin: "-80px 0px" }}
               >
                 <motion.div className={styles.visual} {...unveil}>
                   <div className={styles.frame} data-cursor="PLAY">

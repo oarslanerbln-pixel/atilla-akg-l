@@ -31,6 +31,35 @@
   color: var(--text-on-ink);
 }
 
+/* Where one light chapter follows another, the hairline between them is the
+   brand mark's horizon: two teal needles that sharpen towards the edges and
+   the gold sun between them. */
+.horizon {
+  position: relative;
+}
+
+.horizon::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: min(calc(100% - 4rem), calc(var(--max-width) - 4rem));
+  height: 7px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle at center, var(--accent-gold) 2.5px, transparent 3px),
+    linear-gradient(
+        90deg,
+        transparent,
+        var(--brand-teal) calc(50% - 9px),
+        transparent calc(50% - 9px) calc(50% + 9px),
+        var(--brand-teal) calc(50% + 9px),
+        transparent
+      )
+      center / 100% 1px no-repeat;
+  pointer-events: none;
+}
+
 .head {
   max-width: 820px;
   margin: 0 0 clamp(3rem, 6vw, 5rem);
@@ -291,6 +320,10 @@
 @media (max-width: 640px) {
   .section {
     padding: var(--section-padding-y-mobile) 0;
+  }
+
+  .horizon::before {
+    width: calc(100% - 3rem);
   }
 
   .eyebrow {

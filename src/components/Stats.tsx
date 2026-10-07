@@ -14,7 +14,8 @@ import styles from "./Stats.module.css";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-type Figure = { value: ReactNode; label: string; href?: string };
+/** `share`, a percentage, draws a gold line under the figure as well. */
+type Figure = { value: ReactNode; label: string; href?: string; share?: number };
 
 /**
  * Whom the films reach, set like the figures page of a printed media kit:
@@ -47,9 +48,9 @@ export default function Stats() {
     {
       label: "stats_demo_title",
       figures: [
-        { value: <AnimatedCounter to={audience.age25to54} suffix="%" />, label: t("stat_age") },
-        { value: <AnimatedCounter to={audience.dach} suffix="%" />, label: t("stat_region") },
-        { value: <AnimatedCounter to={audience.female} suffix="%" />, label: t("stat_gender") },
+        { value: <AnimatedCounter to={audience.age25to54} suffix="%" />, label: t("stat_age"), share: audience.age25to54 },
+        { value: <AnimatedCounter to={audience.dach} suffix="%" />, label: t("stat_region"), share: audience.dach },
+        { value: <AnimatedCounter to={audience.female} suffix="%" />, label: t("stat_gender"), share: audience.female },
       ],
     },
     {
@@ -105,6 +106,18 @@ export default function Stats() {
                   const body = (
                     <>
                       <span className={`${ed.figureValue} ${styles.value}`}>{figure.value}</span>
+                      {figure.share !== undefined && (
+                        // Fills in step with the counter above it: same length, same ease-out.
+                        <span className={styles.meter} aria-hidden="true">
+                          <motion.span
+                            className={styles.meterFill}
+                            initial={{ scaleX: 0 }}
+                            whileInView={{ scaleX: figure.share / 100 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={calm ? { duration: 0 } : { duration: 2, ease: [0.33, 1, 0.68, 1] }}
+                          />
+                        </span>
+                      )}
                       <span className={`${ed.figureLabel} ${styles.label}`}>
                         {figure.label}
                         {figure.href && <ArrowUpRight size={12} aria-hidden="true" />}

@@ -219,11 +219,36 @@
   }
 }
 
-/* On a phone the frame grows taller and the play mark moves to a corner,
-   leaving the lower half to the title. */
+/* On a phone the projects become a row of tall cards, swiped one at a time
+   like the films they came from; the next card shows at the edge. The play
+   mark moves to a corner, leaving the lower half to the title. */
 @media (max-width: 640px) {
+  .spreads {
+    flex-direction: row;
+    gap: 1rem;
+    margin: 0 -1.5rem;
+    padding: 0 1.5rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1.5rem;
+    scrollbar-width: none;
+  }
+
+  .spreads::-webkit-scrollbar {
+    display: none;
+  }
+
+  .spread,
+  .spread:nth-child(even) {
+    flex: 0 0 86%;
+    width: auto;
+    margin-left: 0;
+    scroll-snap-align: start;
+  }
+
   .frame {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 4 / 5;
   }
 
   .trigger {
