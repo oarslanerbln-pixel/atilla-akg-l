@@ -18,7 +18,7 @@ Meta'nın webhook kurulum rehberi (developers.facebook.com → Instagram Platfor
 | Gizlilik politikası URL'si: `https://atillabarbarossa.com/datenschutz` | güncel: §9 yalnızca partner linklerini anlatıyor (Manychat ve yapay zekâ pasajları çıkarıldı). İnceleyen, politikayı başvurudaki kullanımla karşılaştırır. | tamam |
 | Uygulama kategorisi | *Business and Pages* ya da panelin önerdiği en yakın kategori | kullanıcı |
 | İş e-postası | uygulama iletişim adresi ayarlandı (2026-10-06) | tamam |
-| İşletme doğrulaması | açık | Atilla |
+| İşletme doğrulaması | **reddedildi, yeniden gönderilecek** (2026-10-11'de okundu, portföy "Atilla"). Meta, ad, adres ve telefon için yüklenen belgelerin hiçbirini kabul edilen türde bulmadı. Kabul edilenler: ad için Gewerbeschein/Gewerbeanmeldung, şirket kuruluş belgesi, banka hesap özeti veya banka mektubu; adres ve telefon için bunlara ek olarak elektrik/su/gaz/telefon faturası. Belgedeki ad ve adres, formda girilenle **harfi harfine** aynı olmalı (formdaki ad: "Atilla Akgül"). | Atilla |
 | Her izin için en az bir başarılı API çağrısı | `instagram_business_basic`: her üç günde bir film senkronu (`me/media`), sağlanmış. `manage_comments` ve `manage_messages`: tester testindeki yorum cevabı ve DM bunları sağlar. | tester testi |
 | Manychat'in Instagram bağlantısı | kesildi (2026-10-06); hesaba bağlı tek uygulama bu | tamam |
 
