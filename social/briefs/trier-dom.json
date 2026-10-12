@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "trier-dom",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Hoher Dom St. Peter · Trier",
+  "title": "Nicht Rom,",
+  "accent": "sondern Trier",
+  "subtitle": "Älteste Bischofskirche Deutschlands",
+  "photo": { "src": "social/assets/trier-dom.jpg", "focus": [0.45, 0.45], "zoom": 1 }
+}
