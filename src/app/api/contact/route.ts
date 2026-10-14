@@ -113,9 +113,12 @@ export async function POST(request: Request) {
     // Misconfiguration must never look like a delivered message. Log for the
     // operator without touching the visitor's data, and tell the client the
     // channel is down so the UI can offer the direct mail address instead.
-    console.error(
-      "[contact] mail delivery is not configured: set RESEND_API_KEY, CONTACT_TO_EMAIL and CONTACT_FROM_EMAIL",
-    );
+    // Names only: an empty value saved in the dashboard reads as missing, and
+    // the log has to say which one without printing any value.
+    const missing = Object.entries({ RESEND_API_KEY: apiKey, CONTACT_TO_EMAIL: to, CONTACT_FROM_EMAIL: from })
+      .filter(([, value]) => !value)
+      .map(([name]) => name);
+    console.error(`[contact] mail delivery is not configured: ${missing.join(", ")} missing or empty`);
     return NextResponse.json({ error: "not_configured" }, { status: 503 });
   }
 
