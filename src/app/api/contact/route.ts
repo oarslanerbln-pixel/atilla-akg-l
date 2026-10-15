@@ -143,9 +143,17 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
-      // The provider's body can echo the submitted address, so log the status
-      // only — the visitor's data does not belong in the platform log.
-      console.error(`[contact] provider rejected the message: ${response.status}`);
+      // The provider's reason is what an operator needs to fix a rejection
+      // (unverified domain, malformed sender), but its body can echo the
+      // submitted address: every address in it is masked before it is logged.
+      const reason = await response
+        .json()
+        .then((b: { name?: unknown; message?: unknown }) =>
+          [b?.name, b?.message].filter((v) => typeof v === "string").join(": "),
+        )
+        .catch(() => "");
+      const masked = reason.replace(/[^\s<>"'`,;:()]+@[^\s<>"'`,;:()]+/g, "[address]").slice(0, 300);
+      console.error(`[contact] provider rejected the message: ${response.status}${masked ? ` ${masked}` : ""}`);
       return NextResponse.json({ error: "delivery_failed" }, { status: 502 });
     }
 
