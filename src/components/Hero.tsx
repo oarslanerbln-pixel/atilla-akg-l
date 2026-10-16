@@ -49,14 +49,14 @@ const T = {
  * A visitor who asked for less motion gets the finished frame: no mattes, no
  * letters, no drift, no lean.
  *
- * `hold` keeps it at that first frame, paper and nothing else, while HomeHero
- * finds out whether the globe takes its place.
+ * The opening for calm visitors and slow connections (src/lib/heroChoice.ts);
+ * everyone else gets the globe.
  */
-export default function Hero({ hold = false }: { hold?: boolean }) {
+export default function Hero() {
   const { t } = useLanguage();
   const { playClickSound } = useSoundDesign();
   const calm = usePrefersCalm();
-  const go = useIntroDone() && !hold;
+  const go = useIntroDone();
 
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
@@ -129,12 +129,10 @@ export default function Hero({ hold = false }: { hold?: boolean }) {
 
           {/* The page's largest text, so the moment it is first drawn is the
               Largest Contentful Paint. It used to wait for the script and the
-              intro, hidden: 4.6 s on a throttled phone. On phones and tablets
-              it is drawn from the first frame, soft and a little low, and the
-              opening pulls it into focus. At a desk it stays paper until the
-              opening starts (`.open`), so the globe can still take the
-              sunrise's place unseen (HomeHero). */}
-          <h1 className={`${styles.name} ${go ? styles.open : ""}`}>
+              intro, hidden: 4.6 s on a throttled phone. Now it is drawn from
+              the first frame, soft and a little low, and the opening pulls it
+              into focus. */}
+          <h1 className={styles.name}>
             <motion.span
               className={styles.nameShine}
               initial={{ filter: "blur(12px)", y: "0.12em" }}

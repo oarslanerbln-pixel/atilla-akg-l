@@ -27,16 +27,39 @@
   opacity: 1;
 }
 
-/* Copy that waits for its entrance. The script marks the section ready the
-   moment it takes over; without the script the copy still shows. */
-.hero:not([data-ready]) .pending {
-  opacity: 0;
-  animation: pendingFailsafe 0.8s ease 6s forwards;
+/* The copy is drawn from the first frame, so the page's largest text never
+   waits for a script (it is the Largest Contentful Paint). Before its
+   entrance it sits soft and a little low; the script moves it into place and
+   marks the section entered in the same frame. Without the script, or under
+   reduced motion, it settles here. */
+.hero:not([data-entered]) [data-rise="eyebrow"] {
+  transform: translateY(14px);
 }
 
-@keyframes pendingFailsafe {
+.hero:not([data-entered]) [data-rise="name"] {
+  filter: blur(12px);
+  transform: translateY(0.12em);
+}
+
+.hero:not([data-entered]) [data-rise="body"] {
+  transform: translateY(26px);
+}
+
+.hero:not([data-entered]) [data-rise] {
+  animation: riseFailsafe 0.8s ease 6s forwards;
+}
+
+@keyframes riseFailsafe {
   to {
-    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero:not([data-entered]) [data-rise] {
+    filter: none;
+    transform: none;
   }
 }
 

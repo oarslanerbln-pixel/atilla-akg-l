@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
+import { heroWantsGlobe } from "@/lib/heroChoice";
 import styles from "./Hero.module.css";
 
 /**
@@ -141,7 +142,9 @@ export default function HeroHorizon() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    // A globe visitor has this hero in the markup, hidden, until HomeHero
+    // removes it: no WebGL context for a scene nobody will see.
+    if (!canvas || heroWantsGlobe()) return;
     const gl = canvas.getContext("webgl", {
       alpha: false,
       antialias: false,

@@ -87,10 +87,10 @@ src/
 │   ├── CustomCursor.tsx
 │   ├── Navbar.tsx
 │   ├── LiveClock.tsx
-│   ├── HomeHero.tsx         # Picks the hero: globe at a desk, sunrise elsewhere
+│   ├── HomeHero.tsx         # Picks the hero: globe, or sunrise when calm or slow
 │   ├── Hero.tsx             # Sunrise hero (phones, tablets, calm visitors)
 │   ├── HeroHorizon.tsx      # Live WebGL sea-at-sunrise backdrop
-│   ├── globe/               # Desktop hero: compass globe (three.js + GSAP),
+│   ├── globe/               # Home hero: compass globe (three.js + GSAP),
 │                            #   partner routes from lib/partners.ts
 │   ├── SocialIcons.tsx      # Profile marks and links, shared by both heroes
 │   ├── WhatsAppButton.tsx   # Floating wa.me link between hero and contact
@@ -284,24 +284,29 @@ sending nothing, so every inquiry was lost. A response of 200 from
 returns 503, delivery failure returns 502, and the form surfaces both.
 
 ### Mobile data is the budget
-Visitors arrive from Instagram on a phone. Their hero backdrop is a live
-WebGL scene (`HeroHorizon.tsx`), not a clip: a few kilobytes of shader,
-rendered below screen resolution, stopped when off screen, and a single still
-frame under `usePrefersCalm()`. Keep it dependency-free; a 3D library would
-cost more than the scene.
-At a desk (≥ 900 px, mouse or trackpad, not calm) `HomeHero` swaps in the
-compass globe (`components/globe/`). Its three.js and GSAP (about 190 KB
-gzipped) are a dynamic import that phones, tablets and calm visitors never
-request. The server renders the sunrise for everyone; on a desk it holds its
-blank first frame (`hold`) until the globe arrives, and opens after all if
-that takes more than a second past the intro or fails. The choice is taken
-once per page load, so a resize never swaps heroes in front of the visitor.
+Visitors arrive from Instagram on a phone. The home hero is the compass globe
+(`components/globe/`) on every screen, phones included (the owner's call,
+October 2026): its three.js and GSAP, about 190 KB gzipped, are a dynamic
+import loaded once the page is interactive. Calm visitors (`usePrefersCalm()`:
+reduced motion, reduced data, Save-Data) and 3G-class connections get the
+sunrise instead (`HeroHorizon.tsx`): a few kilobytes of shader, rendered below
+screen resolution, stopped when off screen, a single still frame under calm.
+Keep the sunrise dependency-free; a 3D library would cost more than the scene.
+The choice is made before first paint by an inline script that marks `<html>`
+with `data-hero-globe` (`src/lib/heroChoice.ts`). The server renders both
+openings with their copy drawn, and the stylesheet shows only the visitor's
+one, so the largest text is on screen at first paint either way (that is the
+Largest Contentful Paint; a hero that hid its copy until the script and the
+intro had run measured 12.4 s on a throttled phone). Once hydrated, HomeHero
+removes the other one and one h1 is left. GSAP and three.js load only for a
+globe visitor, the sunrise's WebGL context opens only for a sunrise visitor,
+and an entrance never hides copy: it starts soft and low and moves into place.
 `#home` sits on HomeHero's wrapper, not on either section. Project clips carry `preload="none"` and a self-hosted
 poster. Anything new and heavy loads on visibility, and `usePrefersCalm()`
 decides whether it autoplays at all. The intro (`Preloader.tsx`) plays once
 per visitor, ever (localStorage), for about 1.4 s, and never under reduced
 motion — a first impression, not a toll on every return.
-The hero's opening (mattes, focus letters, cascade) waits for the intro to
+The hero's opening (mattes, the name pulled into focus, cascade) waits for the intro to
 leave (`useIntroDone`, marked by the Preloader); scrolling away drives the
 WebGL camera's climb (`u_climb`). Nothing holds the scroll: the hero stays
 one screen tall.
