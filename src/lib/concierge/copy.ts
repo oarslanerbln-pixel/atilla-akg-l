@@ -38,6 +38,13 @@ const customer = {
     tr: (name: string, url: string) =>
       `${name} için linkiniz:\n${url}\n\nReklam: Bu bir iş ortaklığı (affiliate) linkidir. Bu link üzerinden rezervasyon ya da başvuru yaparsanız Atilla komisyon alır; sizin için hiçbir şey değişmez. Koşullar ve danışmanlık için doğrudan sağlayıcıya başvurun.`,
   },
+  // Atilla's own product (network 'own' in offers.sql): advertising too, but nobody pays a commission.
+  ownProductLink: {
+    de: (name: string, url: string) =>
+      `Hier ist dein Link zu ${name}:\n${url}\n\nWerbung in eigener Sache: ${name} ist Atillas eigenes Produkt.`,
+    en: (name: string, url: string) => `Here is your link to ${name}:\n${url}\n\nAd: ${name} is Atilla's own product.`,
+    tr: (name: string, url: string) => `${name} için linkiniz:\n${url}\n\nReklam: ${name}, Atilla'nın kendi ürünüdür.`,
+  },
   commentReply: {
     de: 'Danke für dein Interesse! ✨ Schreib mir hier einfach, welche Tour dich reizt, wann du reisen möchtest und mit wie vielen Personen – ich stelle dir alles zusammen.',
     en: 'Thank you for your interest! ✨ Just reply here with the tour you have in mind, your travel dates and how many of you are coming – I will put everything together for you.',
@@ -92,6 +99,7 @@ export const tourButton = (lang: Lang) => customer.tourButton[lang];
 export const offerButton = (lang: Lang) => customer.offerButton[lang];
 export const offerTeaser = (lang: Lang, pitch: string) => customer.offerTeaser[lang](pitch);
 export const offerLink = (lang: Lang, name: string, url: string) => customer.offerLink[lang](name, url);
+export const ownProductLink = (lang: Lang, name: string, url: string) => customer.ownProductLink[lang](name, url);
 
 export function fallbackReply(lang: Lang): string {
   return customer.fallback[lang];
