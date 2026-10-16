@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore, type ComponentType } from "react";
+import { useSyncExternalStore } from "react";
 import Hero from "./Hero";
-import { useIntroDone } from "@/hooks/useIntroDone";
+import HeroGlobe from "./globe/HeroGlobe";
 import { heroWantsGlobe } from "@/lib/heroChoice";
-
-/** How long, once the intro has gone, the paper may stay blank waiting for the globe. */
-const PATIENCE_MS = 1000;
+import styles from "./HomeHero.module.css";
 
 /**
  * Read from <html>, where an inline script put it before first paint
@@ -17,51 +15,39 @@ const PATIENCE_MS = 1000;
 let choice: boolean | undefined;
 const wantsGlobe = () => (choice ??= heroWantsGlobe());
 const unchanging = () => () => {};
-const onServer = () => false;
+/** The server, and the client render that hydrates its markup, draw both. */
+const undecided = () => null;
 
 /**
- * Two openings. The compass globe on every screen, phones included: three.js
- * and GSAP, about 190 KB gzipped, loaded after the page is interactive. For
+ * Two openings. The compass globe on every screen, phones included. For
  * anyone who asked for less motion or less data, or is on a 3G-class
  * connection, the sea at sunrise: a few kilobytes of shader.
  *
- * The server renders the sunrise for everyone. For a globe visitor it is
- * blank paper before its opening plays, and so is the globe's, so the globe
- * takes its place unseen: the sunrise holds its first frame while the globe's
- * code arrives. If that takes too long, or fails, the sunrise opens after all
- * and stays.
+ * Both are in the server's markup with their copy already drawn, so the
+ * page's largest text never waits for a script: the inline script marks
+ * <html> before first paint and the stylesheet shows only the visitor's
+ * opening. Once hydrated, the other one is removed, which leaves one h1. The
+ * globe's weight (three.js and GSAP, about 190 KB gzipped) loads only after
+ * that, and only for a globe visitor; without WebGL the globe's copy stands
+ * on its own.
  *
  * The id lives on this wrapper rather than on either section, so whatever
- * looks for #home (the WhatsApp button) keeps the same element through the
- * swap.
+ * looks for #home (the WhatsApp button) keeps the same element.
  */
 export default function HomeHero() {
-  const globe = useSyncExternalStore(unchanging, wantsGlobe, onServer);
-  const introDone = useIntroDone();
-  const [Globe, setGlobe] = useState<ComponentType | null>(null);
-  const [gaveUp, setGaveUp] = useState(false);
-
-  useEffect(() => {
-    if (!globe || gaveUp) return;
-    let cancelled = false;
-    import("./globe/HeroGlobe").then(
-      ({ default: loaded }) => {
-        if (!cancelled) setGlobe(() => loaded);
-      },
-      () => {
-        if (!cancelled) setGaveUp(true);
-      },
-    );
-    return () => {
-      cancelled = true;
-    };
-  }, [globe, gaveUp]);
-
-  useEffect(() => {
-    if (!globe || Globe || gaveUp || !introDone) return;
-    const timer = setTimeout(() => setGaveUp(true), PATIENCE_MS);
-    return () => clearTimeout(timer);
-  }, [globe, Globe, gaveUp, introDone]);
-
-  return <div id="home">{Globe ? <Globe /> : <Hero hold={globe && !gaveUp} />}</div>;
+  const globe = useSyncExternalStore<boolean | null>(unchanging, wantsGlobe, undecided);
+  return (
+    <div id="home">
+      {globe !== false && (
+        <div className={styles.globe}>
+          <HeroGlobe />
+        </div>
+      )}
+      {globe !== true && (
+        <div className={styles.sunrise}>
+          <Hero />
+        </div>
+      )}
+    </div>
+  );
 }

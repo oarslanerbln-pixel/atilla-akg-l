@@ -293,12 +293,14 @@ sunrise instead (`HeroHorizon.tsx`): a few kilobytes of shader, rendered below
 screen resolution, stopped when off screen, a single still frame under calm.
 Keep the sunrise dependency-free; a 3D library would cost more than the scene.
 The choice is made before first paint by an inline script that marks `<html>`
-with `data-hero-globe` (`src/lib/heroChoice.ts`); HomeHero and the sunrise's
-stylesheet read that one answer, once per page load. The server renders the
-sunrise for everyone. For a globe visitor it holds its blank first frame
-(`hold`) until the globe arrives, and opens after all if that takes more than
-a second past the intro or fails. For everyone else its name is drawn from
-the first frame (the mobile LCP: 12.4 s → 3.0 s with DevTools throttling).
+with `data-hero-globe` (`src/lib/heroChoice.ts`). The server renders both
+openings with their copy drawn, and the stylesheet shows only the visitor's
+one, so the largest text is on screen at first paint either way (that is the
+Largest Contentful Paint; a hero that hid its copy until the script and the
+intro had run measured 12.4 s on a throttled phone). Once hydrated, HomeHero
+removes the other one and one h1 is left. GSAP and three.js load only for a
+globe visitor, the sunrise's WebGL context opens only for a sunrise visitor,
+and an entrance never hides copy: it starts soft and low and moves into place.
 `#home` sits on HomeHero's wrapper, not on either section. Project clips carry `preload="none"` and a self-hosted
 poster. Anything new and heavy loads on visibility, and `usePrefersCalm()`
 decides whether it autoplays at all. The intro (`Preloader.tsx`) plays once

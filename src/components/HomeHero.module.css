@@ -1,0 +1,8 @@
+/* Both openings are in the server's markup. The inline script in the root
+   layout marks <html> before first paint (src/lib/heroChoice.ts), so only the
+   visitor's one is ever drawn; HomeHero removes the other once hydrated.
+   Without the script the sunrise shows: it needs nothing else to play. */
+:global(html[data-hero-globe]) .sunrise,
+:global(html:not([data-hero-globe])) .globe {
+  display: none;
+}

@@ -8,11 +8,13 @@
  * `data-hero-globe` for a globe visitor before anything is drawn, so the
  * stylesheet and HomeHero read the same answer:
  *
- * - The sunrise is server-rendered for everyone. For a globe visitor it stays
- *   blank paper until the globe takes its place, so nothing is drawn and then
- *   replaced (Hero.module.css).
- * - For everyone else its name is drawn from the first frame, which keeps the
- *   Largest Contentful Paint fast where the globe is not coming.
+ * - Both openings are server-rendered with their copy drawn; the stylesheet
+ *   shows only the visitor's one (HomeHero.module.css), so the page's largest
+ *   text is on screen at first paint whichever it is, and nothing is drawn
+ *   and then replaced.
+ * - Once hydrated, HomeHero removes the other one. The globe's three.js and
+ *   GSAP load only for a globe visitor, and the sunrise's WebGL context opens
+ *   only for a sunrise visitor.
  *
  * `prefersCalmNow()` (usePrefersCalm.ts) asks the same questions; the
  * connection check is the only one it does not share.
