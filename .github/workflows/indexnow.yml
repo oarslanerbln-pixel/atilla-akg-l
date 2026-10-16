@@ -1,0 +1,48 @@
+# Submits changed pages to IndexNow (Bing, Yandex, Seznam, Naver): scripts/indexnow.mjs.
+# Bing feeds ChatGPT search and Copilot, and it had not indexed the site three weeks after launch.
+# Runs after every production deploy, once a day for content that changes without one (the
+# Instagram films on the home page), and by hand from the Actions tab.
+name: IndexNow
+
+on:
+  deployment_status:
+  schedule:
+    - cron: "40 5 * * *"
+  workflow_dispatch:
+    inputs:
+      all:
+        description: Submit every page in the sitemap, not only the changed ones
+        type: boolean
+        default: false
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    # Vercel reports each deployment to GitHub; only a finished production one is live on the domain.
+    if: >-
+      github.event_name != 'deployment_status' ||
+      (github.event.deployment_status.state == 'success' &&
+       startsWith(github.event.deployment.environment, 'Production'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The fingerprints of the last run. Each run saves under a new key; restore-keys picks the latest.
+      - uses: actions/cache@v4
+        with:
+          path: .indexnow
+          key: indexnow-${{ github.run_id }}
+          restore-keys: indexnow-
+
+      # The domain is aliased to a new deployment a few seconds after it reports success.
+      - if: github.event_name == 'deployment_status'
+        run: sleep 30
+
+      - run: node scripts/indexnow.mjs ${{ inputs.all && '--all' || '' }}

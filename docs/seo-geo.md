@@ -1,6 +1,6 @@
 # SEO & GEO Rehberi – atillabarbarossa.com ve sosyal medya
 
-**Durum tarihi: 5 Ekim 2026** (ilk sürüm 30 Eylül 2026; son değişiklikler bölüm 11'de). SEO: Google/Bing'de bulunmak. GEO (Generative Engine
+**Durum tarihi: 16 Ekim 2026** (ilk sürüm 30 Eylül 2026; son durum analizi ve yol haritası bölüm 12'de). SEO: Google/Bing'de bulunmak. GEO (Generative Engine
 Optimization): ChatGPT, Perplexity, Google AI Overviews/AI Mode, Gemini ve Copilot gibi
 yapay zekâ motorlarının Atilla'yı doğru tanıması, doğru anlatması ve siteyi kaynak göstermesi.
 İkisinin temeli aynı: **her yerde aynı kimlik, aynı gerçekler, okunabilir metin.**
@@ -46,9 +46,13 @@ yazılı; onu da unutmayın.)
    Copilot büyük ölçüde Bing dizinini kullanır.
    - "Google Search Console'dan içe aktar" ile tek tıkla kurulur (ya da `BING_SITE_VERIFICATION`).
    - Sitemap'i orada da gönderin.
-   - Önemli bir sayfa değişince adresini **URL Submission** ile gönderin (Bing'in IndexNow
-     altyapısı); Bing ve onun dizinini kullanan ChatGPT arama ile Copilot değişikliği daha
-     hızlı görür.
+   - Değişen sayfalar **IndexNow** ile otomatik bildirilir (Ekim 2026'dan beri): GitHub Action
+     `.github/workflows/indexnow.yml` her production deploy'undan sonra ve her gün
+     `scripts/indexnow.mjs`'i çalıştırır; içeriği (başlık, açıklama, yapılandırılmış veri,
+     görünen metin) değişen sayfalar Bing'e gider, ChatGPT arama ile Copilot değişikliği daha
+     hızlı görür. Anahtar `public/<anahtar>.txt`. Elle: GitHub → Actions → IndexNow → *Run
+     workflow* ("all" ile bütün sayfalar). Bing Webmaster Tools'taki **URL Submission**'a
+     artık gerek yok.
 3. **Kontrol testleri**
    - search.google.com/test/rich-results ve validator.schema.org: ana sayfa, `/en`,
      `/social-media`, `/roadmap`. Hata olmamalı.
@@ -397,3 +401,71 @@ artık kapsıyor; geriye profillerden link vermek kalıyor:
    "Dizine eklenmesini iste".
 2. Rich Results Test ve validator.schema.org: `/` ve `/en` hatasız olmalı.
 3. Bing Webmaster Tools → URL Submission: aynı adresler.
+
+---
+
+## 12. 16 Ekim 2026: durum analizi ve yol haritası
+
+Lansmandan üç hafta sonra canlı siteden, Google ve Bing'in herkese açık sonuçlarından ve
+PageSpeed Insights'tan okundu. Search Console'un iç verileri (gösterim, tıklama, sorgular)
+Google girişi gerektirdiği için bu analizde yok.
+
+### Bulgular
+
+| Alan | Durum | Bulgu |
+|---|---|---|
+| Google dizini | ✅ | Sitemap'teki 10 adresin 10'u dizinde (`site:` araması). |
+| Google, marka araması | 🟡 | "Atilla Barbarossa": site 3. sırada; önde YouTube ve Instagram. Sitelinks yok. |
+| Google AI özeti | 🔴 | Marka aramasında "Übersicht mit KI" çıkıyor, ama kaynak yalnızca Instagram ve TikTok. Atilla "Reise- und Hotel-Blogger" olarak anlatılıyor; sitenin "Reisefilmer & Creative Director für Hotels und Destinationen" konumu özete hiç girmemiş. |
+| Ticari aramalar | 🔴 | "Social Media Betreuung Hotel Videoproduktion" ve "Reise Influencer für Hotel Kooperation buchen": ilk 10'da yok. Bu sonuçlarda ajanslar ve influencer listeleri var. Bunlardan biri additive.eu'nun "9 Travel-Influencer für Hotels im DACH-Raum" listesi (Ocak 2025); Atilla o listede yok. |
+| Bing dizini | 🔴 | Hiç sayfa yok: `"atillabarbarossa.com"` sıfır sonuç veriyor, `site:` alakasız sonuçlara düşüyor. ChatGPT'nin arama özelliği ve Copilot Bing'i kullandığı için oralarda site kaynak gösterilemiyor. Bing Webmaster Tools kurulmamış (`BING_SITE_VERIFICATION` yok). Erişim sorunu yok: bingbot, Googlebot, GPTBot, OAI-SearchBot, ClaudeBot ve PerplexityBot 200 alıyor. |
+| Teknik | ✅ | PageSpeed mobil: SEO, Erişilebilirlik ve En iyi uygulamalar 100/100. Yapılandırılmış veri hatasız: WebSite, Person, ProfilePage, FAQPage, hizmetler, partnerler. `llms.txt` ve hreflang doğru. |
+| Mobil hız | 🟡 | Performans 75, LCP 4,6 sn. Hero yazıları JavaScript ve intro bitene kadar gizliydi. Gerçek kısıtlamayla ölçülen LCP 12,4 sn çıkıyordu. |
+| Kimlik | 🟡 | `sameAs` içinde yalnızca Instagram, TikTok ve YouTube var. LinkedIn "Atilla Akgül – Filmproducer & Social Media Influencer", Facebook "AtillaWhiterose" adıyla duruyor. Wikidata kaydı yok. |
+| Güven sinyalleri | 🔴 | 4 partner kurumun hiçbirine yayımlanmış iş linki (`url`) ya da logo bağlı değil. Vaka çalışması sayfası yok (bkz. §7.1). |
+
+### Strateji
+
+Hedef genel trafik değil: **doğru kişi aradığında ya da bir yapay zekâya sorduğunda Atilla'nın çıkması.**
+
+1. **GEO:** Bir otel müdürü ChatGPT'ye, Google AI Mode'a ya da Copilot'a "DACH için otel videosu çeken creator" diye sorduğunda cevapta Atilla geçmeli ve kaynak site olmalı. Bu motorlar şunları kaynak alır: somut rakamlı sayfalar (vaka çalışmaları), bağımsız listeler ve basın, her yerde aynı kimlik.
+2. **SEO:** Az aranan ama değerli aramalar hedeflenmeli: marka, "Atilla Barbarossa media kit", vaka sayfaları, listeler. Genel "Hotel Social Media" aramalarında ajanslarla yarışmak gerçekçi değil.
+
+### Yol haritası
+
+**Bu hafta**
+
+| # | İş | Kim | Durum |
+|---|---|---|---|
+| 1 | Bing Webmaster Tools: "Search Console'dan içe aktar" ve sitemap gönderimi | Atilla | açık |
+| 2 | IndexNow: her deploy'dan sonra değişen sayfalar otomatik gönderilir (§2) | Claude | yapıldı (Ekim 2026) |
+| 3 | Profil tutarlılığı: LinkedIn başlığında "Atilla Barbarossa", her profilde web sitesi alanı `atillabarbarossa.com` | Atilla | açık |
+| 4 | Profiller düzelince LinkedIn ve Facebook'u `socialProfiles` / `sameAs`'e eklemek | Claude | 3'ten sonra |
+| 5 | Mobil LCP: hero ismi ilk karede çiziliyor (Lighthouse, gerçek kısıtlama: 12,4 sn → 2,1 sn) | Claude | yapıldı (Ekim 2026) |
+| 6 | Search Console: "Leistung" ve "Seiten" raporlarını okumak | Atilla ya da Claude (Google girişiyle) | açık |
+
+**1–3 ay**
+
+| # | İş | Kim |
+|---|---|---|
+| 7 | Vaka çalışması sayfaları, üç dilde (§7.1). Örnekler: Novotel İstanbul (559.316 erişilen hesap), Maritim, Moxy Bochum | Claude (kod), Atilla (rakamlar, partner onayı) |
+| 8 | Partner linkleri ve logolar (§3); partnerlerden siteye link istemek | Atilla |
+| 9 | Listelere girmek: additive.eu, HypeAuditor, sektör ödül listeleri | Atilla / Lisa |
+| 10 | YouTube açıklamalarında site linki (§6) | Atilla |
+| 11 | Aylık yapay zekâ testi (§8): Google AI özeti ve Bing | Claude |
+
+**3–6 ay**
+
+| # | İş | Kim |
+|---|---|---|
+| 12 | Basın: AHGZ, fvw, Tophotel (§7.5); bağımsız anılmadan sonra Wikidata | Atilla |
+| 13 | İsteğe bağlı destinasyon sayfaları: Trier, Heilbronn gibi reel konularından rehberler. Takipçi aramaları ve GetYourGuide partner linkleri için | Claude ve Atilla |
+
+**Hedefler**
+
+- 2 hafta içinde Bing'de 10/10 sayfa dizinde.
+- 2–3 ay içinde Google AI özeti siteyi kaynak gösteriyor ve Atilla'yı "Reisefilmer & Creative Director" olarak anlatıyor.
+- Marka aramasında site 1. ya da 2. sırada.
+- Gerçek ziyaretçi verisi (CrUX) oluştuğunda mobil LCP 2,5 sn'nin altında.
+
+**Ölçülemeyenler:** Search Console verisi, backlink profili, gerçek ziyaretçi hız verisi (CrUX'ta henüz kayıt yok), ChatGPT ve Perplexity cevapları.

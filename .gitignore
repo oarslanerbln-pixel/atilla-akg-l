@@ -63,3 +63,6 @@ next-env.d.ts
 
 # rate cards carry prices; the repo is public
 /social/briefs/private/
+
+# IndexNow fingerprints of the last run (scripts/indexnow.mjs)
+.indexnow/
