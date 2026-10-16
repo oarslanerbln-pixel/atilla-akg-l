@@ -9,6 +9,10 @@
     {
       "path": "/api/cron/instagram-reels",
       "schedule": "30 4 */3 * *"
+    },
+    {
+      "path": "/api/cron/status",
+      "schedule": "15 5 * * *"
     }
   ]
 }
