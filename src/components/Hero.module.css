@@ -119,17 +119,23 @@
   margin-bottom: 1.5rem;
   text-align: center;
   color: var(--text-primary);
-  /* The focus letters sit exactly over the readable name. Kerning pairs are
-     lost between separate letter boxes, so it is off for both layers. */
-  font-kerning: none;
 }
 
-/* The readable name: it sets the layout and takes over from the focus
-   letters once they have landed. Same ink as the section headings below. */
+/* The name, drawn from the first frame and pulled into focus by the opening.
+   Same ink as the section headings below. */
 .nameShine {
   display: block;
-  /* Failsafe: if the script never arrives, the name still shows. */
-  animation: nameFailsafe 0.8s ease 6s forwards;
+  transition: opacity 0.6s ease;
+}
+
+/* At a desk the sunrise stays paper until its opening starts, so the globe
+   can take its place unseen (HomeHero uses the same query). */
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+  .name:not(.open) .nameShine {
+    opacity: 0;
+    /* Failsafe: if the script never arrives, the name still shows. */
+    animation: nameFailsafe 0.8s ease 6s forwards;
+  }
 }
 
 @keyframes nameFailsafe {
@@ -138,24 +144,13 @@
   }
 }
 
-.nameLetters {
-  position: absolute;
-  inset: 0;
-  color: var(--text-primary);
-  pointer-events: none;
-}
-
-.word {
-  white-space: nowrap;
-}
-
-/* Each glyph is drawn from data-ch, so the letters add no text to the page. */
-.letter {
-  display: inline-block;
-}
-
-.letter::before {
-  content: attr(data-ch);
+/* Less motion: the name is sharp from the first frame, before the script
+   that would snap it there. The inline start values need !important. */
+@media (prefers-reduced-motion: reduce) {
+  .nameShine {
+    filter: none !important;
+    transform: none !important;
+  }
 }
 
 /* --- Opening: horizon line and mattes --- */
