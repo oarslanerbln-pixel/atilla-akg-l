@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "maritim-stuttgart",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Maritim Hotel · Stuttgart",
+  "title": "Größte Hotelgruppe",
+  "accent": "in Familienhand",
+  "subtitle": "Mit der historischen Alten Reithalle",
+  "photo": { "src": "social/assets/maritim-stuttgart.jpg", "focus": [0.4, 0.45], "zoom": 1 }
+}
