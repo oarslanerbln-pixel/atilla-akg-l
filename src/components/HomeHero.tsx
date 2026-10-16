@@ -3,34 +3,33 @@
 import { useEffect, useState, useSyncExternalStore, type ComponentType } from "react";
 import Hero from "./Hero";
 import { useIntroDone } from "@/hooks/useIntroDone";
-import { prefersCalmNow } from "@/hooks/usePrefersCalm";
+import { heroWantsGlobe } from "@/lib/heroChoice";
 
-/** A wide screen driven by a mouse or trackpad: a desk, not a phone or a tablet. */
-const DESK = "(min-width: 900px) and (hover: hover) and (pointer: fine)";
 /** How long, once the intro has gone, the paper may stay blank waiting for the globe. */
 const PATIENCE_MS = 1000;
 
 /**
- * Taken at the first client render and kept for the page load: a window
- * resized or a preference changed later never swaps one opening for the
- * other in front of the visitor. HeroGlobe answers a later calm preference
- * with a still frame of its own.
+ * Read from <html>, where an inline script put it before first paint
+ * (src/lib/heroChoice.ts), and kept for the page load: a preference changed
+ * later never swaps one opening for the other in front of the visitor.
+ * HeroGlobe answers a later calm preference with a still frame of its own.
  */
 let choice: boolean | undefined;
-const wantsGlobe = () => (choice ??= window.matchMedia(DESK).matches && !prefersCalmNow());
+const wantsGlobe = () => (choice ??= heroWantsGlobe());
 const unchanging = () => () => {};
 const onServer = () => false;
 
 /**
- * Two openings, one per audience. On a phone, a tablet, or for anyone who
- * asked for less motion or less data, the sea at sunrise: a few kilobytes of
- * shader. At a desk, the compass globe, whose three.js and GSAP (about
- * 190 KB gzipped) a phone never downloads.
+ * Two openings. The compass globe on every screen, phones included: three.js
+ * and GSAP, about 190 KB gzipped, loaded after the page is interactive. For
+ * anyone who asked for less motion or less data, or is on a 3G-class
+ * connection, the sea at sunrise: a few kilobytes of shader.
  *
- * The server renders the sunrise for everyone. Before its opening plays it is
- * blank paper, and so is the globe's, so the globe takes its place unseen:
- * the sunrise holds its first frame while the globe's code arrives. If that
- * takes too long, or fails, the sunrise opens after all and stays.
+ * The server renders the sunrise for everyone. For a globe visitor it is
+ * blank paper before its opening plays, and so is the globe's, so the globe
+ * takes its place unseen: the sunrise holds its first frame while the globe's
+ * code arrives. If that takes too long, or fails, the sunrise opens after all
+ * and stays.
  *
  * The id lives on this wrapper rather than on either section, so whatever
  * looks for #home (the WhatsApp button) keeps the same element through the

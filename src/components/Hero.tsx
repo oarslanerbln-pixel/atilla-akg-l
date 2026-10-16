@@ -129,11 +129,12 @@ export default function Hero({ hold = false }: { hold?: boolean }) {
 
           {/* The page's largest text, so the moment it is first drawn is the
               Largest Contentful Paint. It used to wait for the script and the
-              intro, hidden: 4.6 s on a throttled phone. On phones and tablets
-              it is drawn from the first frame, soft and a little low, and the
-              opening pulls it into focus. At a desk it stays paper until the
-              opening starts (`.open`), so the globe can still take the
-              sunrise's place unseen (HomeHero). */}
+              intro, hidden: 4.6 s on a throttled phone. Where the sunrise is
+              the opening it is drawn from the first frame, soft and a little
+              low, and the opening pulls it into focus. Where the globe is
+              coming (src/lib/heroChoice.ts) it stays paper until the opening
+              starts (`.open`), so the globe can take the sunrise's place
+              unseen (HomeHero). */}
           <h1 className={`${styles.name} ${go ? styles.open : ""}`}>
             <motion.span
               className={styles.nameShine}

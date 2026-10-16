@@ -103,7 +103,7 @@ function measure(root: HTMLElement, stage: HTMLElement): GlobeLayout {
 }
 
 /**
- * The desktop hero (HomeHero decides): the compass globe. Berlin at the centre of the work, gold
+ * The home page's hero on every screen (HomeHero decides): the compass globe. Berlin at the centre of the work, gold
  * routes to the tourism boards in partners.ts, a light flying each in turn.
  * three.js arrives in its own chunk after the copy is on screen; under
  * usePrefersCalm() the globe is a single still frame with every route drawn.

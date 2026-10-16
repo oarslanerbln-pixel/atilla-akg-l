@@ -1,6 +1,7 @@
 import { Inter, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import type { Language } from "@/i18n/translations";
+import { HERO_CHOICE_SCRIPT } from "@/lib/heroChoice";
 import { INTRO_SEEN_SCRIPT } from "@/lib/intro";
 import { HTML_LANG } from "@/lib/locales";
 import { siteGraph } from "@/lib/structuredData";
@@ -41,17 +42,18 @@ export default function RootDocument({
   children: React.ReactNode;
 }) {
   return (
-    // suppressHydrationWarning: the intro script below may add a data
-    // attribute to <html> before React hydrates it.
+    // suppressHydrationWarning: the script below may add data attributes to
+    // <html> before React hydrates it.
     <html
       lang={HTML_LANG[lang]}
       className={`${inter.variable} ${interTight.variable}`}
       suppressHydrationWarning
     >
       <body>
-        {/* Runs before first paint so a returning visitor never sees the
-            intro overlay; see src/lib/intro.ts. A fixed string, no input. */}
-        <script dangerouslySetInnerHTML={{ __html: INTRO_SEEN_SCRIPT }} />
+        {/* Runs before first paint: a returning visitor never sees the intro
+            overlay (src/lib/intro.ts), and the home page knows which opening
+            it plays (src/lib/heroChoice.ts). Fixed strings, no input. */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_SEEN_SCRIPT + HERO_CHOICE_SCRIPT }} />
         <JsonLd data={siteGraph(lang)} />
         <Providers lang={lang}>{children}</Providers>
       </body>

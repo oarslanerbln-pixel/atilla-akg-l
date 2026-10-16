@@ -128,14 +128,12 @@
   transition: opacity 0.6s ease;
 }
 
-/* At a desk the sunrise stays paper until its opening starts, so the globe
-   can take its place unseen (HomeHero uses the same query). */
-@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
-  .name:not(.open) .nameShine {
-    opacity: 0;
-    /* Failsafe: if the script never arrives, the name still shows. */
-    animation: nameFailsafe 0.8s ease 6s forwards;
-  }
+/* For a globe visitor (src/lib/heroChoice.ts) the sunrise stays paper until
+   its opening starts, so the globe can take its place unseen. */
+:global(html[data-hero-globe]) .name:not(.open) .nameShine {
+  opacity: 0;
+  /* Failsafe: if the script never arrives, the name still shows. */
+  animation: nameFailsafe 0.8s ease 6s forwards;
 }
 
 @keyframes nameFailsafe {
