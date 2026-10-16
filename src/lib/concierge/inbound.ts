@@ -29,7 +29,6 @@ import {
   commentReply,
   guessLang,
   offerButton,
-  offerLink,
   offerTeaser,
   publicCommentReply,
   staff,
@@ -37,9 +36,9 @@ import {
 } from './copy';
 import {
   activeOffers,
-  createOfferLink,
   keywordRequest,
   OFFER_PAYLOAD,
+  offerLinkMessage,
   rememberMedia,
   sendOffer,
   sendOfferLink,
@@ -225,7 +224,7 @@ async function handleInstagramComment(c: InstagramComment): Promise<void> {
     await privateReplyWithButton(contact, c.commentId, offerTeaser(lang, offer.pitch[lang]), {
       title: offerButton(lang),
       payload: `${OFFER_PAYLOAD}${offer.id}`,
-    }, async () => `${offer.pitch[lang]}\n\n${offerLink(lang, offer.name[lang], await createOfferLink(offer, contact))}`);
+    }, async () => `${offer.pitch[lang]}\n\n${await offerLinkMessage(offer, contact, lang)}`);
   } else {
     const reply = commentReply(lang);
     await privateReplyWithButton(contact, c.commentId, reply, { title: tourButton(lang), payload: 'TOURS' }, async () => reply);

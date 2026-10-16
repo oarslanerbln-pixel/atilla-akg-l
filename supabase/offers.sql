@@ -64,6 +64,21 @@ insert into public.affiliate_offers (id, network, name, pitch, tracking_url, key
      "tr": "Tüm destinasyonlara uygun uçuşlar – Skyscanner''da seyahat tarihleriniz için güncel fiyatları görürsünüz."}',
    'https://skyscanner.pxf.io/rE1bJQ?subId1={click_id}&u=https%3A%2F%2Fwww.skyscanner.de%2Ftransport%2Ffluge-von%2Fde%2F%3Fadultsv2%3D1%26cabinclass%3Deconomy%26rtn%3D1',
    '{skyscanner}',
+   true),
+
+  -- Atilla's own e-book, not a partner's: network 'own' sends the "Werbung in eigener Sache" notice
+  -- instead of the commission one (copy.ts, ownProductLink). The link goes to the site's page,
+  -- which carries the price and both Tentary checkouts (src/lib/roadmap.ts), so a price change
+  -- never has to be made here. "E-Book" splits into "e" and "book" (keywords.ts), and "book"
+  -- would answer "Book please" meant for a tour: the keywords are ROADMAP and EBOOK.
+  ('roadmap',
+   'own',
+   '{"de": "The Travel Creator Roadmap", "en": "The Travel Creator Roadmap", "tr": "The Travel Creator Roadmap"}',
+   '{"de": "Das E-Book von Atilla Barbarossa: Pitch-Vorlagen, Hotel-Strategie und der Weg von kostenlosen Luxusnächten zu bezahlten Kooperationen.",
+     "en": "Atilla Barbarossa''s e-book (in German): pitch templates, hotel strategy and the way from free luxury nights to paid collaborations.",
+     "tr": "Atilla Barbarossa''nın e-kitabı (Almanca): pitch şablonları, otel stratejisi ve ücretsiz lüks gecelerden ücretli iş birliklerine giden yol."}',
+   'https://atillabarbarossa.com/roadmap',
+   '{roadmap,ebook}',
    true)
 
 on conflict (id) do update set

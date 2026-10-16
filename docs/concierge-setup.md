@@ -89,6 +89,8 @@ Tur dışında tanıtılan ürünler `affiliate_offers` tablosunda durur ve `sup
 4. **Story:** *"Bu story'ye GOLDCARD diye cevap ver"*. Story'ye kelimeyle cevap veren kişiye ("GOLDCARD", "Goldcard bitte"; cümle içindeki kelime sayılmaz) tanıtım metni ve link hemen DM'den gider, story de kaynak olarak kaydedilir. Aynı mesaj DM'den veya WhatsApp'tan gelirse de aynısı olur. Instagram API ile story'ye link sticker'ı eklenemediği için story'de linki bu yolla dağıtıyoruz.
 5. Concierge'e sohbet içinde soran müşteriye de aynı link gönderilir. Her tıklama sayılır.
 
+**Atilla'nın kendi ürünü: e-kitap (`roadmap`).** Aynı sistemle çalışır: *"Yorumlara ROADMAP yaz"* ya da story'ye "EBOOK" cevabı. Link `/go/…` üzerinden sitedeki `/roadmap` sayfasına gider (fiyat ve Tentary ödeme linkleri orada, `src/lib/roadmap.ts`). Teklifin `network` değeri `own` olduğu için mesajın altında komisyon uyarısı değil, "Werbung in eigener Sache / Ad / Reklam: Atilla'nın kendi ürünü" yazar. "E-Book" yazımı "e" ve "book" diye iki kelimeye bölünür; "book" turlar için de kullanılabildiğinden anahtar kelimeler bilerek **ROADMAP** ve **EBOOK** (tiresiz). Reel ve story'de bu ikisinden biri söylenmeli.
+
 **Hukuki notlar**
 - Her partner linkinde "Anzeige / Ad / Reklam" uyarısı otomatik olarak yer alır. Reel'in kendisi de reklam olarak işaretlenmeli (ör. "Werbung" etiketi veya Instagram'ın *Ücretli ortaklık* etiketi).
 - Concierge kredi kartları hakkında kişisel finansal tavsiye vermez; yalnızca onaylı tanıtım metnini kullanır ve koşullar için sağlayıcıya yönlendirir.

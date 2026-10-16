@@ -3,7 +3,7 @@ import { randomInt } from 'node:crypto';
 import { env, type Lang } from './config';
 import { db, type Contact } from './db';
 import { getInstagramMedia, sendToContact } from './meta';
-import { offerLink } from './copy';
+import { offerLink, ownProductLink } from './copy';
 import { normalizeWord, requestedKeywords } from './keywords';
 
 // Partner (affiliate) offers such as American Express cards. Links go out as SITE_URL/go/<click id>,
@@ -23,6 +23,8 @@ const ID_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456
 const CLICK_ID = /^[A-Za-z0-9]{16}$/;
 /** Quick-reply payload prefix for "send me the link" buttons. */
 export const OFFER_PAYLOAD = 'OFFER:';
+/** The `network` of Atilla's own products (the e-book), which earn no commission. */
+const OWN_PRODUCT = 'own';
 
 export async function activeOffers(): Promise<Offer[]> {
   const { data, error } = await db().from('affiliate_offers').select('id, network, name, pitch, keywords').eq('active', true);
@@ -73,10 +75,19 @@ export async function createOfferLink(offer: Offer, contact: Contact): Promise<s
   return `${env('SITE_URL')}/go/${id}`;
 }
 
+/**
+ * A fresh tracked link with its advertising notice: a partner's carries the commission notice,
+ * Atilla's own product says it is his own. Every message that hands out an offer goes through here.
+ */
+export async function offerLinkMessage(offer: Offer, contact: Contact, lang: Lang): Promise<string> {
+  const notice = offer.network === OWN_PRODUCT ? ownProductLink : offerLink;
+  return notice(lang, offer.name[lang], await createOfferLink(offer, contact));
+}
+
 /** Sends a fresh tracked link, led by the offer's description when the customer hasn't seen it yet. */
 export async function sendOffer(contact: Contact, offer: Offer, withPitch: boolean): Promise<void> {
   const lang = contact.language ?? 'en';
-  const link = offerLink(lang, offer.name[lang], await createOfferLink(offer, contact));
+  const link = await offerLinkMessage(offer, contact, lang);
   await sendToContact(contact, withPitch ? `${offer.pitch[lang]}
 
 ${link}` : link);
