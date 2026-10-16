@@ -141,8 +141,10 @@ const lounge: Template = {
             display: "flex",
             position: "absolute",
             top: 0, left: 0, right: 0, bottom: 0,
+            // The vignette's sides are a linear gradient: next/og draws a radial one with its
+            // transparent centre at the edge colour's alpha, which dimmed the whole photo by a third.
             backgroundImage:
-              "radial-gradient(ellipse at 50% 46%, rgba(20,15,10,0) 45%, rgba(20,15,10,0.36) 100%), linear-gradient(180deg, rgba(20,15,10,0.2) 0%, rgba(20,15,10,0) 22%, rgba(20,15,10,0) 38%, rgba(20,15,10,0.78) 62%, rgba(20,15,10,0.94) 100%)",
+              "linear-gradient(90deg, rgba(20,15,10,0.3) 0%, rgba(20,15,10,0) 24%, rgba(20,15,10,0) 76%, rgba(20,15,10,0.3) 100%), linear-gradient(180deg, rgba(20,15,10,0.2) 0%, rgba(20,15,10,0) 22%, rgba(20,15,10,0) 38%, rgba(20,15,10,0.78) 62%, rgba(20,15,10,0.94) 100%)",
           }}
         />
         <div
