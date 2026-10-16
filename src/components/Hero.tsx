@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform, type Transition } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { socialProfiles } from "@/lib/site";
@@ -22,8 +22,7 @@ const T = {
   line: 0,
   shutter: 0.35,
   greeting: 0.5,
-  letters: 0.65,
-  stagger: 0.04,
+  name: 0.65,
   divider: 1.3,
   subtitle: 1.45,
   value: 1.65,
@@ -33,51 +32,14 @@ const T = {
 };
 
 /**
- * One word of the name, letter by letter, each pulled into focus: it starts
- * soft and a little low and sharpens into place, like a lens finding its
- * mark. The glyphs are drawn by CSS (`::before` from data-ch), so they add no
- * text to the page; the real, readable name is the layer underneath.
- */
-function FocusWord({
-  text,
-  start,
-  go,
-  onDone,
-  className,
-}: {
-  text: string;
-  start: number;
-  go: boolean;
-  onDone?: () => void;
-  className: string;
-}) {
-  const chars = Array.from(text);
-  return (
-    <span className={`${styles.word} ${className}`}>
-      {chars.map((ch, i) => (
-        <motion.span
-          key={i}
-          className={styles.letter}
-          data-ch={ch}
-          initial={{ opacity: 0, y: "0.35em", filter: "blur(10px)" }}
-          animate={go ? { opacity: 1, y: "0em", filter: "blur(0px)" } : undefined}
-          transition={{ duration: 1, ease: EASE, delay: start + i * T.stagger }}
-          onAnimationComplete={i === chars.length - 1 ? onDone : undefined}
-        />
-      ))}
-    </span>
-  );
-}
-
-/**
  * The hero opens like a film.
  *
  * A gold line draws across the centre — the horizon — and the paper mattes
  * above and below it part like curtains on a bright morning, revealing the
- * sea at sunrise. The name sharpens into focus letter by letter, set in the
- * same light Inter Tight as every heading on the page; the rest follows in a
- * short, ordered cascade. It starts only when the intro overlay leaves
- * (useIntroDone), so nobody watches it play underneath the overlay.
+ * sea at sunrise. The name sharpens into focus like a lens finding its mark,
+ * set in the same light Inter Tight as every heading on the page; the rest
+ * follows in a short, ordered cascade. It starts only when the intro overlay
+ * leaves (useIntroDone), so nobody watches it play underneath the overlay.
  *
  * Scrolling away lifts the camera like a drone climbing (HeroHorizon reads
  * the scroll) while the copy drifts up and fades. The hero stays one screen
@@ -95,8 +57,6 @@ export default function Hero({ hold = false }: { hold?: boolean }) {
   const { playClickSound } = useSoundDesign();
   const calm = usePrefersCalm();
   const go = useIntroDone() && !hold;
-  const [lettersDone, setLettersDone] = useState(false);
-  const showShine = calm || lettersDone;
 
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
@@ -167,14 +127,19 @@ export default function Hero({ hold = false }: { hold?: boolean }) {
             {t('hero_welcome')}
           </motion.p>
 
-          <h1 className={styles.name}>
-            {/* The readable name. It sets the layout; the focus letters sit
-                over it and hand over to it once they have landed. */}
+          {/* The page's largest text, so the moment it is first drawn is the
+              Largest Contentful Paint. It used to wait for the script and the
+              intro, hidden: 4.6 s on a throttled phone. On phones and tablets
+              it is drawn from the first frame, soft and a little low, and the
+              opening pulls it into focus. At a desk it stays paper until the
+              opening starts (`.open`), so the globe can still take the
+              sunrise's place unseen (HomeHero). */}
+          <h1 className={`${styles.name} ${go ? styles.open : ""}`}>
             <motion.span
               className={styles.nameShine}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: showShine ? 1 : 0 }}
-              transition={calm ? { duration: 0 } : { duration: 1, ease: "easeInOut" }}
+              initial={{ filter: "blur(12px)", y: "0.12em" }}
+              animate={go ? { filter: "blur(0px)", y: "0em" } : undefined}
+              transition={at(T.name, 1.3)}
             >
               {/* The space keeps the words apart where the line break is
                   ignored, as it is when a crawler extracts the text. */}
@@ -182,25 +147,6 @@ export default function Hero({ hold = false }: { hold?: boolean }) {
               <br />
               <span className={styles.lastName}>Barbarossa</span>
             </motion.span>
-            {!calm && (
-              <motion.span
-                className={styles.nameLetters}
-                aria-hidden="true"
-                initial={{ opacity: 1 }}
-                animate={{ opacity: lettersDone ? 0 : 1 }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-              >
-                <FocusWord text="Atilla" start={T.letters} go={go} className={styles.firstName} />
-                <br />
-                <FocusWord
-                  text="Barbarossa"
-                  start={T.letters + 6 * T.stagger}
-                  go={go}
-                  className={styles.lastName}
-                  onDone={() => setLettersDone(true)}
-                />
-              </motion.span>
-            )}
           </h1>
 
           <motion.div
