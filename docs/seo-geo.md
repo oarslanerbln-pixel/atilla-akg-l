@@ -46,9 +46,13 @@ yazılı; onu da unutmayın.)
    Copilot büyük ölçüde Bing dizinini kullanır.
    - "Google Search Console'dan içe aktar" ile tek tıkla kurulur (ya da `BING_SITE_VERIFICATION`).
    - Sitemap'i orada da gönderin.
-   - Önemli bir sayfa değişince adresini **URL Submission** ile gönderin (Bing'in IndexNow
-     altyapısı); Bing ve onun dizinini kullanan ChatGPT arama ile Copilot değişikliği daha
-     hızlı görür.
+   - Değişen sayfalar **IndexNow** ile otomatik bildirilir (Ekim 2026'dan beri): GitHub Action
+     `.github/workflows/indexnow.yml` her production deploy'undan sonra ve her gün
+     `scripts/indexnow.mjs`'i çalıştırır; içeriği (başlık, açıklama, yapılandırılmış veri,
+     görünen metin) değişen sayfalar Bing'e gider, ChatGPT arama ile Copilot değişikliği daha
+     hızlı görür. Anahtar `public/<anahtar>.txt`. Elle: GitHub → Actions → IndexNow → *Run
+     workflow* ("all" ile bütün sayfalar). Bing Webmaster Tools'taki **URL Submission**'a
+     artık gerek yok.
 3. **Kontrol testleri**
    - search.google.com/test/rich-results ve validator.schema.org: ana sayfa, `/en`,
      `/social-media`, `/roadmap`. Hata olmamalı.
