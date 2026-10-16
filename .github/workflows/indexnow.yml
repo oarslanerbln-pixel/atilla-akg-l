@@ -19,6 +19,10 @@ concurrency:
   group: indexnow
   cancel-in-progress: false
 
+permissions:
+  contents: read
+  actions: read # to download the previous run's fingerprints
+
 jobs:
   submit:
     # Vercel reports each deployment to GitHub; only a finished production one is live on the domain.
@@ -34,15 +38,28 @@ jobs:
         with:
           node-version: 22
 
-      # The fingerprints of the last run. Each run saves under a new key; restore-keys picks the latest.
-      - uses: actions/cache@v4
-        with:
-          path: .indexnow
-          key: indexnow-${{ github.run_id }}
-          restore-keys: indexnow-
+      # The fingerprints of the last successful run travel as an artifact. actions/cache cannot
+      # carry them: a deployment_status event has no branch ref, and the cache refuses it.
+      - name: Restore the last fingerprints
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          last=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow indexnow.yml --status success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+          if [ -n "$last" ] && gh run download "$last" --repo "$GITHUB_REPOSITORY" --name indexnow-state --dir .indexnow; then
+            echo "Fingerprints from run $last"
+          else
+            echo "No earlier fingerprints: every page counts as changed"
+          fi
 
       # The domain is aliased to a new deployment a few seconds after it reports success.
       - if: github.event_name == 'deployment_status'
         run: sleep 30
 
       - run: node scripts/indexnow.mjs ${{ inputs.all && '--all' || '' }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: indexnow-state
+          path: .indexnow/state.json
+          include-hidden-files: true # .indexnow/ is a dot directory
+          retention-days: 30
