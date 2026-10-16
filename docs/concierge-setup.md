@@ -141,6 +141,7 @@ Bütün değişkenleri girin (`SITE_URL` dahil) ve yeniden deploy edin. Webhook'
 - Elle çalıştırmak: Vercel → Settings → Cron Jobs → `/api/cron/status` → *Run*, ya da proje klasöründe `vercel crons run /api/cron/status`.
 - Sonuç: *View Logs* veya `vercel logs --environment production --since 15m --query "[status]"`. Her sorun bir `error` satırıdır (ör. `[status] whatsapp: failed: …`); son satır `[status] all good` ya da `[status] needs attention`.
 - Stripe (`deposits`) ve yapay zekâ (`aiReplies`) kapalıyken eksik değişkenleri sorun sayılmaz, `(feature off)` notuyla bilgi satırı olarak geçer.
+- Vercel logları yaklaşık bir saat yaşadığı için bir sorun bulunduğunda aynı satırlar `CONTACT_TO_EMAIL` adresine, iletişim formunun Resend ayarlarıyla mail olarak da gider (konu: `⚠️ atillabarbarossa.com: N sorun`). Sorun giderilene kadar her sabah tekrar gelir. Mail ayarlarının kendisi bozuksa mail gidemez; o zaman yalnızca log kalır (`[status] alert not sent: …`).
 
 ---
 

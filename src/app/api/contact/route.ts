@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sendMail } from "@/lib/mail";
 
 /**
  * Contact endpoint — the single revenue path of this site.
@@ -122,44 +123,28 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "not_configured" }, { status: 503 });
   }
 
-  try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: headerSafe(from),
-        to: [headerSafe(to)],
-        reply_to: headerSafe(email),
-        subject: `Neue Projektanfrage — ${headerSafe(name)}`,
-        text: `Name: ${name}\nE-Mail: ${email}\n\n${message}`,
-        html:
-          `<p><strong>Name:</strong> ${escapeHtml(name)}</p>` +
-          `<p><strong>E-Mail:</strong> ${escapeHtml(email)}</p>` +
-          `<p style="white-space:pre-wrap">${escapeHtml(message)}</p>`,
-      }),
-    });
+  const sent = await sendMail(apiKey, {
+    from: headerSafe(from),
+    to: headerSafe(to),
+    replyTo: headerSafe(email),
+    subject: `Neue Projektanfrage — ${headerSafe(name)}`,
+    text: `Name: ${name}\nE-Mail: ${email}\n\n${message}`,
+    html:
+      `<p><strong>Name:</strong> ${escapeHtml(name)}</p>` +
+      `<p><strong>E-Mail:</strong> ${escapeHtml(email)}</p>` +
+      `<p style="white-space:pre-wrap">${escapeHtml(message)}</p>`,
+  });
 
-    if (!response.ok) {
-      // The provider's reason is what an operator needs to fix a rejection
-      // (unverified domain, malformed sender), but its body can echo the
-      // submitted address: every address in it is masked before it is logged.
-      const reason = await response
-        .json()
-        .then((b: { name?: unknown; message?: unknown }) =>
-          [b?.name, b?.message].filter((v) => typeof v === "string").join(": "),
-        )
-        .catch(() => "");
-      const masked = reason.replace(/[^\s<>"'`,;:()]+@[^\s<>"'`,;:()]+/g, "[address]").slice(0, 300);
-      console.error(`[contact] provider rejected the message: ${response.status}${masked ? ` ${masked}` : ""}`);
-      return NextResponse.json({ error: "delivery_failed" }, { status: 502 });
-    }
-
-    return NextResponse.json({ message: "delivered" }, { status: 200 });
-  } catch {
-    console.error("[contact] could not reach the mail provider");
+  if (!sent.ok) {
+    // The visitor's data does not belong in the platform log; sendMail masks
+    // every address in the provider's reason.
+    console.error(
+      sent.kind === "rejected"
+        ? `[contact] provider rejected the message: ${sent.detail}`
+        : "[contact] could not reach the mail provider",
+    );
     return NextResponse.json({ error: "delivery_failed" }, { status: 502 });
   }
+
+  return NextResponse.json({ message: "delivered" }, { status: 200 });
 }
