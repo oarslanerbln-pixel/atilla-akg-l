@@ -86,6 +86,27 @@ export async function instagramAccessToken(): Promise<string> {
   }
 }
 
+export interface InstagramTokenPeek {
+  token: string;
+  /** 'env' until the first Instagram call stores the env token (or a newly pasted one). */
+  source: 'stored' | 'env';
+  obtainedAt: string | null;
+  expiresAt: string | null;
+}
+
+/**
+ * The token the next Instagram call would use, read without writing anything: for the status
+ * check (/api/cron/status), which must not seed or replace the stored token itself.
+ */
+export async function peekInstagramToken(): Promise<InstagramTokenPeek> {
+  const envToken = env('INSTAGRAM_ACCESS_TOKEN');
+  const stored = await readStoredToken();
+  if (stored?.seedHash === seedHash(envToken)) {
+    return { token: stored.token, source: 'stored', obtainedAt: stored.obtainedAt, expiresAt: stored.expiresAt };
+  }
+  return { token: envToken, source: 'env', obtainedAt: null, expiresAt: null };
+}
+
 export type TokenRefresh =
   | { status: 'refreshed'; expiresAt: string | null }
   /** Younger than a day: Meta would refuse, and a duplicate cron delivery lands here. */

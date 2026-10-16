@@ -137,6 +137,11 @@ Bütün değişkenleri girin (`SITE_URL` dahil) ve yeniden deploy edin. Webhook'
 2. Vercel → Settings → Environment Variables → `CRON_SECRET` olarak (Production, Sensitive) girin ve yeniden deploy edin. Vercel bu değeri her cron isteğine `Authorization: Bearer …` başlığıyla ekler; `CRON_SECRET` yoksa uç nokta 503 döner ve hiçbir şey yenilenmez.
 3. Kontrol: Vercel → Settings → Cron Jobs → *Run* ile elle tetikleyin, sonra *View Logs*. Cevap `{"status":"refreshed",…}` veya token bir günden yeniyse `{"status":"too_new",…}` olmalı; `webhooks` alanı `{"status":"subscribed"}` göstermeli. Yeni bir `INSTAGRAM_ACCESS_TOKEN` girildiğinde redeploy'dan sonra bir kez *Run*'a basın, pazartesiyi beklemeyin.
 
+**Durum kontrolü (`/api/cron/status`):** her gün 05:15 UTC'de (Hobby planında o saat içinde) kendiliğinden çalışır ve hiçbir şey yazmaz, göndermez. Vercel listesinde görünen bir değişken boş da olabilir (iletişim formu iki hafta böyle kaldı); bu kontrol her özelliğin değişkenlerini **adıyla** raporlar, şifreleme anahtarlarını bir şifrele-çöz turuyla, Supabase'i sayım sorgularıyla, Instagram token'ını ve WhatsApp numarasını salt okunur Graph çağrılarıyla dener. Hiçbir değer, kişisel alan veya Atilla'nın numarası loga yazılmaz.
+- Elle çalıştırmak: Vercel → Settings → Cron Jobs → `/api/cron/status` → *Run*, ya da proje klasöründe `vercel crons run /api/cron/status`.
+- Sonuç: *View Logs* veya `vercel logs --environment production --since 15m --query "[status]"`. Her sorun bir `error` satırıdır (ör. `[status] whatsapp: failed: …`); son satır `[status] all good` ya da `[status] needs attention`.
+- Stripe (`deposits`) ve yapay zekâ (`aiReplies`) kapalıyken eksik değişkenleri sorun sayılmaz, `(feature off)` notuyla bilgi satırı olarak geçer.
+
 ---
 
 ## Atilla sistemi nasıl kullanır?
