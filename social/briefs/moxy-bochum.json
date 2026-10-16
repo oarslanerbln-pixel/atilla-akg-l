@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "moxy-bochum",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Anzeige · Moxy Bochum",
+  "title": "Pizza essen",
+  "accent": "im Hotel?",
+  "subtitle": "Echte neapolitanische Pizza in Bochum",
+  "photo": { "src": "social/assets/moxy-bochum.jpg", "focus": [0.5, 0.5], "zoom": 1 }
+}

@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "heilbronn-steak-doener",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Anzeige · Original Berliner Döner",
+  "title": "Der perfekte",
+  "accent": "Steak Döner?",
+  "subtitle": "Wiedereröffnung in Heilbronn",
+  "photo": { "src": "social/assets/heilbronn-steak-doener.jpg", "focus": [0.45, 0.4], "zoom": 1 }
+}
