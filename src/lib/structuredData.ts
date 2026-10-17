@@ -321,7 +321,7 @@ export function roadmapGraph(description: string) {
         name: "The Travel Creator Roadmap",
         description,
         url,
-        image: absolute("/roadmap/cover.webp"),
+        image: absolute("/roadmap/book-cover.webp"),
         author: ref(ids.person),
         inLanguage: "de",
         bookFormat: "https://schema.org/EBook",
