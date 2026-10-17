@@ -45,7 +45,7 @@ export default function RoadmapTeaser() {
             src="/roadmap/cover.webp"
             alt={t("rm_cover_alt")}
             width={960}
-            height={1500}
+            height={1536}
             sizes="(max-width: 900px) 55vw, 320px"
             className={styles.cover}
           />

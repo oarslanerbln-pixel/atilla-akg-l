@@ -190,7 +190,7 @@ export default function RoadmapPage() {
                 src="/roadmap/cover.webp"
                 alt={t("rm_cover_alt")}
                 width={960}
-                height={1500}
+                height={1536}
                 priority
                 sizes="(max-width: 900px) 70vw, 420px"
                 className={styles.cover}
