@@ -48,6 +48,16 @@ and `terms` (travel). The audience figures come from `src/lib/site.ts`. Rate
 briefs go in `social/briefs/private/`, which git ignores: the repo is public
 and the site quotes no prices.
 
+## E-book cover
+
+`npx tsx social/ebook.tsx` renders the cover options for The Travel Creator
+Roadmap into `social/out/ebook/` (1200×1920, with overview sheets);
+`npx tsx social/ebook.tsx 21` starts at option 21. The chosen one is `CHOSEN`
+in the script: `npx tsx social/ebook.tsx final` draws it at 1600×2560 for
+Tentary and writes `public/roadmap/cover.webp` (960×1536, the size the pages
+declare). The photo of Atilla in the courtyard lives in `social/assets/`
+(`ebook-atilla-courtyard.jpg`, gitignored).
+
 ## Rules
 
 - Partner content carries the ad label: the eyebrow starts with "Anzeige"
