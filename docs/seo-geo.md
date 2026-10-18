@@ -319,7 +319,7 @@ götürüyordu; ne ziyaretçi ne Google ona ana sayfadan ulaşabiliyordu.
    - Search Console ile aynı Google hesabıyla açın; alan adını doğrulayıp sahiplenin.
    - Ürünler → "Web sitenizden ürün ekleyin": sayfadaki ürün verisini otomatik okur.
      Elle eklenecekse: kimlik `TCR-DE`, link `https://atillabarbarossa.com/roadmap`,
-     görsel `/roadmap/cover.webp`, fiyat 49 EUR, durum yeni, marka Atilla Barbarossa.
+     görsel `/roadmap/book-cover.webp`, fiyat 49 EUR, durum yeni, marka Atilla Barbarossa.
    - Pazarlama yöntemi olarak **yalnızca "Ücretsiz listelemeler"**. Google, e-kitapları Mayıs
      2021'den beri **Shopping reklamlarında kabul etmiyor**; reklam kampanyası açmayın, reddedilir.
    - Teslimat: dijital ürün, kargo ücreti 0 €. İade politikası: Tentary'deki cayma hakkı metni

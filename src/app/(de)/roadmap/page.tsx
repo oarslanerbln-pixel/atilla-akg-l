@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: "de_DE",
     type: "website",
-    images: [{ url: "/roadmap/cover.webp", width: 960, height: 1500, alt: "The Travel Creator Roadmap" }],
+    images: [{ url: "/roadmap/book-cover.webp", width: 1000, height: 1600, alt: "The Travel Creator Roadmap" }],
   },
   twitter: { card: "summary_large_image", title, description },
 };

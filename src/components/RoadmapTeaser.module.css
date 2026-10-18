@@ -22,27 +22,8 @@
 }
 
 .coverFrame {
-  position: relative;
   justify-self: center;
   width: 100%;
-  padding: clamp(0.85rem, 2vw, 1.25rem);
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  box-shadow: 0 40px 80px -40px rgba(20, 15, 10, 0.35);
-}
-
-.coverFrame::after {
-  content: "";
-  position: absolute;
-  inset: 0.4rem;
-  border: 1px solid rgba(179, 139, 89, 0.35);
-  pointer-events: none;
-}
-
-.cover {
-  display: block;
-  width: 100%;
-  height: auto;
 }
 
 .titleSoft {
