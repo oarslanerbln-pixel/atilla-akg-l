@@ -1,5 +1,5 @@
 /* /roadmap — see RoadmapPage.tsx for the reasoning. The same paper, ink and
-   single gold accent as /social-media; the cover is hung like a print. */
+   single gold accent as /social-media; the cover stands as a hardback. */
 
 /* ---------- Top bar ---------- */
 .topbar {
@@ -197,7 +197,7 @@
 
 .openingGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   align-items: center;
   gap: clamp(2.5rem, 6vw, 6rem);
 }
@@ -245,29 +245,10 @@
   color: var(--text-secondary);
 }
 
-/* The cover hangs in a porcelain mount with a gold hairline, like a print. */
+/* The book stands on its own (BookCover); this only sizes and places it. */
 .coverFrame {
-  position: relative;
   justify-self: center;
-  width: min(100%, 420px);
-  padding: clamp(1rem, 2.5vw, 1.75rem);
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  box-shadow: 0 40px 80px -40px rgba(20, 15, 10, 0.35);
-}
-
-.coverFrame::after {
-  content: "";
-  position: absolute;
-  inset: 0.5rem;
-  border: 1px solid rgba(179, 139, 89, 0.35);
-  pointer-events: none;
-}
-
-.cover {
-  display: block;
-  width: 100%;
-  height: auto;
+  width: min(100%, 560px);
 }
 
 /* ---------- Tourist vs. creator ---------- */
@@ -715,7 +696,7 @@
      should see the book before they read about it. */
   .coverFrame {
     order: -1;
-    width: min(58%, 280px);
+    width: min(62%, 300px);
   }
 
   .inside {

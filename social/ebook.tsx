@@ -1007,7 +1007,8 @@ const CHOSEN = "28-magazine-b";
 
 /**
  * Tentary gets 1600×2560 (the common e-book size): the 1200×1920 layout drawn at 4/3, so type and
- * lines stay sharp. The site gets public/roadmap/cover.webp at 960×1536, the size the pages declare.
+ * lines stay sharp. The site gets public/roadmap/book-cover.webp at 1000×1600, the size BOOK_COVER
+ * (src/components/roadmap/BookCover.tsx) declares.
  */
 async function final(all: Cover[]) {
   const cover = all.find((c) => c.name === CHOSEN);
@@ -1034,8 +1035,8 @@ async function final(all: Cover[]) {
   );
   const png = join(OUT, "final", `roadmap-cover-${big.width}x${big.height}.png`);
   await renderPng(element, png, big);
-  const webp = join(__dirname, "..", "public", "roadmap", "cover.webp");
-  await sharp(png).resize(960, 1536, { kernel: "lanczos3" }).webp({ quality: 78 }).toFile(webp);
+  const webp = join(__dirname, "..", "public", "roadmap", "book-cover.webp");
+  await sharp(png).resize(1000, 1600, { kernel: "lanczos3" }).webp({ quality: 78 }).toFile(webp);
   console.log(png);
   console.log(webp);
 }

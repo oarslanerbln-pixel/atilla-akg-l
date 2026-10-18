@@ -14,6 +14,7 @@ import { useMagnetic } from "@/hooks/useMagnetic";
 import { roadmap } from "@/lib/roadmap";
 import { pagePath } from "@/lib/locales";
 import type { Language, TranslationKeys } from "@/i18n/translations";
+import BookCover from "./BookCover";
 import styles from "./RoadmapPage.module.css";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -186,15 +187,7 @@ export default function RoadmapPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={at(0.35, 1.3)}
             >
-              <Image
-                src="/roadmap/cover.webp"
-                alt={t("rm_cover_alt")}
-                width={960}
-                height={1536}
-                priority
-                sizes="(max-width: 900px) 70vw, 420px"
-                className={styles.cover}
-              />
+              <BookCover alt={t("rm_cover_alt")} priority delay={1.8} sizes="(max-width: 900px) 62vw, 300px" />
             </motion.div>
           </div>
         </section>

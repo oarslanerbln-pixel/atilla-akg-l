@@ -54,8 +54,8 @@ and the site quotes no prices.
 Roadmap into `social/out/ebook/` (1200×1920, with overview sheets);
 `npx tsx social/ebook.tsx 21` starts at option 21. The chosen one is `CHOSEN`
 in the script: `npx tsx social/ebook.tsx final` draws it at 1600×2560 for
-Tentary and writes `public/roadmap/cover.webp` (960×1536, the size the pages
-declare). The photo of Atilla in the courtyard lives in `social/assets/`
+Tentary and writes `public/roadmap/book-cover.webp` (1000×1600, the size
+`BOOK_COVER` in `src/components/roadmap/BookCover.tsx` declares). The photo of Atilla in the courtyard lives in `social/assets/`
 (`ebook-atilla-courtyard.jpg`, gitignored).
 
 ## Rules

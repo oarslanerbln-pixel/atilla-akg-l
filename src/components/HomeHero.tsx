@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import Hero from "./Hero";
+import HeroEbookNote from "./HeroEbookNote";
 import HeroGlobe from "./globe/HeroGlobe";
 import { heroWantsGlobe } from "@/lib/heroChoice";
 import styles from "./HomeHero.module.css";
@@ -37,7 +38,7 @@ const undecided = () => null;
 export default function HomeHero() {
   const globe = useSyncExternalStore<boolean | null>(unchanging, wantsGlobe, undecided);
   return (
-    <div id="home">
+    <div id="home" className={styles.home}>
       {globe !== false && (
         <div className={styles.globe}>
           <HeroGlobe />
@@ -48,6 +49,7 @@ export default function HomeHero() {
           <Hero />
         </div>
       )}
+      <HeroEbookNote />
     </div>
   );
 }
