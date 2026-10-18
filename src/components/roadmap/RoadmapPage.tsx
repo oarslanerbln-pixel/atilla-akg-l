@@ -187,7 +187,7 @@ export default function RoadmapPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={at(0.35, 1.3)}
             >
-              <BookCover alt={t("rm_cover_alt")} priority sizes="(max-width: 900px) 60vw, 400px" />
+              <BookCover alt={t("rm_cover_alt")} priority delay={1.8} sizes="(max-width: 900px) 62vw, 300px" />
             </motion.div>
           </div>
         </section>

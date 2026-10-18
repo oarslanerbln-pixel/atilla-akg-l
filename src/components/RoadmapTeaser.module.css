@@ -11,10 +11,10 @@
 
 .grid {
   display: grid;
-  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  /* The open book is a two-page spread, so it takes the wider column. */
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   align-items: center;
-  gap: clamp(3rem, 7vw, 6rem);
-  max-width: 1040px;
+  gap: clamp(3rem, 6vw, 5.5rem);
 }
 
 .grid > * {
@@ -62,8 +62,8 @@
   }
 
   .coverFrame {
-    justify-self: start;
-    width: min(55%, 260px);
+    justify-self: center;
+    width: min(62%, 300px);
   }
 }
 
