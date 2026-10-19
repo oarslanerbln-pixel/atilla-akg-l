@@ -126,7 +126,7 @@ export default function Contact() {
 
           {/* Contact info & form, a card on the same axis */}
           <div className={styles.contactCol}>
-            <motion.div variants={itemVariants}>
+            <motion.div variants={itemVariants} className={styles.cardHead}>
               <p className={ed.kicker}>{t('contact_form_subtitle')}</p>
               <h3 className={styles.formTitle}>{t('contact_form_title')}</h3>
             </motion.div>

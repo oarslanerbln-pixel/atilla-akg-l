@@ -51,6 +51,15 @@
   max-width: 560px;
 }
 
+/* The card's head on the page's axis; the form below stays left-aligned. */
+.cardHead {
+  text-align: center;
+}
+
+.cardHead > p::before {
+  margin-inline: auto;
+}
+
 .formTitle {
   margin: 1rem 0 2rem;
   font-family: var(--font-display);
