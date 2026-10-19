@@ -101,9 +101,9 @@ export default function Contact() {
           viewport={{ once: true, margin: "-100px" }}
           className={styles.grid}
         >
-          {/* Left Column: Philosophy & Process */}
+          {/* Philosophy & process, centred above the card */}
           <div className={styles.infoCol}>
-            <motion.div variants={itemVariants}>
+            <motion.div variants={itemVariants} className={ed.centred}>
               <p className={ed.eyebrow}>{t('contact_subtitle')}</p>
               <h2 id="contact-title" className={ed.title}>
                 {t('contact_title')}
@@ -117,14 +117,14 @@ export default function Contact() {
               <p className={styles.closing}>{t('contact_closing')}</p>
             </motion.div>
 
-            <motion.p variants={itemVariants} className={`${ed.signature} ${styles.signature}`}>
+            <motion.p variants={itemVariants} className={`${ed.signature} ${ed.signatureCentred} ${styles.signature}`}>
               <BrandMark className={ed.signatureMark} />
               <span className={ed.signatureName}>Atilla Barbarossa</span>
               <span className={ed.signatureRole}>{t('quote_role')}</span>
             </motion.p>
           </div>
 
-          {/* Right Column: Contact Info & Form */}
+          {/* Contact info & form, a card on the same axis */}
           <div className={styles.contactCol}>
             <motion.div variants={itemVariants}>
               <p className={ed.kicker}>{t('contact_form_subtitle')}</p>
