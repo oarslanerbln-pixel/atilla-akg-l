@@ -1,5 +1,5 @@
 /* The editorial vocabulary the home page shares with /media-kit: numbered
-   chapters, heads set flush left, figures between hairlines, a second way to
+   chapters, heads set flush left (centred on the home page, see .gallery), figures between hairlines, a second way to
    act set as an underlined line, the square play mark. Section modules keep
    their own layout and import these for the parts that must match. */
 
@@ -288,6 +288,14 @@
   border-top: 1px solid var(--border-light);
 }
 
+/* Centred under a centred text: mark and name in the middle of the rule. */
+.signatureCentred {
+  justify-content: center;
+  grid-template-columns: auto auto;
+  margin-inline: auto;
+  text-align: left;
+}
+
 .signatureMark {
   grid-row: span 2;
   width: 38px;
@@ -308,6 +316,54 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text-secondary);
+}
+
+/* ---------- Gallery: the home page set on one centred axis ----------
+   Section heads stand in the middle like a placard in a gallery: the gold
+   eyebrow between two short hairlines, the heading below it, a short text
+   or figure under both. Scoped to <main class="gallery">, so /media-kit
+   keeps its flush-left kit. */
+.gallery .head,
+.gallery .headSplit {
+  max-width: 820px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.gallery .headSplit {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  align-items: start;
+  gap: 2rem;
+}
+
+.gallery .headSplit > :not(:first-child) {
+  width: min(100%, 560px);
+}
+
+.gallery .head .lede,
+.gallery .headSplit .lede {
+  margin-inline: auto;
+}
+
+/* A definition list in a centred head (the case study's brand and format)
+   stacks each term over its value, on the same axis. */
+.gallery .headSplit dl > div {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.35rem;
+}
+
+/* The eyebrow between two hairlines, drawn as backgrounds so the chapter
+   numeral keeps its own ::before. */
+.gallery .head .eyebrow,
+.gallery .headSplit .eyebrow,
+.gallery .centred .eyebrow {
+  width: fit-content;
+  margin-inline: auto;
+  padding-inline: 3.25rem;
+  background:
+    linear-gradient(var(--accent-gold), var(--accent-gold)) left center / 2.25rem 1px no-repeat,
+    linear-gradient(var(--accent-gold), var(--accent-gold)) right center / 2.25rem 1px no-repeat;
 }
 
 @media (max-width: 900px) {
@@ -331,8 +387,26 @@
     letter-spacing: 0.22em;
   }
 
+  .gallery .head .eyebrow,
+  .gallery .headSplit .eyebrow,
+  .gallery .centred .eyebrow {
+    padding-inline: 2.25rem;
+    background-size: 1.5rem 1px;
+  }
+
   .playIcon {
     width: 3.75rem;
     height: 3.75rem;
+  }
+}
+
+/* On the narrowest phones a long eyebrow wraps, and hairlines beside two
+   lines read as stray marks: the eyebrow stands alone there. */
+@media (max-width: 400px) {
+  .gallery .head .eyebrow,
+  .gallery .headSplit .eyebrow,
+  .gallery .centred .eyebrow {
+    padding-inline: 0;
+    background: none;
   }
 }

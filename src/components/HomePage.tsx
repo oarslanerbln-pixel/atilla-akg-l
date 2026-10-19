@@ -31,7 +31,7 @@ export default async function HomePage({ lang }: { lang: Language }) {
   // The Novotel reel, mirrored by the reels cron; both places that show it read it here.
   const caseFilm = await loadCaseFilm();
   return (
-    <main className={ed.chapters}>
+    <main className={`${ed.chapters} ${ed.gallery}`}>
       <JsonLd data={homeGraph(lang)} />
       <Preloader />
       <CustomCursor />
