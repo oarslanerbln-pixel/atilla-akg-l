@@ -3,7 +3,7 @@
    An interlude between chapters, so it carries no numeral. */
 .section {
   background:
-    radial-gradient(ellipse 40% 70% at 22% 50%, rgba(216, 180, 130, 0.22), transparent 70%),
+    radial-gradient(ellipse 40% 70% at 25% 50%, rgba(216, 180, 130, 0.22), transparent 70%),
     var(--bg-secondary);
   border-top: 1px solid var(--border-light);
   border-bottom: 1px solid var(--border-light);
@@ -11,8 +11,8 @@
 
 .grid {
   display: grid;
-  /* The open book is a two-page spread, so it takes the wider column. */
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  /* Two equal halves: the closed book centred in one, the text in the other. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
   gap: clamp(3rem, 6vw, 5.5rem);
 }
@@ -23,7 +23,7 @@
 
 .coverFrame {
   justify-self: center;
-  width: 100%;
+  width: min(100%, 320px);
 }
 
 .titleSoft {
@@ -64,6 +64,19 @@
   .coverFrame {
     justify-self: center;
     width: min(62%, 300px);
+  }
+
+  /* Stacked under the centred book, the text is centred on the same axis. */
+  .copy {
+    text-align: center;
+  }
+
+  .lead {
+    margin-inline: auto;
+  }
+
+  .actions {
+    justify-content: center;
   }
 }
 

@@ -41,10 +41,10 @@ export default function RoadmapTeaser() {
     <section id="ebook" className={`${ed.section} ${styles.section}`} aria-labelledby="ebook-title">
       <div className={`container ${styles.grid}`}>
         <motion.div className={styles.coverFrame} {...reveal()}>
-          <BookCover alt={t("rm_cover_alt")} delay={0.5} sizes="(max-width: 900px) 50vw, 300px" />
+          <BookCover alt={t("rm_cover_alt")} sizes="(max-width: 900px) 62vw, 320px" />
         </motion.div>
 
-        <motion.div {...reveal(0.12)}>
+        <motion.div className={styles.copy} {...reveal(0.12)}>
           <p className={ed.eyebrow}>{t("ebook_eyebrow")}</p>
           <h2 id="ebook-title" className={ed.title}>
             {t("ebook_title_1")}{" "}

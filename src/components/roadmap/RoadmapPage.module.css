@@ -248,7 +248,7 @@
 /* The book stands on its own (BookCover); this only sizes and places it. */
 .coverFrame {
   justify-self: center;
-  width: min(100%, 560px);
+  width: min(100%, 360px);
 }
 
 /* ---------- Tourist vs. creator ---------- */

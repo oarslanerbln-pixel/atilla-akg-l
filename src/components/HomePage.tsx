@@ -20,13 +20,16 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import JsonLd from "@/components/JsonLd";
 import type { Language } from "@/i18n/translations";
 import { homeGraph } from "@/lib/structuredData";
+import { CASE_REEL, loadCaseFilm } from "@/lib/reels/manifest";
 import ed from "@/components/editorial.module.css";
 
 /**
  * The single-page portfolio, served at /, /en and /tr. The language comes
  * from the route's root layout; here it only picks the structured data.
  */
-export default function HomePage({ lang }: { lang: Language }) {
+export default async function HomePage({ lang }: { lang: Language }) {
+  // The Novotel reel, mirrored by the reels cron; both places that show it read it here.
+  const caseFilm = await loadCaseFilm();
   return (
     <main className={ed.chapters}>
       <JsonLd data={homeGraph(lang)} />
@@ -39,11 +42,11 @@ export default function HomePage({ lang }: { lang: Language }) {
       <FilmBand />
       <Stats />
       <Partners />
-      <FeaturedWork />
+      <FeaturedWork novotel={caseFilm} permalink={CASE_REEL.permalink} />
       <LatestReels />
       <RoadmapTeaser />
       <Services />
-      <CaseStudy />
+      <CaseStudy film={caseFilm} permalink={CASE_REEL.permalink} />
       <EditorialQuote />
       <Faq />
       <Contact />
