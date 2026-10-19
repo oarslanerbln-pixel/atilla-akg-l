@@ -273,6 +273,10 @@ in brackets (`[Anzeige]`, `(unbezahlte Werbung)`) or as the first word
 copyrighted Instagram music has no `media_url` and cannot be mirrored; the
 cron reports it as `withoutFile`. Needs a Blob store connected to the project
 (`BLOB_READ_WRITE_TOKEN`); without one the section is absent.
+The same cron mirrors the case study's film, the Novotel Bosphorus reel, found
+by its shortcode (`CASE_REEL` in `src/lib/reels/manifest.ts`, stored as
+`caseFilm` in the manifest); CaseStudy and the Novotel project in
+FeaturedWork play it. Until it is mirrored they link to the reel on Instagram.
 Blob transfer is metered per byte downloaded (Hobby: 10 GB a month, then the
 store is blocked for 30 days), so video loads only when a card is opened:
 no hover previews, no autoplay in the rail.
