@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "maritim-familienhand", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Maritim Hotel · Stuttgart",
+  "title": "Größte Hotelgruppe", "accent": "in Familienhand",
+  "subtitle": "Der perfekte Ausgangspunkt",
+  "photo": { "src": "social/assets/maritim-fassade.png", "focus": [0.5, 0.5], "zoom": 1 }
+}

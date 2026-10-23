@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "stuttgart-city-trip", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Hotel-Tipp · Stuttgart",
+  "title": "Perfekter City Trip", "accent": "nach Stuttgart",
+  "subtitle": "Maritim Hotel Stuttgart",
+  "photo": { "src": "social/assets/maritim-terrasse.png", "focus": [0.5, 0.4], "zoom": 1 }
+}

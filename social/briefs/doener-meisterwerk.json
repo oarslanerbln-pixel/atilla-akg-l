@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "doener-meisterwerk", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Döner-Tipp",
+  "title": "Meisterwerk", "accent": "oder Verbrechen?",
+  "subtitle": "Steak Döner mit Käse und Jalapeños",
+  "photo": { "src": "social/assets/doener-meisterwerk.png", "focus": [0.5, 0.5], "zoom": 1 }
+}
