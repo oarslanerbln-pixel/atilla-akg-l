@@ -31,10 +31,21 @@
   color: var(--text-primary);
 }
 
-/* The clip is a wide film; 2:1 is its own frame. */
+/* The reel upright beside its story: two balanced columns, the film
+   centred in its own. */
+.feature {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: 2.5rem clamp(2.5rem, 6vw, 6rem);
+}
+
+/* A reel is 9:16; that is its own frame. */
 .film {
   position: relative;
-  aspect-ratio: 2 / 1;
+  justify-self: center;
+  width: min(100%, 380px);
+  aspect-ratio: 9 / 16;
   overflow: hidden;
   background: var(--bg-ink);
 }
@@ -59,6 +70,18 @@
     color-mix(in srgb, var(--bg-ink) 35%, transparent)
   );
   cursor: pointer;
+}
+
+/* Until the reel is mirrored, the frame is a link to it on Instagram. */
+.external {
+  background: radial-gradient(ellipse at 50% 40%, color-mix(in srgb, var(--accent-gold) 22%, transparent), transparent 70%);
+  color: var(--text-on-ink);
+  text-decoration: none;
+}
+
+.external:focus-visible {
+  outline: 2px solid var(--accent-gold-light);
+  outline-offset: -6px;
 }
 
 /* Playing, the film has the frame to itself. */
@@ -103,9 +126,10 @@
 .figures {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  margin: 0;
+  margin: clamp(3rem, 5vw, 4.5rem) 0 0;
   padding: 0;
   list-style: none;
+  border-top: 1px solid var(--border-light);
   border-bottom: 1px solid var(--border-light);
 }
 
@@ -130,11 +154,10 @@
 }
 
 .story {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  align-items: start;
-  gap: 2.5rem clamp(2.5rem, 6vw, 6rem);
-  margin-top: clamp(3rem, 5vw, 4.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  min-width: 0;
 }
 
 .caption {
@@ -170,8 +193,12 @@
 }
 
 @media (max-width: 900px) {
-  .story {
+  .feature {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .film {
+    width: min(100%, 340px);
   }
 
   /* The reach leads on a line of its own; the four reactions follow. */
@@ -196,10 +223,6 @@
 }
 
 @media (max-width: 640px) {
-  .film {
-    aspect-ratio: 16 / 10;
-  }
-
   .figures {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
