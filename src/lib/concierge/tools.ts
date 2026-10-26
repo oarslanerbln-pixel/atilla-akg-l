@@ -2,7 +2,7 @@ import 'server-only';
 import type Anthropic from '@anthropic-ai/sdk';
 import { CONCIERGE, env, isLang, type Lang } from './config';
 import { attachCheckoutSession, createPendingBooking } from './bookings';
-import { activeOffers, sendOfferLink } from './offers';
+import { activeOffers, offersHere, sendOfferLink } from './offers';
 import { updateContact, type Contact, type ContactPatch, type Stage } from './db';
 import { alertStaff } from './meta';
 import { staff } from './copy';
@@ -309,7 +309,8 @@ async function handoffToAtilla(input: Input, ctx: ToolContext) {
 
 async function listPartnerOffers(ctx: ToolContext) {
   const l = lang(ctx);
-  const offers = await activeOffers();
+  // Reel-only variants (Offer.media_codes) would list the same card twice.
+  const offers = offersHere(await activeOffers());
   return offers.length
     ? offers.map((o) => ({ id: o.id, name: o.name[l], description: o.pitch[l] }))
     : { offers: [], note: 'There are no partner offers at the moment.' };

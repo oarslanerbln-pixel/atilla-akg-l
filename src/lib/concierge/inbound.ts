@@ -37,8 +37,10 @@ import {
 import {
   activeOffers,
   keywordRequest,
+  mediaCode,
   OFFER_PAYLOAD,
   offerLinkMessage,
+  offersHere,
   rememberMedia,
   sendOffer,
   sendOfferLink,
@@ -91,7 +93,7 @@ async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
 /** A tap on a "send me the link" button, or a message that answerOfferKeyword would answer. */
 async function asksForOffer(msg: InboundMessage): Promise<boolean> {
   if (msg.offerId) return true;
-  return Boolean(keywordRequest(customerWords(msg.text), await activeOffers())?.offer);
+  return Boolean(keywordRequest(customerWords(msg.text), offersHere(await activeOffers()))?.offer);
 }
 
 /**
@@ -102,7 +104,7 @@ async function asksForOffer(msg: InboundMessage): Promise<boolean> {
  */
 async function answerOfferKeyword(contact: Contact, msg: InboundMessage): Promise<boolean> {
   const own = customerWords(msg.text);
-  const request = keywordRequest(own, await activeOffers());
+  const request = keywordRequest(own, offersHere(await activeOffers()));
   if (!request?.offer) return false;
   const { offer, keyword } = request;
 
@@ -205,7 +207,10 @@ interface InstagramComment {
 async function handleInstagramComment(c: InstagramComment): Promise<void> {
   if (c.fromId === c.accountId) return;
   const tourKeywords = CONCIERGE.aiReplies ? CONCIERGE.commentKeywords : [];
-  const request = keywordRequest(c.text, await activeOffers(), tourKeywords);
+  const offers = await activeOffers();
+  // Only an offer limited to certain reels needs to know which one this is.
+  const code = c.mediaId && offers.some((o) => o.media_codes.length) ? await mediaCode(c.mediaId) : undefined;
+  const request = keywordRequest(c.text, offersHere(offers, code), tourKeywords);
   if (!request) return;
   const { offer, keyword } = request;
 
