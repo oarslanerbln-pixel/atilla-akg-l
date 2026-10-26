@@ -174,7 +174,8 @@ export default function PrivacyEnglish() {
 
       <h2 id="instagram">9. Automatic replies on Instagram</h2>
       <p>
-        Under some posts I name a keyword, such as &ldquo;GOLDCARD&rdquo;. If
+        Under some posts and in some ads I name a keyword, such as
+        &ldquo;GOLDCARD&rdquo;. If
         you ask for the offer with this keyword in a comment, a story reply
         or a direct message, you automatically receive a short description
         and, on request, the link to it (section 10); under a comment, a short
@@ -186,7 +187,7 @@ export default function PrivacyEnglish() {
         For such a request, your Instagram ID (a number Instagram assigns for
         my account), your name and username where available, your comment or
         message, the detected language, my reply and the post under which you
-        asked are stored. If an account sends an unusually large number of
+        asked, or the ad through which you wrote, are stored. If an account sends an unusually large number of
         messages in a short time, the automatic reply pauses and I receive a
         notice with the account&apos;s name via WhatsApp. The legal basis is
         Art. 6(1)(f) GDPR; the legitimate interest lies in answering requests
@@ -228,10 +229,10 @@ export default function PrivacyEnglish() {
       <p>
         The links first pass through this website (<code>/go/…</code>). A
         random ID is used to count how often and when the link was first
-        opened, and to record which request and which post it came from. This
-        ID is passed to the partner programme concerned (such as financeAds,
-        GetYourGuide or Skyscanner) so that commissions can be attributed to
-        the post; the partner programme does not receive your name or
+        opened, and to record which request and which post or ad it came from.
+        This ID is passed to the partner programme concerned (such as
+        financeAds, GetYourGuide or Skyscanner) so that commissions can be
+        attributed to the post or ad; the partner programme does not receive your name or
         Instagram ID. The legal basis is Art. 6(1)(f) GDPR; the legitimate
         interest lies in settling commissions. After the redirect, the privacy
         policy of the provider concerned applies, and it may set its own

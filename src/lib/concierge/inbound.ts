@@ -39,9 +39,11 @@ import {
   keywordRequest,
   OFFER_PAYLOAD,
   offerLinkMessage,
+  rememberAd,
   rememberMedia,
   sendOffer,
   sendOfferLink,
+  type AdSource,
 } from './offers';
 import { runConcierge } from './agent';
 
@@ -64,6 +66,8 @@ interface InboundMessage {
   offerId?: string;
   /** The Instagram story this message replies to. */
   storyId?: string;
+  /** The "send message" ad this conversation was opened from; Instagram puts it on the first message. */
+  ad?: AdSource;
 }
 
 async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
@@ -84,6 +88,9 @@ async function handleCustomerMessage(msg: InboundMessage): Promise<void> {
   if (await answerOfferKeyword(contact, msg)) return;
   if (!CONCIERGE.aiReplies) return;
 
+  // A concierge conversation counts for the story or ad it started from, as a comment does for its reel.
+  const source = contact.source_media_id ? undefined : await sourceOf(msg);
+  if (source) await updateContact(contact.id, { source_media_id: source });
   await sleep(CONCIERGE.debounceMs);
   await answerWhenFree(contact.id);
 }
@@ -94,11 +101,21 @@ async function asksForOffer(msg: InboundMessage): Promise<boolean> {
   return Boolean(keywordRequest(customerWords(msg.text), await activeOffers())?.offer);
 }
 
+/** The story or ad a message came from, stored for the dashboard. Callers keep the first one. */
+async function sourceOf(msg: InboundMessage): Promise<string | undefined> {
+  if (msg.storyId) {
+    await rememberMedia(msg.storyId);
+    return msg.storyId;
+  }
+  return msg.ad ? rememberAd(msg.ad) : undefined;
+}
+
 /**
  * Story-to-DM: a reply to a story that asks for a partner offer ("GOLDCARD", "Goldcard bitte") gets the
  * offer and its link at once, and the story is remembered as the source like a reel for comments.
- * The same request outside a story reply (WhatsApp, a plain DM) is answered the same way. Anything
- * more stays with the concierge, so a keyword in passing never hijacks a conversation.
+ * The same request outside a story reply (WhatsApp, a plain DM, the first message from a "send
+ * message" ad, which then counts as the source) is answered the same way. Anything more stays with
+ * the concierge, so a keyword in passing never hijacks a conversation.
  */
 async function answerOfferKeyword(contact: Contact, msg: InboundMessage): Promise<boolean> {
   const own = customerWords(msg.text);
@@ -108,10 +125,8 @@ async function answerOfferKeyword(contact: Contact, msg: InboundMessage): Promis
 
   const patch: ContactPatch = {};
   if (!contact.language) patch.language = guessLang(own);
-  if (!contact.source_media_id && msg.storyId) {
-    await rememberMedia(msg.storyId);
-    Object.assign(patch, { source_media_id: msg.storyId, source_keyword: keyword });
-  }
+  const source = contact.source_media_id ? undefined : await sourceOf(msg);
+  if (source) Object.assign(patch, { source_media_id: source, source_keyword: keyword });
   const updated = Object.keys(patch).length ? await updateContact(contact.id, patch) : contact;
   await sendOffer(updated, offer, true);
   return true;
@@ -315,8 +330,19 @@ interface InstagramEvent {
     quick_reply?: { payload: string };
     attachments?: { type: string }[];
     reply_to?: { story?: { id: string } };
+    /** On the first message after a tap on a "send message" ad (source ADS). */
+    referral?: { source?: string; ad_id?: string; ads_context_data?: { ad_title?: string } };
   };
   postback?: { mid: string; title: string };
+}
+
+/**
+ * The ad behind a message. A tap on an ig.me link or an ad in an existing chat arrives as a separate
+ * `referral` event without a message; it is ignored, since without a request nothing is stored.
+ */
+function adOf(referral: NonNullable<InstagramEvent['message']>['referral']): AdSource | undefined {
+  if (referral?.source !== 'ADS' || !referral.ad_id) return undefined;
+  return { id: referral.ad_id, title: referral.ads_context_data?.ad_title };
 }
 
 function instagramText(message: NonNullable<InstagramEvent['message']>): string | null {
@@ -386,6 +412,7 @@ export function jobsFromMetaWebhook(payload: {
                 text,
                 offerId: payload?.startsWith(OFFER_PAYLOAD) ? payload.slice(OFFER_PAYLOAD.length) : undefined,
                 storyId: message.reply_to?.story?.id,
+                ad: adOf(message.referral),
               }),
             );
           }

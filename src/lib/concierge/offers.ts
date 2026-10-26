@@ -121,3 +121,33 @@ export async function rememberMedia(mediaId: string): Promise<void> {
     .from('instagram_media')
     .upsert({ id: mediaId, permalink: media.permalink ?? null, caption: media.caption ?? null }, { ignoreDuplicates: true });
 }
+
+/** A "send message" ad, as Instagram names it on the first message it brings in. */
+export interface AdSource {
+  id: string;
+  title?: string;
+}
+
+// Ads share the sources table with posts and stories, under an id that cannot be a media id, so
+// contacts, links and source_performance count them like a reel.
+const AD_SOURCE = 'ad:';
+const AD_ID = /^\d{1,30}$/;
+
+export const isAdSource = (sourceId: string) => sourceId.startsWith(AD_SOURCE);
+
+/**
+ * Stores an ad the first time it brings in a message, with its title for the dashboard, and returns
+ * its source id. Attribution is a bonus: if it fails, the customer is still answered.
+ */
+export async function rememberAd(ad: AdSource): Promise<string | undefined> {
+  if (!AD_ID.test(ad.id)) return undefined;
+  const id = `${AD_SOURCE}${ad.id}`;
+  const { error } = await db()
+    .from('instagram_media')
+    .upsert({ id, permalink: null, caption: ad.title?.slice(0, 200) ?? null }, { ignoreDuplicates: true });
+  if (error) {
+    console.error('[concierge] ad source not stored', error.message);
+    return undefined;
+  }
+  return id;
+}

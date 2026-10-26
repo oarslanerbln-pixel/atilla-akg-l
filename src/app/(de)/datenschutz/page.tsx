@@ -188,7 +188,8 @@ export default function Datenschutz() {
 
       <h2 id="instagram">9. Automatische Antworten auf Instagram</h2>
       <p>
-        Unter einigen Beiträgen nenne ich ein Stichwort, etwa „GOLDCARD“.
+        Unter einigen Beiträgen und in einigen Anzeigen nenne ich ein
+        Stichwort, etwa „GOLDCARD“.
         Fragen Sie in einem Kommentar, einer Story-Antwort oder einer
         Direktnachricht mit diesem Stichwort nach dem Angebot, erhalten Sie
         automatisch eine kurze Beschreibung und auf Wunsch den Link dazu
@@ -201,8 +202,8 @@ export default function Datenschutz() {
         Zu einer solchen Anfrage werden Ihre Instagram-Kennung (eine Nummer,
         die Instagram für mein Konto vergibt), gegebenenfalls Name und
         Benutzername, Ihr Kommentar oder Ihre Nachricht, die erkannte Sprache,
-        meine Antwort und der Beitrag, unter dem Sie gefragt haben,
-        gespeichert. Schreibt ein Konto in kurzer Zeit ungewöhnlich viele
+        meine Antwort und der Beitrag, unter dem Sie gefragt haben, oder die
+        Anzeige, über die Sie geschrieben haben, gespeichert. Schreibt ein Konto in kurzer Zeit ungewöhnlich viele
         Nachrichten, pausiert die automatische Antwort, und ich erhalte einen
         Hinweis mit dem Namen des Kontos per WhatsApp. Rechtsgrundlage ist
         Art. 6 Abs. 1 lit. f DSGVO; das berechtigte Interesse liegt darin,
@@ -247,10 +248,10 @@ export default function Datenschutz() {
         Die Links führen zunächst über diese Website (
         <code>/go/…</code>). Dabei wird unter einer zufälligen Kennung gezählt,
         wie oft und wann der Link zuerst geöffnet wurde, und festgehalten, aus
-        welcher Anfrage und über welchen Beitrag er stammt. Diese Kennung wird
-        an das jeweilige Partnerprogramm (etwa financeAds, GetYourGuide oder
-        Skyscanner) übergeben, damit Provisionen dem Beitrag zugeordnet werden
-        können; Name oder Instagram-Kennung erhält das Partnerprogramm nicht.
+        welcher Anfrage und über welchen Beitrag oder welche Anzeige er stammt.
+        Diese Kennung wird an das jeweilige Partnerprogramm (etwa financeAds,
+        GetYourGuide oder Skyscanner) übergeben, damit Provisionen dem Beitrag
+        oder der Anzeige zugeordnet werden können; Name oder Instagram-Kennung erhält das Partnerprogramm nicht.
         Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; das berechtigte
         Interesse liegt in der Abrechnung der Provisionen. Nach der
         Weiterleitung gilt die Datenschutzerklärung des jeweiligen Anbieters,
