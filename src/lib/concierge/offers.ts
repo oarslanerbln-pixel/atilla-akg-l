@@ -16,6 +16,11 @@ export interface Offer {
   name: Record<Lang, string>;
   pitch: Record<Lang, string>;
   keywords: string[];
+  /**
+   * Codes from the links of the posts or reels (instagram.com/reel/<code>/) under which the keywords
+   * count, in comments only. Empty: everywhere, comments, story replies and DMs alike.
+   */
+  media_codes: string[];
 }
 
 // Letters and digits only: FinanceAds, for one, accepts nothing else as sub id.
@@ -26,20 +31,52 @@ export const OFFER_PAYLOAD = 'OFFER:';
 /** The `network` of Atilla's own products (the e-book), which earn no commission. */
 const OWN_PRODUCT = 'own';
 
+// '*' rather than a column list: a deploy that lands before the media_codes migration has run
+// still answers every keyword, it only treats every offer as unscoped.
+const toOffer = (row: Omit<Offer, 'media_codes'> & { media_codes?: string[] | null }): Offer => ({
+  id: row.id,
+  network: row.network,
+  name: row.name,
+  pitch: row.pitch,
+  keywords: row.keywords,
+  media_codes: row.media_codes ?? [],
+});
+
 export async function activeOffers(): Promise<Offer[]> {
-  const { data, error } = await db().from('affiliate_offers').select('id, network, name, pitch, keywords').eq('active', true);
+  const { data, error } = await db().from('affiliate_offers').select('*').eq('active', true);
   if (error) throw new Error(`activeOffers: ${error.message}`);
-  return data as Offer[];
+  return (data ?? []).map(toOffer);
 }
 
 export async function getOffer(id: string): Promise<Offer | null> {
-  const { data } = await db()
-    .from('affiliate_offers')
-    .select('id, network, name, pitch, keywords')
-    .eq('id', id)
-    .eq('active', true)
-    .maybeSingle();
-  return (data as Offer | null) ?? null;
+  const { data } = await db().from('affiliate_offers').select('*').eq('id', id).eq('active', true).maybeSingle();
+  return data ? toOffer(data) : null;
+}
+
+/**
+ * The offers that may answer here: the unscoped ones, plus those limited to the post or reel with
+ * this code (see Offer.media_codes). Without a code (story replies, DMs) only the unscoped ones.
+ */
+export function offersHere(offers: Offer[], mediaCode?: string): Offer[] {
+  return offers.filter((o) => !o.media_codes.length || (mediaCode !== undefined && o.media_codes.includes(mediaCode)));
+}
+
+const MEDIA_CODE = /instagram\.com\/(?:[^/]+\/)?(?:reels?|p|tv)\/([A-Za-z0-9_-]+)/;
+
+/** The code in a post's or reel's link, e.g. "Dd1hMBzt3q7" for instagram.com/reel/Dd1hMBzt3q7/. */
+export function codeFromPermalink(permalink: string | null | undefined): string | undefined {
+  return permalink?.match(MEDIA_CODE)?.[1];
+}
+
+/** The link code of a post or reel, from the stored media or else from Instagram. */
+export async function mediaCode(mediaId: string): Promise<string | undefined> {
+  const { data } = await db().from('instagram_media').select('permalink').eq('id', mediaId).maybeSingle();
+  if (data?.permalink) return codeFromPermalink(data.permalink);
+  const media = await getInstagramMedia(mediaId).catch((e) => {
+    console.error('[concierge] media lookup failed', e);
+    return {} as { permalink?: string };
+  });
+  return codeFromPermalink(media.permalink);
 }
 
 export interface KeywordRequest {
