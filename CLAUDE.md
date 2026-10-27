@@ -131,7 +131,7 @@ src/
 ## 🤖 AI Concierge (Instagram + WhatsApp tour sales)
 - Server-only code in `src/lib/concierge/`; webhooks in `src/app/api/webhooks/{meta,stripe}/route.ts`.
 - Stack: `@anthropic-ai/sdk` (Claude tool-use loop in `agent.ts`), `@supabase/supabase-js` (CRM, schema in `supabase/migrations/`), `stripe` (deposit Checkout).
-- Partner (affiliate) offers are data in `supabase/offers.sql` (idempotent, run in the SQL Editor); a comment, story reply or DM that asks for a keyword (the word alone or with request words such as "bitte"; `keywordRequest` in `offers.ts`, the one gate for every entry point) sends the tracked `/go/<id>` link. An offer with `media_codes` answers only in comments under those reels (`offersHere`), e.g. LOUNGE under the Priority Pass reel.
+- Partner (affiliate) offers are data in `supabase/offers.sql` (idempotent, run in the SQL Editor); a comment, story reply or DM that asks for a keyword (the word alone or with request words such as "bitte"; `keywordRequest` in `offers.ts`, the one gate for every entry point) sends the tracked `/go/<id>` link. An offer with `media_codes` answers only in comments under those reels (`offersHere`), e.g. LOUNGE under the Priority Pass reel. The reel, story or "send message" ad it came from is the source (ads as `ad:<ad id>` in `instagram_media`, `rememberAd`); `/api/cron/weekly-report` mails the links asked for and opened per offer and source every Monday (`report.ts`).
 - Fixed customer messages live in `src/lib/concierge/copy.ts` (DE/EN/TR), not `translations.ts`, because they are sent server-side.
 - Setup and env vars: `docs/concierge-setup.md`, `.env.example`.
 - Current state, open gaps and next steps (dated snapshot, for a new session picking the work up): `docs/automation-handover.md`.

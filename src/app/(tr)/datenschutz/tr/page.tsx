@@ -172,8 +172,8 @@ export default function PrivacyTurkish() {
 
       <h2 id="instagram">9. Instagram&apos;da otomatik yanıtlar</h2>
       <p>
-        Bazı paylaşımlarımın altında &ldquo;GOLDCARD&rdquo; gibi bir anahtar
-        kelime belirtirim. Bir yorumda, hikâye yanıtında ya da doğrudan
+        Bazı paylaşımlarımın altında ve bazı reklamlarımda
+        &ldquo;GOLDCARD&rdquo; gibi bir anahtar kelime belirtirim. Bir yorumda, hikâye yanıtında ya da doğrudan
         mesajda bu kelimeyle teklifi sorarsanız otomatik olarak kısa bir
         açıklama ve isterseniz linkini alırsınız (10. bölüm); yorumların
         altında ayrıca mesaja dair kısa ve herkese açık bir not görünür.
@@ -183,8 +183,8 @@ export default function PrivacyTurkish() {
       <p>
         Böyle bir talepte Instagram kimliğiniz (Instagram&apos;ın hesabım için
         verdiği bir numara), varsa adınız ve kullanıcı adınız, yorumunuz ya da
-        mesajınız, algılanan dil, yanıtım ve soruyu sorduğunuz paylaşım
-        saklanır. Bir hesap kısa sürede olağandışı sayıda mesaj gönderirse
+        mesajınız, algılanan dil, yanıtım ve soruyu sorduğunuz paylaşım ya da
+        üzerinden yazdığınız reklam saklanır. Bir hesap kısa sürede olağandışı sayıda mesaj gönderirse
         otomatik yanıt durur ve WhatsApp üzerinden hesabın adını içeren bir
         bildirim alırım. Hukuki dayanak GDPR m. 6/1-f&apos;dir; meşru menfaat,
         anahtar kelimeyle kendinizin başlattığı talepleri hemen ve yalnızca
@@ -225,8 +225,8 @@ export default function PrivacyTurkish() {
       <p>
         Linkler önce bu web sitesinden geçer (<code>/go/…</code>). Bu sırada
         rastgele bir kimlikle linkin kaç kez ve ilk ne zaman açıldığı sayılır,
-        hangi talepten ve hangi paylaşımdan geldiği kaydedilir. Komisyonların
-        paylaşımla eşleştirilebilmesi için bu kimlik ilgili partner programına
+        hangi talepten ve hangi paylaşım ya da reklamdan geldiği kaydedilir.
+        Komisyonların paylaşım ya da reklamla eşleştirilebilmesi için bu kimlik ilgili partner programına
         (financeAds, GetYourGuide veya Skyscanner gibi) iletilir; partner
         programı adınızı ya da Instagram kimliğinizi almaz. Hukuki dayanak
         GDPR m. 6/1-f&apos;dir; meşru menfaat komisyonların hesaplanmasıdır.
