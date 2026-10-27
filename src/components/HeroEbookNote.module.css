@@ -14,6 +14,15 @@
   border: 1px solid var(--border-light);
   border-bottom: 2px solid var(--accent-gold);
   box-shadow: 0 24px 50px -24px rgba(20, 15, 10, 0.35);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth);
+}
+
+/* The whole card is the link, so the whole card answers the pointer. */
+.note:has(.link:hover) {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 60px -26px rgba(20, 15, 10, 0.42);
 }
 
 .link {
@@ -85,22 +94,35 @@
   color: var(--text-secondary);
 }
 
+/* Looks like the site's primary button, so it reads as the thing to press;
+   it is part of the one link, not a second control. */
 .cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.6rem;
+  align-self: flex-start;
+  gap: 0.55rem;
+  margin-top: 0.85rem;
+  padding: 0.65rem 1rem;
+  background: var(--bg-ink);
   font-family: var(--font-inter), sans-serif;
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-primary);
-  transition: color var(--transition-smooth);
+  color: var(--text-on-ink);
+  transition: background-color var(--transition-smooth);
+}
+
+.cta svg {
+  transition: transform var(--transition-smooth);
 }
 
 .link:hover .cta {
-  color: var(--accent-gold-readable);
+  background: var(--accent-gold-readable);
+}
+
+.link:hover .cta svg {
+  transform: translateX(3px);
 }
 
 .close {
