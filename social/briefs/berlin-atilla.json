@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "berlin-atilla", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "DoubleTree by Hilton · Ku'damm",
+  "title": "Wo übernachten", "accent": "in Berlin?",
+  "subtitle": "Mein Hotel-Tipp mitten im Zentrum",
+  "photo": { "src": "social/assets/berlin-atilla.png", "focus": [0.5, 0.3], "zoom": 1 }
+}

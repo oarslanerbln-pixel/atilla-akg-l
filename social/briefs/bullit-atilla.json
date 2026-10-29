@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "bullit-atilla", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Anzeige · BULLIT Bielefeld",
+  "title": "Bestes Döner-Brot", "accent": "in Bielefeld?",
+  "subtitle": "Frisch gebackenes Sesambrot direkt am Ofen",
+  "photo": { "src": "social/assets/bullit-atilla.png", "focus": [0.5, 0.35], "zoom": 1 }
+}

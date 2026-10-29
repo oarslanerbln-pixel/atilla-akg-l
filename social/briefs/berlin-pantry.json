@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "berlin-pantry", "lang": "de", "templates": ["editorial"],
+  "eyebrow": "DoubleTree by Hilton · Ku'damm",
+  "title": "Exklusiver Luxus", "accent": "am Ku'damm",
+  "subtitle": "Hotel-Tipp für Berlin",
+  "photo": { "src": "social/assets/berlin-pantry.png", "focus": [0.5, 0.5], "zoom": 1 }
+}
