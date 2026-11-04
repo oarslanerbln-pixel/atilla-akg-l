@@ -433,7 +433,11 @@ export const translations = {
     card_save: "Kontakt speichern",
     card_share: "Karte teilen",
     card_copied: "Link kopiert",
-    card_share_text: "Die digitale Visitenkarte von Atilla Barbarossa"
+    card_share_text: "Die digitale Visitenkarte von Atilla Barbarossa",
+    card_section_eyebrow: "Visitenkarte",
+    card_section_title: "Nehmen Sie meine Karte mit",
+    card_section_text: "Tippen Sie auf die Karte, um sie umzudrehen: Auf der Rückseite führt ein QR-Code zu WhatsApp, Instagram oder zur Website, und „Kontakt speichern“ legt meine Daten direkt in Ihrem Adressbuch ab.",
+    card_section_open: "Karte auf eigener Seite öffnen"
   },
   
   EN: {
@@ -870,7 +874,11 @@ export const translations = {
     card_save: "Save contact",
     card_share: "Share card",
     card_copied: "Link copied",
-    card_share_text: "The digital business card of Atilla Barbarossa"
+    card_share_text: "The digital business card of Atilla Barbarossa",
+    card_section_eyebrow: "Business card",
+    card_section_title: "Take my card with you",
+    card_section_text: "Tap the card to turn it: on the back, a QR code leads to WhatsApp, Instagram or the website, and “Save contact” puts my details straight into your address book.",
+    card_section_open: "Open the card on its own page"
   },
   
   TR: {
@@ -1307,7 +1315,11 @@ export const translations = {
     card_save: "Kişiyi kaydet",
     card_share: "Kartı paylaş",
     card_copied: "Bağlantı kopyalandı",
-    card_share_text: "Atilla Barbarossa'nın dijital kartviziti"
+    card_share_text: "Atilla Barbarossa'nın dijital kartviziti",
+    card_section_eyebrow: "Kartvizit",
+    card_section_title: "Kartımı yanınıza alın",
+    card_section_text: "Kartı çevirmek için üzerine dokunun: arka yüzdeki QR kod WhatsApp’a, Instagram’a ya da web sitesine götürür; “Kişiyi kaydet” bilgilerimi doğrudan rehberinize ekler.",
+    card_section_open: "Kartı kendi sayfasında aç"
   }
 };
 

@@ -29,6 +29,9 @@ export function cardMetadata(lang: Language): Metadata {
       description: t.card_meta_description,
     }),
     robots: { index: false, follow: true },
+    // Added to a phone's home screen, the card opens full screen, like an app,
+    // ready to be shown across a table.
+    appleWebApp: { capable: true, title: SITE_NAME, statusBarStyle: "default" },
   };
 }
 

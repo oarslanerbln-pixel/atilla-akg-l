@@ -97,8 +97,9 @@ src/
 │   ├── WhatsAppButton.tsx   # Floating wa.me link between hero and contact
 │   ├── packages/            # /social-media page (plates data in lib/packages.ts,
 │                            #   metadata and share cards in share.tsx)
-│   ├── card/                # /card digital business card (CardPage.tsx), QR
-│                            #   drawing (qr.ts), metadata and preview (share.tsx)
+│   ├── card/                # Digital business card: the card (BusinessCard.tsx),
+│                            #   /card page (CardPage.tsx), home section
+│                            #   (CardSection.tsx), QR drawing (qr.ts), share.tsx
 │   ├── Brands.tsx           # Grey credit-line marquee, constant 30 px/s
 │   ├── Stats.tsx
 │   ├── FeaturedWork.tsx
@@ -154,7 +155,9 @@ Run `tsc --noEmit`, `next build` and `eslint` before every push; all three are
 expected to pass with zero output.
 
 ## 🪪 Digital business card (/card)
-`/card`, `/card/en`, `/card/tr`: one flip card. Front: the lounge portrait
+`/card`, `/card/en`, `/card/tr`, and the same card (`BusinessCard`) as a
+section of the portfolio between FAQ and Contact (`#card`; the floating
+WhatsApp button steps aside over it). One flip card. Front: the lounge portrait
 (`public/card/atilla.webp`), the wordmark in gold foil, WhatsApp, Instagram
 and the website as links. Back: one QR code the visitor points at the card,
 WhatsApp, Instagram or the website. Below: "Save contact"
@@ -168,6 +171,14 @@ WhatsApp, Instagram or the website. Below: "Save contact"
   H, brand mark in the centre. Modules are drawn connected with round ends:
   separate dots with gaps failed to decode once rendered sharp (2×, 3×).
   Check every code decodes after changing the drawing.
+- **It is alive while on screen:** one requestAnimationFrame loop eases a
+  slow idle sway, the mouse (held while it hovers) and, on touch screens,
+  the gyroscope (iOS asks on the first tap that turns the card) into
+  `--lean-x/-y`. The loop stops off screen, in a background tab and under
+  `usePrefersCalm()`. While the QR side faces the front, a Screen Wake Lock
+  keeps the phone's screen on. `/card` declares `appleWebApp`, so added to
+  the home screen it opens full screen. In tests the card is never
+  "stable": click with `force` and screenshot with a `clip`.
 - **The turn is two flat quarter turns** (edge-on, swap faces, swing back).
   Don't go back to a back face kept at `rotateY(180deg)` under
   `preserve-3d`: Chrome then sent taps on the back's buttons to the card's

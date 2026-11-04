@@ -13,8 +13,8 @@ import styles from "./WhatsAppButton.module.css";
  * Visitors arrive from Instagram on a phone, where the contact form sits a
  * long scroll away and typing into it is the slowest way to ask a question.
  * The button only shows where it helps: it stays out of the hero, which has
- * its own calls to action, and steps aside once the Contact section is on
- * screen, where every channel is already laid out. It stays away below it
+ * its own calls to action, and steps aside once the business card or the
+ * Contact section is on screen, where every channel is already laid out. It stays away below it
  * too: over the footer it covered the language and legal links.
  *
  * A bare icon asked visitors to guess what it does; the short label says it
@@ -29,11 +29,13 @@ export default function WhatsAppButton() {
   const { playClickSound } = useSoundDesign();
   const [heroVisible, setHeroVisible] = useState(true);
   const [contactVisible, setContactVisible] = useState(false);
+  const [cardVisible, setCardVisible] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
 
   useEffect(() => {
     const hero = document.getElementById("home");
     const contactSection = document.getElementById("contact");
+    const cardSection = document.getElementById("card");
     const footer = document.querySelector("footer");
     const observers: IntersectionObserver[] = [];
 
@@ -52,6 +54,14 @@ export default function WhatsAppButton() {
       o.observe(contactSection);
       observers.push(o);
     }
+    // The business card has its own WhatsApp link and buttons under it.
+    if (cardSection) {
+      const o = new IntersectionObserver(([entry]) => setCardVisible(entry.isIntersecting), {
+        threshold: 0.15,
+      });
+      o.observe(cardSection);
+      observers.push(o);
+    }
     // The footer follows the contact section directly, so between the two
     // there is no point below the form where the button could come back.
     if (footer) {
@@ -62,7 +72,7 @@ export default function WhatsAppButton() {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
-  const shown = !heroVisible && !contactVisible && !footerVisible;
+  const shown = !heroVisible && !contactVisible && !cardVisible && !footerVisible;
   const href = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(t("whatsapp_message"))}`;
 
   return (
