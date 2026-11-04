@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "maritim-reithalle", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Maritim Hotel · Stuttgart",
+  "title": "Alte Reithalle", "accent": "im Hotel",
+  "subtitle": "Historisches Highlight in Stuttgart",
+  "photo": { "src": "social/assets/maritim-reithalle.png", "focus": [0.5, 0.5], "zoom": 1 }
+}

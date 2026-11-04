@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "berlin-eingang", "lang": "de", "templates": ["split"],
+  "eyebrow": "Hotel-Tipp · Berlin",
+  "title": "Check-in", "accent": "am Ku'damm",
+  "subtitle": "DoubleTree by Hilton Berlin Ku'damm",
+  "photo": { "src": "social/assets/berlin-eingang.png", "focus": [0.5, 0.4], "zoom": 1 }
+}

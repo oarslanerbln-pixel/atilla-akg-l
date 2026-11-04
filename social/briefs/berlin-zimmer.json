@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "berlin-zimmer", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "DoubleTree by Hilton · Ku'damm",
+  "title": "Das richtige Hotel", "accent": "in Berlin",
+  "subtitle": "Mitten im Zentrum, alles vor der Tür",
+  "photo": { "src": "social/assets/berlin-zimmer.png", "focus": [0.5, 0.5], "zoom": 1 }
+}

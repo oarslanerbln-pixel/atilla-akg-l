@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "moxy-iskandar",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Anzeige · Moxy Bochum",
+  "title": "Geheimer VIP-Friseur",
+  "accent": "im Hotel?",
+  "subtitle": "Iskandar im Moxy · Stadionring 18, Bochum",
+  "photo": { "src": "social/assets/moxy-iskandar-crop.png", "focus": [0.58, 0.28], "zoom": 1 }
+}

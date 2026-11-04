@@ -108,6 +108,7 @@ src/
 │   ├── LatestReels.tsx      # Newest Instagram films (server), ReelsRail.tsx (client)
 │   ├── BrandMark.tsx        # The brand mark, inline (paths: brandMarkPaths.ts, generated)
 │   ├── BrandWordmark.tsx    # The wordmark, outlined (paths: brandWordmarkPaths.ts)
+│   ├── card/                # /card: the digital business card page (noindex)
 │   └── LegalPage.tsx        # Shell shared by the two legal routes
 ├── context/
 │   └── LanguageContext.tsx  # Language state & provider
@@ -118,6 +119,7 @@ src/
 │   ├── structuredData.ts    # schema.org graphs per page
 │   ├── faq.ts               # FAQ entries and the facts that fill them
 │   ├── partners.ts, brands.ts, packages.ts, roadmap.ts
+│   ├── wallet/              # Business card: Apple Wallet .pkpass, Google Wallet JWT, vCard
 ├── hooks/
 │   ├── useSoundDesign.ts    # Shared AudioContext for the click sound
 │   ├── useScrollLock.ts     # Body scroll lock, counted across overlays
@@ -238,6 +240,17 @@ the social profile playbook and next steps: `docs/seo-geo.md` (Turkish).
   profiles (each bio links to `/impressum`). The privacy policy exists in DE,
   EN and TR (`privacy` in `locales.ts`); German is binding, and the three
   files change together. Both are noindex, with their own description.
+
+## 💳 Digital business card (Apple / Google Wallet)
+`/card` (`/card/en`, `/card/tr`, noindex) hands out the card: a contact file
+(`/api/wallet/vcard`, always), an Apple Wallet pass (`/api/wallet/apple`, a
+.pkpass signed with the Pass Type ID certificate) and a Google Wallet pass
+(`/api/wallet/google`, a signed "Save to Google Wallet" JWT). A Wallet's
+button shows only when its env vars are set (`lib/wallet/config.ts`); the page
+is prerendered, so redeploy after setting them. Card text written into the
+passes lives in `lib/wallet/card.ts` (DE/EN/TR), the facts in `site.ts`. The
+pass images in `public/wallet/` come from `npm run wallet`. Setup:
+`docs/wallet-setup.md` (Turkish).
 
 ## 🔐 Environment
 `.env.example` documents the variables. Without `RESEND_API_KEY`,

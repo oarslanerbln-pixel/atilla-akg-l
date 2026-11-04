@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "moxy-c-suite", "lang": "de", "templates": ["passepartout"],
+  "eyebrow": "Anzeige · Moxy Bochum",
+  "title": "Geheime", "accent": "Suite",
+  "subtitle": "Nur an unangekündigten Tagen, reine Glückssache",
+  "photo": { "src": "social/assets/moxy-c-suite.png", "focus": [0.5, 0.6], "zoom": 1 }
+}

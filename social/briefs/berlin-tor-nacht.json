@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "berlin-tor-nacht", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Hotel-Tipp · Berlin",
+  "title": "Mitten im Zentrum", "accent": "von Berlin",
+  "subtitle": "DoubleTree by Hilton am Ku'damm",
+  "photo": { "src": "social/assets/berlin-tor-nacht.png", "focus": [0.5, 0.4], "zoom": 1 }
+}

@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "berlin-falsches-hotel", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Hotel-Tipp · Berlin",
+  "title": "Das falsche Hotel", "accent": "gebucht?",
+  "subtitle": "DoubleTree by Hilton am Ku'damm",
+  "photo": { "src": "social/assets/berlin-doubletree-lobby.png", "focus": [0.6, 0.45], "zoom": 1 }
+}

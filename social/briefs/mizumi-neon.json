@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "mizumi-neon", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Mizumi · Ku'damm",
+  "title": "Brennt hier", "accent": "der Tisch?",
+  "subtitle": "Asian Fusion Kitchen in Berlin",
+  "photo": { "src": "social/assets/mizumi-neon.png", "focus": [0.5, 0.4], "zoom": 1 }
+}

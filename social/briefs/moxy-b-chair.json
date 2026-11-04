@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "moxy-b-chair", "lang": "de", "templates": ["editorial"],
+  "eyebrow": "Anzeige · Moxy Bochum",
+  "title": "Barbershop", "accent": "im Hotel",
+  "subtitle": "Iskandar · seit 2012",
+  "photo": { "src": "social/assets/moxy-b-chair.png", "focus": [0.78, 0.45], "zoom": 1, "blur": [[0.38, 0.44, 0.22, 0.13]] }
+}

@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "berlin-kadewe", "lang": "de", "templates": ["passepartout"],
+  "eyebrow": "Hotel-Tipp · Berlin",
+  "title": "Alles", "accent": "vor der Tür",
+  "subtitle": "DoubleTree by Hilton am Ku'damm",
+  "photo": { "src": "social/assets/berlin-kadewe.png", "focus": [0.5, 0.25], "zoom": 1 }
+}

@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "kaese-doener-schweiz", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Döner-Tipp · Schweiz",
+  "title": "Käse-Döner", "accent": "in der Schweiz",
+  "subtitle": "Alamanya Kebab · Premium Beef",
+  "photo": { "src": "social/assets/kaese-doener-schweiz.png", "focus": [0.5, 0.5], "zoom": 1 }
+}

@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "bullit-tabela", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Anzeige · BULLIT Bielefeld",
+  "title": "Kebab & Bowl", "accent": "in Bielefeld",
+  "subtitle": "Karl-Eilers-Straße 16",
+  "photo": { "src": "social/assets/bullit-tabela.png", "focus": [0.5, 0.5], "zoom": 1 }
+}

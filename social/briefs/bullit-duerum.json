@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "bullit-duerum", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Anzeige · BULLIT Bielefeld",
+  "title": "Auch der Dürüm", "accent": "überzeugt",
+  "subtitle": "Frisch gebackenes Dürüm-Brot",
+  "photo": { "src": "social/assets/bullit-steak.png", "focus": [0.5, 0.5], "zoom": 1 }
+}
