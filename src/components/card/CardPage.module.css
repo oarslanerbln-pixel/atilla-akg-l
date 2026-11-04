@@ -1,0 +1,279 @@
+/* The digital business card. One narrow column, read on a phone held out to
+   someone: the card itself in ink, as Wallet shows it, then the ways to keep
+   it, then every way to reach Atilla. */
+
+.page {
+  min-height: 100svh;
+  background: var(--bg-primary);
+  padding: 4rem 0 5rem;
+}
+
+.inner {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.back,
+.languages a {
+  padding: 0.25rem 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.languages {
+  display: flex;
+  gap: 1rem;
+}
+
+.languages a {
+  border-bottom: 1px solid transparent;
+}
+
+.back:hover,
+.languages a:hover {
+  color: var(--accent-gold-readable);
+}
+
+.languages a[aria-current="page"] {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent-gold);
+}
+
+/* --- The card, as Wallet shows it ----------------------------------------- */
+
+.card {
+  --brand-teal: var(--brand-teal-on-ink);
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+  border: 1px solid rgba(179, 139, 89, 0.28);
+  border-top: 2px solid var(--accent-gold-light);
+  padding: 1.5rem 1.5rem 1.75rem;
+  box-shadow: 0 12px 30px rgba(24, 21, 18, 0.12);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.mark {
+  width: 34px;
+  height: 34px;
+  color: var(--text-on-ink);
+}
+
+.org {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-on-ink-muted);
+}
+
+.identity {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1.25rem;
+}
+
+.identityText {
+  min-width: 0;
+}
+
+.eyebrow {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-gold-light);
+  margin-bottom: 0.6rem;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.9rem, 8vw, 2.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--text-on-ink);
+}
+
+.role {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-on-ink-muted);
+}
+
+.portrait {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  object-position: 62% 18%;
+  border: 1px solid var(--border-ink);
+}
+
+/* --- Save and contact ------------------------------------------------------ */
+
+.block {
+  margin-top: 2.75rem;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 1.6rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+}
+
+.actions {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.walletButton,
+.contactButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 52px;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition:
+    background var(--transition-smooth),
+    color var(--transition-smooth),
+    transform var(--transition-smooth);
+}
+
+.walletButton {
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+  border: 1px solid var(--bg-ink);
+}
+
+.walletButton:hover {
+  background: var(--bg-ink-soft);
+  transform: translateY(-2px);
+}
+
+.contactButton {
+  margin-top: 0.5rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--accent-gold);
+}
+
+.contactButton:hover {
+  color: var(--accent-gold-readable);
+  transform: translateY(-2px);
+}
+
+.note {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.list {
+  list-style: none;
+  border-top: 1px solid var(--border-light);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.rowLabel {
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.rowLink {
+  min-width: 0;
+  overflow-wrap: break-word;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.rowLink:hover {
+  color: var(--accent-gold-readable);
+}
+
+.legalLinks {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.legalLinks a {
+  color: var(--text-secondary);
+}
+
+.legalLinks a:hover {
+  color: var(--accent-gold-readable);
+}
+
+.back:focus-visible,
+.languages a:focus-visible,
+.walletButton:focus-visible,
+.contactButton:focus-visible,
+.rowLink:focus-visible,
+.legalLinks a:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+@media (max-width: 400px) {
+  .inner {
+    padding: 0 1.25rem;
+  }
+  .row {
+    grid-template-columns: 6.25rem minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+  .portrait {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .walletButton:hover,
+  .contactButton:hover {
+    transform: none;
+  }
+}

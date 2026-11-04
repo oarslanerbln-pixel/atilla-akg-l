@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "*.public.blob.vercel-storage.com", pathname: "/reels/**" },
     ],
   },
+  // The Apple Wallet endpoint packs the pass images from public/wallet into
+  // each .pkpass, so they must travel with its function.
+  outputFileTracingIncludes: {
+    "/api/wallet/apple": ["./public/wallet/**"],
+  },
   experimental: {
     // Each language has its own root layout (src/app/(de), (en), (tr)), so an
     // unmatched address has no single layout to render in; this lets

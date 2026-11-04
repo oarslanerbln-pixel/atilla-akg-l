@@ -121,6 +121,17 @@ export default function PrivacyTurkish() {
         andan itibaren o sağlayıcının gizlilik politikası geçerlidir.
       </p>
 
+      <p>
+        /card adresindeki dijital kartvizit bir kişi dosyası (.vcf) ve Apple
+        Cüzdan için bir kart sunar; ikisini de bu sunucu iletir. Apple Cüzdan
+        kartı yalnızca benim iletişim bilgilerimi içerir ve sonrasında bana
+        bilgi göndermez. &ldquo;Google Cüzdan&apos;a ekle&rdquo; düğmesi basit bir
+        bağlantıdır: ancak ona dokunduğunuzda tarayıcınız Google Ireland
+        Limited&apos;in (Gordon House, Barrow Street, Dublin 4, İrlanda) bir
+        sayfasını açar ve kartı orada kaydedersiniz; bu andan itibaren
+        Google&apos;ın gizlilik politikası geçerlidir.
+      </p>
+
       <h2>6. İletişim formu</h2>
       <p>
         İletişim formunu kullandığınızda talebinizi yanıtlamak için adınız,
@@ -406,7 +417,7 @@ export default function PrivacyTurkish() {
 
       <h2>17. Tarih ve dil seçenekleri</h2>
       <p>
-        Ekim 2026 itibarıyla. Bu politika web sitesinin teknik durumunu
+        Kasım 2026 itibarıyla. Bu politika web sitesinin teknik durumunu
         açıklar ve kullanılan hizmetler değiştiğinde güncellenir. Almanca,
         İngilizce ve Türkçe olarak mevcuttur; bağlayıcı olan Almanca metindir.
       </p>

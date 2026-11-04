@@ -131,6 +131,17 @@ export default function Datenschutz() {
         Datenschutzerklärung.
       </p>
 
+      <p>
+        Die digitale Visitenkarte unter /card bietet eine Kontaktdatei (.vcf)
+        und eine Karte für Apple Wallet an; beide liefert dieser Server aus,
+        die Karte für Apple Wallet enthält nur meine eigenen Kontaktdaten und
+        meldet sich danach nicht mehr bei mir. Der Knopf „Zu Google Wallet
+        hinzufügen“ ist ein einfacher Verweis: Erst wenn Sie ihn antippen,
+        öffnet Ihr Browser eine Seite der Google Ireland Limited (Gordon House,
+        Barrow Street, Dublin 4, Irland), auf der Sie die Karte speichern; ab
+        diesem Zeitpunkt gilt die Datenschutzerklärung von Google.
+      </p>
+
       <h2>6. Kontaktformular</h2>
       <p>
         Wenn Sie das Kontaktformular nutzen, werden Name, E-Mail-Adresse und
@@ -432,7 +443,7 @@ export default function Datenschutz() {
 
       <h2>17. Stand und Sprachfassungen</h2>
       <p>
-        Stand: Oktober 2026. Diese Erklärung beschreibt den technischen Stand
+        Stand: November 2026. Diese Erklärung beschreibt den technischen Stand
         dieser Website und wird angepasst, sobald sich eingesetzte Dienste
         ändern. Sie liegt auch auf Englisch und Türkisch vor; maßgeblich ist
         die deutsche Fassung.

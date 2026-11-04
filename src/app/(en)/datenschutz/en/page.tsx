@@ -121,6 +121,16 @@ export default function PrivacyEnglish() {
         from then on, that provider&apos;s privacy policy applies.
       </p>
 
+      <p>
+        The digital business card at /card offers a contact file (.vcf) and a
+        card for Apple Wallet; this server delivers both, and the Apple Wallet
+        card holds only my own contact details and does not report back to
+        me. The &ldquo;Add to Google Wallet&rdquo; button is a plain link: only
+        when you tap it does your browser open a page of Google Ireland
+        Limited (Gordon House, Barrow Street, Dublin 4, Ireland), where you
+        save the card; from then on Google&apos;s privacy policy applies.
+      </p>
+
       <h2>6. Contact form</h2>
       <p>
         When you use the contact form, your name, email address and message
@@ -409,7 +419,7 @@ export default function PrivacyEnglish() {
 
       <h2>17. Date and language versions</h2>
       <p>
-        As of October 2026. This policy describes the technical state of this
+        As of November 2026. This policy describes the technical state of this
         website and is updated as soon as the services used change. It is
         available in German, English and Turkish; the German version is
         binding.
