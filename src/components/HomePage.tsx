@@ -15,12 +15,14 @@ import CaseStudy from "@/components/CaseStudy";
 import EditorialQuote from "@/components/EditorialQuote";
 import Faq from "@/components/Faq";
 import Contact from "@/components/Contact";
+import CardSection from "@/components/card/CardSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import JsonLd from "@/components/JsonLd";
 import type { Language } from "@/i18n/translations";
 import { homeGraph } from "@/lib/structuredData";
 import { CASE_REEL, loadCaseFilm } from "@/lib/reels/manifest";
+import { cardCodes } from "@/lib/card";
 import ed from "@/components/editorial.module.css";
 
 /**
@@ -49,6 +51,8 @@ export default async function HomePage({ lang }: { lang: Language }) {
       <CaseStudy film={caseFilm} permalink={CASE_REEL.permalink} />
       <EditorialQuote />
       <Faq />
+      {/* The QR codes are computed here, on the server; the encoder never reaches the browser. */}
+      <CardSection codes={cardCodes()} />
       <Contact />
       <Footer />
       <WhatsAppButton />

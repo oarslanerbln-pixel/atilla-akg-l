@@ -1,0 +1,652 @@
+/* The digital business card, on /card and in the portfolio: ink front with
+   the lounge portrait and gold foil, porcelain back with the QR code.
+   Everything on the card is sized in cqi (the card's own width), so it holds
+   its proportions from a 280 px phone card to the 376 px desktop one. A page
+   may set --card-w to size it; otherwise it takes the screen's width. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4rem;
+}
+
+.stage {
+  container-type: inline-size;
+  position: relative;
+  width: var(--card-w, clamp(17.5rem, calc(100vw - 2.5rem), 23.5rem));
+  aspect-ratio: 54 / 85.6; /* ISO ID-1, upright */
+  perspective: 1800px;
+}
+
+/* Three flat layers, each with its own perspective for the next: the
+   entrance, the lean, the turn. No preserve-3d, so the card is hit-tested
+   as the flat picture it is at rest. */
+.enter,
+.lean,
+.flipper {
+  position: absolute;
+  inset: 0;
+}
+
+.enter,
+.lean {
+  perspective: 1800px;
+}
+
+/* The lean, -1 to 1 on each axis, written every frame by BusinessCard's
+   loop (sway, mouse, gyroscope), which does its own easing. */
+.lean {
+  --lean-x: 0;
+  --lean-y: 0;
+  transform: rotateX(calc(var(--lean-y) * -6deg)) rotateY(calc(var(--lean-x) * 8deg));
+}
+
+/* The shadow the card casts on the wall. */
+.floor {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -4.5%;
+  height: 7%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(20, 15, 10, 0.3), transparent);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* ---------- Faces ---------- */
+.face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow:
+    0 40px 70px -32px rgba(20, 15, 10, 0.55),
+    0 14px 30px rgba(24, 21, 18, 0.08);
+}
+
+/* The face turned away is swapped out while the card is edge-on. */
+.face[inert] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* The engraved hairline frame, inset like a printed card's. */
+.face::after {
+  content: "";
+  position: absolute;
+  inset: 3.2cqi;
+  z-index: 3;
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 34%, transparent);
+  pointer-events: none;
+}
+
+/* The whole face turns the card; its links and buttons sit above. */
+.turn {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.turn:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: -1.6cqi;
+}
+
+.turnHint {
+  position: absolute;
+  right: 7cqi;
+  bottom: 6cqi;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  font-family: var(--font-inter), sans-serif;
+  font-size: max(0.56rem, 2.7cqi);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-gold-light);
+  transition: color 0.3s ease;
+}
+
+.turn:hover .turnHint {
+  color: var(--text-on-ink);
+}
+
+/* ---------- Front ---------- */
+.front {
+  --brand-teal: var(--brand-teal-on-ink);
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+}
+
+.photo {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.photoImage {
+  object-fit: cover;
+  object-position: 53% 26%;
+}
+
+/* A dusk at the top for the eyebrow, and the photo sinking into ink below. */
+.photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--bg-ink) 60%, transparent) 0%, transparent 24%),
+    linear-gradient(
+      to top,
+      var(--bg-ink) 0%,
+      color-mix(in srgb, var(--bg-ink) 72%, transparent) 20%,
+      transparent 52%
+    );
+}
+
+.eyebrow {
+  position: absolute;
+  top: 7cqi;
+  left: 7cqi;
+  right: 7cqi;
+  z-index: 2;
+  font-family: var(--font-inter), sans-serif;
+  font-size: max(0.56rem, 2.7cqi);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-on-ink);
+  text-shadow: 0 1px 10px rgba(20, 15, 10, 0.45);
+  pointer-events: none;
+}
+
+.frontBody {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 0 7cqi 6cqi;
+  pointer-events: none;
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -9cqi;
+  text-align: center;
+}
+
+.mark {
+  width: 9.5cqi;
+  height: 9.5cqi;
+  margin-bottom: 3.4cqi;
+  color: var(--text-on-ink);
+}
+
+.name {
+  width: 100%;
+  margin: 0;
+  font-size: inherit;
+  line-height: 0;
+}
+
+.wordmark {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The foil's stops: deep gold at the ends, a pale catch-light off centre. */
+.foilDeep {
+  stop-color: var(--accent-gold-dark);
+}
+
+.foilBase {
+  stop-color: var(--accent-gold);
+}
+
+.foilLight {
+  stop-color: var(--accent-gold-light);
+}
+
+.foilShine {
+  stop-color: color-mix(in srgb, var(--accent-gold-light) 45%, var(--text-on-ink));
+}
+
+.role {
+  margin-top: 3.6cqi;
+  font-family: var(--font-display);
+  font-size: max(0.82rem, 4.4cqi);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: var(--text-on-ink-muted);
+}
+
+.cities {
+  margin-top: 1.8cqi;
+  font-family: var(--font-inter), sans-serif;
+  font-size: max(0.54rem, 2.6cqi);
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--accent-gold-light);
+}
+
+.links {
+  margin-top: 5.6cqi;
+  list-style: none;
+  border-top: 1px solid var(--border-ink);
+}
+
+.links li {
+  border-bottom: 1px solid var(--border-ink);
+}
+
+.link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 3.6cqi;
+  min-height: max(2.5rem, 13cqi);
+  color: var(--text-on-ink);
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.link:hover {
+  color: var(--text-on-ink);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.linkIcon {
+  display: grid;
+  place-items: center;
+  width: max(1.85rem, 8.6cqi);
+  height: max(1.85rem, 8.6cqi);
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 42%, transparent);
+  color: var(--accent-gold-light);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.linkIcon svg {
+  width: 48%;
+  height: 48%;
+}
+
+.link:hover .linkIcon {
+  border-color: var(--accent-gold-light);
+  background: color-mix(in srgb, var(--accent-gold) 14%, transparent);
+}
+
+.linkText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  min-width: 0;
+}
+
+.linkLabel {
+  font-family: var(--font-inter), sans-serif;
+  font-size: max(0.52rem, 2.4cqi);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-on-ink-muted);
+}
+
+.linkValue {
+  overflow: hidden;
+  font-size: max(0.8rem, 4cqi);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s ease;
+}
+
+.link:hover .linkValue {
+  color: var(--accent-gold-light);
+}
+
+.linkArrow {
+  color: var(--accent-gold-light);
+  opacity: 0.6;
+  transition:
+    transform var(--transition-smooth),
+    opacity 0.3s ease;
+}
+
+.link:hover .linkArrow {
+  opacity: 1;
+  transform: translate(2px, -2px);
+}
+
+.coords {
+  padding-top: 5cqi;
+  font-family: var(--font-inter), sans-serif;
+  font-size: max(0.56rem, 2.7cqi);
+  line-height: 1;
+  letter-spacing: 0.1em;
+  color: var(--text-on-ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Foil catching the light as the card leans. */
+.sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: linear-gradient(
+    115deg,
+    transparent 36%,
+    color-mix(in srgb, var(--accent-gold-light) 20%, transparent) 47%,
+    color-mix(in srgb, var(--text-on-ink) 9%, transparent) 51%,
+    transparent 62%
+  );
+  background-size: 260% 260%;
+  background-position: calc(50% + var(--lean-x) * 45%) calc(50% + var(--lean-y) * 45%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+/* The foil glimmers while the card sways, and catches the full light behind a hand. */
+.lean[data-alive] .sheen {
+  opacity: 0.7;
+}
+
+.lean[data-leaning] .sheen {
+  opacity: 1;
+}
+
+.glint {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    color-mix(in srgb, var(--accent-gold-light) 24%, transparent) 48%,
+    color-mix(in srgb, var(--text-on-ink) 12%, transparent) 50%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transform: translateX(-100%);
+  animation: glint 1.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes glint {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* ---------- Back ---------- */
+.back {
+  background: linear-gradient(160deg, var(--bg-card) 0%, var(--bg-primary) 62%, var(--bg-secondary) 100%);
+  color: var(--text-primary);
+}
+
+.back::after {
+  border-color: color-mix(in srgb, var(--accent-gold) 42%, transparent);
+}
+
+.back .turnHint {
+  color: var(--accent-gold-readable);
+}
+
+.back .turn:hover .turnHint {
+  color: var(--text-primary);
+}
+
+/* The stack sits centred between the top edge and the turn hint. */
+.backBody {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8cqi 9cqi 13cqi;
+  pointer-events: none;
+}
+
+.backTop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.8cqi;
+}
+
+.backMark {
+  width: 8cqi;
+  height: 8cqi;
+  color: var(--text-primary);
+}
+
+.backEyebrow {
+  font-family: var(--font-inter), sans-serif;
+  font-size: max(0.56rem, 2.7cqi);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.qr {
+  position: relative;
+  width: 80%;
+  aspect-ratio: 1;
+  margin-top: 6cqi;
+}
+
+.qrCode {
+  position: absolute;
+  inset: 0;
+}
+
+.qrCode svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.qrCaption {
+  max-width: 100%;
+  margin-top: 4.6cqi;
+  text-align: center;
+}
+
+.qrTitle {
+  font-family: var(--font-display);
+  font-size: max(1.05rem, 5.6cqi);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.qrUrl {
+  margin-top: 1.4cqi;
+  overflow: hidden;
+  font-size: max(0.72rem, 3.3cqi);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.targets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.2cqi;
+  width: 80%;
+  margin-top: 8cqi;
+}
+
+.target {
+  display: grid;
+  place-items: center;
+  height: max(2.5rem, 12cqi);
+  padding: 0;
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.target svg {
+  width: max(1rem, 4.8cqi);
+  height: max(1rem, 4.8cqi);
+}
+
+.target:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+}
+
+.target[aria-pressed="true"] {
+  border-color: var(--bg-ink);
+  background: var(--bg-ink);
+  color: var(--accent-gold-light);
+}
+
+.target:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+/* A satin catch-light on the porcelain as the card leans. */
+.sheenLight {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: linear-gradient(
+    115deg,
+    transparent 40%,
+    color-mix(in srgb, var(--accent-gold-light) 10%, transparent) 50%,
+    transparent 60%
+  );
+  background-size: 260% 260%;
+  background-position: calc(50% + var(--lean-x) * 45%) calc(50% + var(--lean-y) * 45%);
+  mix-blend-mode: multiply;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.lean[data-alive] .sheenLight,
+.lean[data-leaning] .sheenLight {
+  opacity: 1;
+}
+
+/* ---------- Below the card ---------- */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: var(--card-w, clamp(17.5rem, calc(100vw - 2.5rem), 23.5rem));
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3rem;
+  padding: 0 1.25rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.primary {
+  border: 1px solid var(--bg-ink);
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+  box-shadow: inset 0 -2px 0 var(--accent-gold);
+}
+
+.primary:hover {
+  background: var(--bg-ink-soft);
+  color: var(--accent-gold-light);
+}
+
+.secondary {
+  border: 1px solid color-mix(in srgb, var(--text-primary) 22%, transparent);
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.secondary:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold-readable);
+}
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .root {
+    gap: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glint {
+    display: none;
+  }
+}

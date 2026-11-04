@@ -1,0 +1,158 @@
+/* /card — the page around the digital business card (BusinessCard): a top
+   bar, the card on a porcelain wall, the legal links. */
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: var(--z-nav);
+  padding: 1.4rem 0;
+}
+
+.topbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--text-primary);
+}
+
+.brandMark {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.brandWordmark {
+  height: 0.66rem;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.langs {
+  display: flex;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 22%, transparent);
+}
+
+.lang {
+  min-width: 2.5rem;
+  padding: 0.45rem 0.6rem;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.lang + .lang {
+  border-left: 1px solid color-mix(in srgb, var(--text-primary) 22%, transparent);
+}
+
+.lang:hover {
+  background: var(--bg-secondary);
+}
+
+.lang[aria-pressed="true"] {
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+}
+
+/* ---------- The wall ---------- */
+.page {
+  --card-w: clamp(17.5rem, min(calc(100vw - 2.5rem), calc((100svh - 18rem) / 1.585)), 23.5rem);
+  min-height: calc(100svh - 3.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 1.25rem 2rem;
+  /* A spotlight on porcelain, where the card hangs. */
+  background:
+    radial-gradient(55% 45% at 50% 42%, var(--bg-card) 0%, transparent 72%),
+    linear-gradient(to bottom, var(--bg-primary), var(--bg-secondary));
+  color: var(--text-primary);
+}
+
+.lang:focus-visible,
+.brand:focus-visible,
+.footerLinks a:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.5rem;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-light);
+}
+
+.footerLinks {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.footerLinks a {
+  color: var(--text-secondary);
+}
+
+.footerLinks a:hover {
+  color: var(--accent-gold-readable);
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 600px) {
+  .topbar {
+    padding: 1.1rem 0;
+  }
+
+  .brandWordmark {
+    height: 0.56rem;
+  }
+
+  .page {
+    --card-w: clamp(17.5rem, min(calc(100vw - 2.5rem), calc((100svh - 16.5rem) / 1.585)), 23.5rem);
+    padding: 5rem 1.25rem 1.75rem;
+  }
+}
+
+/* 360 px: the bar's name and the three languages share 312 px. */
+@media (max-width: 400px) {
+  .brand {
+    gap: 0.5rem;
+  }
+
+  .brandWordmark {
+    height: 0.46rem;
+  }
+
+  .lang {
+    min-width: 2.25rem;
+    padding: 0.45rem 0.4rem;
+  }
+}
+
