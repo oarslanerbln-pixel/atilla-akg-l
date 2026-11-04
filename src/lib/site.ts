@@ -29,6 +29,20 @@ export const contact = {
   whatsapp: "4917631717458",
 } as const;
 
+/**
+ * The digital business card (/card) and the contact file it hands out
+ * (/atilla-barbarossa.vcf). Its WhatsApp line is its own: the number given
+ * for the card, which the rest of the site (the floating button, the
+ * imprint) does not use.
+ */
+export const businessCard = {
+  /** Digits only, as wa.me expects. */
+  whatsapp: "4917672725165",
+  whatsappDisplay: "+49 176 72725165",
+  /** The handle, as the card prints it. */
+  instagramHandle: "@atillabarbarossa",
+} as const;
+
 export const socialProfiles = {
   instagram: "https://www.instagram.com/atillabarbarossa",
   tiktok: "https://www.tiktok.com/@atillabarbarossa",

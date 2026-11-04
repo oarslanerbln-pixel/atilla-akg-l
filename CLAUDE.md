@@ -70,14 +70,15 @@ src/
 │   ├── Providers.tsx        # Context providers wrapper (LanguageProvider)
 │   ├── global-not-found.tsx # Trilingual 404 (no single root layout to use)
 │   ├── (de)/                # Root layout lang="de": /, impressum, datenschutz,
-│   │                        #   roadmap, social-media, media-kit; opengraph-image.tsx
+│   │                        #   roadmap, social-media, media-kit, card; opengraph-image.tsx
 │   ├── (en)/                # Root layout lang="en": /en, /social-media/en,
-│   │                        #   /media-kit/en, /datenschutz/en
+│   │                        #   /media-kit/en, /datenschutz/en, /card/en
 │   ├── (tr)/                # Root layout lang="tr": /tr, /social-media/tr,
-│   │                        #   /media-kit/tr, /datenschutz/tr
+│   │                        #   /media-kit/tr, /datenschutz/tr, /card/tr
 │   │                        #   (?lang=en|tr on /social-media is rewritten onto these)
 │   ├── robots.ts, sitemap.ts
 │   ├── api/contact/route.ts # Contact form delivery (Resend)
+│   ├── atilla-barbarossa.vcf/route.ts # Contact file behind "Save contact" on /card
 │   └── llms.txt/route.ts    # Plain-text summary for AI answer engines
 ├── components/              # Modular UI components with *.module.css pairs
 │   ├── HomePage.tsx         # The portfolio, shared by /, /en and /tr
@@ -96,6 +97,8 @@ src/
 │   ├── WhatsAppButton.tsx   # Floating wa.me link between hero and contact
 │   ├── packages/            # /social-media page (plates data in lib/packages.ts,
 │                            #   metadata and share cards in share.tsx)
+│   ├── card/                # /card digital business card (CardPage.tsx), QR
+│                            #   drawing (qr.ts), metadata and preview (share.tsx)
 │   ├── Brands.tsx           # Grey credit-line marquee, constant 30 px/s
 │   ├── Stats.tsx
 │   ├── FeaturedWork.tsx
@@ -149,6 +152,26 @@ src/
 
 Run `tsc --noEmit`, `next build` and `eslint` before every push; all three are
 expected to pass with zero output.
+
+## 🪪 Digital business card (/card)
+`/card`, `/card/en`, `/card/tr`: one flip card. Front: the lounge portrait
+(`public/card/atilla.webp`), the wordmark in gold foil, WhatsApp, Instagram
+and the website as links. Back: one QR code the visitor points at the card,
+WhatsApp, Instagram or the website. Below: "Save contact"
+(`/atilla-barbarossa.vcf`, vCard 3.0 with portrait, built at build time in
+`src/lib/card.ts`) and the share sheet. noindex, not in the sitemap.
+
+- **Its WhatsApp number is its own:** `businessCard` in `src/lib/site.ts`
+  (+49 176 72725165), not `contact.whatsapp`, which the rest of the site uses.
+- **QR codes are computed on the server** (`qrcode`, server-only, in
+  `src/lib/card.ts`) and drawn by `components/card/qr.ts`, error correction
+  H, brand mark in the centre. Modules are drawn connected with round ends:
+  separate dots with gaps failed to decode once rendered sharp (2×, 3×).
+  Check every code decodes after changing the drawing.
+- **The turn is two flat quarter turns** (edge-on, swap faces, swing back).
+  Don't go back to a back face kept at `rotateY(180deg)` under
+  `preserve-3d`: Chrome then sent taps on the back's buttons to the card's
+  container or to the front behind it as soon as the card leaned.
 
 ## 🤝 Partners (tourism boards & institutions)
 `src/lib/partners.ts` is the single source for the Partners section, the
