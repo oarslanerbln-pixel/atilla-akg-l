@@ -1,0 +1,82 @@
+/* A closed hardback standing in gallery light. The cover keeps its own
+   colours; the book is made of light and shadow around it, never of a
+   second image. */
+
+.book {
+  position: relative;
+  width: 100%;
+  padding-bottom: 1.4rem;
+}
+
+.stage {
+  perspective: 2400px;
+}
+
+/* Turned slightly towards the reader, so the page block shows. */
+.volume {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 1600;
+  transform: rotateY(-8deg);
+  transform-style: preserve-3d;
+}
+
+/* The cast shadow on the surface it stands on; ::before paints under the
+   positioned cover, so it needs no z-index. */
+.volume::before {
+  content: "";
+  position: absolute;
+  left: 4%;
+  right: 0;
+  bottom: -1.05rem;
+  height: 1.6rem;
+  background: radial-gradient(ellipse at 50% 50%, rgba(20, 15, 10, 0.32), transparent 70%);
+  filter: blur(6px);
+}
+
+/* The block of pages, seen past the right edge. */
+.pages {
+  position: absolute;
+  top: 0.45rem;
+  right: -0.6rem;
+  bottom: 0.45rem;
+  width: 0.7rem;
+  background: repeating-linear-gradient(90deg, var(--bg-card) 0 1px, var(--bg-secondary) 1px 2px);
+  border: 1px solid var(--border-light);
+  box-shadow: inset -3px 0 6px rgba(20, 15, 10, 0.08);
+}
+
+.front {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(20, 15, 10, 0.2),
+    0 18px 30px -12px rgba(20, 15, 10, 0.35),
+    0 50px 80px -40px rgba(20, 15, 10, 0.45);
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Spine: a crease a few percent in from the left edge, a highlight on the
+   hinge and a soft sheen across the board. */
+.spine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.42) 0%,
+      rgba(255, 255, 255, 0.16) 1.4%,
+      rgba(0, 0, 0, 0.22) 3.2%,
+      rgba(255, 255, 255, 0.1) 4.6%,
+      transparent 9%
+    ),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.1) 0%, transparent 38%);
+}

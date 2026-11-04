@@ -148,6 +148,11 @@
     border-top: 1px solid var(--border-light);
   }
 
+  /* Stacked, the link keeps the column's left edge like everything above it. */
+  .inquire {
+    align-self: flex-start;
+  }
+
   .note {
     grid-template-columns: minmax(0, 1fr);
   }

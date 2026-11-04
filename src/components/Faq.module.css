@@ -5,19 +5,19 @@
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  align-items: start;
-  gap: 2.5rem clamp(2.5rem, 6vw, 6rem);
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 860px;
+  margin-inline: auto;
+  gap: clamp(2.5rem, 5vw, 4rem);
 }
 
 .layout > * {
   min-width: 0;
 }
 
-/* Below the fixed navbar while the questions scroll past. */
+/* The head centred above the questions, on the page's one axis. */
 .head {
-  position: sticky;
-  top: 7rem;
+  text-align: center;
 }
 
 /* A plain ruled list: one hairline between questions, none around them. */
@@ -113,16 +113,6 @@
 
 .inlineLink:hover {
   color: var(--text-primary);
-}
-
-@media (max-width: 900px) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .head {
-    position: static;
-  }
 }
 
 @media (max-width: 768px) {

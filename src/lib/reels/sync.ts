@@ -3,12 +3,14 @@ import { del, list, put } from '@vercel/blob';
 import { CONCIERGE } from '@/lib/concierge/config';
 import { graphGet } from '@/lib/concierge/meta';
 import { instagramAccessToken } from '@/lib/concierge/tokens';
-import { MANIFEST_PATH, REELS_PREFIX, readManifest, type Reel } from './manifest';
+import { CASE_REEL, MANIFEST_PATH, REELS_PREFIX, readManifest, type Reel, type ReelsManifest } from './manifest';
 
 /** Videos the section shows. */
 const MAX_REELS = 9;
 /** Pages of 25 posts searched for videos; photos and carousels are skipped. */
 const MAX_PAGES = 4;
+/** Pages of 25 posts searched for the case study's reel, which is years old. */
+const MAX_CASE_PAGES = 60;
 /** No new download starts after this, so a run ends inside maxDuration; the next run catches up. */
 const TIME_BUDGET_MS = 30_000;
 /** Mirrored files never change: a new Instagram post gets a new id. */
@@ -36,6 +38,8 @@ export interface ReelsSync {
   /** Videos Instagram offers no file for (copyrighted music). */
   withoutFile: number;
   deleted: number;
+  /** The case study's reel: mirrored, waiting (not found yet, no time left) or without a file on Instagram. */
+  caseFilm: 'mirrored' | 'pending' | 'withoutFile';
 }
 
 /** Words that mark a post as advertising (DE, EN, TR), in lower case. */
@@ -86,6 +90,24 @@ async function recentVideos(token: string) {
   return { videos, withoutFile };
 }
 
+/**
+ * Finds the case study's reel by its address. The Graph API has no lookup by
+ * shortcode, so it pages back through the account, once: after that the
+ * manifest keeps the copy.
+ */
+async function findCaseReel(token: string, deadline: number): Promise<InstagramMedia | null> {
+  const marker = `/${CASE_REEL.shortcode}/`;
+  let next: string | undefined =
+    `https://graph.instagram.com/${CONCIERGE.graphVersion}/me/media?fields=${MEDIA_FIELDS}&limit=25`;
+  for (let page = 0; next && page < MAX_CASE_PAGES && Date.now() < deadline; page++) {
+    const json = (await graphGet(next, token)) as { data?: InstagramMedia[]; paging?: { next?: string } };
+    const found = (json.data ?? []).find((media) => media.permalink.includes(marker));
+    if (found) return found;
+    next = json.paging?.next;
+  }
+  return null;
+}
+
 /** The caption's first line without hashtags, short enough for a card. */
 function titleOf(caption: string | undefined): string {
   const line = (caption ?? '').split('\n').find((l) => l.trim()) ?? '';
@@ -122,18 +144,20 @@ async function mirror(media: InstagramMedia): Promise<Reel> {
  */
 export async function syncReels(): Promise<ReelsSync> {
   const deadline = Date.now() + TIME_BUDGET_MS;
-  const { videos, withoutFile } = await recentVideos(await instagramAccessToken());
-  const previous = (await readManifest())?.reels ?? [];
+  const token = await instagramAccessToken();
+  const { videos, withoutFile } = await recentVideos(token);
+  const stored = await readManifest();
+  const previous = stored?.reels ?? [];
   const known = new Map(previous.map((reel) => [reel.id, reel]));
 
   const reels: Reel[] = [];
   let added = 0;
   let pending = 0;
   for (const media of videos) {
-    const stored = known.get(media.id);
-    if (stored) {
+    const kept = known.get(media.id);
+    if (kept) {
       // Captions can be edited after posting.
-      reels.push({ ...stored, title: titleOf(media.caption), permalink: media.permalink });
+      reels.push({ ...kept, title: titleOf(media.caption), permalink: media.permalink });
       continue;
     }
     if (Date.now() > deadline) {
@@ -149,9 +173,25 @@ export async function syncReels(): Promise<ReelsSync> {
     }
   }
 
-  const changed = JSON.stringify(reels) !== JSON.stringify(previous);
+  let caseFilm = stored?.caseFilm?.shortcode === CASE_REEL.shortcode ? stored.caseFilm : undefined;
+  let caseState: ReelsSync['caseFilm'] = caseFilm ? 'mirrored' : 'pending';
+  if (!caseFilm) {
+    try {
+      const media = await findCaseReel(token, deadline);
+      if (media && !(media.media_url && media.thumbnail_url)) caseState = 'withoutFile';
+      else if (media) {
+        caseFilm = { ...(await mirror(media)), shortcode: CASE_REEL.shortcode };
+        caseState = 'mirrored';
+      }
+    } catch (error) {
+      console.error('[reels] could not mirror the case study reel', error);
+    }
+  }
+
+  const manifest: Omit<ReelsManifest, 'updatedAt'> = { reels, ...(caseFilm ? { caseFilm } : {}) };
+  const changed = JSON.stringify(manifest) !== JSON.stringify({ reels: previous, ...(stored?.caseFilm ? { caseFilm: stored.caseFilm } : {}) });
   if (changed) {
-    await put(MANIFEST_PATH, JSON.stringify({ updatedAt: new Date().toISOString(), reels }), {
+    await put(MANIFEST_PATH, JSON.stringify({ updatedAt: new Date().toISOString(), ...manifest }), {
       access: 'public',
       contentType: 'application/json',
       cacheControlMaxAge: 60,
@@ -159,10 +199,11 @@ export async function syncReels(): Promise<ReelsSync> {
     });
   }
 
-  const keep = new Set([...previous, ...reels].flatMap((reel) => [reel.videoUrl, reel.posterUrl]));
+  const films = [...previous, ...reels, ...(stored?.caseFilm ? [stored.caseFilm] : []), ...(caseFilm ? [caseFilm] : [])];
+  const keep = new Set(films.flatMap((reel) => [reel.videoUrl, reel.posterUrl]));
   const { blobs } = await list({ prefix: REELS_PREFIX });
   const orphans = blobs.filter((blob) => blob.pathname !== MANIFEST_PATH && !keep.has(blob.url)).map((blob) => blob.url);
   if (orphans.length) await del(orphans);
 
-  return { changed, shown: reels.length, added, pending, withoutFile, deleted: orphans.length };
+  return { changed, shown: reels.length, added, pending, withoutFile, deleted: orphans.length, caseFilm: caseState };
 }

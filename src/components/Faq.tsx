@@ -54,10 +54,9 @@ export default function Faq() {
 
   return (
     <section id="faq" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="faq-title">
-      {/* Two columns, as a kit sets its questions: the head stays in view
-          on the left while the list runs down the right. */}
+      {/* One centred column: the head above, the questions beneath it. */}
       <div className={`container ${styles.layout}`}>
-        <motion.div className={styles.head} {...reveal}>
+        <motion.div className={`${styles.head} ${ed.centred}`} {...reveal}>
           <p className={ed.eyebrow}>{t("faq_eyebrow")}</p>
           <h2 id="faq-title" className={ed.title}>
             {t("faq_title")}

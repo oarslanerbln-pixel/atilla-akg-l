@@ -15,12 +15,6 @@
   gap: clamp(1.75rem, 3vw, 2.5rem);
 }
 
-/* The second frame steps in from the left. */
-.spread:nth-child(even) {
-  width: 84%;
-  margin-left: auto;
-}
-
 .visual,
 .body {
   min-width: 0;
@@ -62,6 +56,13 @@
     transparent 55%
   );
   cursor: pointer;
+}
+
+/* Until the reel is mirrored: an ink frame with a low gold light. */
+.external {
+  background: radial-gradient(ellipse at 50% 45%, color-mix(in srgb, var(--accent-gold) 22%, transparent), transparent 70%);
+  color: var(--text-on-ink);
+  text-decoration: none;
 }
 
 .trigger:focus-visible {
@@ -202,6 +203,13 @@
   background: #000;
 }
 
+/* An upright reel gets an upright frame, as tall as the screen allows. */
+.modalVideoWrapper[data-portrait] {
+  aspect-ratio: 9 / 16;
+  width: min(100%, calc(78svh * 9 / 16));
+  margin-inline: auto;
+}
+
 .modalVideo {
   width: 100%;
   height: 100%;
@@ -209,10 +217,6 @@
 }
 
 @media (max-width: 900px) {
-  .spread:nth-child(even) {
-    width: 100%;
-  }
-
   .body {
     grid-template-columns: minmax(0, 1fr);
     align-items: start;
@@ -239,11 +243,8 @@
     display: none;
   }
 
-  .spread,
-  .spread:nth-child(even) {
+  .spread {
     flex: 0 0 86%;
-    width: auto;
-    margin-left: 0;
     scroll-snap-align: start;
   }
 

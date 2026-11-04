@@ -11,9 +11,9 @@ import styles from "./About.module.css";
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
- * The person behind the camera, straight after the hero: the portrait, the
- * philosophy in his own words, and a signature with the brand mark, as on
- * /media-kit. The figures that used to share this section have one of their
+ * The person behind the camera, straight after the hero, set on the page's
+ * centred axis: the head, the portrait beneath it, the philosophy in his own
+ * words, and a signature with the brand mark, as on /media-kit. The figures that used to share this section have one of their
  * own (Stats), so the text can be read rather than squeezed beside cards.
  */
 export default function About() {
@@ -25,6 +25,19 @@ export default function About() {
   return (
     <section id="about" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="about-title">
       <div className={`container ${styles.inner}`}>
+        <motion.div
+          className={`${styles.head} ${ed.centred}`}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={at(0, 0.9)}
+        >
+          <p className={ed.eyebrow}>{t("stats_about_subtitle")}</p>
+          <h2 id="about-title" className={ed.title}>
+            {t("stats_about_title")}
+          </h2>
+        </motion.div>
+
         {/* Footage and portraits open like a curtain rising. */}
         <motion.div
           className={styles.portrait}
@@ -49,16 +62,12 @@ export default function About() {
           viewport={{ once: true, margin: "-80px" }}
           transition={at(0.15, 0.9)}
         >
-          <p className={ed.eyebrow}>{t("stats_about_subtitle")}</p>
-          <h2 id="about-title" className={ed.title}>
-            {t("stats_about_title")}
-          </h2>
           <div className={styles.text}>
             <p>{t("stats_about_p1")}</p>
             <p>{t("stats_about_p2")}</p>
             <p>{t("stats_about_p3")}</p>
           </div>
-          <p className={ed.signature}>
+          <p className={`${ed.signature} ${ed.signatureCentred}`}>
             <BrandMark className={ed.signatureMark} />
             <span className={ed.signatureName}>Atilla Barbarossa</span>
             <span className={ed.signatureRole}>{t("quote_role")}</span>

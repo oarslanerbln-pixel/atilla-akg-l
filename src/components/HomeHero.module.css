@@ -1,3 +1,8 @@
+/* Holds the e-book note in the hero's corner. */
+.home {
+  position: relative;
+}
+
 /* Both openings are in the server's markup. The inline script in the root
    layout marks <html> before first paint (src/lib/heroChoice.ts), so only the
    visitor's one is ever drawn; HomeHero removes the other once hydrated.

@@ -2,7 +2,8 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, X } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight, Play, X } from "lucide-react";
 import ed from "./editorial.module.css";
 import styles from "./FeaturedWork.module.css";
 import { useLanguage } from "@/context/LanguageContext";
@@ -12,6 +13,7 @@ import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import InViewVideo from "./InViewVideo";
+import type { Reel } from "@/lib/reels/manifest";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -24,6 +26,10 @@ interface ProjectItem {
   typeKey: TranslationKeys;
   poster: string;
   videoSrc: string;
+  /** A mirrored Instagram film: shown as its still, never autoplayed (Blob transfer is metered). */
+  still?: boolean;
+  /** Not mirrored yet: the frame links to the reel on Instagram. */
+  instagram?: string;
 }
 
 const rawProjects: ProjectItem[] = [
@@ -49,8 +55,24 @@ const rawProjects: ProjectItem[] = [
   },
 ];
 
-export default function FeaturedWork() {
+/**
+ * The Novotel project plays the reel itself once the reels cron has mirrored
+ * it (CASE_REEL in lib/reels/manifest.ts); until then it links to Instagram.
+ */
+export default function FeaturedWork({
+  novotel,
+  permalink,
+}: {
+  novotel: Pick<Reel, "videoUrl" | "posterUrl"> | null;
+  permalink: string;
+}) {
   const { t } = useLanguage();
+  const projects = rawProjects.map((project): ProjectItem => {
+    if (project.id !== "1") return project;
+    return novotel
+      ? { ...project, poster: novotel.posterUrl, videoSrc: novotel.videoUrl, still: true }
+      : { ...project, instagram: permalink };
+  });
   const { playClickSound } = useSoundDesign();
   const [activeProject, setActiveProject] = useState<ProjectItem | null>(null);
 
@@ -115,10 +137,10 @@ export default function FeaturedWork() {
         </motion.div>
 
         {/* Each project is a wide frame with its title set over the footage,
-            like a title card, and its story and result beneath. The second
-            frame steps in from the left, so the two do not read as a grid. */}
+            like a title card, and its story and result beneath. Both run
+            the full measure, so the two stand as a matched pair. */}
         <ol className={styles.spreads}>
-          {rawProjects.map((project, i) => {
+          {projects.map((project, i) => {
             const metric = splitMetric(t(project.metricKey));
             return (
               <motion.li
@@ -129,24 +151,47 @@ export default function FeaturedWork() {
                 viewport={{ once: true, margin: "-80px 0px" }}
               >
                 <motion.div className={styles.visual} {...unveil}>
-                  <div className={styles.frame} data-cursor="PLAY">
-                    <InViewVideo src={project.videoSrc} poster={project.poster} className={styles.video} />
+                  <div className={styles.frame} data-cursor={project.instagram ? undefined : "PLAY"}>
+                    {project.still ? (
+                      <Image src={project.poster} alt="" fill sizes="(max-width: 900px) 100vw, 1200px" className={styles.video} />
+                    ) : (
+                      !project.instagram && (
+                        <InViewVideo src={project.videoSrc} poster={project.poster} className={styles.video} />
+                      )
+                    )}
                     {/* The whole frame is the control: a button over the
                         footage, named with the project, opening the film
                         with sound in the lightbox. */}
-                    <button
-                      type="button"
-                      className={`${styles.trigger} ${ed.playHost}`}
-                      onClick={(event) => openModal(project, event.currentTarget)}
-                      aria-label={`${t("work_watch")}: ${t(project.titleKey)}`}
-                    >
-                      <span className={ed.play}>
-                        <span className={ed.playIcon} aria-hidden="true">
-                          <Play size={18} strokeWidth={1.25} />
+                    {project.instagram ? (
+                      <a
+                        href={project.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${styles.trigger} ${styles.external} ${ed.playHost}`}
+                        aria-label={`${t("case_watch_instagram")}: ${t(project.titleKey)}`}
+                      >
+                        <span className={ed.play}>
+                          <span className={ed.playIcon} aria-hidden="true">
+                            <ArrowUpRight size={18} strokeWidth={1.25} />
+                          </span>
+                          <span className={`${ed.playLabel} ${styles.playLabel}`}>{t("case_watch_instagram")}</span>
                         </span>
-                        <span className={`${ed.playLabel} ${styles.playLabel}`}>{t("work_watch")}</span>
-                      </span>
-                    </button>
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        className={`${styles.trigger} ${ed.playHost}`}
+                        onClick={(event) => openModal(project, event.currentTarget)}
+                        aria-label={`${t("work_watch")}: ${t(project.titleKey)}`}
+                      >
+                        <span className={ed.play}>
+                          <span className={ed.playIcon} aria-hidden="true">
+                            <Play size={18} strokeWidth={1.25} />
+                          </span>
+                          <span className={`${ed.playLabel} ${styles.playLabel}`}>{t("work_watch")}</span>
+                        </span>
+                      </button>
+                    )}
                     <div className={styles.caption}>
                       <span className={ed.index}>{String(i + 1).padStart(2, "0")}</span>
                       <h3 className={styles.name}>{t(project.titleKey)}</h3>
@@ -205,7 +250,7 @@ export default function FeaturedWork() {
                   <span>{t('work_close')}</span>
                 </button>
               </div>
-              <div className={styles.modalVideoWrapper}>
+              <div className={styles.modalVideoWrapper} data-portrait={activeProject.still || undefined}>
                 <video
                   src={activeProject.videoSrc}
                   poster={activeProject.poster}

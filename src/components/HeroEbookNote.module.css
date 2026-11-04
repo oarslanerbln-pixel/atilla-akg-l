@@ -1,0 +1,138 @@
+/* A card, not a banner: porcelain, a hairline, a gold line along the foot.
+   It arrives where notifications arrive, just under the header on the
+   right; the bottom of the hero is taken by the globe's course instrument
+   and the scroll cue. Sharp corners, like every card on the site. */
+.note {
+  position: absolute;
+  top: 5.25rem;
+  right: 2rem;
+  z-index: var(--z-float);
+  display: flex;
+  align-items: stretch;
+  width: min(340px, calc(100% - 2.5rem));
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-bottom: 2px solid var(--accent-gold);
+  box-shadow: 0 24px 50px -24px rgba(20, 15, 10, 0.35);
+}
+
+.link {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  gap: 1rem;
+  padding: 1rem 0 1rem 1rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.link:focus-visible,
+.close:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.thumb {
+  flex: none;
+  width: 48px;
+  align-self: flex-start;
+  box-shadow:
+    0 1px 2px rgba(20, 15, 10, 0.2),
+    0 8px 16px -8px rgba(20, 15, 10, 0.4);
+  transition: transform var(--transition-smooth);
+}
+
+.thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.link:hover .thumb {
+  transform: translateY(-3px) rotate(-2deg);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.eyebrow {
+  margin-bottom: 0.35rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.line {
+  margin-top: 0.3rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  transition: color var(--transition-smooth);
+}
+
+.link:hover .cta {
+  color: var(--accent-gold-readable);
+}
+
+.close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  align-self: flex-start;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-smooth);
+}
+
+.close:hover {
+  color: var(--text-primary);
+}
+
+@media (max-width: 900px) {
+  .note {
+    top: 4.75rem;
+    right: 1.25rem;
+  }
+
+  .thumb {
+    width: 40px;
+  }
+
+  .title {
+    font-size: 1.05rem;
+  }
+}

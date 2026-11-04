@@ -131,7 +131,7 @@ src/
 ## 🤖 AI Concierge (Instagram + WhatsApp tour sales)
 - Server-only code in `src/lib/concierge/`; webhooks in `src/app/api/webhooks/{meta,stripe}/route.ts`.
 - Stack: `@anthropic-ai/sdk` (Claude tool-use loop in `agent.ts`), `@supabase/supabase-js` (CRM, schema in `supabase/migrations/`), `stripe` (deposit Checkout).
-- Partner (affiliate) offers are data in `supabase/offers.sql` (idempotent, run in the SQL Editor); a comment, story reply or DM that asks for a keyword (the word alone or with request words such as "bitte"; `keywordRequest` in `offers.ts`, the one gate for every entry point) sends the tracked `/go/<id>` link.
+- Partner (affiliate) offers are data in `supabase/offers.sql` (idempotent, run in the SQL Editor); a comment, story reply or DM that asks for a keyword (the word alone or with request words such as "bitte"; `keywordRequest` in `offers.ts`, the one gate for every entry point) sends the tracked `/go/<id>` link. An offer with `media_codes` answers only in comments under those reels (`offersHere`), e.g. LOUNGE under the Priority Pass reel.
 - Fixed customer messages live in `src/lib/concierge/copy.ts` (DE/EN/TR), not `translations.ts`, because they are sent server-side.
 - Setup and env vars: `docs/concierge-setup.md`, `.env.example`.
 - Current state, open gaps and next steps (dated snapshot, for a new session picking the work up): `docs/automation-handover.md`.
@@ -273,6 +273,10 @@ in brackets (`[Anzeige]`, `(unbezahlte Werbung)`) or as the first word
 copyrighted Instagram music has no `media_url` and cannot be mirrored; the
 cron reports it as `withoutFile`. Needs a Blob store connected to the project
 (`BLOB_READ_WRITE_TOKEN`); without one the section is absent.
+The same cron mirrors the case study's film, the Novotel Bosphorus reel, found
+by its shortcode (`CASE_REEL` in `src/lib/reels/manifest.ts`, stored as
+`caseFilm` in the manifest); CaseStudy and the Novotel project in
+FeaturedWork play it. Until it is mirrored they link to the reel on Instagram.
 Blob transfer is metered per byte downloaded (Hobby: 10 GB a month, then the
 store is blocked for 30 days), so video loads only when a card is opened:
 no hover previews, no autoplay in the rail.

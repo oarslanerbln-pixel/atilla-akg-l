@@ -23,10 +23,21 @@ export interface Reel {
   posterUrl: string;
 }
 
+/**
+ * The case study's film, chosen by its Instagram address rather than its age:
+ * the Novotel Bosphorus reel (April 2023) is far below the newest nine.
+ */
+export const CASE_REEL = {
+  shortcode: 'CrYTleIq4dV',
+  permalink: 'https://www.instagram.com/reel/CrYTleIq4dV/',
+} as const;
+
 export interface ReelsManifest {
   updatedAt: string;
   /** Newest first. */
   reels: Reel[];
+  /** The case study's film once mirrored; absent before, or if Instagram offers no file. */
+  caseFilm?: Reel & { shortcode: string };
 }
 
 /**
@@ -46,7 +57,11 @@ export async function readManifest(): Promise<ReelsManifest | null> {
   const res = await fetch(url, { cache: 'no-store' });
   if (!res.ok) throw new Error(`Load reels manifest: ${res.status}`);
   const json = (await res.json()) as Partial<ReelsManifest>;
-  return { updatedAt: json.updatedAt ?? '', reels: Array.isArray(json.reels) ? json.reels : [] };
+  return {
+    updatedAt: json.updatedAt ?? '',
+    reels: Array.isArray(json.reels) ? json.reels : [],
+    ...(json.caseFilm ? { caseFilm: json.caseFilm } : {}),
+  };
 }
 
 /**
@@ -55,7 +70,7 @@ export async function readManifest(): Promise<ReelsManifest | null> {
  * manifest yet. A page built before the first sync would otherwise be plain
  * static, deaf to the cron, and stay empty until the next deploy.
  */
-const cachedReels = unstable_cache(async () => (await readManifest())?.reels ?? [], [MANIFEST_PATH], {
+const cachedManifest = unstable_cache(readManifest, [MANIFEST_PATH], {
   tags: [REELS_TAG],
   revalidate: 24 * 60 * 60,
 });
@@ -67,5 +82,12 @@ const cachedReels = unstable_cache(async () => (await readManifest())?.reels ?? 
  */
 export async function loadReels(): Promise<Reel[]> {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return [];
-  return cachedReels();
+  return (await cachedManifest())?.reels ?? [];
+}
+
+/** The case study's film, if the cron has mirrored the reel named in CASE_REEL. */
+export async function loadCaseFilm(): Promise<Reel | null> {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  const film = (await cachedManifest())?.caseFilm;
+  return film?.shortcode === CASE_REEL.shortcode ? film : null;
 }

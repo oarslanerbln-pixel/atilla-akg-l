@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import BookCover from "./roadmap/BookCover";
 import ed from "./editorial.module.css";
 import styles from "./RoadmapTeaser.module.css";
 import { useLanguage } from "@/context/LanguageContext";
@@ -41,17 +41,10 @@ export default function RoadmapTeaser() {
     <section id="ebook" className={`${ed.section} ${styles.section}`} aria-labelledby="ebook-title">
       <div className={`container ${styles.grid}`}>
         <motion.div className={styles.coverFrame} {...reveal()}>
-          <Image
-            src="/roadmap/cover.webp"
-            alt={t("rm_cover_alt")}
-            width={960}
-            height={1500}
-            sizes="(max-width: 900px) 55vw, 320px"
-            className={styles.cover}
-          />
+          <BookCover alt={t("rm_cover_alt")} sizes="(max-width: 900px) 62vw, 320px" />
         </motion.div>
 
-        <motion.div {...reveal(0.12)}>
+        <motion.div className={styles.copy} {...reveal(0.12)}>
           <p className={ed.eyebrow}>{t("ebook_eyebrow")}</p>
           <h2 id="ebook-title" className={ed.title}>
             {t("ebook_title_1")}{" "}
