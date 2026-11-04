@@ -159,8 +159,9 @@ expected to pass with zero output.
 section of the portfolio between FAQ and Contact (`#card`; the floating
 WhatsApp button steps aside over it). One flip card. Front: the lounge portrait
 (`public/card/atilla.webp`), the wordmark in gold foil, WhatsApp, Instagram
-and the website as links. Back: one QR code the visitor points at the card,
-WhatsApp, Instagram or the website. Below: "Save contact"
+and the website as links. Back: one QR code, by default the website
+(atillabarbarossa.com, in the page's language); the visitor can point it at
+WhatsApp, Instagram or the card itself instead. Below: "Save contact"
 (`/atilla-barbarossa.vcf`, vCard 3.0 with portrait, built at build time in
 `src/lib/card.ts`) and the share sheet. noindex, not in the sitemap.
 

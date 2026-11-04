@@ -70,7 +70,7 @@ const FACE = { width: 280, height: 444 };
 export async function cardPreview(lang: Language) {
   const t = translations[lang];
   const upper = (text: string) => text.toLocaleUpperCase(HTML_LANG[lang]);
-  const code = cardCodes()[lang].card;
+  const code = cardCodes()[lang].web;
 
   const [latin, latinExt, photo, lockup] = await Promise.all([
     Promise.all(WEIGHTS.map((weight) => font("latin", weight))),
@@ -129,7 +129,7 @@ export async function cardPreview(lang: Language) {
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element -- drawn by next/og into the PNG, never sent to a browser */}
             <img src={qr} width={206} height={206} alt="" style={{ marginTop: 34 }} />
-            <div style={{ display: "flex", marginTop: 26, fontSize: 24, fontWeight: 300 }}>{t.card_qr_card}</div>
+            <div style={{ display: "flex", marginTop: 26, fontSize: 24, fontWeight: 300 }}>{t.card_qr_web}</div>
             <div style={{ display: "flex", marginTop: 6, fontSize: 14, color: MUTED }}>
               {prettyUrl(code.url)}
             </div>

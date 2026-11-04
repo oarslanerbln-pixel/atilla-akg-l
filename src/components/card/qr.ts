@@ -15,7 +15,8 @@ import type { Language } from "@/i18n/translations";
  * the link preview (colours as hex, for next/og), so the two never differ.
  */
 
-export const QR_TARGETS = ["card", "whatsapp", "instagram", "web"] as const;
+/** In the order the card offers them; the first, the website, is the one a turned card shows. */
+export const QR_TARGETS = ["web", "whatsapp", "instagram", "card"] as const;
 export type QrTarget = (typeof QR_TARGETS)[number];
 
 /** One QR code: its width in modules and its modules, row by row, four to a hex digit. */
