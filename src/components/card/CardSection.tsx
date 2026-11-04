@@ -7,7 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import { pagePath } from "@/lib/locales";
 import ed from "@/components/editorial.module.css";
-import BusinessCard from "./BusinessCard";
+import BusinessCard, { type WalletOptions } from "./BusinessCard";
 import type { CardCodes } from "./qr";
 import styles from "./CardSection.module.css";
 
@@ -20,7 +20,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
  * than a chapter, so it carries no numeral. The floating WhatsApp button
  * steps aside while it is on screen (WhatsAppButton observes #card).
  */
-export default function CardSection({ codes }: { codes: CardCodes }) {
+export default function CardSection({ codes, wallet }: { codes: CardCodes; wallet: WalletOptions }) {
   const { t, activeLang } = useLanguage();
   const calm = usePrefersCalm();
 
@@ -42,7 +42,7 @@ export default function CardSection({ codes }: { codes: CardCodes }) {
           <p className={`${ed.lede} ${styles.lede}`}>{t("card_section_text")}</p>
         </motion.div>
 
-        <BusinessCard codes={codes} />
+        <BusinessCard codes={codes} wallet={wallet} />
 
         <motion.div {...reveal(0.2)}>
           <Link href={pagePath("card", activeLang)} className={styles.open}>

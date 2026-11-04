@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type ComponentType, type PointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentType, type PointerEvent } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useAnimate } from "framer-motion";
-import { ArrowUpRight, Check, Globe, IdCard, QrCode, RotateCcw, Share2, UserPlus } from "lucide-react";
+import { ArrowUpRight, Check, Globe, IdCard, QrCode, RotateCcw, Share2, UserPlus, Wallet } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import BrandWordmark from "@/components/BrandWordmark";
 import { InstagramIcon, WhatsAppIcon } from "@/components/SocialIcons";
@@ -11,7 +11,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import { fill } from "@/i18n/format";
 import type { TranslationKeys } from "@/i18n/translations";
-import { pagePath } from "@/lib/locales";
+import { HTML_LANG, pagePath } from "@/lib/locales";
 import { BASE, formatCoords } from "@/lib/partners";
 import { businessCard, socialProfiles } from "@/lib/site";
 import { PAGE_QR_COLORS, QR_TARGETS, prettyUrl, qrSvg, type CardCodes, type QrTarget } from "./qr";
@@ -36,6 +36,20 @@ const GYRO_RANGE = 18;
 const GYRO_DRIFT = 0.015;
 
 type Lean = { x: number; y: number; at: number; source: "mouse" | "gyro" };
+
+/** Which Wallet passes the server can sign (lib/wallet/ready.ts). */
+export type WalletOptions = { apple: boolean; google: boolean };
+
+type Platform = "apple" | "android" | "other";
+
+/** Where a pass can go: Apple Wallet on iPhone, iPad and Mac, Google Wallet on Android and elsewhere. */
+function readPlatform(): Platform {
+  const ua = navigator.userAgent;
+  if (/Android/i.test(ua)) return "android";
+  if (/iPhone|iPad|iPod|Macintosh/.test(ua)) return "apple";
+  return "other";
+}
+const noSubscribe = () => () => {};
 
 type DeviceOrientationWithPermission = typeof DeviceOrientationEvent & {
   requestPermission?: () => Promise<"granted" | "denied">;
@@ -74,7 +88,15 @@ type DeviceOrientationWithPermission = typeof DeviceOrientationEvent & {
  * awake, so the code is still there when the person opposite gets their
  * camera out.
  */
-export default function BusinessCard({ codes, standalone = false }: { codes: CardCodes; standalone?: boolean }) {
+export default function BusinessCard({
+  codes,
+  standalone = false,
+  wallet,
+}: {
+  codes: CardCodes;
+  standalone?: boolean;
+  wallet?: WalletOptions;
+}) {
   const { t, activeLang } = useLanguage();
   const calm = usePrefersCalm();
   const [flipped, setFlipped] = useState(false);
@@ -85,6 +107,8 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
   const [arrived, setArrived] = useState(false);
   const [copied, setCopied] = useState(false);
   const [motionGranted, setMotionGranted] = useState(0);
+  // Read on the client only: the server cannot know the visitor's device.
+  const platform = useSyncExternalStore<Platform | null>(noSubscribe, readPlatform, () => null);
   const stage = useRef<HTMLDivElement>(null);
   const lean = useRef<HTMLDivElement>(null);
   const leanInput = useRef<Lean | null>(null);
@@ -310,6 +334,20 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
     }
   };
 
+  // The Wallet button only where a pass can be added: Apple's on Apple devices,
+  // Google's on Android and on other computers (it saves to the Google account).
+  const walletProvider =
+    !wallet || !platform
+      ? null
+      : platform === "apple"
+        ? wallet.apple
+          ? "apple"
+          : null
+        : wallet.google
+          ? "google"
+          : null;
+  const walletHref = walletProvider ? `/wallet/${walletProvider}?lang=${HTML_LANG[activeLang]}` : null;
+
   const whatsappHref = `https://wa.me/${businessCard.whatsapp}?text=${encodeURIComponent(t("whatsapp_message"))}`;
   const links = [
     {
@@ -524,6 +562,13 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
           <UserPlus size={16} strokeWidth={1.5} aria-hidden="true" />
           {t("card_save")}
         </a>
+        {walletHref && (
+          // Plain links: Safari opens the .pkpass in Wallet; Google's goes via its save page.
+          <a href={walletHref} className={styles.secondary}>
+            <Wallet size={16} strokeWidth={1.5} aria-hidden="true" />
+            {t("card_wallet")}
+          </a>
+        )}
         <button type="button" className={styles.secondary} onClick={share}>
           {copied ? (
             <Check size={16} strokeWidth={1.5} aria-hidden="true" />

@@ -6,7 +6,7 @@ import BrandWordmark from "@/components/BrandWordmark";
 import { useLanguage } from "@/context/LanguageContext";
 import type { Language } from "@/i18n/translations";
 import { LANGUAGES, pagePath } from "@/lib/locales";
-import BusinessCard from "./BusinessCard";
+import BusinessCard, { type WalletOptions } from "./BusinessCard";
 import type { CardCodes } from "./qr";
 import styles from "./CardPage.module.css";
 
@@ -18,7 +18,7 @@ import styles from "./CardPage.module.css";
  * full screen, like an app (`appleWebApp` in share.tsx). The card itself is
  * BusinessCard, shared with the portfolio's card section.
  */
-export default function CardPage({ codes }: { codes: CardCodes }) {
+export default function CardPage({ codes, wallet }: { codes: CardCodes; wallet: WalletOptions }) {
   const { t, activeLang, setActiveLang } = useLanguage();
 
   // In place, like the other switchers; the address follows.
@@ -52,7 +52,7 @@ export default function CardPage({ codes }: { codes: CardCodes }) {
       </header>
 
       <main className={styles.page}>
-        <BusinessCard codes={codes} standalone />
+        <BusinessCard codes={codes} wallet={wallet} standalone />
       </main>
 
       <footer className={styles.footer}>

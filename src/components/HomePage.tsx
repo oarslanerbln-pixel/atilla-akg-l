@@ -23,6 +23,7 @@ import type { Language } from "@/i18n/translations";
 import { homeGraph } from "@/lib/structuredData";
 import { CASE_REEL, loadCaseFilm } from "@/lib/reels/manifest";
 import { cardCodes } from "@/lib/card";
+import { walletOptions } from "@/lib/wallet/ready";
 import ed from "@/components/editorial.module.css";
 
 /**
@@ -52,7 +53,7 @@ export default async function HomePage({ lang }: { lang: Language }) {
       <EditorialQuote />
       <Faq />
       {/* The QR codes are computed here, on the server; the encoder never reaches the browser. */}
-      <CardSection codes={cardCodes()} />
+      <CardSection codes={cardCodes()} wallet={walletOptions()} />
       <Contact />
       <Footer />
       <WhatsAppButton />

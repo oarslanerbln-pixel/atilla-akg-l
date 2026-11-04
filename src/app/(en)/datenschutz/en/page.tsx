@@ -120,6 +120,19 @@ export default function PrivacyEnglish() {
         you click one does your browser connect to the provider concerned;
         from then on, that provider&apos;s privacy policy applies.
       </p>
+      <p>
+        On the digital business card (at /card and on the home page), my
+        server creates the contact file and the Apple Wallet card itself;
+        downloading them transfers no data to third parties, and a card saved
+        in Apple Wallet does not connect to my server. The card follows the
+        tilt of your phone; this motion data is processed only in your
+        browser and is not transmitted. On Android devices and computers, the
+        &ldquo;Add to Wallet&rdquo; button leads to Google Wallet (Google
+        Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland). Only
+        when you tap it does your browser connect to Google; from then on,
+        Google&apos;s privacy policy applies. Google then fetches the logo and
+        an image for the card from this website.
+      </p>
 
       <h2>6. Contact form</h2>
       <p>
@@ -409,7 +422,7 @@ export default function PrivacyEnglish() {
 
       <h2>17. Date and language versions</h2>
       <p>
-        As of October 2026. This policy describes the technical state of this
+        As of November 2026. This policy describes the technical state of this
         website and is updated as soon as the services used change. It is
         available in German, English and Turkish; the German version is
         binding.

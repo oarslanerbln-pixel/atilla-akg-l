@@ -437,7 +437,9 @@ export const translations = {
     card_section_eyebrow: "Visitenkarte",
     card_section_title: "Nehmen Sie meine Karte mit",
     card_section_text: "Tippen Sie auf die Karte, um sie umzudrehen: Auf der Rückseite führt ein QR-Code zu WhatsApp, Instagram oder zur Website, und „Kontakt speichern“ legt meine Daten direkt in Ihrem Adressbuch ab.",
-    card_section_open: "Karte auf eigener Seite öffnen"
+    card_section_open: "Karte auf eigener Seite öffnen",
+    card_wallet: "In Wallet speichern",
+    card_email: "E-Mail"
   },
   
   EN: {
@@ -878,7 +880,9 @@ export const translations = {
     card_section_eyebrow: "Business card",
     card_section_title: "Take my card with you",
     card_section_text: "Tap the card to turn it: on the back, a QR code leads to WhatsApp, Instagram or the website, and “Save contact” puts my details straight into your address book.",
-    card_section_open: "Open the card on its own page"
+    card_section_open: "Open the card on its own page",
+    card_wallet: "Add to Wallet",
+    card_email: "Email"
   },
   
   TR: {
@@ -1319,7 +1323,9 @@ export const translations = {
     card_section_eyebrow: "Kartvizit",
     card_section_title: "Kartımı yanınıza alın",
     card_section_text: "Kartı çevirmek için üzerine dokunun: arka yüzdeki QR kod WhatsApp’a, Instagram’a ya da web sitesine götürür; “Kişiyi kaydet” bilgilerimi doğrudan rehberinize ekler.",
-    card_section_open: "Kartı kendi sayfasında aç"
+    card_section_open: "Kartı kendi sayfasında aç",
+    card_wallet: "Cüzdana ekle",
+    card_email: "E-posta"
   }
 };
 

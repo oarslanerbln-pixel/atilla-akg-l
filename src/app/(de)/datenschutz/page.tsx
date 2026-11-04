@@ -15,6 +15,7 @@ export const metadata: Metadata = {
  * Describes what this site actually does, nothing more: Vercel hosting
  * (functions in fra1, see vercel.json), one localStorage flag, self-hosted
  * assets, the contact form (Resend), plain mailto/tel/wa.me links, the
+ * business card (contact file, Apple Wallet pass, Google Wallet link), the
  * partner-link replies on Instagram (src/lib/concierge with CONCIERGE_AI off),
  * partner links (/go/<id>), the e-book checkout on Tentary (/roadmap) and
  * Atilla's social media profiles.
@@ -129,6 +130,20 @@ export default function Datenschutz() {
         wenn Sie einen davon anklicken, stellt Ihr Browser eine Verbindung zum
         jeweiligen Anbieter her; ab diesem Zeitpunkt gilt dessen
         Datenschutzerklärung.
+      </p>
+      <p>
+        Auf der digitalen Visitenkarte (unter /card und auf der Startseite)
+        erzeugt mein Server die Kontaktdatei und die Karte für Apple Wallet
+        selbst; beim Herunterladen werden keine Daten an Dritte übertragen,
+        und eine in Apple Wallet gespeicherte Karte nimmt keine Verbindung zu
+        meinem Server auf. Die Karte folgt der Neigung Ihres Telefons; diese
+        Bewegungsdaten werden nur in Ihrem Browser ausgewertet und nicht
+        übertragen. Die Schaltfläche „In Wallet speichern“ führt auf
+        Android-Geräten und Computern zu Google Wallet (Google Ireland
+        Limited, Gordon House, Barrow Street, Dublin 4, Irland). Erst wenn Sie
+        sie antippen, stellt Ihr Browser eine Verbindung zu Google her; ab
+        diesem Zeitpunkt gilt die Datenschutzerklärung von Google. Google ruft
+        dabei das Logo und ein Bild der Karte von dieser Website ab.
       </p>
 
       <h2>6. Kontaktformular</h2>
@@ -432,7 +447,7 @@ export default function Datenschutz() {
 
       <h2>17. Stand und Sprachfassungen</h2>
       <p>
-        Stand: Oktober 2026. Diese Erklärung beschreibt den technischen Stand
+        Stand: November 2026. Diese Erklärung beschreibt den technischen Stand
         dieser Website und wird angepasst, sobald sich eingesetzte Dienste
         ändern. Sie liegt auch auf Englisch und Türkisch vor; maßgeblich ist
         die deutsche Fassung.
