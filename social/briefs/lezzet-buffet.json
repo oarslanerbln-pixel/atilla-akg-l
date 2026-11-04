@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "lezzet-buffet", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Lezzet Dünyası · Berlin",
+  "title": "Türkische", "accent": "Hausmannskost",
+  "subtitle": "Kottbusser Damm 14 · Kreuzberg",
+  "photo": { "src": "social/assets/lezzet-buffet.png", "focus": [0.5, 0.5], "zoom": 1 }
+}

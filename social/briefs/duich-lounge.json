@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "duich-lounge", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Anzeige · DoubleTree by Hilton",
+  "title": "48 Stunden Berlin", "accent": "zu zweit",
+  "subtitle": "Das Special „Du & Ich. Berlin.“ am Ku'damm",
+  "photo": { "src": "social/assets/duich-lounge.png", "focus": [0.5, 0.5], "zoom": 1 }
+}

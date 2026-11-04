@@ -1,0 +1,7 @@
+{
+  "kind": "cover", "name": "mizumi-sushi", "lang": "de", "templates": ["lounge"],
+  "eyebrow": "Mizumi · Ku'damm",
+  "title": "Sushi im", "accent": "Trockeneis-Nebel",
+  "subtitle": "Joachimsthaler Str. 15 · Berlin",
+  "photo": { "src": "social/assets/mizumi-sushi.png", "focus": [0.5, 0.5], "zoom": 1 }
+}
