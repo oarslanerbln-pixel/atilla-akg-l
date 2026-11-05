@@ -79,6 +79,7 @@ src/
 │   ├── robots.ts, sitemap.ts
 │   ├── api/contact/route.ts # Contact form delivery (Resend)
 │   ├── atilla-barbarossa.vcf/route.ts # Contact file behind "Save contact" on /card
+│   ├── wallet/{apple,google}/route.ts # Wallet passes for the card (lib/wallet)
 │   └── llms.txt/route.ts    # Plain-text summary for AI answer engines
 ├── components/              # Modular UI components with *.module.css pairs
 │   ├── HomePage.tsx         # The portfolio, shared by /, /en and /tr
@@ -165,6 +166,18 @@ WhatsApp, Instagram or the card itself instead. Below: "Save contact"
 (`/atilla-barbarossa.vcf`, vCard 3.0 with portrait, built at build time in
 `src/lib/card.ts`) and the share sheet. noindex, not in the sitemap.
 
+- **Two faces, one card:** a Personal / Business switch above it. The
+  business face (eyebrow "Media & Kooperationen", total followers, reach
+  and DACH share from `audience`, then Media Kit, management e-mail and
+  WhatsApp with the media kit's message) is for hotels, brands and tourism
+  boards; its QR codes open the media kit first (`MODE_TARGETS` in
+  `qr.ts`). `/card/business` (`cardBusiness` in `locales.ts`, `/en`, `/tr`)
+  opens on it, with its own preview. On `/card` the address follows the
+  face and the language.
+- **NFC:** a web page cannot make a phone act as an NFC tag, so a physical
+  card (NTAG213/215/216, "on-metal" for metal cards) carries the address.
+  `/card#nfc` shows the owner's writer (`NfcWriter.tsx`): Web NFC on Chrome
+  for Android, NFC Tools steps and a copy button elsewhere. `docs/nfc.md`.
 - **Its WhatsApp number is its own:** `businessCard` in `src/lib/site.ts`
   (+49 176 72725165), not `contact.whatsapp`, which the rest of the site uses.
 - **QR codes are computed on the server** (`qrcode`, server-only, in
@@ -180,6 +193,14 @@ WhatsApp, Instagram or the card itself instead. Below: "Save contact"
   keeps the phone's screen on. `/card` declares `appleWebApp`, so added to
   the home screen it opens full screen. In tests the card is never
   "stable": click with `force` and screenshot with a `clip`.
+- **Wallet:** "Add to Wallet" adds the card to Apple Wallet (iPhone, iPad,
+  Mac: a signed `.pkpass` from `/wallet/apple`) or Google Wallet (Android and
+  other computers: `/wallet/google` redirects to Google's save page with a
+  signed JWT). Code in `src/lib/wallet/`, images from
+  `npx tsx social/brand/wallet.ts`. Each needs its provider's credentials
+  (`docs/wallet-setup.md`, `.env.example`); without them the button is not
+  shown for that platform and the route answers 503, never a pass that would
+  fail. Bump `VERSION` in `google.ts` when the pass content changes.
 - **The turn is two flat quarter turns** (edge-on, swap faces, swing back).
   Don't go back to a back face kept at `rotateY(180deg)` under
   `preserve-3d`: Chrome then sent taps on the back's buttons to the card's

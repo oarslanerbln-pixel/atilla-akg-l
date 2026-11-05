@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type ComponentType, type PointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentType, type PointerEvent } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useAnimate } from "framer-motion";
-import { ArrowUpRight, Check, Globe, IdCard, QrCode, RotateCcw, Share2, UserPlus } from "lucide-react";
+import { ArrowUpRight, BookOpen, Check, Globe, IdCard, Mail, QrCode, RotateCcw, Share2, UserPlus, Wallet } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import BrandWordmark from "@/components/BrandWordmark";
 import { InstagramIcon, WhatsAppIcon } from "@/components/SocialIcons";
@@ -11,10 +11,10 @@ import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
 import { fill } from "@/i18n/format";
 import type { TranslationKeys } from "@/i18n/translations";
-import { pagePath } from "@/lib/locales";
+import { HTML_LANG, pagePath } from "@/lib/locales";
 import { BASE, formatCoords } from "@/lib/partners";
-import { businessCard, socialProfiles } from "@/lib/site";
-import { PAGE_QR_COLORS, QR_TARGETS, prettyUrl, qrSvg, type CardCodes, type QrTarget } from "./qr";
+import { audience, businessCard, contact, socialProfiles, totalFollowers } from "@/lib/site";
+import { MODE_TARGETS, PAGE_QR_COLORS, prettyUrl, qrSvg, type CardCodes, type CardMode, type QrTarget } from "./qr";
 import styles from "./BusinessCard.module.css";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -24,7 +24,11 @@ const TARGETS: Record<QrTarget, { label: TranslationKeys; Icon: ComponentType<{ 
   whatsapp: { label: "card_qr_whatsapp", Icon: WhatsAppIcon },
   instagram: { label: "card_qr_instagram", Icon: InstagramIcon },
   web: { label: "card_qr_web", Icon: Globe },
+  mediaKit: { label: "card_qr_mediakit", Icon: BookOpen },
+  businessCard: { label: "card_qr_card", Icon: IdCard },
 };
+
+const MODES: CardMode[] = ["personal", "business"];
 
 const clamp = (n: number) => Math.max(-1, Math.min(1, n));
 
@@ -36,6 +40,20 @@ const GYRO_RANGE = 18;
 const GYRO_DRIFT = 0.015;
 
 type Lean = { x: number; y: number; at: number; source: "mouse" | "gyro" };
+
+/** Which Wallet passes the server can sign (lib/wallet/ready.ts). */
+export type WalletOptions = { apple: boolean; google: boolean };
+
+type Platform = "apple" | "android" | "other";
+
+/** Where a pass can go: Apple Wallet on iPhone, iPad and Mac, Google Wallet on Android and elsewhere. */
+function readPlatform(): Platform {
+  const ua = navigator.userAgent;
+  if (/Android/i.test(ua)) return "android";
+  if (/iPhone|iPad|iPod|Macintosh/.test(ua)) return "apple";
+  return "other";
+}
+const noSubscribe = () => () => {};
 
 type DeviceOrientationWithPermission = typeof DeviceOrientationEvent & {
   requestPermission?: () => Promise<"granted" | "denied">;
@@ -74,17 +92,34 @@ type DeviceOrientationWithPermission = typeof DeviceOrientationEvent & {
  * awake, so the code is still there when the person opposite gets their
  * camera out.
  */
-export default function BusinessCard({ codes, standalone = false }: { codes: CardCodes; standalone?: boolean }) {
+export default function BusinessCard({
+  codes,
+  standalone = false,
+  wallet,
+  initialMode = "personal",
+  onModeChange,
+}: {
+  codes: CardCodes;
+  standalone?: boolean;
+  wallet?: WalletOptions;
+  /** Personal or business face; /card/business opens on the business one. */
+  initialMode?: CardMode;
+  /** Told when the visitor switches faces, so a page can follow with its address. */
+  onModeChange?: (mode: CardMode) => void;
+}) {
   const { t, activeLang } = useLanguage();
   const calm = usePrefersCalm();
   const [flipped, setFlipped] = useState(false);
   const [flipper, animate] = useAnimate<HTMLDivElement>();
   const turning = useRef(false);
-  const [target, setTarget] = useState<QrTarget>(QR_TARGETS[0]);
+  const [mode, setMode] = useState<CardMode>(initialMode);
+  const [target, setTarget] = useState<QrTarget>(MODE_TARGETS[initialMode][0]);
   const [turns, setTurns] = useState(0);
   const [arrived, setArrived] = useState(false);
   const [copied, setCopied] = useState(false);
   const [motionGranted, setMotionGranted] = useState(0);
+  // Read on the client only: the server cannot know the visitor's device.
+  const platform = useSyncExternalStore<Platform | null>(noSubscribe, readPlatform, () => null);
   const stage = useRef<HTMLDivElement>(null);
   const lean = useRef<HTMLDivElement>(null);
   const leanInput = useRef<Lean | null>(null);
@@ -284,6 +319,16 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
 
   const entry = codes[activeLang][target];
   const svg = useMemo(() => qrSvg(entry.matrix, PAGE_QR_COLORS), [entry]);
+  const business = mode === "business";
+
+  // A new face starts on its own first code.
+  const chooseMode = (next: CardMode) => {
+    if (next === mode) return;
+    setMode(next);
+    setTarget(MODE_TARGETS[next][0]);
+    onModeChange?.(next);
+  };
+
   const shown =
     target === "whatsapp"
       ? businessCard.whatsappDisplay
@@ -293,7 +338,7 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
   const targetName = t(TARGETS[target].label);
 
   const share = async () => {
-    const url = codes[activeLang].card.url;
+    const url = codes[activeLang][business ? "businessCard" : "card"].url;
     if (typeof navigator.share === "function") {
       try {
         await navigator.share({ title: "Atilla Barbarossa", text: t("card_share_text"), url });
@@ -310,8 +355,25 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
     }
   };
 
-  const whatsappHref = `https://wa.me/${businessCard.whatsapp}?text=${encodeURIComponent(t("whatsapp_message"))}`;
-  const links = [
+  // The Wallet button only where a pass can be added: Apple's on Apple devices,
+  // Google's on Android and on other computers (it saves to the Google account).
+  const walletProvider =
+    !wallet || !platform
+      ? null
+      : platform === "apple"
+        ? wallet.apple
+          ? "apple"
+          : null
+        : wallet.google
+          ? "google"
+          : null;
+  const walletHref = walletProvider ? `/wallet/${walletProvider}?lang=${HTML_LANG[activeLang]}` : null;
+
+  // The business face asks for a partnership in its first line, as the media kit does.
+  const whatsappHref = `https://wa.me/${businessCard.whatsapp}?text=${encodeURIComponent(
+    t(business ? "mk_wa_message" : "whatsapp_message"),
+  )}`;
+  const personalLinks = [
     {
       key: "whatsapp",
       href: whatsappHref,
@@ -319,6 +381,7 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
       label: t("card_qr_whatsapp"),
       value: businessCard.whatsappDisplay,
       Icon: WhatsAppIcon,
+      long: false,
     },
     {
       key: "instagram",
@@ -327,6 +390,7 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
       label: t("card_qr_instagram"),
       value: businessCard.instagramHandle,
       Icon: InstagramIcon,
+      long: false,
     },
     {
       key: "web",
@@ -336,8 +400,49 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
       // The domain alone, as printed cards give it; the link opens the portfolio in the card's language.
       value: prettyUrl(new URL(codes[activeLang].web.url).origin),
       Icon: Globe,
+      long: false,
     },
-  ] as const;
+  ];
+  const businessLinks = [
+    {
+      key: "mediakit",
+      href: pagePath("mediaKit", activeLang),
+      external: false,
+      label: t("card_qr_mediakit"),
+      // What the kit holds, rather than its address, which no 280 px card fits.
+      value: t("card_mediakit_value"),
+      Icon: BookOpen,
+      long: false,
+    },
+    {
+      key: "management",
+      href: `mailto:${contact.management}?subject=${encodeURIComponent(t("mk_mail_subject"))}`,
+      external: false,
+      label: t("card_management"),
+      value: contact.management,
+      Icon: Mail,
+      long: true,
+    },
+    {
+      key: "whatsapp",
+      href: whatsappHref,
+      external: true,
+      label: t("card_qr_whatsapp"),
+      value: businessCard.whatsappDisplay,
+      Icon: WhatsAppIcon,
+      long: false,
+    },
+  ];
+  const links = business ? businessLinks : personalLinks;
+
+  // The business face's figures, from the one source the media kit and Stats read.
+  const locale = HTML_LANG[activeLang];
+  const compact = new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 });
+  const figures = [
+    { value: compact.format(totalFollowers), label: t("card_fig_followers") },
+    { value: compact.format(audience.accountsReached), label: t("card_fig_reach") },
+    { value: new Intl.NumberFormat(locale, { style: "percent" }).format(audience.dach / 100), label: t("card_fig_dach") },
+  ];
 
   // On its own page the name is the page's heading; in the portfolio the hero has that.
   const Name = standalone ? "h1" : "p";
@@ -359,6 +464,20 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
 
   return (
     <div className={styles.root}>
+      <div className={styles.modes} role="group" aria-label={t("card_mode_label")}>
+        {MODES.map((m) => (
+          <button
+            key={m}
+            type="button"
+            className={styles.mode}
+            aria-pressed={mode === m}
+            onClick={() => chooseMode(m)}
+          >
+            {t(m === "business" ? "card_mode_business" : "card_mode_personal")}
+          </button>
+        ))}
+      </div>
+
       <div ref={stage} className={styles.stage} onPointerMove={followMouse} onPointerLeave={releaseMouse}>
         <motion.div className={styles.enter} {...entrance} onAnimationComplete={() => setArrived(true)}>
           <div ref={lean} className={styles.lean}>
@@ -389,7 +508,7 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
                   />
                 </div>
 
-                <p className={styles.eyebrow}>{t("card_eyebrow")}</p>
+                <p className={styles.eyebrow}>{t(business ? "card_business_eyebrow" : "card_eyebrow")}</p>
 
                 <div className={styles.frontBody}>
                   <div className={styles.identity}>
@@ -409,11 +528,22 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
                       </BrandWordmark>
                     </Name>
                     <p className={styles.role}>{t("mk_about_role")}</p>
-                    <p className={styles.cities}>{t("card_cities")}</p>
+                    {business ? (
+                      <dl className={styles.figures}>
+                        {figures.map((figure) => (
+                          <div key={figure.label} className={styles.figure}>
+                            <dt className={styles.figureLabel}>{figure.label}</dt>
+                            <dd className={styles.figureValue}>{figure.value}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    ) : (
+                      <p className={styles.cities}>{t("card_cities")}</p>
+                    )}
                   </div>
 
                   <ul className={styles.links}>
-                    {links.map(({ key, href, external, label, value, Icon }) => (
+                    {links.map(({ key, href, external, label, value, Icon, long }) => (
                       <li key={key}>
                         <a
                           href={href}
@@ -425,7 +555,7 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
                           </span>
                           <span className={styles.linkText}>
                             <span className={styles.linkLabel}>{label}</span>
-                            <span className={styles.linkValue}>{value}</span>
+                            <span className={`${styles.linkValue} ${long ? styles.linkValueLong : ""}`}>{value}</span>
                           </span>
                           <ArrowUpRight className={styles.linkArrow} size={14} strokeWidth={1.5} aria-hidden="true" />
                         </a>
@@ -492,7 +622,7 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
                   </div>
 
                   <div className={styles.targets} role="group" aria-label={t("card_qr_group")}>
-                    {QR_TARGETS.map((key) => {
+                    {MODE_TARGETS[mode].map((key) => {
                       const { label, Icon } = TARGETS[key];
                       return (
                         <button
@@ -524,6 +654,13 @@ export default function BusinessCard({ codes, standalone = false }: { codes: Car
           <UserPlus size={16} strokeWidth={1.5} aria-hidden="true" />
           {t("card_save")}
         </a>
+        {walletHref && (
+          // Plain links: Safari opens the .pkpass in Wallet; Google's goes via its save page.
+          <a href={walletHref} className={styles.secondary}>
+            <Wallet size={16} strokeWidth={1.5} aria-hidden="true" />
+            {t("card_wallet")}
+          </a>
+        )}
         <button type="button" className={styles.secondary} onClick={share}>
           {copied ? (
             <Check size={16} strokeWidth={1.5} aria-hidden="true" />

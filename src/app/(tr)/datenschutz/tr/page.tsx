@@ -120,6 +120,19 @@ export default function PrivacyTurkish() {
         Tarayıcınız ilgili sağlayıcıya ancak birine tıkladığınızda bağlanır; o
         andan itibaren o sağlayıcının gizlilik politikası geçerlidir.
       </p>
+      <p>
+        Dijital kartvizitte (/card adresinde ve ana sayfada) kişi dosyasını ve
+        Apple Wallet kartını sunucum kendisi oluşturur; indirirken üçüncü
+        kişilere veri aktarılmaz ve Apple Wallet&apos;a kaydedilen kart
+        sunucuma bağlanmaz. Kart telefonunuzun eğimini takip eder; bu hareket
+        verileri yalnızca tarayıcınızda işlenir ve aktarılmaz. Android
+        cihazlarda ve bilgisayarlarda &ldquo;Cüzdana ekle&rdquo; düğmesi
+        Google Wallet&apos;a (Google Ireland Limited, Gordon House, Barrow
+        Street, Dublin 4, İrlanda) yönlendirir. Tarayıcınız Google&apos;a
+        ancak düğmeye dokunduğunuzda bağlanır; o andan itibaren Google&apos;ın
+        gizlilik politikası geçerlidir. Google bu sırada kartın logosunu ve
+        bir görselini bu web sitesinden alır.
+      </p>
 
       <h2>6. İletişim formu</h2>
       <p>
@@ -406,7 +419,7 @@ export default function PrivacyTurkish() {
 
       <h2>17. Tarih ve dil seçenekleri</h2>
       <p>
-        Ekim 2026 itibarıyla. Bu politika web sitesinin teknik durumunu
+        Kasım 2026 itibarıyla. Bu politika web sitesinin teknik durumunu
         açıklar ve kullanılan hizmetler değiştiğinde güncellenir. Almanca,
         İngilizce ve Türkçe olarak mevcuttur; bağlayıcı olan Almanca metindir.
       </p>

@@ -1,0 +1,142 @@
+/* The owner's NFC panel under the card on /card#nfc: a plain porcelain sheet. */
+
+.panel {
+  width: var(--card-w, clamp(17.5rem, calc(100vw - 2.5rem), 23.5rem));
+  margin-top: 2.5rem;
+  padding: 1.5rem 1.25rem;
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+  box-shadow: 0 12px 30px rgba(24, 21, 18, 0.05);
+  color: var(--text-primary);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+.intro,
+.steps {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.choices {
+  margin-top: 1.25rem;
+  border: 0;
+}
+
+.legend {
+  margin-bottom: 0.5rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.choice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0.75rem;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--border-light);
+  cursor: pointer;
+}
+
+.choice input {
+  grid-row: span 2;
+  accent-color: var(--bg-ink);
+}
+
+.choice input:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.choiceLabel {
+  font-size: 0.9rem;
+}
+
+.choiceUrl {
+  overflow: hidden;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text-secondary);
+}
+
+.write,
+.copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--bg-ink);
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.write {
+  width: 100%;
+  min-height: 3rem;
+  margin-top: 1.25rem;
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+  font-size: 0.7rem;
+  box-shadow: inset 0 -2px 0 var(--accent-gold);
+}
+
+.write:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.address {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.url {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 0.55rem 0.7rem;
+  overflow-wrap: anywhere;
+  background: var(--bg-secondary);
+  font-size: 0.78rem;
+}
+
+.copy {
+  min-height: 2.5rem;
+  padding: 0 0.9rem;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.62rem;
+}
+
+.write:focus-visible,
+.copy:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.status {
+  min-height: 1.2em;
+  margin-top: 0.9rem;
+  font-size: 0.85rem;
+  color: var(--accent-gold-readable);
+}
