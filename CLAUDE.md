@@ -160,11 +160,14 @@ expected to pass with zero output.
 section of the portfolio between FAQ and Contact (`#card`; the floating
 WhatsApp button steps aside over it). One flip card. Front: the lounge portrait
 (`public/card/atilla.webp`), the wordmark in gold foil, WhatsApp, Instagram
-and the website as links. Back: one QR code, by default the card itself
-(atillabarbarossa.com/card, in the page's language), so a scan opens the
-animated card with Instagram, WhatsApp, the website and "Save contact" one
-tap away; the visitor can point it at the website, WhatsApp or Instagram
-instead. Below: "Save contact"
+and the website as links. Back: one QR code, by default the contact page
+(`/c`, `/c/en`, `/c/tr`, `ContactPage.tsx`): what a scan opens on the other
+person's phone is not the card again but the contact, made to be kept: the
+portrait in a gold ring, a large "Save contact" (the vCard with its photo),
+"Follow on Instagram" right below it, then WhatsApp, a call, e-mail, the
+website and the media kit. The link previews, story images, Wallet passes
+and the NFC writer's first choice carry `/c` too. The visitor can point the
+code at the website, WhatsApp or Instagram instead. Below: "Save contact"
 (`/atilla-barbarossa.vcf`, vCard 3.0 with portrait, built at build time in
 `src/lib/card.ts`) and the share sheet. noindex, not in the sitemap.
 
@@ -172,7 +175,7 @@ instead. Below: "Save contact"
   business face (eyebrow "Media & Kooperationen", total followers, reach
   and DACH share from `audience`, then Media Kit, management e-mail and
   WhatsApp with the media kit's message) is for hotels, brands and tourism
-  boards; its QR code opens `/card/business`, then the contact itself
+  boards; its QR code opens `/c` too, then the contact itself
   (`contact`, a short vCard at level M, its own grid, so a scan offers "Add
   to contacts" offline), the media kit and WhatsApp (`MODE_TARGETS` in
   `qr.ts`). `/card/business` (`cardBusiness` in `locales.ts`, `/en`, `/tr`)
