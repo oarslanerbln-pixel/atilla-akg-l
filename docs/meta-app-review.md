@@ -38,7 +38,7 @@ Durum: ✅ tamam · ❌ eksik · ⚠️ karar ya da düzeltme gerekiyor. "Panel 
 
 | # | Adım | Durum | Kim |
 |---|---|---|---|
-| 1 | İşletme doğrulaması (portföy "Atilla") | ✅ doğrulandı, 2026-10-25 | — |
+| 1 | İşletme doğrulaması (portföy "Atilla") | ✅ doğrulandı, 2026-10-25 (Security Center: "Verifiziert", "Ursprünglich verifiziert am Oct 25, 2026"; 2026-10-26'da okundu). Onaylanan üçüncü gönderim 2026-10-24'teydi: Einzelunternehmen, "Registriert", web sitesi `https://atillabarbarossa.com`, Personalausweis. İlk gönderim (ret 2026-10-11'de görüldü) ve Gewerbeanmeldung ile ikinci gönderim (2026-10-16), belgeler "kabul edilen türde değil" gerekçesiyle reddedilmişti. | — |
 | 2 | App Review | ❌ **hiç gönderilmedi** (*App-Review → Einreichungen*: "Nicht eingereicht", geçmiş başvuru yok) | — |
 | 3 | Instagram izinlerinin erişim düzeyi | ❌ üçü de Standard Access ("Bereit zum Testen"). Advanced Access henüz istenmedi; taslak başvuruda Instagram izni yok. | panel yöneticisi |
 | 4 | Her izinde en az bir başarılı API çağrısı | `instagram_business_basic` ✅ 1,3 bin · `instagram_business_manage_comments` ✅ 1,1 bin · `instagram_business_manage_messages` ❌ **0**. Bu sıfır kalırken o izin için Advanced Access istenemez. Demek ki bir yoruma özel cevap ya da DM şimdiye kadar hiç başarıyla gitmedi. Çözüm: aşağıdaki *Prova*. Panelin sayıyı güncellemesi 24 saate kadar sürebilir. | tester hesabı |
