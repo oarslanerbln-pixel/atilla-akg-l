@@ -24,11 +24,38 @@ export function cardTargets(lang: Language): Record<QrTarget, string> {
     web: absolute(pagePath("home", lang)),
     mediaKit: absolute(pagePath("mediaKit", lang)),
     businessCard: absolute(pagePath("cardBusiness", lang)),
+    contact: contactQrText(),
   };
+}
+
+/**
+ * The contact itself, as a QR code holds it: scanned with a phone's camera it
+ * offers "Add to contacts" straight away, offline, without opening the site.
+ * The short form of the contact file below (no portrait, which no QR code
+ * could carry), kept to what fits a code a phone reads from a screen.
+ */
+export function contactQrText(): string {
+  return [
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    "N:Barbarossa;Atilla",
+    "FN:Atilla Barbarossa",
+    `TEL;TYPE=CELL:+${businessCard.whatsapp}`,
+    `EMAIL:${contact.email}`,
+    `URL:${absolute("/")}`,
+    "END:VCARD",
+  ].join("\n");
 }
 
 const encode = (text: string, version?: number) =>
   QRCode.create(text, { errorCorrectionLevel: "H", ...(version ? { version } : {}) });
+
+/**
+ * The contact code carries several times an address's text, so it has its
+ * own grid, at level M: a level-H code of it would be too fine to read off a
+ * phone screen. M still restores the 3 % the brand mark covers.
+ */
+const encodeContact = (text: string) => QRCode.create(text, { errorCorrectionLevel: "M" });
 
 /**
  * Every code the card can show, in every language, all at the version the
@@ -40,8 +67,9 @@ export function cardCodes(): CardCodes {
     Language,
     Record<QrTarget, string>
   >;
+  const addresses = QR_TARGETS.filter((target) => target !== "contact");
   const version = Math.max(
-    ...LANGUAGES.flatMap((lang) => QR_TARGETS.map((target) => encode(targets[lang][target]).version)),
+    ...LANGUAGES.flatMap((lang) => addresses.map((target) => encode(targets[lang][target]).version)),
   );
 
   return Object.fromEntries(
@@ -50,7 +78,7 @@ export function cardCodes(): CardCodes {
       Object.fromEntries(
         QR_TARGETS.map((target) => {
           const url = targets[lang][target];
-          const { modules } = encode(url, version);
+          const { modules } = target === "contact" ? encodeContact(url) : encode(url, version);
           return [target, { url, matrix: { size: modules.size, hex: packModules(modules.data) } }];
         }),
       ),

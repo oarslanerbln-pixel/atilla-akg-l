@@ -16,7 +16,8 @@ import type { Language } from "@/i18n/translations";
  */
 
 /** Every address a QR code on the card can carry. */
-export const QR_TARGETS = ["web", "whatsapp", "instagram", "card", "mediaKit", "businessCard"] as const;
+/** Every code the card can show: addresses, and the contact itself (`contact`, a vCard). */
+export const QR_TARGETS = ["web", "whatsapp", "instagram", "card", "mediaKit", "businessCard", "contact"] as const;
 export type QrTarget = (typeof QR_TARGETS)[number];
 
 /**
@@ -29,13 +30,14 @@ export type CardMode = "personal" | "business";
 /** The codes each mode offers, in order; the first is the one a turned card shows. */
 export const MODE_TARGETS: Record<CardMode, readonly QrTarget[]> = {
   personal: ["web", "whatsapp", "instagram", "card"],
-  business: ["mediaKit", "whatsapp", "web", "businessCard"],
+  // A partner scanning the card gets the contact first; the media kit is a tap away.
+  business: ["contact", "mediaKit", "whatsapp", "web"],
 };
 
 /** One QR code: its width in modules and its modules, row by row, four to a hex digit. */
 export type QrMatrix = { size: number; hex: string };
 
-/** What a code opens, and the code itself. */
+/** What a code opens (an address, or for `contact` the vCard text it carries), and the code itself. */
 export type QrEntry = { url: string; matrix: QrMatrix };
 
 /** Every code the card can show, by language and target. */
