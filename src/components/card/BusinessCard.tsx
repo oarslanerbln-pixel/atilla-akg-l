@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentType, type PointerEvent } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useAnimate } from "framer-motion";
-import { ArrowUpRight, BookOpen, Check, Globe, IdCard, Mail, QrCode, RotateCcw, Share2, UserPlus, Wallet } from "lucide-react";
+import { ArrowUpRight, BookOpen, Check, Contact, Globe, IdCard, Mail, QrCode, RotateCcw, Share2, UserPlus, Wallet } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import BrandWordmark from "@/components/BrandWordmark";
 import { InstagramIcon, WhatsAppIcon } from "@/components/SocialIcons";
@@ -26,6 +26,7 @@ const TARGETS: Record<QrTarget, { label: TranslationKeys; Icon: ComponentType<{ 
   web: { label: "card_qr_web", Icon: Globe },
   mediaKit: { label: "card_qr_mediakit", Icon: BookOpen },
   businessCard: { label: "card_qr_card", Icon: IdCard },
+  contact: { label: "card_qr_contact", Icon: Contact },
 };
 
 const MODES: CardMode[] = ["personal", "business"];
@@ -330,7 +331,9 @@ export default function BusinessCard({
   };
 
   const shown =
-    target === "whatsapp"
+    target === "contact"
+      ? t("card_qr_contact_hint")
+      : target === "whatsapp"
       ? businessCard.whatsappDisplay
       : target === "instagram"
         ? businessCard.instagramHandle

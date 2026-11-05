@@ -170,8 +170,9 @@ WhatsApp, Instagram or the card itself instead. Below: "Save contact"
   business face (eyebrow "Media & Kooperationen", total followers, reach
   and DACH share from `audience`, then Media Kit, management e-mail and
   WhatsApp with the media kit's message) is for hotels, brands and tourism
-  boards; its QR codes open the media kit first (`MODE_TARGETS` in
-  `qr.ts`). `/card/business` (`cardBusiness` in `locales.ts`, `/en`, `/tr`)
+  boards; its QR code is the contact itself (`contact`, a short vCard at
+  level M, its own grid), so a scan offers "Add to contacts" offline; the
+  media kit, WhatsApp and the website follow (`MODE_TARGETS` in `qr.ts`). `/card/business` (`cardBusiness` in `locales.ts`, `/en`, `/tr`)
   opens on it, with its own preview. On `/card` the address follows the
   face and the language.
 - **NFC:** a web page cannot make a phone act as an NFC tag, so a physical
