@@ -40,6 +40,8 @@ const PAGES = {
   privacy: { DE: "/datenschutz", EN: "/datenschutz/en", TR: "/datenschutz/tr" },
   card: { DE: "/card", EN: "/card/en", TR: "/card/tr" },
   cardBusiness: { DE: "/card/business", EN: "/card/business/en", TR: "/card/business/tr" },
+  // Kept short: it is the address the card's QR codes and NFC tags carry.
+  contact: { DE: "/c", EN: "/c/en", TR: "/c/tr" },
 } as const satisfies Record<string, Record<Language, string>>;
 
 export type LocalizedPage = keyof typeof PAGES;

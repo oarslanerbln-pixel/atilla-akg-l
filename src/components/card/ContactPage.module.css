@@ -1,0 +1,348 @@
+/* /c — the contact a scan of the card opens: one porcelain sheet, the
+   portrait in a gold ring, Save contact first, Instagram second, the rest
+   as a quiet list. */
+
+.page {
+  min-height: calc(100svh - 3.5rem);
+  display: flex;
+  justify-content: center;
+  padding: 5.5rem 1.25rem 2.5rem;
+  background:
+    radial-gradient(60% 40% at 50% 18%, var(--bg-card) 0%, transparent 72%),
+    linear-gradient(to bottom, var(--bg-primary), var(--bg-secondary));
+  color: var(--text-primary);
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 26rem);
+  text-align: center;
+}
+
+/* ---------- Portrait ---------- */
+.portrait {
+  position: relative;
+  width: 8.5rem;
+  height: 8.5rem;
+  padding: 0.35rem;
+}
+
+.portraitImage {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 18px 40px -18px rgba(20, 15, 10, 0.45);
+}
+
+/* The ring is the one round line on the site besides status dots: a portrait
+   in a gold mount. It draws itself once, from the top, clockwise. */
+@property --ring-sweep {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 360deg;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--accent-gold-light),
+    var(--accent-gold),
+    var(--accent-gold-dark),
+    var(--accent-gold-light) var(--ring-sweep),
+    transparent var(--ring-sweep)
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), var(--text-primary) calc(100% - 1.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), var(--text-primary) calc(100% - 1.5px));
+}
+
+.ringDraw {
+  animation: ring-draw 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+@keyframes ring-draw {
+  from {
+    --ring-sweep: 0deg;
+  }
+  to {
+    --ring-sweep: 360deg;
+  }
+}
+
+/* ---------- Name ---------- */
+.eyebrow {
+  margin-top: 1.6rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.name {
+  margin-top: 0.6rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 9vw, 2.6rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.role {
+  margin-top: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
+.cities {
+  margin-top: 0.45rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+/* ---------- Save contact ---------- */
+.primaryBlock {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.save {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 3.6rem;
+  overflow: hidden;
+  border: 1px solid var(--bg-ink);
+  background: var(--bg-ink);
+  box-shadow: inset 0 -2px 0 var(--accent-gold);
+  color: var(--text-on-ink);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* A light passes over the button once, after the page has arrived. */
+.save::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    color-mix(in srgb, var(--accent-gold-light) 28%, transparent) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  animation: save-glint 1.8s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both;
+  pointer-events: none;
+}
+
+@keyframes save-glint {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.save:hover {
+  background: var(--bg-ink-soft);
+  color: var(--accent-gold-light);
+}
+
+.saveHint {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.inApp {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 40%, transparent);
+  background: var(--bg-card);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  text-align: left;
+  color: var(--text-secondary);
+}
+
+.inApp svg {
+  margin-top: 0.15rem;
+  color: var(--accent-gold-readable);
+}
+
+/* ---------- Instagram ---------- */
+.instagram {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  margin-top: 1.4rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 45%, transparent);
+  background: var(--bg-card);
+  box-shadow: 0 12px 30px rgba(24, 21, 18, 0.05);
+  text-align: left;
+  color: var(--text-primary);
+  transition:
+    border-color 0.3s ease,
+    transform var(--transition-smooth);
+}
+
+.instagram:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.instagramIcon {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  background: var(--bg-ink);
+  color: var(--accent-gold-light);
+}
+
+.instagramIcon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.instagramText,
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.instagramLabel {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+/* Handle and follower count may wrap at 360 px rather than be cut. */
+.instagramValue {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+/* ---------- The rest ---------- */
+.rows {
+  width: 100%;
+  margin-top: 1.4rem;
+  list-style: none;
+  border-top: 1px solid var(--border-light);
+  text-align: left;
+}
+
+.rows li {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: 3.4rem;
+  color: var(--text-primary);
+}
+
+.row:hover {
+  color: var(--text-primary);
+}
+
+.rowIcon {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 40%, transparent);
+  color: var(--accent-gold-readable);
+}
+
+.rowIcon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.rowLabel {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.rowValue {
+  overflow: hidden;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.arrow {
+  color: var(--accent-gold);
+  transition: transform var(--transition-smooth);
+}
+
+.row:hover .arrow,
+.instagram:hover .arrow {
+  transform: translate(2px, -2px);
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 2rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--accent-gold);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.save:focus-visible,
+.instagram:focus-visible,
+.row:focus-visible,
+.cardLink:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .save::after {
+    display: none;
+  }
+}

@@ -25,6 +25,7 @@ export function cardTargets(lang: Language): Record<QrTarget, string> {
     mediaKit: absolute(pagePath("mediaKit", lang)),
     businessCard: absolute(pagePath("cardBusiness", lang)),
     contact: contactQrText(),
+    contactPage: absolute(pagePath("contact", lang)),
   };
 }
 

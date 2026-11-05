@@ -36,6 +36,20 @@ export function cardMetadata(lang: Language, mode: CardMode = "personal"): Metad
   };
 }
 
+/** /c, the contact a scan of the card opens. noindex, like the card. */
+export function contactMetadata(lang: Language): Metadata {
+  const t = translations[lang];
+  return {
+    ...localizedMetadata({
+      page: "contact",
+      lang,
+      title: `${t.contact_meta_title} | ${SITE_NAME}`,
+      description: t.contact_meta_description,
+    }),
+    robots: { index: false, follow: true },
+  };
+}
+
 export const CARD_SIZE = { width: 1200, height: 630 };
 export const CARD_CONTENT_TYPE = "image/png";
 
@@ -74,8 +88,8 @@ export async function cardPreview(lang: Language, mode: CardMode = "personal") {
   const business = mode === "business";
   const upper = (text: string) => text.toLocaleUpperCase(HTML_LANG[lang]);
   const codes = cardCodes()[lang];
-  // The back shows the code each face opens with: the card itself.
-  const code = business ? codes.businessCard : codes.card;
+  // The back shows the code a scan opens: the contact page.
+  const code = codes.contactPage;
 
   const [latin, latinExt, photo, lockup] = await Promise.all([
     Promise.all(WEIGHTS.map((weight) => font("latin", weight))),
@@ -141,7 +155,7 @@ export async function cardPreview(lang: Language, mode: CardMode = "personal") {
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element -- drawn by next/og into the PNG, never sent to a browser */}
             <img src={qr} width={206} height={206} alt="" style={{ marginTop: 34 }} />
-            <div style={{ display: "flex", marginTop: 26, fontSize: 24, fontWeight: 300 }}>{t.card_qr_card}</div>
+            <div style={{ display: "flex", marginTop: 26, fontSize: 24, fontWeight: 300 }}>{t.card_qr_contactpage}</div>
             <div style={{ display: "flex", marginTop: 6, fontSize: 14, color: MUTED }}>
               {prettyUrl(code.url)}
             </div>
@@ -270,7 +284,7 @@ export async function cardStory(lang: Language, mode: CardMode = "personal") {
   const business = mode === "business";
   const upper = (text: string) => text.toLocaleUpperCase(HTML_LANG[lang]);
   const codes = cardCodes()[lang];
-  const code = business ? codes.businessCard : codes.card;
+  const code = codes.contactPage;
   const locale = HTML_LANG[lang];
   const compact = new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 });
   const figures = [
