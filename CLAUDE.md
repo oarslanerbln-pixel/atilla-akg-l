@@ -160,9 +160,11 @@ expected to pass with zero output.
 section of the portfolio between FAQ and Contact (`#card`; the floating
 WhatsApp button steps aside over it). One flip card. Front: the lounge portrait
 (`public/card/atilla.webp`), the wordmark in gold foil, WhatsApp, Instagram
-and the website as links. Back: one QR code, by default the website
-(atillabarbarossa.com, in the page's language); the visitor can point it at
-WhatsApp, Instagram or the card itself instead. Below: "Save contact"
+and the website as links. Back: one QR code, by default the card itself
+(atillabarbarossa.com/card, in the page's language), so a scan opens the
+animated card with Instagram, WhatsApp, the website and "Save contact" one
+tap away; the visitor can point it at the website, WhatsApp or Instagram
+instead. Below: "Save contact"
 (`/atilla-barbarossa.vcf`, vCard 3.0 with portrait, built at build time in
 `src/lib/card.ts`) and the share sheet. noindex, not in the sitemap.
 
@@ -170,9 +172,10 @@ WhatsApp, Instagram or the card itself instead. Below: "Save contact"
   business face (eyebrow "Media & Kooperationen", total followers, reach
   and DACH share from `audience`, then Media Kit, management e-mail and
   WhatsApp with the media kit's message) is for hotels, brands and tourism
-  boards; its QR code is the contact itself (`contact`, a short vCard at
-  level M, its own grid), so a scan offers "Add to contacts" offline; the
-  media kit, WhatsApp and the website follow (`MODE_TARGETS` in `qr.ts`). `/card/business` (`cardBusiness` in `locales.ts`, `/en`, `/tr`)
+  boards; its QR code opens `/card/business`, then the contact itself
+  (`contact`, a short vCard at level M, its own grid, so a scan offers "Add
+  to contacts" offline), the media kit and WhatsApp (`MODE_TARGETS` in
+  `qr.ts`). `/card/business` (`cardBusiness` in `locales.ts`, `/en`, `/tr`)
   opens on it, with its own preview. On `/card` the address follows the
   face and the language.
 - **NFC:** a web page cannot make a phone act as an NFC tag, so a physical
@@ -202,6 +205,20 @@ WhatsApp, Instagram or the card itself instead. Below: "Save contact"
   (`docs/wallet-setup.md`, `.env.example`); without them the button is not
   shown for that platform and the route answers 503, never a pass that would
   fail. Bump `VERSION` in `google.ts` when the pass content changes.
+- **Instagram:** opened from a bio or story link, the card runs in
+  Instagram's in-app browser, which cannot save a contact file or add a
+  Wallet pass. There (`readInApp`: Instagram/FBAN/FBAV in the user agent) a
+  quiet note offers the phone's own browser, and Save contact and Wallet go
+  through it (`x-safari-https://` on iOS 17+, an Android intent with the
+  address as fallback). "Instagram Story" copies the card's address for the
+  link sticker and shares `/card-story/<lang>-<mode>.png` (1080 × 1920,
+  drawn at build time by `cardStory()` in `share.tsx`, inside Instagram's
+  safe zone) through the share sheet; without file sharing the image opens
+  to be saved. The image is fetched only when the button is pressed.
+- **Motion:** the card arrives tilted in depth and settles flat; on a turn it
+  lifts (scale 1.05, 10 px) while its floor shadow pales, then settles. A
+  holographic film (`.holo`: gold, teal, porcelain, soft-light) and the
+  wordmark's foil (`gradientTransform`, written by the loop) follow the lean.
 - **The turn is two flat quarter turns** (edge-on, swap faces, swing back).
   Don't go back to a back face kept at `rotateY(180deg)` under
   `preserve-3d`: Chrome then sent taps on the back's buttons to the card's

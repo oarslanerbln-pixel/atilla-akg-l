@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentType, type PointerEvent } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useAnimate } from "framer-motion";
-import { ArrowUpRight, BookOpen, Check, Contact, Globe, IdCard, Mail, QrCode, RotateCcw, Share2, UserPlus, Wallet } from "lucide-react";
+import { ArrowUpRight, BookOpen, Check, Compass, Contact, Globe, IdCard, Mail, QrCode, RotateCcw, Share2, UserPlus, Wallet } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import BrandWordmark from "@/components/BrandWordmark";
 import { InstagramIcon, WhatsAppIcon } from "@/components/SocialIcons";
@@ -55,6 +55,27 @@ function readPlatform(): Platform {
   return "other";
 }
 const noSubscribe = () => () => {};
+
+/**
+ * Instagram's (and Facebook's) in-app browser. It opens the card from a bio or
+ * story link, but it cannot save a contact file or add a Wallet pass, so there
+ * those actions, and a quiet note, hand the page to the phone's own browser.
+ */
+const readInApp = () => /Instagram|FBAN|FBAV|FB_IAB/.test(navigator.userAgent);
+
+/**
+ * An address the in-app browser hands to the phone's own browser: Safari by
+ * its x-safari-https scheme (iOS 17 and later), the default browser by an
+ * Android intent that falls back to the address itself.
+ */
+function inBrowser(url: string, platform: Platform | null): string {
+  const rest = url.replace(/^https?:\/\//, "");
+  if (platform === "apple") return `x-safari-https://${rest}`;
+  if (platform === "android") {
+    return `intent://${rest}#Intent;scheme=https;S.browser_fallback_url=${encodeURIComponent(url)};end`;
+  }
+  return url;
+}
 
 type DeviceOrientationWithPermission = typeof DeviceOrientationEvent & {
   requestPermission?: () => Promise<"granted" | "denied">;
@@ -121,8 +142,12 @@ export default function BusinessCard({
   const [motionGranted, setMotionGranted] = useState(0);
   // Read on the client only: the server cannot know the visitor's device.
   const platform = useSyncExternalStore<Platform | null>(noSubscribe, readPlatform, () => null);
+  const inApp = useSyncExternalStore(noSubscribe, readInApp, () => false);
+  const [storyNote, setStoryNote] = useState(false);
   const stage = useRef<HTMLDivElement>(null);
   const lean = useRef<HTMLDivElement>(null);
+  const floor = useRef<HTMLDivElement>(null);
+  const foil = useRef<SVGLinearGradientElement>(null);
   const leanInput = useRef<Lean | null>(null);
   const motionAsked = useRef(false);
   const frontTurn = useRef<HTMLButtonElement>(null);
@@ -176,6 +201,8 @@ export default function BusinessCard({
       y += (ty - y) * ease;
       el.style.setProperty("--lean-x", x.toFixed(4));
       el.style.setProperty("--lean-y", y.toFixed(4));
+      // The foil's catch-light slides along the name as the card leans.
+      foil.current?.setAttribute("gradientTransform", `translate(${(x * 0.35).toFixed(4)} 0)`);
       el.toggleAttribute("data-leaning", live !== null);
       frame = requestAnimationFrame(tick);
     };
@@ -293,9 +320,23 @@ export default function BusinessCard({
     if (!calm && flipper.current) {
       // Front to back swings left, back to front swings right.
       const edge = toBack ? -90 : 90;
-      await animate(flipper.current, { rotateY: edge }, { duration: 0.32, ease: [0.55, 0, 0.8, 0.3] });
+      // The card lifts off the wall as it turns, its shadow widening and paling
+      // beneath it, and settles back flat.
+      const lift = floor.current
+        ? animate(floor.current, { scaleX: [1, 0.78, 1], opacity: [1, 0.45, 1] }, { duration: 1.2, ease: EASE })
+        : null;
+      await animate(
+        flipper.current,
+        { rotateY: edge, scale: 1.05, y: -10 },
+        { duration: 0.34, ease: [0.55, 0, 0.8, 0.3] },
+      );
       setFlipped(toBack);
-      await animate(flipper.current, { rotateY: [-edge, 0] }, { duration: 0.85, ease: EASE });
+      await animate(
+        flipper.current,
+        { rotateY: [-edge, 0], scale: [1.05, 1], y: [-10, 0] },
+        { duration: 0.9, ease: EASE },
+      );
+      await lift;
     } else {
       setFlipped(toBack);
     }
@@ -340,6 +381,48 @@ export default function BusinessCard({
         : prettyUrl(entry.url);
   const targetName = t(TARGETS[target].label);
 
+  // The story image for this face and language (/card-story, drawn at build time).
+  const storySrc = `/card-story/${HTML_LANG[activeLang]}-${mode}.png`;
+  const storyFile = useRef<{ src: string; file: Promise<File | null> } | null>(null);
+  const loadStory = () => {
+    if (storyFile.current?.src !== storySrc) {
+      storyFile.current = {
+        src: storySrc,
+        file: fetch(storySrc)
+          .then((response) => (response.ok ? response.blob() : null))
+          .then((blob) => (blob ? new File([blob], "atilla-barbarossa-story.png", { type: "image/png" }) : null))
+          .catch(() => null),
+      };
+    }
+    return storyFile.current.file;
+  };
+
+  /**
+   * "Instagram Story": the card's address goes to the clipboard, for the link
+   * sticker, and the story image to the share sheet, where Instagram is one
+   * of the targets. Where a browser cannot share files, the image opens to be
+   * saved. The image is fetched only once the visitor reaches for the button.
+   */
+  const shareStory = async () => {
+    const url = codes[activeLang][business ? "businessCard" : "card"].url;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // No clipboard; the note still tells them where the link goes.
+    }
+    setStoryNote(true);
+    const file = await loadStory();
+    if (file && typeof navigator.canShare === "function" && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file] });
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+      }
+    }
+    window.open(storySrc, "_blank", "noopener");
+  };
+
   const share = async () => {
     const url = codes[activeLang][business ? "businessCard" : "card"].url;
     if (typeof navigator.share === "function") {
@@ -370,7 +453,13 @@ export default function BusinessCard({
         : wallet.google
           ? "google"
           : null;
-  const walletHref = walletProvider ? `/wallet/${walletProvider}?lang=${HTML_LANG[activeLang]}` : null;
+  const walletPath = walletProvider ? `/wallet/${walletProvider}?lang=${HTML_LANG[activeLang]}` : null;
+
+  // In Instagram's browser, saving and Wallet go through the phone's own browser.
+  const origin = typeof window === "undefined" ? "" : window.location.origin;
+  const viaBrowser = (path: string) => (inApp ? inBrowser(origin + path, platform) : path);
+  const saveHref = viaBrowser("/atilla-barbarossa.vcf");
+  const walletHref = walletPath ? viaBrowser(walletPath) : null;
 
   // The business face asks for a partnership in its first line, as the media kit does.
   const whatsappHref = `https://wa.me/${businessCard.whatsapp}?text=${encodeURIComponent(
@@ -454,15 +543,18 @@ export default function BusinessCard({
     ? { initial: false as const }
     : standalone
       ? {
-          initial: { opacity: 0.6, y: 36, rotateX: 16 },
-          animate: { opacity: 1, y: 0, rotateX: 0 },
-          transition: { duration: 1.3, ease: EASE, delay: 0.1 },
+          // Laid on the table and turned towards the viewer: a quarter-lean in
+          // depth, a little low and small, settling flat. Its copy is on screen
+          // from the first paint, only softened.
+          initial: { opacity: 0.6, y: 48, rotateX: 22, rotateY: -24, scale: 0.94 },
+          animate: { opacity: 1, y: 0, rotateX: 0, rotateY: 0, scale: 1 },
+          transition: { duration: 1.6, ease: EASE, delay: 0.1 },
         }
       : {
-          initial: { opacity: 0, y: 40, rotateX: 18 },
-          whileInView: { opacity: 1, y: 0, rotateX: 0 },
+          initial: { opacity: 0, y: 56, rotateX: 24, rotateY: -24, scale: 0.94 },
+          whileInView: { opacity: 1, y: 0, rotateX: 0, rotateY: 0, scale: 1 },
           viewport: { once: true, margin: "-80px" },
-          transition: { duration: 1.3, ease: EASE },
+          transition: { duration: 1.6, ease: EASE },
         };
 
   return (
@@ -519,7 +611,7 @@ export default function BusinessCard({
                     <Name className={styles.name}>
                       <BrandWordmark className={styles.wordmark} fill="url(#card-foil)">
                         <defs>
-                          <linearGradient id="card-foil" x1="0" y1="0" x2="1" y2="0.4">
+                          <linearGradient ref={foil} id="card-foil" x1="0" y1="0" x2="1" y2="0.4" spreadMethod="reflect">
                             <stop offset="0" className={styles.foilDeep} />
                             <stop offset="0.28" className={styles.foilLight} />
                             <stop offset="0.46" className={styles.foilShine} />
@@ -569,6 +661,7 @@ export default function BusinessCard({
                   <p className={styles.coords}>{formatCoords(BASE)}</p>
                 </div>
 
+                <span className={styles.holo} aria-hidden="true" />
                 <span className={styles.sheen} aria-hidden="true" />
                 {/* A light passes over the foil once the card has arrived, and again with each turn. */}
                 {arrived && !calm && (
@@ -648,12 +741,21 @@ export default function BusinessCard({
             </div>
           </div>
         </motion.div>
-        <div className={styles.floor} aria-hidden="true" />
+        <div ref={floor} className={styles.floor} aria-hidden="true" />
       </div>
 
       <div className={styles.actions}>
+        {inApp && (
+          <p className={styles.inApp}>
+            <Compass size={15} strokeWidth={1.5} aria-hidden="true" />
+            <span>{t("card_inapp")}</span>
+            <a href={inBrowser(origin + window.location.pathname, platform)} className={styles.inAppLink}>
+              {t("card_inapp_open")}
+            </a>
+          </p>
+        )}
         {/* A plain link: the file is a download, not a page to route to. */}
-        <a href="/atilla-barbarossa.vcf" className={styles.primary}>
+        <a href={saveHref} className={styles.primary}>
           <UserPlus size={16} strokeWidth={1.5} aria-hidden="true" />
           {t("card_save")}
         </a>
@@ -664,6 +766,16 @@ export default function BusinessCard({
             {t("card_wallet")}
           </a>
         )}
+        <button
+          type="button"
+          className={styles.secondary}
+          onPointerDown={() => void loadStory()}
+          onClick={shareStory}
+        >
+          <InstagramIcon />
+          {t("card_story")}
+        </button>
+        {storyNote && <p className={styles.storyNote}>{t("card_story_note")}</p>}
         <button type="button" className={styles.secondary} onClick={share}>
           {copied ? (
             <Check size={16} strokeWidth={1.5} aria-hidden="true" />
