@@ -22,6 +22,8 @@ export function cardTargets(lang: Language): Record<QrTarget, string> {
     whatsapp: `https://wa.me/${businessCard.whatsapp}`,
     instagram: socialProfiles.instagram,
     web: absolute(pagePath("home", lang)),
+    mediaKit: absolute(pagePath("mediaKit", lang)),
+    businessCard: absolute(pagePath("cardBusiness", lang)),
   };
 }
 
@@ -85,7 +87,10 @@ export async function businessVCard(): Promise<string> {
     `FN:${text("Atilla Barbarossa")}`,
     `TITLE:${text("Creative Director & Filmmaker")}`,
     `TEL;TYPE=CELL,VOICE,pref:+${businessCard.whatsapp}`,
-    `EMAIL;TYPE=INTERNET,WORK:${contact.email}`,
+    `EMAIL;TYPE=INTERNET,WORK,pref:${contact.email}`,
+    // The management address, labelled as such in Apple's and Google's contacts.
+    `item1.EMAIL;TYPE=INTERNET:${contact.management}`,
+    "item1.X-ABLabel:Management",
     `URL:${absolute("/")}`,
     `X-SOCIALPROFILE;TYPE=instagram:${socialProfiles.instagram}`,
     `X-SOCIALPROFILE;TYPE=tiktok:${socialProfiles.tiktok}`,

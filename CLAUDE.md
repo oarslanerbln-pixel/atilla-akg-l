@@ -166,6 +166,18 @@ WhatsApp, Instagram or the card itself instead. Below: "Save contact"
 (`/atilla-barbarossa.vcf`, vCard 3.0 with portrait, built at build time in
 `src/lib/card.ts`) and the share sheet. noindex, not in the sitemap.
 
+- **Two faces, one card:** a Personal / Business switch above it. The
+  business face (eyebrow "Media & Kooperationen", total followers, reach
+  and DACH share from `audience`, then Media Kit, management e-mail and
+  WhatsApp with the media kit's message) is for hotels, brands and tourism
+  boards; its QR codes open the media kit first (`MODE_TARGETS` in
+  `qr.ts`). `/card/business` (`cardBusiness` in `locales.ts`, `/en`, `/tr`)
+  opens on it, with its own preview. On `/card` the address follows the
+  face and the language.
+- **NFC:** a web page cannot make a phone act as an NFC tag, so a physical
+  card (NTAG213/215/216, "on-metal" for metal cards) carries the address.
+  `/card#nfc` shows the owner's writer (`NfcWriter.tsx`): Web NFC on Chrome
+  for Android, NFC Tools steps and a copy button elsewhere. `docs/nfc.md`.
 - **Its WhatsApp number is its own:** `businessCard` in `src/lib/site.ts`
   (+49 176 72725165), not `contact.whatsapp`, which the rest of the site uses.
 - **QR codes are computed on the server** (`qrcode`, server-only, in

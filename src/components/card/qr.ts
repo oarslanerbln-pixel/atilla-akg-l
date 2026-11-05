@@ -15,9 +15,22 @@ import type { Language } from "@/i18n/translations";
  * the link preview (colours as hex, for next/og), so the two never differ.
  */
 
-/** In the order the card offers them; the first, the website, is the one a turned card shows. */
-export const QR_TARGETS = ["web", "whatsapp", "instagram", "card"] as const;
+/** Every address a QR code on the card can carry. */
+export const QR_TARGETS = ["web", "whatsapp", "instagram", "card", "mediaKit", "businessCard"] as const;
 export type QrTarget = (typeof QR_TARGETS)[number];
+
+/**
+ * The card's two faces of the same person: personal (portrait, WhatsApp,
+ * Instagram, website) and business (audience figures, media kit,
+ * management) for hotels, brands and tourism boards.
+ */
+export type CardMode = "personal" | "business";
+
+/** The codes each mode offers, in order; the first is the one a turned card shows. */
+export const MODE_TARGETS: Record<CardMode, readonly QrTarget[]> = {
+  personal: ["web", "whatsapp", "instagram", "card"],
+  business: ["mediaKit", "whatsapp", "web", "businessCard"],
+};
 
 /** One QR code: its width in modules and its modules, row by row, four to a hex digit. */
 export type QrMatrix = { size: number; hex: string };

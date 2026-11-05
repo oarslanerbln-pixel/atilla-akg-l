@@ -7,8 +7,8 @@ import { HTML_LANG } from "@/lib/locales";
 import { SITE_NAME, localizedMetadata } from "@/lib/metadata";
 import { cardCodes } from "@/lib/card";
 import { BASE, formatCoords } from "@/lib/partners";
-import { businessCard } from "@/lib/site";
-import { prettyUrl, qrSvg } from "./qr";
+import { businessCard, contact } from "@/lib/site";
+import { prettyUrl, qrSvg, type CardMode } from "./qr";
 
 /**
  * What a link to /card shows before it is opened, in each language. The card
@@ -19,14 +19,15 @@ import { prettyUrl, qrSvg } from "./qr";
  * CLAUDE.md asks, is not blocked in robots.ts, so the noindex is read), and
  * it is not in the sitemap.
  */
-export function cardMetadata(lang: Language): Metadata {
+export function cardMetadata(lang: Language, mode: CardMode = "personal"): Metadata {
   const t = translations[lang];
+  const business = mode === "business";
   return {
     ...localizedMetadata({
-      page: "card",
+      page: business ? "cardBusiness" : "card",
       lang,
-      title: `${t.card_meta_title} | ${SITE_NAME}`,
-      description: t.card_meta_description,
+      title: `${business ? t.card_business_meta_title : t.card_meta_title} | ${SITE_NAME}`,
+      description: business ? t.card_business_meta_description : t.card_meta_description,
     }),
     robots: { index: false, follow: true },
     // Added to a phone's home screen, the card opens full screen, like an app,
@@ -38,7 +39,8 @@ export function cardMetadata(lang: Language): Metadata {
 export const CARD_SIZE = { width: 1200, height: 630 };
 export const CARD_CONTENT_TYPE = "image/png";
 
-export const cardAlt = (lang: Language) => `${translations[lang].card_meta_title} · ${SITE_NAME}`;
+export const cardAlt = (lang: Language, mode: CardMode = "personal") =>
+  `${mode === "business" ? translations[lang].card_business_meta_title : translations[lang].card_meta_title} · ${SITE_NAME}`;
 
 // next/og cannot read the site's custom properties; these are their values
 // (src/app/globals.css).
@@ -67,10 +69,13 @@ const dataUri = (type: string, data: Buffer | string) =>
 /** Card faces in the preview: ISO ID-1, upright. */
 const FACE = { width: 280, height: 444 };
 
-export async function cardPreview(lang: Language) {
+export async function cardPreview(lang: Language, mode: CardMode = "personal") {
   const t = translations[lang];
+  const business = mode === "business";
   const upper = (text: string) => text.toLocaleUpperCase(HTML_LANG[lang]);
-  const code = cardCodes()[lang].web;
+  const codes = cardCodes()[lang];
+  // The back shows the code each face opens with: the website, or the media kit.
+  const code = business ? codes.mediaKit : codes.web;
 
   const [latin, latinExt, photo, lockup] = await Promise.all([
     Promise.all(WEIGHTS.map((weight) => font("latin", weight))),
@@ -83,11 +88,18 @@ export async function cardPreview(lang: Language) {
     qrSvg(code.matrix, { ink: TEXT, pupil: GOLD_DARK, paper: WHITE, teal: TEAL, sun: GOLD }),
   );
 
-  const rows = [
-    { label: t.card_qr_whatsapp, value: businessCard.whatsappDisplay },
-    { label: t.card_qr_instagram, value: businessCard.instagramHandle },
-    { label: t.card_qr_web, value: prettyUrl(new URL(cardCodes()[lang].web.url).origin) },
-  ];
+  const rows = business
+    ? [
+        { label: t.card_qr_mediakit, value: prettyUrl(codes.mediaKit.url) },
+        { label: t.card_management, value: contact.management },
+        { label: t.card_qr_whatsapp, value: businessCard.whatsappDisplay },
+      ]
+    : [
+        { label: t.card_qr_whatsapp, value: businessCard.whatsappDisplay },
+        { label: t.card_qr_instagram, value: businessCard.instagramHandle },
+        { label: t.card_qr_web, value: prettyUrl(new URL(codes.web.url).origin) },
+      ];
+  const rowSize = business ? 22 : 26;
 
   const caps = { fontSize: 13, letterSpacing: 3, fontWeight: 400 } as const;
 
@@ -129,7 +141,7 @@ export async function cardPreview(lang: Language) {
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element -- drawn by next/og into the PNG, never sent to a browser */}
             <img src={qr} width={206} height={206} alt="" style={{ marginTop: 34 }} />
-            <div style={{ display: "flex", marginTop: 26, fontSize: 24, fontWeight: 300 }}>{t.card_qr_web}</div>
+            <div style={{ display: "flex", marginTop: 26, fontSize: 24, fontWeight: 300 }}>{business ? t.card_qr_mediakit : t.card_qr_web}</div>
             <div style={{ display: "flex", marginTop: 6, fontSize: 14, color: MUTED }}>
               {prettyUrl(code.url)}
             </div>
@@ -204,7 +216,7 @@ export async function cardPreview(lang: Language) {
         {/* Who, and how to reach him. */}
         <div style={{ display: "flex", flexDirection: "column", flex: 1, marginLeft: 56 }}>
           <div style={{ display: "flex", ...caps, fontSize: 16, letterSpacing: 5, color: GOLD_READABLE }}>
-            {upper(t.card_eyebrow)}
+            {upper(business ? t.card_business_eyebrow : t.card_eyebrow)}
           </div>
           <div style={{ display: "flex", marginTop: 22, fontSize: 68, fontWeight: 300, letterSpacing: -2.5, lineHeight: 1 }}>
             Atilla Barbarossa
@@ -225,7 +237,7 @@ export async function cardPreview(lang: Language) {
                 }}
               >
                 <div style={{ display: "flex", ...caps, color: MUTED }}>{upper(row.label)}</div>
-                <div style={{ display: "flex", fontSize: 26, fontWeight: 300 }}>{row.value}</div>
+                <div style={{ display: "flex", fontSize: rowSize, fontWeight: 300 }}>{row.value}</div>
               </div>
             ))}
           </div>
