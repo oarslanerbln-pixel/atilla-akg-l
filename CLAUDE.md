@@ -202,6 +202,20 @@ WhatsApp, Instagram or the card itself instead. Below: "Save contact"
   (`docs/wallet-setup.md`, `.env.example`); without them the button is not
   shown for that platform and the route answers 503, never a pass that would
   fail. Bump `VERSION` in `google.ts` when the pass content changes.
+- **Instagram:** opened from a bio or story link, the card runs in
+  Instagram's in-app browser, which cannot save a contact file or add a
+  Wallet pass. There (`readInApp`: Instagram/FBAN/FBAV in the user agent) a
+  quiet note offers the phone's own browser, and Save contact and Wallet go
+  through it (`x-safari-https://` on iOS 17+, an Android intent with the
+  address as fallback). "Instagram Story" copies the card's address for the
+  link sticker and shares `/card-story/<lang>-<mode>.png` (1080 × 1920,
+  drawn at build time by `cardStory()` in `share.tsx`, inside Instagram's
+  safe zone) through the share sheet; without file sharing the image opens
+  to be saved. The image is fetched only when the button is pressed.
+- **Motion:** the card arrives tilted in depth and settles flat; on a turn it
+  lifts (scale 1.05, 10 px) while its floor shadow pales, then settles. A
+  holographic film (`.holo`: gold, teal, porcelain, soft-light) and the
+  wordmark's foil (`gradientTransform`, written by the loop) follow the lean.
 - **The turn is two flat quarter turns** (edge-on, swap faces, swing back).
   Don't go back to a back face kept at `rotateY(180deg)` under
   `preserve-3d`: Chrome then sent taps on the back's buttons to the card's

@@ -83,8 +83,10 @@
   transform: rotateX(calc(var(--lean-y) * -6deg)) rotateY(calc(var(--lean-x) * 8deg));
 }
 
-/* The shadow the card casts on the wall. */
+/* The shadow the card casts on the wall; it widens and pales as the card
+   lifts to turn (BusinessCard animates it). */
 .floor {
+  transform-origin: center;
   position: absolute;
   left: 10%;
   right: 10%;
@@ -458,6 +460,38 @@
   transition: opacity 0.6s ease;
 }
 
+/* A holographic film over the front: gold, the brand's teal and porcelain
+   drifting across the card as it leans, as a foil-stamped card does under a
+   lamp. Faint while the card sways, fuller behind a hand. */
+.holo {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: linear-gradient(
+    125deg,
+    transparent 20%,
+    color-mix(in srgb, var(--accent-gold-light) 35%, transparent) 34%,
+    color-mix(in srgb, var(--brand-teal) 30%, transparent) 46%,
+    color-mix(in srgb, var(--text-on-ink) 22%, transparent) 54%,
+    color-mix(in srgb, var(--accent-gold) 30%, transparent) 64%,
+    transparent 80%
+  );
+  background-size: 300% 300%;
+  background-position: calc(50% - var(--lean-x) * 60%) calc(50% - var(--lean-y) * 60%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.lean[data-alive] .holo {
+  opacity: 0.55;
+}
+
+.lean[data-leaning] .holo {
+  opacity: 0.9;
+}
+
 /* The foil glimmers while the card sways, and catches the full light behind a hand. */
 .lean[data-alive] .sheen {
   opacity: 0.7;
@@ -707,6 +741,55 @@
 
 .secondary:hover {
   border-color: var(--accent-gold);
+  color: var(--accent-gold-readable);
+}
+
+.secondary svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* In Instagram's browser: a quiet line above the actions, not an alert. */
+.inApp {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0.6rem;
+  row-gap: 0.4rem;
+  align-items: start;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 40%, transparent);
+  background: var(--bg-card);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.inApp svg {
+  margin-top: 0.15rem;
+  color: var(--accent-gold-readable);
+}
+
+.inAppLink {
+  grid-column: 2;
+  justify-self: start;
+  padding-bottom: 0.1rem;
+  border-bottom: 1px solid var(--accent-gold);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.inAppLink:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
+.storyNote {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  text-align: center;
   color: var(--accent-gold-readable);
 }
 
