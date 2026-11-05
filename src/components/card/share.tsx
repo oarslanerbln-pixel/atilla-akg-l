@@ -74,8 +74,8 @@ export async function cardPreview(lang: Language, mode: CardMode = "personal") {
   const business = mode === "business";
   const upper = (text: string) => text.toLocaleUpperCase(HTML_LANG[lang]);
   const codes = cardCodes()[lang];
-  // The back shows the code each face opens with: the website, or the contact.
-  const code = business ? codes.contact : codes.web;
+  // The back shows the code each face opens with: the card itself.
+  const code = business ? codes.businessCard : codes.card;
 
   const [latin, latinExt, photo, lockup] = await Promise.all([
     Promise.all(WEIGHTS.map((weight) => font("latin", weight))),
@@ -141,7 +141,7 @@ export async function cardPreview(lang: Language, mode: CardMode = "personal") {
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element -- drawn by next/og into the PNG, never sent to a browser */}
             <img src={qr} width={206} height={206} alt="" style={{ marginTop: 34 }} />
-            <div style={{ display: "flex", marginTop: 26, fontSize: 24, fontWeight: 300 }}>{business ? t.card_qr_contact : t.card_qr_web}</div>
+            <div style={{ display: "flex", marginTop: 26, fontSize: 24, fontWeight: 300 }}>{t.card_qr_card}</div>
             <div style={{ display: "flex", marginTop: 6, fontSize: 14, color: MUTED }}>
               {prettyUrl(code.url)}
             </div>
@@ -270,7 +270,7 @@ export async function cardStory(lang: Language, mode: CardMode = "personal") {
   const business = mode === "business";
   const upper = (text: string) => text.toLocaleUpperCase(HTML_LANG[lang]);
   const codes = cardCodes()[lang];
-  const code = business ? codes.contact : codes.web;
+  const code = business ? codes.businessCard : codes.card;
   const locale = HTML_LANG[lang];
   const compact = new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 });
   const figures = [
@@ -411,7 +411,7 @@ export async function cardStory(lang: Language, mode: CardMode = "personal") {
               Atilla Barbarossa
             </div>
             <div style={{ display: "flex", marginTop: 10, fontSize: 24, fontWeight: 300, color: MUTED }}>
-              {business ? t.card_qr_contact_hint : prettyUrl(code.url)}
+              {prettyUrl(code.url)}
             </div>
           </div>
         </div>

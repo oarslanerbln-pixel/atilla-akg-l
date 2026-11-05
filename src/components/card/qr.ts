@@ -29,9 +29,12 @@ export type CardMode = "personal" | "business";
 
 /** The codes each mode offers, in order; the first is the one a turned card shows. */
 export const MODE_TARGETS: Record<CardMode, readonly QrTarget[]> = {
-  personal: ["web", "whatsapp", "instagram", "card"],
-  // A partner scanning the card gets the contact first; the media kit is a tap away.
-  business: ["contact", "mediaKit", "whatsapp", "web"],
+  // A scan opens the card itself: Instagram, WhatsApp, the website and
+  // "Save contact" are each one tap away there.
+  personal: ["card", "web", "whatsapp", "instagram"],
+  // The business card first; the contact itself (a vCard, saved offline) and
+  // the media kit are the next choices.
+  business: ["businessCard", "contact", "mediaKit", "whatsapp"],
 };
 
 /** One QR code: its width in modules and its modules, row by row, four to a hex digit. */

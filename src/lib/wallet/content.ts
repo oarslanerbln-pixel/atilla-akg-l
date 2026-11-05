@@ -13,8 +13,8 @@ const host = new URL(siteUrl).host;
 
 export const WALLET_NAME = "Atilla Barbarossa";
 
-/** The QR code on a pass opens the website, as the card's does, in the pass's language. */
-export const walletQrUrl = (lang: Language) => absolute(pagePath("home", lang));
+/** The QR code on a pass opens the card, as the card's own code does, in the pass's language. */
+export const walletQrUrl = (lang: Language) => absolute(pagePath("card", lang));
 
 export function walletFacts(lang: Language) {
   const t = translations[lang];

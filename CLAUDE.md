@@ -160,9 +160,11 @@ expected to pass with zero output.
 section of the portfolio between FAQ and Contact (`#card`; the floating
 WhatsApp button steps aside over it). One flip card. Front: the lounge portrait
 (`public/card/atilla.webp`), the wordmark in gold foil, WhatsApp, Instagram
-and the website as links. Back: one QR code, by default the website
-(atillabarbarossa.com, in the page's language); the visitor can point it at
-WhatsApp, Instagram or the card itself instead. Below: "Save contact"
+and the website as links. Back: one QR code, by default the card itself
+(atillabarbarossa.com/card, in the page's language), so a scan opens the
+animated card with Instagram, WhatsApp, the website and "Save contact" one
+tap away; the visitor can point it at the website, WhatsApp or Instagram
+instead. Below: "Save contact"
 (`/atilla-barbarossa.vcf`, vCard 3.0 with portrait, built at build time in
 `src/lib/card.ts`) and the share sheet. noindex, not in the sitemap.
 
@@ -170,9 +172,10 @@ WhatsApp, Instagram or the card itself instead. Below: "Save contact"
   business face (eyebrow "Media & Kooperationen", total followers, reach
   and DACH share from `audience`, then Media Kit, management e-mail and
   WhatsApp with the media kit's message) is for hotels, brands and tourism
-  boards; its QR code is the contact itself (`contact`, a short vCard at
-  level M, its own grid), so a scan offers "Add to contacts" offline; the
-  media kit, WhatsApp and the website follow (`MODE_TARGETS` in `qr.ts`). `/card/business` (`cardBusiness` in `locales.ts`, `/en`, `/tr`)
+  boards; its QR code opens `/card/business`, then the contact itself
+  (`contact`, a short vCard at level M, its own grid, so a scan offers "Add
+  to contacts" offline), the media kit and WhatsApp (`MODE_TARGETS` in
+  `qr.ts`). `/card/business` (`cardBusiness` in `locales.ts`, `/en`, `/tr`)
   opens on it, with its own preview. On `/card` the address follows the
   face and the language.
 - **NFC:** a web page cannot make a phone act as an NFC tag, so a physical
