@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Plus } from "lucide-react";
 import ed from "./editorial.module.css";
 import styles from "./Faq.module.css";
@@ -56,12 +56,12 @@ export default function Faq() {
     <section id="faq" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="faq-title">
       {/* One centred column: the head above, the questions beneath it. */}
       <div className={`container ${styles.layout}`}>
-        <motion.div className={`${styles.head} ${ed.centred}`} {...reveal}>
+        <m.div className={`${styles.head} ${ed.centred}`} {...reveal}>
           <p className={ed.eyebrow}>{t("faq_eyebrow")}</p>
           <h2 id="faq-title" className={ed.title}>
             {t("faq_title")}
           </h2>
-        </motion.div>
+        </m.div>
 
         <ul className={styles.list}>
           {entries.map((entry, i) => (

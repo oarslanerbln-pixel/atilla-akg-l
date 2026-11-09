@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
 import { audience, socialProfiles } from "@/lib/site";
@@ -78,7 +78,7 @@ export default function Stats() {
   return (
     <section id="stats" className={`${ed.section} ${ed.chapter} ${ed.ink} ${styles.section}`} aria-labelledby="stats-title">
       <div className="container">
-        <motion.div className={ed.headSplit} {...reveal()}>
+        <m.div className={ed.headSplit} {...reveal()}>
           <div>
             <p className={ed.eyebrow}>{t("nav_stats")}</p>
             <h2 id="stats-title" className={ed.title}>
@@ -95,11 +95,11 @@ export default function Stats() {
             </span>
             <span className={ed.figureLabel}>{t("stats_reach_accounts")}</span>
           </p>
-        </motion.div>
+        </m.div>
 
         <div className={styles.ledger}>
           {rows.map((row, i) => (
-            <motion.div key={row.label} className={styles.row} {...reveal(i * 0.1)}>
+            <m.div key={row.label} className={styles.row} {...reveal(i * 0.1)}>
               <h3 className={styles.rowLabel}>{t(row.label)}</h3>
               <ul className={styles.figures}>
                 {row.figures.map((figure) => {
@@ -109,7 +109,7 @@ export default function Stats() {
                       {figure.share !== undefined && (
                         // Fills in step with the counter above it: same length, same ease-out.
                         <span className={styles.meter} aria-hidden="true">
-                          <motion.span
+                          <m.span
                             className={styles.meterFill}
                             initial={{ scaleX: 0 }}
                             whileInView={{ scaleX: figure.share / 100 }}
@@ -144,7 +144,7 @@ export default function Stats() {
                   );
                 })}
               </ul>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

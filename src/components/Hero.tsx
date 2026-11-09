@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, type Transition } from "framer-motion";
+import { m, useScroll, useTransform, type Transition } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { socialProfiles } from "@/lib/site";
 import { fill } from "@/i18n/format";
@@ -86,19 +86,19 @@ export default function Hero() {
       {/* The opening: horizon line, then the mattes part. */}
       {!calm && (
         <div className={styles.shutter} aria-hidden="true">
-          <motion.div
+          <m.div
             className={`${styles.matte} ${styles.matteTop}`}
             initial={{ scaleY: 1 }}
             animate={go ? { scaleY: 0 } : undefined}
             transition={{ duration: 1.3, ease: SHUTTER, delay: T.shutter }}
           />
-          <motion.div
+          <m.div
             className={`${styles.matte} ${styles.matteBottom}`}
             initial={{ scaleY: 1 }}
             animate={go ? { scaleY: 0 } : undefined}
             transition={{ duration: 1.3, ease: SHUTTER, delay: T.shutter }}
           />
-          <motion.div
+          <m.div
             className={styles.horizonLine}
             initial={{ scaleX: 0, opacity: 1 }}
             animate={go ? { scaleX: 1, opacity: 0 } : undefined}
@@ -111,21 +111,21 @@ export default function Hero() {
       )}
 
       {/* Content drifts up and fades as the hero scrolls away. */}
-      <motion.div
+      <m.div
         className={styles.content}
         style={calm ? undefined : { y: contentY, opacity: contentOpacity, scale: contentScale }}
       >
         <div className={styles.textContent}>
           {/* A greeting, not a heading: the name below is the page's one h1,
               and nothing should outrank it in the outline. */}
-          <motion.p
+          <m.p
             className={styles.greeting}
             initial={{ opacity: 0, letterSpacing: "0.6em" }}
             animate={go ? { opacity: 1, letterSpacing: "0.32em" } : undefined}
             transition={at(T.greeting, 1.2)}
           >
             {t('hero_welcome')}
-          </motion.p>
+          </m.p>
 
           {/* The page's largest text, so the moment it is first drawn is the
               Largest Contentful Paint. It used to wait for the script and the
@@ -133,7 +133,7 @@ export default function Hero() {
               the first frame, soft and a little low, and the opening pulls it
               into focus. */}
           <h1 className={styles.name}>
-            <motion.span
+            <m.span
               className={styles.nameShine}
               initial={{ filter: "blur(12px)", y: "0.12em" }}
               animate={go ? { filter: "blur(0px)", y: "0em" } : undefined}
@@ -144,10 +144,10 @@ export default function Hero() {
               <span className={styles.firstName}>Atilla</span>{" "}
               <br />
               <span className={styles.lastName}>Barbarossa</span>
-            </motion.span>
+            </m.span>
           </h1>
 
-          <motion.div
+          <m.div
             className={styles.divider}
             initial={{ scaleX: 0 }}
             animate={go ? { scaleX: 1 } : undefined}
@@ -155,25 +155,25 @@ export default function Hero() {
           />
 
           <div className={styles.subtitle}>
-            <motion.span {...rise(T.subtitle)}>{t('hero_aud_hotels')}</motion.span>
-            <motion.span className={styles.separator} aria-hidden="true" {...rise(T.subtitle + 0.06)} />
-            <motion.span {...rise(T.subtitle + 0.12)}>{t('hero_aud_destinations')}</motion.span>
-            <motion.span className={styles.separator} aria-hidden="true" {...rise(T.subtitle + 0.18)} />
-            <motion.span {...rise(T.subtitle + 0.24)}>{t('hero_aud_brands')}</motion.span>
+            <m.span {...rise(T.subtitle)}>{t('hero_aud_hotels')}</m.span>
+            <m.span className={styles.separator} aria-hidden="true" {...rise(T.subtitle + 0.06)} />
+            <m.span {...rise(T.subtitle + 0.12)}>{t('hero_aud_destinations')}</m.span>
+            <m.span className={styles.separator} aria-hidden="true" {...rise(T.subtitle + 0.18)} />
+            <m.span {...rise(T.subtitle + 0.24)}>{t('hero_aud_brands')}</m.span>
           </div>
 
           {/* What the work is and what it gives a client, in one sentence and
               only with figures the Stats section already shows. */}
-          <motion.p className={styles.value} {...rise(T.value)}>
+          <m.p className={styles.value} {...rise(T.value)}>
             {t('hero_value')}
-          </motion.p>
+          </m.p>
 
           {/* Entrance on the wrapper, the magnetic lean on the link itself, so
               the two transforms never fight. The enquiry leads: a hotel or
               tourism board arriving here has come to ask, not to browse. */}
           <div className={styles.ctaGroup}>
-            <motion.div className={styles.ctaSlot} {...rise(T.cta)}>
-              <motion.a
+            <m.div className={styles.ctaSlot} {...rise(T.cta)}>
+              <m.a
                 ref={primaryRef}
                 style={primaryLean}
                 href="#contact"
@@ -182,10 +182,10 @@ export default function Hero() {
                 data-cursor="CONTACT"
               >
                 {t('hero_cta_contact')}
-              </motion.a>
-            </motion.div>
-            <motion.div className={styles.ctaSlot} {...rise(T.cta + 0.1)}>
-              <motion.a
+              </m.a>
+            </m.div>
+            <m.div className={styles.ctaSlot} {...rise(T.cta + 0.1)}>
+              <m.a
                 ref={secondaryRef}
                 style={secondaryLean}
                 href="#work"
@@ -194,13 +194,13 @@ export default function Hero() {
                 data-cursor="PORTFOLIO"
               >
                 {t('hero_cta_projects')}
-              </motion.a>
-            </motion.div>
+              </m.a>
+            </m.div>
           </div>
 
           {/* Social links: thin gold rings, see Hero.module.css */}
           <div className={styles.socialIcons}>
-            <motion.a
+            <m.a
               {...rise(T.social)}
               href={socialProfiles.instagram}
               target="_blank"
@@ -213,8 +213,8 @@ export default function Hero() {
               <span className={styles.iconInner}>
                 <InstagramIcon />
               </span>
-            </motion.a>
-            <motion.a
+            </m.a>
+            <m.a
               {...rise(T.social + 0.08)}
               href={socialProfiles.tiktok}
               target="_blank"
@@ -227,8 +227,8 @@ export default function Hero() {
               <span className={styles.iconInner}>
                 <TikTokIcon />
               </span>
-            </motion.a>
-            <motion.a
+            </m.a>
+            <m.a
               {...rise(T.social + 0.16)}
               href={socialProfiles.youtube}
               target="_blank"
@@ -241,26 +241,26 @@ export default function Hero() {
               <span className={styles.iconInner}>
                 <YoutubeIcon />
               </span>
-            </motion.a>
+            </m.a>
           </div>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Scroll Indicator */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={go ? { opacity: 1 } : undefined}
         transition={at(T.scroll, 1)}
         className={styles.scrollIndicator}
       >
         <span className={styles.scrollText}>{t('hero_scroll')}</span>
-        <motion.div
+        <m.div
           animate={calm ? undefined : { y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
         >
           <ChevronDown className={styles.scrollIcon} />
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </section>
   );
 }

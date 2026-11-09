@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { ArrowRight, X } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useIntroDone } from "@/hooks/useIntroDone";
@@ -59,7 +59,7 @@ export default function HeroEbookNote() {
   return (
     <AnimatePresence>
       {shown && (
-        <motion.aside
+        <m.aside
           className={styles.note}
           aria-label={t("ebook_note_label")}
           initial={{ opacity: 0, y: -16 }}
@@ -84,7 +84,7 @@ export default function HeroEbookNote() {
           <button type="button" className={styles.close} onClick={dismiss} aria-label={t("ebook_note_close")}>
             <X size={14} aria-hidden="true" />
           </button>
-        </motion.aside>
+        </m.aside>
       )}
     </AnimatePresence>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import ed from "./editorial.module.css";
@@ -61,18 +61,18 @@ export default function Services() {
   return (
     <section id="services" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="services-title">
       <div className="container">
-        <motion.div className={ed.head} {...reveal()}>
+        <m.div className={ed.head} {...reveal()}>
           <p className={ed.eyebrow}>{t("services_subtitle")}</p>
           <h2 id="services-title" className={ed.title}>
             {t("services_title")}
           </h2>
-        </motion.div>
+        </m.div>
 
         {/* Three columns between hairlines, as on the offer page of a printed
             kit: no cards, no icons, the words carry it. */}
         <ol className={styles.columns}>
           {segments.map((segment, i) => (
-            <motion.li key={segment.forKey} className={styles.column} {...reveal(i * 0.1)}>
+            <m.li key={segment.forKey} className={styles.column} {...reveal(i * 0.1)}>
               <p className={styles.for}>
                 <span className={ed.index}>{String(i + 1).padStart(2, "0")}</span>
                 {t(segment.forKey)}
@@ -94,11 +94,11 @@ export default function Services() {
                 {t("services_btn")}
                 <ArrowUpRight size={14} aria-hidden="true" />
               </a>
-            </motion.li>
+            </m.li>
           ))}
         </ol>
 
-        <motion.div className={styles.note} {...reveal(0.2)}>
+        <m.div className={styles.note} {...reveal(0.2)}>
           <p className={styles.disclaimer}>{t("services_disclaimer")}</p>
           {/* The monthly packages have a page of their own; this is the one
               path to it from the portfolio, in the language on screen. */}
@@ -110,7 +110,7 @@ export default function Services() {
             {t("services_packages_link")}
             <ArrowUpRight size={15} aria-hidden="true" />
           </Link>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

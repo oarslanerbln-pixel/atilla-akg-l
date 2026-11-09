@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import BrandMark from "@/components/BrandMark";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
@@ -25,7 +25,7 @@ export default function About() {
   return (
     <section id="about" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="about-title">
       <div className={`container ${styles.inner}`}>
-        <motion.div
+        <m.div
           className={`${styles.head} ${ed.centred}`}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -36,10 +36,10 @@ export default function About() {
           <h2 id="about-title" className={ed.title}>
             {t("stats_about_title")}
           </h2>
-        </motion.div>
+        </m.div>
 
         {/* Footage and portraits open like a curtain rising. */}
-        <motion.div
+        <m.div
           className={styles.portrait}
           initial={{ clipPath: "inset(0 0 100% 0)" }}
           whileInView={{ clipPath: "inset(0 0 0% 0)" }}
@@ -53,9 +53,9 @@ export default function About() {
             sizes="(max-width: 900px) 100vw, 460px"
             className={styles.portraitImage}
           />
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className={styles.body}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -72,7 +72,7 @@ export default function About() {
             <span className={ed.signatureName}>Atilla Barbarossa</span>
             <span className={ed.signatureRole}>{t("quote_role")}</span>
           </p>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

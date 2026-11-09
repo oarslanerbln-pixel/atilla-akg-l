@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { socialProfiles } from "@/lib/site";
 import { HTML_LANG, LANGUAGES, LANGUAGE_NAMES, pagePath } from "@/lib/locales";
 import { roadmapPath } from "@/lib/roadmap";
@@ -18,7 +18,7 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -111,7 +111,7 @@ export default function Footer() {
               </nav>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </footer>
   );

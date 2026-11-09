@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { motion, type Transition, type Variants } from "framer-motion";
+import { m, type Transition, type Variants } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import BrandWordmark from "@/components/BrandWordmark";
@@ -141,40 +141,40 @@ export default function PackagesPage() {
   const renderPlate = (pkg: Package, index: number) => {
     const values = { name: pkg.name, count: pkg.videos };
     return (
-      <motion.li
+      <m.li
         key={pkg.id}
         className={`${styles.plate} ${pkg.featured ? styles.featured : ""}`}
         variants={plateVariants}
       >
-        <motion.div className={styles.plateTop} variants={lineVariants}>
+        <m.div className={styles.plateTop} variants={lineVariants}>
           <span className={styles.plateIndex}>{String(index + 1).padStart(2, "0")}</span>
           {pkg.featured && <span className={styles.badge}>{t("pkg_most_chosen")}</span>}
-        </motion.div>
+        </m.div>
 
-        <motion.h3 className={styles.plateName} variants={lineVariants}>
+        <m.h3 className={styles.plateName} variants={lineVariants}>
           {pkg.name}
-        </motion.h3>
-        <motion.p className={styles.tagline} variants={lineVariants}>
+        </m.h3>
+        <m.p className={styles.tagline} variants={lineVariants}>
           {t(pkg.tagline)}
-        </motion.p>
+        </m.p>
 
-        <motion.div className={styles.count} variants={lineVariants}>
+        <m.div className={styles.count} variants={lineVariants}>
           <span className={styles.countValue}>{pkg.videos}</span>
           <span className={styles.countLabel}>
             <span>{t("pkg_videos")}</span>
             <span>{t("pkg_per_month")}</span>
           </span>
-        </motion.div>
+        </m.div>
 
-        <motion.ul className={styles.features} variants={featureListVariants}>
+        <m.ul className={styles.features} variants={featureListVariants}>
           {pkg.features.map((feature) => (
-            <motion.li key={feature} variants={lineVariants}>
+            <m.li key={feature} variants={lineVariants}>
               {t(feature)}
-            </motion.li>
+            </m.li>
           ))}
-        </motion.ul>
+        </m.ul>
 
-        <motion.div className={styles.plateFoot} variants={footVariants(pkg.features.length)}>
+        <m.div className={styles.plateFoot} variants={footVariants(pkg.features.length)}>
           <p className={styles.investment}>{t("pkg_investment")}</p>
           <a
             href={whatsapp(fill(t("pkg_wa_message"), values))}
@@ -188,10 +188,10 @@ export default function PackagesPage() {
           <a href={mail(fill(t("pkg_mail_subject"), values))} className={styles.plateMail}>
             {t("pkg_cta_email")}
           </a>
-        </motion.div>
+        </m.div>
 
         <span className={styles.plateRule} aria-hidden="true" />
-      </motion.li>
+      </m.li>
     );
   };
 
@@ -231,7 +231,7 @@ export default function PackagesPage() {
       <main className={styles.page}>
         {/* Opening */}
         <section className={styles.opening}>
-          <motion.span
+          <m.span
             className={styles.horizon}
             aria-hidden="true"
             initial={{ scaleX: 0 }}
@@ -239,39 +239,39 @@ export default function PackagesPage() {
             transition={at(0.1, 1.6)}
           />
           <div className={`container ${styles.openingInner}`}>
-            <motion.p className={styles.eyebrow} {...rise(0.2)}>
+            <m.p className={styles.eyebrow} {...rise(0.2)}>
               {t("pkg_eyebrow")}
-            </motion.p>
+            </m.p>
             <h1 className={styles.headline}>
-              <motion.span className={styles.headlineLine} {...rise(0.35)}>
+              <m.span className={styles.headlineLine} {...rise(0.35)}>
                 {t("pkg_title_1")}
-              </motion.span>{" "}
-              <motion.span className={`${styles.headlineLine} ${styles.headlineSoft}`} {...rise(0.5)}>
+              </m.span>{" "}
+              <m.span className={`${styles.headlineLine} ${styles.headlineSoft}`} {...rise(0.5)}>
                 {t("pkg_title_2")}
-              </motion.span>
+              </m.span>
             </h1>
-            <motion.p className={styles.lead} {...rise(0.7)}>
+            <m.p className={styles.lead} {...rise(0.7)}>
               {t("pkg_intro")}
-            </motion.p>
-            <motion.a href="#packages" className={styles.scrollLink} {...rise(0.9)}>
+            </m.p>
+            <m.a href="#packages" className={styles.scrollLink} {...rise(0.9)}>
               {t("pkg_scroll")}
               <ArrowDown size={15} aria-hidden="true" />
-            </motion.a>
+            </m.a>
           </div>
         </section>
 
         {/* Packages */}
         <section id="packages" className={styles.section} aria-labelledby="packages-title">
           <div className="container">
-            <motion.div className={styles.sectionHead} {...reveal()}>
+            <m.div className={styles.sectionHead} {...reveal()}>
               <p className={styles.eyebrow}>{t("pkg_packages_eyebrow")}</p>
               <h2 id="packages-title" className={styles.sectionTitle}>
                 {t("pkg_packages_title")}
               </h2>
               <span className={styles.divider} aria-hidden="true" />
-            </motion.div>
+            </m.div>
 
-            <motion.ul
+            <m.ul
               className={styles.plates}
               variants={listVariants}
               initial="hidden"
@@ -279,29 +279,29 @@ export default function PackagesPage() {
               viewport={{ once: true, margin: "-60px" }}
             >
               {packages.map(renderPlate)}
-            </motion.ul>
+            </m.ul>
           </div>
         </section>
 
         {/* Process */}
         <section className={styles.section} aria-labelledby="process-title">
           <div className="container">
-            <motion.div className={styles.sectionHead} {...reveal()}>
+            <m.div className={styles.sectionHead} {...reveal()}>
               <p className={styles.eyebrow}>{t("pkg_process_eyebrow")}</p>
               <h2 id="process-title" className={styles.sectionTitle}>
                 {t("pkg_process_title")}
               </h2>
               <span className={styles.divider} aria-hidden="true" />
-            </motion.div>
+            </m.div>
 
             <ol className={styles.steps}>
               {STEPS.map((n, i) => (
-                <motion.li key={n} className={styles.step} {...reveal(i * 0.1)}>
+                <m.li key={n} className={styles.step} {...reveal(i * 0.1)}>
                   <span className={styles.stepNumber}>{String(n).padStart(2, "0")}</span>
                   <span className={styles.stepLine} aria-hidden="true" />
                   <h3 className={styles.stepTitle}>{t(`pkg_step_${n}_t` as TranslationKeys)}</h3>
                   <p className={styles.stepText}>{t(`pkg_step_${n}_d` as TranslationKeys)}</p>
-                </motion.li>
+                </m.li>
               ))}
             </ol>
           </div>
@@ -310,15 +310,15 @@ export default function PackagesPage() {
         {/* Promises */}
         <section className={`${styles.section} ${styles.promiseSection}`} aria-labelledby="promise-title">
           <div className="container">
-            <motion.p id="promise-title" className={`${styles.eyebrow} ${styles.center}`} {...reveal()}>
+            <m.p id="promise-title" className={`${styles.eyebrow} ${styles.center}`} {...reveal()}>
               {t("pkg_promise_eyebrow")}
-            </motion.p>
+            </m.p>
             <ul className={styles.promises}>
               {PROMISES.map((n, i) => (
-                <motion.li key={n} className={styles.promise} {...reveal(i * 0.08)}>
+                <m.li key={n} className={styles.promise} {...reveal(i * 0.08)}>
                   <h3 className={styles.promiseTitle}>{t(`pkg_promise_${n}_t` as TranslationKeys)}</h3>
                   <p className={styles.promiseText}>{t(`pkg_promise_${n}_d` as TranslationKeys)}</p>
-                </motion.li>
+                </m.li>
               ))}
             </ul>
           </div>
@@ -333,14 +333,14 @@ export default function PackagesPage() {
         {/* Closing */}
         <section className={styles.close} aria-labelledby="close-title">
           <div className={`container ${styles.closeInner}`}>
-            <motion.h2 id="close-title" className={styles.closeTitle} {...reveal()}>
+            <m.h2 id="close-title" className={styles.closeTitle} {...reveal()}>
               {t("pkg_close_title")}
-            </motion.h2>
-            <motion.p className={styles.closeNote} {...reveal(0.1)}>
+            </m.h2>
+            <m.p className={styles.closeNote} {...reveal(0.1)}>
               {t("pkg_close_note")}
-            </motion.p>
-            <motion.div className={styles.closeActions} {...reveal(0.2)}>
-              <motion.a
+            </m.p>
+            <m.div className={styles.closeActions} {...reveal(0.2)}>
+              <m.a
                 ref={waRef}
                 style={waLean}
                 href={whatsapp(t("pkg_wa_general"))}
@@ -349,16 +349,16 @@ export default function PackagesPage() {
                 className={styles.closePrimary}
               >
                 {t("pkg_close_whatsapp")}
-              </motion.a>
-              <motion.a
+              </m.a>
+              <m.a
                 ref={mailRef}
                 style={mailLean}
                 href={mail(t("pkg_mail_general"))}
                 className={styles.closeSecondary}
               >
                 {t("pkg_close_email")}
-              </motion.a>
-            </motion.div>
+              </m.a>
+            </m.div>
           </div>
         </section>
       </main>

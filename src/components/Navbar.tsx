@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import styles from "./Navbar.module.css";
 import { useSoundDesign } from "@/hooks/useSoundDesign";
 import { useLanguage } from "@/context/LanguageContext";
@@ -210,7 +210,7 @@ export default function Navbar() {
           height whenever the page was not at the top. */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             key="mobile-menu"
             ref={sheetRef}
             className={styles.mobileMenu}
@@ -221,7 +221,7 @@ export default function Navbar() {
           >
             <nav className={styles.mobileMenuLinks}>
               {NAV_ITEMS.map((item, i) => (
-                <motion.a
+                <m.a
                   key={item.href}
                   href={item.href}
                   className={styles.mobileMenuLink}
@@ -231,9 +231,9 @@ export default function Navbar() {
                   transition={{ duration: 0.5, delay: 0.08 * i, ease: [0.16, 1, 0.3, 1] }}
                 >
                   {t(item.key)}
-                </motion.a>
+                </m.a>
               ))}
-              <motion.a
+              <m.a
                 href={roadmapPath(activeLang)}
                 className={`${styles.mobileMenuLink} ${styles.mobileMenuEbook}`}
                 onClick={handleLinkClick}
@@ -243,10 +243,10 @@ export default function Navbar() {
               >
                 <span className={styles.mobileMenuEbookLabel}>{t("footer_roadmap")}</span>
                 {t("faq_9_link")}
-              </motion.a>
+              </m.a>
             </nav>
 
-            <motion.div
+            <m.div
               className={styles.mobileMenuFooter}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -276,8 +276,8 @@ export default function Navbar() {
                   <LiveClock /> · BERLIN / ISTANBUL
                 </span>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>
