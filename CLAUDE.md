@@ -12,7 +12,7 @@
 - **Framework:** Next.js 16.3.3 (App Router)
 - **Library:** React 19.2.8
 - **Language:** TypeScript 5
-- **Animations:** `framer-motion` (^13.1.1)
+- **Animations:** `framer-motion` (^13.1.1) as `m.*` under `LazyMotion`; GSAP and three.js only on the globe path
 - **Icons:** `lucide-react` (^1.35.0)
 - **Styling:** Vanilla CSS + CSS Modules (`*.module.css`) + Global Tokens in `src/app/globals.css`
 - ⚠️ **NO Tailwind CSS!** Do NOT install or use Tailwind CSS utility classes. Always use CSS Modules and custom properties.
@@ -67,7 +67,7 @@ src/
 ├── app/
 │   ├── globals.css          # Design tokens, z-index scale, base styles, reset
 │   ├── RootDocument.tsx     # <html lang>, fonts, site-wide JSON-LD, providers
-│   ├── Providers.tsx        # Context providers wrapper (LanguageProvider)
+│   ├── Providers.tsx        # Context providers wrapper (LanguageProvider, LazyMotion)
 │   ├── global-not-found.tsx # Trilingual 404 (no single root layout to use)
 │   ├── (de)/                # Root layout lang="de": /, impressum, datenschutz,
 │   │                        #   roadmap, social-media, media-kit, card; opengraph-image.tsx
@@ -417,6 +417,7 @@ Where a sentence has to carry a link, the translation owns its position with a
    - Maintain the refined, editorial luxury aesthetic (delicate borders, ample whitespace, subtle gold accents, smooth typography).
 3. **Animations:**
    - Use `framer-motion` with soft luxury easing (e.g. `[0.16, 1, 0.3, 1]`).
+   - Render `m.div`, never `motion.div`: the app runs under `<LazyMotion features={domAnimation} strict>` (`Providers.tsx`), which throws on `motion.*` in development (`npm run dev`). Motion rules in `.claude/skills/atilla-design/SKILL.md`.
    - Avoid aggressive or jarring transitions.
 4. **i18n:**
    - Always update `src/i18n/translations.ts` whenever introducing or changing text.

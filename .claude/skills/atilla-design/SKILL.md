@@ -84,7 +84,10 @@ how the site looks and behaves.
 ## Motion
 
 - framer-motion with ease `[0.16, 1, 0.3, 1]`. Entrances run 0.6 to 1.2 s and travel 20 to 40 px. No springs with visible bounce.
+- Use `m.div`, never `motion.div`: `Providers.tsx` wraps the app in `<LazyMotion features={domAnimation} strict>`, and a `motion.*` component throws there under `npm run dev` (production stays silent and just ships the full bundle again). `domAnimation` covers animate, exit, variants and the hover, tap, focus and in-view gestures. `drag`, `layout` and `layoutId` need `domMax` (about 13 KB more gzipped on every page): measure it and ask first, or do the effect another way. Name no variable `m` in a file that renders `m.*`.
 - `MotionConfig reducedMotion="user"` wraps the app. Under `usePrefersCalm()` (reduced motion, reduced data, Save-Data), nothing heavy autoplays.
+- Two engines, two jobs. framer-motion: component entrances, presence, hover. GSAP (with ScrollTrigger): the globe's timelines and its scroll-driven climb, and nothing else, because it loads only with the globe (`loadGsap()` in `HeroGlobe.tsx`). A GSAP plugin (SplitText, Flip, DrawSVG…, all free since 2025) may join it on that path; elsewhere it would put GSAP on every visitor's phone. Wrap GSAP work in `gsap.context()` and `revert()` it on unmount.
+- Shaders (`HeroHorizon.tsx`, `globe/GlobeScene.ts`) draw one still frame under calm, cap the pixel ratio (the sunrise renders below screen resolution, the globe at most 2×) and stop when off screen or in a hidden tab. A new WebGL scene follows the same three rules.
 - The hero opening waits for the intro (`useIntroDone`). The intro plays once per visitor, ever.
 - NEVER hold the scroll or hijack the wheel. The hero stays one screen tall.
 
@@ -148,6 +151,8 @@ main *, footer * { opacity: 1 !important; transform: none !important; }
 **Scroll:** use `scrollTo({ top, behavior: 'instant' })`. Smooth scroll does not advance in a hidden pane.
 
 **Languages:** `/`, `/en`, `/tr`. Run every measurement in all three.
+
+**JavaScript weight:** `next build` no longer prints it. Build, `next start`, then sum the gzip size of every `<script src>` in the page's HTML, fetched with `Accept-Encoding: gzip`. Skip the `noModule` one (Next's polyfills, about 39 KB, which modern browsers never download) and check that every chunk answers 200. Stop the server before the next build: a `next-server` left on the port serves the old build's HTML. Reference, November 2026: `/` 252 KB, `/card` 221 KB, `/social-media` 205 KB; the globe's three.js and GSAP come on top, later, for globe visitors only.
 
 ## Ground rules
 
