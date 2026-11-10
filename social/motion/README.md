@@ -23,7 +23,6 @@ across it, and `<name>-report.json`. Look at the sheet before the film; most def
 | `sting` | reel, square, wide | The mark is drawn, the sun comes up, the name is uncovered. `tone`: `ink`, `paper`, or `alpha` (transparent, over footage). `out: "fade"` for an opening, `"stay"` for a closing card. Optional `line` under the name. | `.mp4`, alpha `.mov` |
 | `title` | reel, wide | A cover's type, moving: eyebrow, serif title, italic gold second line. Same fields as a cover brief. | alpha `.mov` |
 | `location` | reel, wide | A compass turning from north to the bearing from Berlin, the place, its coordinates and distance. Computed from `lat`/`lon` by the site's own `bearing()`. | alpha `.mov` |
-| cartoon brief | reel, square, wide | `kind: "cartoon"`: characters acting on a set, see below. | `.mp4` |
 | flights brief | story | `kind: "flights"` exactly as `templates/flights.tsx` takes it. | `.mp4` |
 
 Overlays are ProRes 4444 with an alpha channel: drop them on a track above the footage in
@@ -33,69 +32,6 @@ that is already dark there.
 
 A brief never states a duration. It follows from the content (`src/briefs.ts`): the entrance,
 then the copy's reading time (1 s plus 0.4 s a word) or `hold`, whichever is longer.
-
-## Cartoons
-
-A cartoon brief is a list of scenes (`social/briefs/cartoon/berlin-istanbul.json` is the worked
-example). Each scene is a place in a light, a cast with a script, and a camera:
-
-```json
-{
-  "place": "airport", "time": "day",
-  "caption": "One line of narration, along the top.",
-  "camera": { "follow": "host", "zoom": [1, 1.15] },
-  "cast": [
-    { "id": "host", "preset": "host", "carry": "suitcase", "x": 840,
-      "script": [ { "at": 0.5, "do": "walk", "to": 1100 }, { "at": 4, "do": "talk", "say": "Einmal Istanbul, bitte." } ] }
-  ]
-}
-```
-
-- **Places:** `berlin`, `istanbul`, `airport`, `seaside`, `mountains`, `lounge`. **Light:** `dawn`,
-  `day`, `dusk`, `night`. Every set is layered for parallax and alive on its own (clouds, a ferry,
-  a departing plane, palms, chimney smoke); one tint lights the set and the figures alike.
-- **Cast:** presets `host`, `traveller`, `guide`, `concierge`, `photographer`, `elder`; any part
-  of a look can be overridden in the brief (`hair`, `hat`, `top`, colours, `beard`, `glasses`,
-  `carry`, `height`). Up to five characters a scene.
-- **Actions:** `idle`, `walk` (to a world x, 0 to 2400), `talk` (with `say`, a speech bubble),
-  `wave`, `point`, `cheer`, `nod`, `think`, `shrug`. Poses blend into each other; a beat written
-  before a walk has arrived waits for it.
-- **Camera:** `follow` a character, or pan `from`/`to`; `zoom` 1 to 2, or a pair to push in.
-- A scene lasts as long as its script and its reading time; scenes dissolve into each other.
-
-### Sound
-
-Add `"lang": "de"` and `"sound": { "music": "warm", "voices": true }` to a cartoon brief.
-
-- **Music** is composed in code (`audio/music.ts`): `warm`, `calm`, `bright`, `night`, or `none`.
-  No samples or loops from anywhere, so there is nothing to license.
-- **Voices:** every caption and every `say` is spoken. Your own take wins: record a line as
-  16-bit WAV to `social/assets/voice/<brief name>/s<scene>-<cast id>-<beat number>.wav` (captions:
-  `s<scene>-caption.wav`) and that line is yours. Everything else is spoken by
-  [Piper](https://github.com/OHF-Voice/piper1-gpl), a neural voice that runs on this machine, is
-  free and sends the script nowhere:
-
-  ```bash
-  pip install piper-tts                         # once; MOTION_PIPER names the Python that has it
-  npm --prefix social/motion run voices -- de tr   # downloads the default voices (60–110 MB each)
-  ```
-
-  A character takes the language's default voice, or `"voice": "tr_TR-dfki-medium"` and
-  `"pitch"` in the brief. Each voice has its own licence (its model card on Hugging Face): read
-  it before publishing with one.
-- **The voices set the timing.** A line lasts as long as it takes to say, its loudness opens the
-  speaker's mouth frame by frame, and the music steps back while anyone talks. The mix is brought
-  to -14 LUFS and laid onto the film without re-encoding the picture.
-- Without Piper or a voice, the film still renders: those lines stay silent, and the run says so.
-
-`npm --prefix social/motion run sheet` renders the model sheet (every preset in every action),
-`run places` a still of every set. Look at both after touching the rig, a look or a backdrop.
-
-How it works: `src/cartoon/rig.ts` is the puppet (two-bone limbs posed by angles, the hip placed
-so the lower foot stands on the ground, the walk driven by distance so feet do not slide),
-`scene.ts` the film as data (schema, timeline, camera), `Character.tsx`, `looks.ts` and
-`Backdrop.tsx` the drawing. A new action is a case in `actionPose`; a new place a function in
-`Backdrop.tsx`; a new character a preset in `looks.ts`.
 
 ## How it is built
 
@@ -116,15 +52,11 @@ so the lower foot stands on the ground, the walk driven by distance so feet do n
 
 - Before the render: the brief matches its schema; a title with `partner` set starts its eyebrow
   with the ad label (Anzeige, Ad, Reklam); a flights keyword is one `supabase/offers.sql` answers to.
-- A cartoon: unique cast ids, a camera that follows someone in the cast, walks with a target, and
-  every speaker in the picture while speaking; two bubbles at once is a warning.
-- Sound: the film has an audio track, within 1.5 LU of -14 LUFS; silent lines are a warning.
 - After it: size, frame rate, duration, codec; an overlay has an alpha channel and ends empty;
   nothing opaque sits under the bands the platform covers.
 
 `npm test` (in `social/motion`) holds the curve, the drawing schedule, the geometry, the copy
-timing and every brief in `social/briefs/` to these rules, and the rig to its own (bones keep
-their length, a standing foot is on the ground, nothing teleports between two frames); CI runs it with the type check.
+timing and every brief in `social/briefs/` to these rules; CI runs it with the type check.
 
 ## A new template
 

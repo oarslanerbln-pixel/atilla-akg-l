@@ -4,8 +4,6 @@ import { join } from "node:path";
 import { promisify } from "node:util";
 import sharp from "sharp";
 import { adLabel, type Clip, type FlightsProps } from "./src/briefs";
-import { spans } from "./src/cartoon/rig";
-import { cameraAt, castAt, project, timeline, viewOf, type CartoonBrief } from "./src/cartoon/scene";
 import { FORMATS, type FormatId } from "./src/lib/formats";
 import { FPS } from "./src/lib/tokens";
 import { ROOT, type Rendered } from "./engine";
@@ -61,40 +59,6 @@ export function checkFlights(p: FlightsProps, keywords = offerKeywords()): Findi
   const sorted = [...p.deals].sort((a, b) => a.price - b.price);
   if (p.deals.some((d, i) => d.price !== sorted[i].price)) out.push(warning("order", "Deals are not cheapest first."));
   if (!/^\d{2}\.\d{2}\.\d{4}$/.test(p.asOf)) out.push(warning("as-of", `asOf "${p.asOf}" is not a date like 27.09.2026.`));
-  return out;
-}
-
-/** A cartoon's script, read before a frame is drawn: who is where, and whether a speaker is in the picture. */
-export function checkCartoon(brief: CartoonBrief): Finding[] {
-  const out: Finding[] = [];
-  brief.scenes.forEach((scene, n) => {
-    const where = `scene ${n + 1}`;
-    const ids = scene.cast.map((c) => c.id);
-    if (new Set(ids).size !== ids.length) out.push(error("cast-id", `${where}: two characters share an id.`));
-    if (scene.camera?.follow && !ids.includes(scene.camera.follow)) out.push(error("follow", `${where}: the camera follows "${scene.camera.follow}", who is not in the cast.`));
-    for (const c of scene.cast) {
-      for (const beat of c.script ?? []) {
-        if (beat.do === "walk" && beat.to === undefined) out.push(error("walk", `${where}, ${c.id}: a walk needs "to".`));
-        if (beat.say && beat.do !== "talk") out.push(warning("say", `${where}, ${c.id}: a line is spoken during "${beat.do}"; the mouth only moves on "talk".`));
-      }
-      for (const format of brief.formats) {
-        const view = viewOf(format);
-        for (const s of spans(c.x, c.script ?? [])) {
-          if (!s.say) continue;
-          // Half a second into the line, the speaker has to be in the picture.
-          const t = s.at + 0.5;
-          const { cam, zoom } = cameraAt(scene, t, view);
-          const [x] = project(castAt(c, t).x, 0, cam, zoom, view, 0);
-          if (x < 40 || x > view - 40) out.push(error("off-screen", `${where}, ${c.id}, ${format}: speaks at ${s.at} s while out of the picture.`));
-        }
-      }
-    }
-    // Two bubbles at once cover each other and split the eye.
-    const lines = scene.cast.flatMap((c) => spans(c.x, c.script ?? []).filter((s) => s.say).map((s) => ({ id: c.id, at: s.at, end: s.end })));
-    for (const a of lines) for (const b of lines) if (a.id < b.id && a.at < b.end && b.at < a.end) out.push(warning("overlap", `${where}: ${a.id} and ${b.id} speak at the same time (${Math.max(a.at, b.at)} s).`));
-  });
-  const { total } = timeline(brief.scenes);
-  if (total > 90) out.push(warning("long", `${total.toFixed(0)} s: a reel holds attention for far less.`));
   return out;
 }
 

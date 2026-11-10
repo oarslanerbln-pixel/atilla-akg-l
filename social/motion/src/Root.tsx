@@ -14,9 +14,6 @@ import {
   type StingProps,
   type TitleProps,
 } from "./briefs";
-import { Cartoon } from "./cartoon/Cartoon";
-import { cartoonPropsSchema, timeline, type CartoonProps } from "./cartoon/scene";
-import { MODEL_SHEET, ModelSheet } from "./cartoon/ModelSheet";
 import { FlightsStory } from "./comps/FlightsStory";
 import { LocationTag } from "./comps/LocationTag";
 import { Sting } from "./comps/Sting";
@@ -54,12 +51,6 @@ const flightsDefaults: FlightsProps = {
     { destination: "Rumänien", detail: "Direktflug", price: 30 },
     { destination: "Italien", detail: "Direktflug", price: 30 },
   ],
-};
-
-const cartoonDefaults: CartoonProps = {
-  kind: "cartoon",
-  name: "sample",
-  scenes: [{ place: "seaside", time: "day", cast: [{ id: "host", preset: "host", x: 1200 }] }],
 };
 
 export const Root: React.FC = () => (
@@ -104,21 +95,6 @@ export const Root: React.FC = () => (
         />
       </React.Fragment>
     ))}
-    {each(["reel", "square", "wide"]).map((f) => (
-      <Composition
-        key={f.id}
-        id={`Cartoon-${f.id}`}
-        component={Cartoon}
-        schema={cartoonPropsSchema}
-        width={f.width}
-        height={f.height}
-        fps={FPS}
-        durationInFrames={FPS}
-        defaultProps={cartoonDefaults}
-        calculateMetadata={({ props }) => ({ durationInFrames: frames(timeline(props.scenes).total) })}
-      />
-    ))}
-    <Composition id="ModelSheet" component={ModelSheet} width={MODEL_SHEET.width} height={MODEL_SHEET.height} fps={FPS} durationInFrames={FPS * 4} />
     <Composition
       id="FlightsStory-story"
       component={FlightsStory}

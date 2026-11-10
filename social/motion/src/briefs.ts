@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { FLIGHTS_COPY } from "../../flights";
-import { cartoonSchema } from "./cartoon/scene";
 import { MARK_DRAWN } from "./brand/schedule";
 import { ENTER, EXIT, readTime } from "./lib/tokens";
 
@@ -123,8 +122,8 @@ export const motionSchema = z.object({
 });
 export type MotionBrief = z.infer<typeof motionSchema>;
 
-/** A brief is a set of clips, a cartoon, or a flights story brief exactly as the still template takes it. */
-export const briefSchema = z.discriminatedUnion("kind", [motionSchema, flightsSchema, cartoonSchema]);
+/** A brief is a set of clips, or a flights story brief exactly as the still template takes it. */
+export const briefSchema = z.union([motionSchema, flightsSchema]);
 
 export const TEMPLATES = {
   sting: { comp: "Sting", seconds: stingSeconds, overlay: false },
