@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ArrowUpRight, Play, Volume2, VolumeX } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
 import ed from "./editorial.module.css";
@@ -72,7 +72,7 @@ export default function CaseStudy({ film, permalink }: { film: Pick<Reel, "video
   return (
     <section id="case-study" className={`${ed.section} ${ed.chapter} ${ed.horizon}`} aria-labelledby="case-title">
       <div className="container">
-        <motion.div className={ed.headSplit} {...reveal()}>
+        <m.div className={ed.headSplit} {...reveal()}>
           <div>
             <p className={ed.eyebrow}>{t("case_title")}</p>
             <h2 id="case-title" className={ed.title}>
@@ -89,11 +89,11 @@ export default function CaseStudy({ film, permalink }: { film: Pick<Reel, "video
               <dd>{t("case_meta_type_val")}</dd>
             </div>
           </dl>
-        </motion.div>
+        </m.div>
 
         <div className={styles.feature}>
           {/* Footage opens like a curtain rising. */}
-          <motion.div
+          <m.div
             className={styles.film}
             data-cursor={film ? (isPlaying ? "PAUSE" : "PLAY") : undefined}
             initial={{ clipPath: "inset(0 0 100% 0)" }}
@@ -160,23 +160,23 @@ export default function CaseStudy({ film, permalink }: { film: Pick<Reel, "video
                 </span>
               </a>
             )}
-          </motion.div>
+          </m.div>
 
           <div className={styles.story}>
-            <motion.figure className={styles.caption} {...reveal()}>
+            <m.figure className={styles.caption} {...reveal()}>
               <figcaption className={ed.kicker}>{t("case_caption_label")}</figcaption>
               <blockquote className={styles.captionText}>
                 <p>{t("case_caption_text")}</p>
               </blockquote>
-            </motion.figure>
-            <motion.div className={styles.desc} {...reveal(0.15)}>
+            </m.figure>
+            <m.div className={styles.desc} {...reveal(0.15)}>
               <p>{t("case_desc1")}</p>
               <p>{t("case_desc2")}</p>
-            </motion.div>
+            </m.div>
           </div>
         </div>
 
-        <motion.ul className={styles.figures} {...reveal()}>
+        <m.ul className={styles.figures} {...reveal()}>
           {METRICS.map((metric) => (
             <li key={metric.label} className={styles.figure}>
               <span className={`${ed.figureValue} ${styles.value}`}>
@@ -185,7 +185,7 @@ export default function CaseStudy({ film, permalink }: { film: Pick<Reel, "video
               <span className={ed.figureLabel}>{t(metric.label)}</span>
             </li>
           ))}
-        </motion.ul>
+        </m.ul>
       </div>
     </section>
   );

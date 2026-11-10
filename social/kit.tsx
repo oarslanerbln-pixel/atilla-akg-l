@@ -4,23 +4,13 @@ import { dirname, join } from "node:path";
 import type { ReactElement } from "react";
 import { ImageResponse } from "next/og";
 import sharp from "sharp";
+import { C } from "./palette";
 
 // Shared pieces for the social templates: the brand's colours, self-hosted fonts, the exported
-// brand artwork, photo framing and rendering. Colours mirror src/app/globals.css; the templates
-// render outside the page's CSS, so they are literals here.
+// brand artwork, photo framing and rendering. The colours live in palette.ts, shared with the
+// motion engine.
 
-export const C = {
-  porcelain: "#fcfbf9",
-  alabaster: "#f4f1ea",
-  ink: "#140f0a",
-  text: "#181512",
-  graphite: "#5a524a",
-  gold: "#b38b59",
-  goldLight: "#d8b482",
-  goldReadable: "#7c5423",
-  onInkSoft: "rgba(252, 251, 249, 0.72)",
-  hairline: "rgba(24, 21, 18, 0.14)",
-} as const;
+export { C } from "./palette";
 
 /** Instagram reel cover and story: 9:16. The profile grid shows the middle 3:4 (y 240–1680). */
 export const PORTRAIT = { width: 1080, height: 1920 } as const;

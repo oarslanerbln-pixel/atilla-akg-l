@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, useInView, Variants } from "framer-motion";
+import { m, useInView, Variants } from "framer-motion";
 
 interface RevealTextProps {
   text: string;
@@ -47,7 +47,7 @@ export default function RevealText({ text, className, delay = 0 }: RevealTextPro
   };
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       className={className}
       variants={container}
@@ -56,10 +56,10 @@ export default function RevealText({ text, className, delay = 0 }: RevealTextPro
       style={{ display: "flex", flexWrap: "wrap", gap: "0.25em" }}
     >
       {words.map((word, index) => (
-        <motion.span variants={child} key={index} style={{ display: "inline-block" }}>
+        <m.span variants={child} key={index} style={{ display: "inline-block" }}>
           {word}
-        </motion.span>
+        </m.span>
       ))}
-    </motion.div>
+    </m.div>
   );
 }

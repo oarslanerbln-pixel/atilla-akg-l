@@ -1,0 +1,24 @@
+{
+  "kind": "motion",
+  "name": "novotel-istanbul",
+  "clips": [
+    {
+      "template": "title",
+      "formats": ["reel", "wide"],
+      "props": {
+        "lang": "de",
+        "partner": "Novotel Istanbul Bosphorus",
+        "eyebrow": "Anzeige · Novotel Istanbul",
+        "title": "Bosporus",
+        "accent": "bei Nacht",
+        "hold": 3,
+        "scrim": true
+      }
+    },
+    {
+      "template": "location",
+      "formats": ["reel", "wide"],
+      "props": { "lang": "de", "place": "Istanbul", "detail": "Novotel Bosphorus", "lat": 41.0256, "lon": 28.9742, "hold": 3, "scrim": true }
+    }
+  ]
+}

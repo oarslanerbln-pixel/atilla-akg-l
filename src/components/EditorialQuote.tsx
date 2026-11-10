@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import BrandMark from "@/components/BrandMark";
 import styles from "./EditorialQuote.module.css";
 import { useLanguage } from "@/context/LanguageContext";
@@ -18,7 +18,7 @@ export default function EditorialQuote() {
 
   return (
     <section className={styles.section}>
-      <motion.figure
+      <m.figure
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -33,7 +33,7 @@ export default function EditorialQuote() {
           <span className={styles.authorName}>{t("quote_author")}</span>
           <span className={styles.authorRole}>{t("quote_role")}</span>
         </figcaption>
-      </motion.figure>
+      </m.figure>
     </section>
   );
 }

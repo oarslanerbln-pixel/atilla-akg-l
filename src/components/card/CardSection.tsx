@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { usePrefersCalm } from "@/hooks/usePrefersCalm";
@@ -34,22 +34,22 @@ export default function CardSection({ codes, wallet }: { codes: CardCodes; walle
   return (
     <section id="card" className={`${ed.section} ${styles.section}`} aria-labelledby="card-title">
       <div className={`container ${styles.inner}`}>
-        <motion.div className={`${ed.head} ${ed.centred} ${styles.head}`} {...reveal()}>
+        <m.div className={`${ed.head} ${ed.centred} ${styles.head}`} {...reveal()}>
           <p className={ed.eyebrow}>{t("card_section_eyebrow")}</p>
           <h2 id="card-title" className={ed.title}>
             {t("card_section_title")}
           </h2>
           <p className={`${ed.lede} ${styles.lede}`}>{t("card_section_text")}</p>
-        </motion.div>
+        </m.div>
 
         <BusinessCard codes={codes} wallet={wallet} />
 
-        <motion.div {...reveal(0.2)}>
+        <m.div {...reveal(0.2)}>
           <Link href={pagePath("card", activeLang)} className={styles.open}>
             {t("card_section_open")}
             <ArrowUpRight size={14} strokeWidth={1.5} aria-hidden="true" />
           </Link>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

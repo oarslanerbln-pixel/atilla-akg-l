@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { motion, Variants } from "framer-motion";
+import { m, Variants } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import ed from "./editorial.module.css";
 import styles from "./Partners.module.css";
@@ -96,7 +96,7 @@ export default function Partners() {
       aria-labelledby="partners-title"
     >
       <div className="container">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -114,9 +114,9 @@ export default function Partners() {
             {names}
             {introAfter}
           </p>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className={styles.gridWrap}
           initial="hidden"
           whileInView="visible"
@@ -124,10 +124,10 @@ export default function Partners() {
           variants={wrapVariants}
         >
           {/* The frame's top and bottom rules draw in before the cards arrive. */}
-          <motion.span className={`${styles.frameLine} ${styles.frameTop}`} variants={frameVariants} aria-hidden="true" />
-          <motion.span className={`${styles.frameLine} ${styles.frameBottom}`} variants={frameVariants} aria-hidden="true" />
+          <m.span className={`${styles.frameLine} ${styles.frameTop}`} variants={frameVariants} aria-hidden="true" />
+          <m.span className={`${styles.frameLine} ${styles.frameBottom}`} variants={frameVariants} aria-hidden="true" />
 
-          <motion.ul className={styles.grid} variants={listVariants}>
+          <m.ul className={styles.grid} variants={listVariants}>
             {partners.map((partner, index) => {
               const deg = bearing(BASE, partner.coords);
               const body = (
@@ -135,10 +135,10 @@ export default function Partners() {
                   <span className={styles.spot} aria-hidden="true" />
 
                   <span className={styles.plateTop} aria-hidden="true">
-                    <motion.span className={styles.index} variants={metaVariants}>
+                    <m.span className={styles.index} variants={metaVariants}>
                       {String(index + 1).padStart(2, "0")}
-                    </motion.span>
-                    <motion.span className={styles.needle} variants={needleVariants} custom={deg}>
+                    </m.span>
+                    <m.span className={styles.needle} variants={needleVariants} custom={deg}>
                       <span className={styles.needleTurn}>
                         <svg viewBox="0 0 24 24" fill="none">
                           <circle cx="12" cy="12" r="10.5" stroke="currentColor" strokeWidth="0.8" opacity="0.35" />
@@ -146,7 +146,7 @@ export default function Partners() {
                           <polygon points="12,20.8 14.1,12 9.9,12" fill="currentColor" opacity="0.45" />
                         </svg>
                       </span>
-                    </motion.span>
+                    </m.span>
                   </span>
 
                   {/* Fixed-height box, so a logo with its caption and a name set
@@ -154,7 +154,7 @@ export default function Partners() {
                   <span className={styles.mark}>
                     <span className={styles.lift}>
                       <span className={styles.maskLine}>
-                        <motion.span className={styles.maskInner} variants={nameVariants}>
+                        <m.span className={styles.maskInner} variants={nameVariants}>
                           {partner.logo ? (
                             <>
                               {/* Decorative: the name is printed right beneath it. */}
@@ -171,14 +171,14 @@ export default function Partners() {
                           ) : (
                             <span className={styles.wordmark}>{partner.name}</span>
                           )}
-                        </motion.span>
+                        </m.span>
                       </span>
                     </span>
                   </span>
 
-                  <motion.span className={styles.region} variants={metaVariants}>
+                  <m.span className={styles.region} variants={metaVariants}>
                     {t(partner.region)}
-                  </motion.span>
+                  </m.span>
 
                   {partner.url ? (
                     <span className={styles.more}>
@@ -194,9 +194,9 @@ export default function Partners() {
                     )
                   )}
 
-                  <motion.span className={styles.coords} variants={metaVariants} aria-hidden="true">
+                  <m.span className={styles.coords} variants={metaVariants} aria-hidden="true">
                     {formatCoords(partner.coords)}
-                  </motion.span>
+                  </m.span>
 
                   <span className={styles.underline} aria-hidden="true" />
                 </>
@@ -205,7 +205,7 @@ export default function Partners() {
               return (
                 <li key={partner.name} className={styles.cell}>
                   {partner.url ? (
-                    <motion.a
+                    <m.a
                       href={partner.url}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -215,17 +215,17 @@ export default function Partners() {
                       onPointerMove={trackPointer}
                     >
                       {body}
-                    </motion.a>
+                    </m.a>
                   ) : (
-                    <motion.div className={styles.tile} variants={tileVariants} onPointerMove={trackPointer}>
+                    <m.div className={styles.tile} variants={tileVariants} onPointerMove={trackPointer}>
                       {body}
-                    </motion.div>
+                    </m.div>
                   )}
                 </li>
               );
             })}
-          </motion.ul>
-        </motion.div>
+          </m.ul>
+        </m.div>
       </div>
     </section>
   );

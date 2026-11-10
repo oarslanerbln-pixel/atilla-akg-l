@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import ed from "./editorial.module.css";
 import styles from "./ReelsRail.module.css";
@@ -144,7 +144,7 @@ export default function ReelsRail({ reels }: { reels: Reel[] }) {
   return (
     <section id="reels" className={`${ed.section} ${ed.chapter} ${styles.section}`} aria-labelledby="reels-title">
       <div className="container">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -155,7 +155,7 @@ export default function ReelsRail({ reels }: { reels: Reel[] }) {
           <h2 id="reels-title" className={ed.title}>
             {t("reels_title")}
           </h2>
-        </motion.div>
+        </m.div>
 
         <ul ref={railRef} className={styles.rail} onScroll={updateEdges}>
           {reels.map((reel, index) => (
@@ -194,7 +194,7 @@ export default function ReelsRail({ reels }: { reels: Reel[] }) {
 
       <AnimatePresence>
         {active && (
-          <motion.div
+          <m.div
             className={styles.lightbox}
             role="dialog"
             aria-modal="true"
@@ -212,7 +212,7 @@ export default function ReelsRail({ reels }: { reels: Reel[] }) {
               <span>{t("work_close")}</span>
             </button>
 
-            <motion.div
+            <m.div
               className={styles.frame}
               initial={{ scale: 0.97, y: 16 }}
               animate={{ scale: 1, y: 0 }}
@@ -230,7 +230,7 @@ export default function ReelsRail({ reels }: { reels: Reel[] }) {
                 preload="auto"
                 className={styles.frameVideo}
               />
-            </motion.div>
+            </m.div>
 
             <div className={styles.bar}>
               <div className={styles.barMeta}>
@@ -264,7 +264,7 @@ export default function ReelsRail({ reels }: { reels: Reel[] }) {
                 </button>
               </>
             )}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </section>

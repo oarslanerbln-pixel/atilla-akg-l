@@ -1,58 +1,12 @@
 import type { ReactElement } from "react";
-import { brand, C, sans, serif, type Lang } from "../kit";
+import { FLIGHTS_COPY, type FlightsBrief } from "../flights";
+import { brand, C, sans, serif } from "../kit";
+
+export type { FlightsBrief };
 
 // Story with the cheapest flight destinations, 1080×1920. Instagram's bars cover roughly the top
 // 250 and bottom 250 pixels, so the content stays between them. Prices are typed in from the
 // partner's page: no partner offers a price feed to us, and reading their pages by script is not allowed.
-
-export interface FlightsBrief {
-  kind: "flights";
-  /** Output file name. */
-  name: string;
-  lang: Lang;
-  /** The affiliate partner, named in the ad label and the price note. */
-  partner: string;
-  title: string;
-  /** Second title line in italic gold, e.g. "ab Deutschland". */
-  accent?: string;
-  /** Keyword for story replies; must match the partner offer's keywords in supabase/offers.sql. */
-  keyword: string;
-  /** Date the prices were read, as it should appear ("27.09.2026"). */
-  asOf: string;
-  /** Up to four destinations (a city or a whole country, as the partner lists them), cheapest first.
-   *  `detail` is the small line below, e.g. the city's country or "Direktflug". */
-  deals: { destination: string; detail?: string; price: number }[];
-}
-
-const COPY: Record<
-  Lang,
-  { ad: string; trip: string; price: (eur: number) => [string, string]; reply: (k: string) => string; dm: string; note: (p: string, d: string) => string }
-> = {
-  de: {
-    ad: "Anzeige",
-    trip: "Hin & zurück · Economy · pro Person",
-    price: (eur) => ["ab", `${eur} €`],
-    reply: (k) => `Antworte mit „${k}“`,
-    dm: "und ich schicke dir den Link per DM.",
-    note: (p, d) => `Niedrigste geschätzte Preise laut ${p}, Stand ${d}. Preise und Verfügbarkeit können sich jederzeit ändern.`,
-  },
-  en: {
-    ad: "Ad",
-    trip: "Return · Economy · per person",
-    price: (eur) => ["from", `${eur} €`],
-    reply: (k) => `Reply “${k}”`,
-    dm: "and I’ll send you the link by DM.",
-    note: (p, d) => `Lowest estimated prices on ${p} as of ${d}. Prices and availability may change at any time.`,
-  },
-  tr: {
-    ad: "Reklam",
-    trip: "Gidiş-dönüş · Ekonomi · kişi başı",
-    price: (eur) => ["", `${eur} €'dan`],
-    reply: (k) => `Story'ye „${k}“ yaz`,
-    dm: "linki DM'den göndereyim.",
-    note: (p, d) => `${p} üzerindeki en düşük tahmini fiyatlar, ${d} itibarıyla. Fiyatlar ve müsaitlik her an değişebilir.`,
-  },
-};
 
 /** Title size that keeps the longer title line on one line within the 904 px column (serif ≈ 0.5 em a letter). */
 function titleSize(...lines: (string | undefined)[]) {
@@ -61,7 +15,7 @@ function titleSize(...lines: (string | undefined)[]) {
 }
 
 export function flightsStory(b: FlightsBrief): ReactElement {
-  const t = COPY[b.lang];
+  const t = FLIGHTS_COPY[b.lang];
   const size = titleSize(b.title, b.accent);
   return (
     <div

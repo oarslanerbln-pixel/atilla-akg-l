@@ -4,7 +4,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { motion, type Transition } from "framer-motion";
+import { m, type Transition } from "framer-motion";
 import { ArrowUpRight, Check, Plus, X } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import BrandWordmark from "@/components/BrandWordmark";
@@ -146,22 +146,22 @@ export default function RoadmapPage() {
         <section ref={openingRef} className={styles.opening}>
           <div className={`container ${styles.openingGrid}`}>
             <div className={styles.openingCopy}>
-              <motion.p className={styles.eyebrow} {...rise(0.15)}>
+              <m.p className={styles.eyebrow} {...rise(0.15)}>
                 {t("rm_eyebrow")}
-              </motion.p>
+              </m.p>
               <h1 className={styles.headline}>
-                <motion.span className={styles.headlineLine} {...rise(0.3)}>
+                <m.span className={styles.headlineLine} {...rise(0.3)}>
                   {t("rm_title_1")}
-                </motion.span>{" "}
-                <motion.span className={`${styles.headlineLine} ${styles.headlineSoft}`} {...rise(0.45)}>
+                </m.span>{" "}
+                <m.span className={`${styles.headlineLine} ${styles.headlineSoft}`} {...rise(0.45)}>
                   {t("rm_title_2")}
-                </motion.span>
+                </m.span>
               </h1>
-              <motion.p className={styles.lead} {...rise(0.6)}>
+              <m.p className={styles.lead} {...rise(0.6)}>
                 {t("rm_lead")}
-              </motion.p>
-              <motion.div className={styles.actions} {...rise(0.75)}>
-                <motion.a
+              </m.p>
+              <m.div className={styles.actions} {...rise(0.75)}>
+                <m.a
                   ref={buyRef}
                   style={buyLean}
                   href={roadmap.checkout}
@@ -171,41 +171,41 @@ export default function RoadmapPage() {
                 >
                   {fill(t("rm_buy"))}
                   <ArrowUpRight size={15} aria-hidden="true" />
-                </motion.a>
+                </m.a>
                 <Checkout href={roadmap.sample} className={styles.secondary}>
                   {t("rm_sample_cta")}
                 </Checkout>
-              </motion.div>
-              <motion.p className={styles.facts} {...rise(0.9)}>
+              </m.div>
+              <m.p className={styles.facts} {...rise(0.9)}>
                 {t("rm_facts")}
-              </motion.p>
+              </m.p>
             </div>
 
-            <motion.div
+            <m.div
               className={styles.coverFrame}
               initial={{ opacity: 0, y: 30, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={at(0.35, 1.3)}
             >
               <BookCover alt={t("rm_cover_alt")} priority sizes="(max-width: 900px) 62vw, 360px" />
-            </motion.div>
+            </m.div>
           </div>
         </section>
 
         {/* Tourist vs. creator */}
         <section className={styles.section} aria-labelledby="compare-title">
           <div className="container">
-            <motion.div className={styles.sectionHead} {...reveal()}>
+            <m.div className={styles.sectionHead} {...reveal()}>
               <p className={styles.eyebrow}>{t("rm_compare_eyebrow")}</p>
               <h2 id="compare-title" className={styles.sectionTitle}>
                 {t("rm_compare_title")}
               </h2>
               <p className={styles.sectionIntro}>{t("rm_compare_intro")}</p>
               <span className={styles.divider} aria-hidden="true" />
-            </motion.div>
+            </m.div>
 
             <div className={styles.compare}>
-              <motion.div className={styles.tourist} {...reveal(0)}>
+              <m.div className={styles.tourist} {...reveal(0)}>
                 <h3 className={styles.compareLabel}>{t("rm_tourist_label")}</h3>
                 <ul className={styles.compareList}>
                   {FOUR.map((n) => (
@@ -215,8 +215,8 @@ export default function RoadmapPage() {
                     </li>
                   ))}
                 </ul>
-              </motion.div>
-              <motion.div className={styles.creator} {...reveal(0.12)}>
+              </m.div>
+              <m.div className={styles.creator} {...reveal(0.12)}>
                 <p className={styles.creatorEyebrow}>{t("rm_creator_eyebrow")}</p>
                 <h3 className={styles.compareLabel}>{t("rm_creator_label")}</h3>
                 <ul className={styles.compareList}>
@@ -227,7 +227,7 @@ export default function RoadmapPage() {
                     </li>
                   ))}
                 </ul>
-              </motion.div>
+              </m.div>
             </div>
           </div>
         </section>
@@ -235,22 +235,22 @@ export default function RoadmapPage() {
         {/* What's inside */}
         <section className={styles.section} aria-labelledby="inside-title">
           <div className="container">
-            <motion.div className={styles.sectionHead} {...reveal()}>
+            <m.div className={styles.sectionHead} {...reveal()}>
               <p className={styles.eyebrow}>{t("rm_inside_eyebrow")}</p>
               <h2 id="inside-title" className={styles.sectionTitle}>
                 {t("rm_inside_title")}
               </h2>
               <span className={styles.divider} aria-hidden="true" />
-            </motion.div>
+            </m.div>
 
             <ol className={styles.inside}>
               {THREE.map((n, i) => (
-                <motion.li key={n} className={styles.insideItem} {...reveal(i * 0.1)}>
+                <m.li key={n} className={styles.insideItem} {...reveal(i * 0.1)}>
                   <span className={styles.insideIndex}>{String(n).padStart(2, "0")}</span>
                   <span className={styles.insideRule} aria-hidden="true" />
                   <h3 className={styles.insideTitle}>{key(`rm_inside_${n}_t`)}</h3>
                   <p className={styles.insideText}>{key(`rm_inside_${n}_d`)}</p>
-                </motion.li>
+                </m.li>
               ))}
             </ol>
           </div>
@@ -258,7 +258,7 @@ export default function RoadmapPage() {
 
         {/* Free excerpt */}
         <section className={styles.sample} aria-labelledby="sample-title">
-          <motion.div className={`container ${styles.sampleInner}`} {...reveal()}>
+          <m.div className={`container ${styles.sampleInner}`} {...reveal()}>
             <div>
               <p className={styles.eyebrow}>{t("rm_sample_eyebrow")}</p>
               <h2 id="sample-title" className={styles.sampleTitle}>
@@ -273,13 +273,13 @@ export default function RoadmapPage() {
               </Checkout>
               <p className={styles.sampleNote}>{t("rm_sample_note")}</p>
             </div>
-          </motion.div>
+          </m.div>
         </section>
 
         {/* Author */}
         <section className={styles.section} aria-labelledby="author-title">
           <div className={`container ${styles.author}`}>
-            <motion.div className={styles.portraitFrame} {...reveal()}>
+            <m.div className={styles.portraitFrame} {...reveal()}>
               <Image
                 src="/roadmap/atilla.webp"
                 alt=""
@@ -288,8 +288,8 @@ export default function RoadmapPage() {
                 sizes="(max-width: 900px) 80vw, 440px"
                 className={styles.portrait}
               />
-            </motion.div>
-            <motion.div {...reveal(0.12)}>
+            </m.div>
+            <m.div {...reveal(0.12)}>
               <p className={styles.eyebrow}>{t("rm_author_eyebrow")}</p>
               <h2 id="author-title" className={styles.sectionTitle}>
                 Atilla Barbarossa
@@ -305,33 +305,33 @@ export default function RoadmapPage() {
                   <dd>600k+</dd>
                 </div>
               </dl>
-            </motion.div>
+            </m.div>
           </div>
         </section>
 
         {/* Price */}
         <section ref={priceRef} className={styles.price} aria-labelledby="price-title">
           <div className={`container ${styles.priceInner}`}>
-            <motion.p className={styles.priceEyebrow} {...reveal()}>
+            <m.p className={styles.priceEyebrow} {...reveal()}>
               {t("rm_price_eyebrow")}
-            </motion.p>
-            <motion.h2 id="price-title" className={styles.priceTitle} {...reveal(0.05)}>
+            </m.p>
+            <m.h2 id="price-title" className={styles.priceTitle} {...reveal(0.05)}>
               {t("rm_price_title")}
-            </motion.h2>
-            <motion.p className={styles.priceNote} {...reveal(0.1)}>
+            </m.h2>
+            <m.p className={styles.priceNote} {...reveal(0.1)}>
               {t("rm_price_note")}
-            </motion.p>
-            <motion.div className={styles.priceTag} {...reveal(0.15)}>
+            </m.p>
+            <m.div className={styles.priceTag} {...reveal(0.15)}>
               <span className={styles.priceAmount}>{fill(t("rm_price_amount"))}</span>
               <span className={styles.priceLabel}>{t("rm_price_label")}</span>
               <span className={styles.priceFormat}>{t("rm_price_format")}</span>
-            </motion.div>
-            <motion.div {...reveal(0.2)}>
+            </m.div>
+            <m.div {...reveal(0.2)}>
               <Checkout href={roadmap.checkout} className={styles.pricePrimary}>
                 {t("rm_price_button")}
                 <ArrowUpRight size={15} aria-hidden="true" />
               </Checkout>
-            </motion.div>
+            </m.div>
             <p className={styles.legal}>{t("rm_legal")}</p>
           </div>
         </section>
@@ -339,13 +339,13 @@ export default function RoadmapPage() {
         {/* FAQ */}
         <section className={styles.section} aria-labelledby="faq-title">
           <div className={`container ${styles.faqWrap}`}>
-            <motion.div className={styles.sectionHead} {...reveal()}>
+            <m.div className={styles.sectionHead} {...reveal()}>
               <p className={styles.eyebrow}>{t("rm_faq_eyebrow")}</p>
               <h2 id="faq-title" className={styles.sectionTitle}>
                 {t("rm_faq_title")}
               </h2>
               <span className={styles.divider} aria-hidden="true" />
-            </motion.div>
+            </m.div>
             <div className={styles.faq}>
               {FOUR.map((n) => (
                 <details key={n} className={styles.faqItem}>

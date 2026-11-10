@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import ed from "./editorial.module.css";
 import styles from "./FilmBand.module.css";
 import InViewVideo from "./InViewVideo";
@@ -33,21 +33,21 @@ export default function FilmBand() {
 
   return (
     <section ref={ref} className={`${ed.ink} ${styles.band}`} aria-labelledby="film-band-line">
-      <motion.div className={styles.media} style={calm ? undefined : { scale }}>
+      <m.div className={styles.media} style={calm ? undefined : { scale }}>
         <InViewVideo src="/hero-reel.mp4" poster="/posters/hero-reel.webp" className={styles.video} />
-      </motion.div>
+      </m.div>
       <div className={`container ${styles.copy}`}>
-        <motion.p className={ed.eyebrow} {...reveal(0)}>
+        <m.p className={ed.eyebrow} {...reveal(0)}>
           {t("film_band_label")}
-        </motion.p>
-        <motion.p id="film-band-line" className={styles.line} {...reveal(0.12)}>
+        </m.p>
+        <m.p id="film-band-line" className={styles.line} {...reveal(0.12)}>
           {t("film_band_line")}
-        </motion.p>
-        <motion.div {...reveal(0.24)}>
+        </m.p>
+        <m.div {...reveal(0.24)}>
           <a href="#work" className={ed.textLink}>
             {t("film_band_cta")}
           </a>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

@@ -122,8 +122,8 @@ function fitCubics(p: Pt[], tol: number, depth = 0): Cubic[] {
 const r2 = (v: number) => Math.round(v * 100) / 100;
 const pt = ([x, y]: Pt) => `${r2(x)} ${r2(y)}`;
 
-/** The filled outline of a line at the given weight (1 = the artwork's own hairlines). */
-export function outline(line: Line, weight: number, tol = 0.015): string {
+/** Both edges of a line at the given weight, sampled by arc length; `f` runs 0 to 1 along it. */
+function edges(line: Line, weight: number) {
   const N = 72;
   // Arc-length sample positions across all segments.
   const samples: Array<{ c: Cubic; t: number }> = [];
@@ -132,21 +132,55 @@ export function outline(line: Line, weight: number, tol = 0.015): string {
   const len = [0];
   for (let i = 1; i < pos.length; i++) len.push(len[i - 1] + Math.hypot(pos[i][0] - pos[i - 1][0], pos[i][1] - pos[i - 1][1]));
   const total = len[len.length - 1];
-  const left: Pt[] = [];
-  const right: Pt[] = [];
+  const out: Array<{ f: number; mid: Pt; nx: number; ny: number; half: number }> = [];
   samples.forEach((s, i) => {
     if (i > 0 && len[i] === len[i - 1]) return; // segment joint duplicate
     const tg = tangent(s.c, s.t);
     const l = Math.hypot(tg[0], tg[1]) || 1;
-    const nx = -tg[1] / l, ny = tg[0] / l;
-    const h = (widthAt(line.width, len[i] / total) * PX * weight) / 2;
-    left.push([pos[i][0] + nx * h, pos[i][1] + ny * h]);
-    right.push([pos[i][0] - nx * h, pos[i][1] - ny * h]);
+    const f = len[i] / total;
+    out.push({ f, mid: pos[i], nx: -tg[1] / l, ny: tg[0] / l, half: (widthAt(line.width, f) * PX * weight) / 2 });
   });
+  return out;
+}
+
+/** The filled outline of a line at the given weight (1 = the artwork's own hairlines). */
+export function outline(line: Line, weight: number, tol = 0.015): string {
+  const e = edges(line, weight);
+  const left: Pt[] = e.map((s) => [s.mid[0] + s.nx * s.half, s.mid[1] + s.ny * s.half]);
+  const right: Pt[] = e.map((s) => [s.mid[0] - s.nx * s.half, s.mid[1] - s.ny * s.half]);
   const fwd = fitCubics(left, tol);
   const back = fitCubics(right.reverse(), tol);
   const curves = (cs: Cubic[]) => cs.map((c) => `C${pt(c[1])} ${pt(c[2])} ${pt(c[3])}`).join("");
   return `M${pt(fwd[0][0])}${curves(fwd)}${line.blunt ? `L${pt(back[0][0])}` : ""}${curves(back)}Z`;
+}
+
+/**
+ * The part of a line between `from` and `to` (0 to 1 along its length), as a
+ * polygon: what a pen has drawn so far. A cut inside the line narrows to a
+ * point over `tip` of the length, like a stroke still being pulled; at the
+ * line's own ends the artwork's taper stands. For motion (social/motion):
+ * the still artwork uses `outline`.
+ */
+export function outlinePart(line: Line, weight: number, from: number, to: number, tip = 0.08): string {
+  if (to - from <= 1e-4) return "";
+  const e = edges(line, weight);
+  const mix = (a: (typeof e)[number], b: (typeof e)[number], f: number) => {
+    const k = (f - a.f) / (b.f - a.f || 1);
+    const lerp = (x: number, y: number) => x + (y - x) * k;
+    return { f, mid: [lerp(a.mid[0], b.mid[0]), lerp(a.mid[1], b.mid[1])] as Pt, nx: lerp(a.nx, b.nx), ny: lerp(a.ny, b.ny), half: lerp(a.half, b.half) };
+  };
+  const cut = (f: number) => {
+    const i = Math.max(1, e.findIndex((s) => s.f >= f));
+    return mix(e[i - 1], e[i], f);
+  };
+  const part = [cut(from), ...e.filter((s) => s.f > from && s.f < to), cut(to)];
+  const narrow = (f: number) => Math.min(1, from > 0 ? (f - from) / tip : 1, to < 1 ? (to - f) / tip : 1);
+  const side = (sign: number) =>
+    part.map((s) => {
+      const h = s.half * Math.max(0, narrow(s.f)) * sign;
+      return [s.mid[0] + s.nx * h, s.mid[1] + s.ny * h] as Pt;
+    });
+  return `M${[...side(1), ...side(-1).reverse()].map(pt).join("L")}Z`;
 }
 
 export type MarkPaths = { ink: string[]; teal: string[]; sun: typeof SUN };

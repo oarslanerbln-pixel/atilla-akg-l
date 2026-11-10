@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentType, type PointerEvent } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useAnimate } from "framer-motion";
+import { AnimatePresence, m, useAnimate } from "framer-motion";
 import { ArrowUpRight, BookOpen, Check, Compass, Contact, Globe, IdCard, Mail, QrCode, RotateCcw, Share2, UserPlus, Wallet } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import BrandWordmark from "@/components/BrandWordmark";
@@ -560,21 +560,21 @@ export default function BusinessCard({
   return (
     <div className={styles.root}>
       <div className={styles.modes} role="group" aria-label={t("card_mode_label")}>
-        {MODES.map((m) => (
+        {MODES.map((face) => (
           <button
-            key={m}
+            key={face}
             type="button"
             className={styles.mode}
-            aria-pressed={mode === m}
-            onClick={() => chooseMode(m)}
+            aria-pressed={mode === face}
+            onClick={() => chooseMode(face)}
           >
-            {t(m === "business" ? "card_mode_business" : "card_mode_personal")}
+            {t(face === "business" ? "card_mode_business" : "card_mode_personal")}
           </button>
         ))}
       </div>
 
       <div ref={stage} className={styles.stage} onPointerMove={followMouse} onPointerLeave={releaseMouse}>
-        <motion.div className={styles.enter} {...entrance} onAnimationComplete={() => setArrived(true)}>
+        <m.div className={styles.enter} {...entrance} onAnimationComplete={() => setArrived(true)}>
           <div ref={lean} className={styles.lean}>
             <div ref={flipper} className={styles.flipper}>
               {/* ---------- Front ---------- */}
@@ -697,7 +697,7 @@ export default function BusinessCard({
 
                   <div className={styles.qr}>
                     <AnimatePresence mode="wait" initial={false}>
-                      <motion.div
+                      <m.div
                         key={`${activeLang}-${target}`}
                         className={styles.qrCode}
                         role="img"
@@ -740,7 +740,7 @@ export default function BusinessCard({
               </div>
             </div>
           </div>
-        </motion.div>
+        </m.div>
         <div ref={floor} className={styles.floor} aria-hidden="true" />
       </div>
 

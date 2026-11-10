@@ -54,6 +54,7 @@ next-env.d.ts
 # social images: source frames and renders stay out of git
 /social/assets/
 /social/out/
+/social/motion/node_modules/
 .vercel
 
 # agent state: session worktrees, local launch config, browser test output

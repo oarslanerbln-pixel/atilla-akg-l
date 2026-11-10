@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ArrowUpRight, Play, X } from "lucide-react";
 import ed from "./editorial.module.css";
@@ -129,12 +129,12 @@ export default function FeaturedWork({
   return (
     <section id="work" className={`${ed.section} ${ed.chapter} ${ed.ink} ${styles.section}`} aria-labelledby="work-title">
       <div className="container">
-        <motion.div className={ed.head} {...reveal()}>
+        <m.div className={ed.head} {...reveal()}>
           <p className={ed.eyebrow}>{t("work_subtitle")}</p>
           <h2 id="work-title" className={ed.title}>
             {t("work_title")}
           </h2>
-        </motion.div>
+        </m.div>
 
         {/* Each project is a wide frame with its title set over the footage,
             like a title card, and its story and result beneath. Both run
@@ -143,14 +143,14 @@ export default function FeaturedWork({
           {projects.map((project, i) => {
             const metric = splitMetric(t(project.metricKey));
             return (
-              <motion.li
+              <m.li
                 key={project.id}
                 className={styles.spread}
                 initial="hidden"
                 whileInView="shown"
                 viewport={{ once: true, margin: "-80px 0px" }}
               >
-                <motion.div className={styles.visual} {...unveil}>
+                <m.div className={styles.visual} {...unveil}>
                   <div className={styles.frame} data-cursor={project.instagram ? undefined : "PLAY"}>
                     {project.still ? (
                       <Image src={project.poster} alt="" fill sizes="(max-width: 900px) 100vw, 1200px" className={styles.video} />
@@ -202,16 +202,16 @@ export default function FeaturedWork({
                       </p>
                     </div>
                   </div>
-                </motion.div>
+                </m.div>
 
-                <motion.div className={styles.body} {...reveal(0.15)}>
+                <m.div className={styles.body} {...reveal(0.15)}>
                   <p className={styles.desc}>{t(project.descKey)}</p>
                   <p className={styles.metric}>
                     <span className={`${ed.figureValue} ${styles.metricValue}`}>{metric.value}</span>{" "}
                     {metric.label && <span className={ed.figureLabel}>{metric.label}</span>}
                   </p>
-                </motion.div>
-              </motion.li>
+                </m.div>
+              </m.li>
             );
           })}
         </ol>
@@ -220,7 +220,7 @@ export default function FeaturedWork({
       {/* Interactive Lightbox Video Modal */}
       <AnimatePresence>
         {activeProject && (
-          <motion.div
+          <m.div
             className={styles.modalBackdrop}
             role="dialog"
             aria-modal="true"
@@ -230,7 +230,7 @@ export default function FeaturedWork({
             exit={{ opacity: 0 }}
             onClick={closeModal}
           >
-            <motion.div
+            <m.div
               className={styles.modalContent}
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
@@ -260,8 +260,8 @@ export default function FeaturedWork({
                   className={styles.modalVideo}
                 />
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </section>

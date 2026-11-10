@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useSyncExternalStore } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import styles from "./Preloader.module.css";
 import BrandWordmark from "./BrandWordmark";
 import { WORDMARK } from "./brandWordmarkPaths";
@@ -112,7 +112,7 @@ export default function Preloader() {
   return (
     <AnimatePresence>
       {isLoading && (
-        <motion.div
+        <m.div
           className={styles.preloader}
           onClick={handleDismiss}
           role="presentation"
@@ -136,19 +136,19 @@ export default function Preloader() {
 
           {/* Cinematic Wrapper */}
           <div className={styles.cinematicWrapper}>
-            <motion.div 
+            <m.div 
               initial={{ opacity: 0, letterSpacing: "0.1em" }}
               animate={{ opacity: 1, letterSpacing: "0.35em" }}
               transition={{ duration: 1, ease: "easeOut" }}
               className={styles.director}
             >
               {t('preloader_vision')}
-            </motion.div>
+            </m.div>
             
             {/* The wordmark on a passing overlay, not the page's title: the
                 hero's name is the one h1. Gold light runs across it, as it once
                 did across the typed name, drawn by the gradient it is filled with. */}
-            <motion.p
+            <m.p
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
@@ -193,11 +193,11 @@ export default function Preloader() {
                 </defs>
 
               </BrandWordmark>
-            </motion.p>
+            </m.p>
           </div>
           
           {/* Progress / Skip Indicator */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
             transition={{ duration: 0.6, delay: 0.4 }}
@@ -209,8 +209,8 @@ export default function Preloader() {
             <div className={styles.progressBar}>
               <div className={styles.progressFill}></div>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

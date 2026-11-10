@@ -12,6 +12,9 @@ The PNGs land in `social/out/` (gitignored). A cover brief renders every
 template plus `<name>-overview.png`, a side-by-side sheet with the profile
 grid's crop marked by dashed lines.
 
+Moving versions (the mark drawn on, title and location overlays for footage, the flights story as
+a film) come from the motion engine: `social/motion/README.md`.
+
 ## Photos
 
 Put the photo in `social/assets/` (gitignored: it holds people's faces). Use a

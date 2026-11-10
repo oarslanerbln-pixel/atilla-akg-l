@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { useId, useState } from "react";
-import { motion, Variants } from "framer-motion";
+import { m, Variants } from "framer-motion";
 import { Mail, Phone, Loader2, CheckCircle, MessageCircle } from "lucide-react";
 import BrandMark from "./BrandMark";
 import ed from "./editorial.module.css";
@@ -94,7 +94,7 @@ export default function Contact() {
   return (
     <section id="contact" className={`${ed.section} ${ed.chapter} ${ed.horizon} ${styles.section}`} aria-labelledby="contact-title">
       <div className={`container ${styles.container}`}>
-        <motion.div
+        <m.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -103,38 +103,38 @@ export default function Contact() {
         >
           {/* Philosophy & process, centred above the card */}
           <div className={styles.infoCol}>
-            <motion.div variants={itemVariants} className={ed.centred}>
+            <m.div variants={itemVariants} className={ed.centred}>
               <p className={ed.eyebrow}>{t('contact_subtitle')}</p>
               <h2 id="contact-title" className={ed.title}>
                 {t('contact_title')}
               </h2>
-            </motion.div>
+            </m.div>
 
-            <motion.div variants={itemVariants} className={styles.paragraphs}>
+            <m.div variants={itemVariants} className={styles.paragraphs}>
               <p>{t('contact_p1')}</p>
               <p>{t('contact_p2')}</p>
               <p>{t('contact_p3')}</p>
               <p className={styles.closing}>{t('contact_closing')}</p>
-            </motion.div>
+            </m.div>
 
-            <motion.p variants={itemVariants} className={`${ed.signature} ${ed.signatureCentred} ${styles.signature}`}>
+            <m.p variants={itemVariants} className={`${ed.signature} ${ed.signatureCentred} ${styles.signature}`}>
               <BrandMark className={ed.signatureMark} />
               <span className={ed.signatureName}>Atilla Barbarossa</span>
               <span className={ed.signatureRole}>{t('quote_role')}</span>
-            </motion.p>
+            </m.p>
           </div>
 
           {/* Contact info & form, a card on the same axis */}
           <div className={styles.contactCol}>
-            <motion.div variants={itemVariants} className={styles.cardHead}>
+            <m.div variants={itemVariants} className={styles.cardHead}>
               <p className={ed.kicker}>{t('contact_form_subtitle')}</p>
               <h3 className={styles.formTitle}>{t('contact_form_title')}</h3>
-            </motion.div>
+            </m.div>
 
             {/* WhatsApp leads: it is where visitors from Instagram already are,
                 and a decision-maker gets an answer without opening a mail
                 client. E-mail and phone follow as the quieter alternatives. */}
-            <motion.div variants={itemVariants} className={styles.primaryChannel}>
+            <m.div variants={itemVariants} className={styles.primaryChannel}>
               <a
                 href={`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(t("whatsapp_message"))}`}
                 target="_blank"
@@ -148,9 +148,9 @@ export default function Contact() {
               </a>
               <p className={styles.primaryHint}>{t("contact_whatsapp_hint")}</p>
               <p className={styles.orLabel}>{t("contact_or_email")}</p>
-            </motion.div>
+            </m.div>
 
-            <motion.div variants={itemVariants} className={styles.contactLinks}>
+            <m.div variants={itemVariants} className={styles.contactLinks}>
               <a
                 href={`mailto:${contact.email}`}
                 className={styles.contactLink}
@@ -184,9 +184,9 @@ export default function Contact() {
                 </div>
                 <span>{contact.phoneDisplay}</span>
               </a>
-            </motion.div>
+            </m.div>
 
-            <motion.form variants={itemVariants} className={styles.form} onSubmit={handleSubmit} noValidate={false}>
+            <m.form variants={itemVariants} className={styles.form} onSubmit={handleSubmit} noValidate={false}>
               <div className={styles.field}>
                 <label className={styles.label} htmlFor={`${fieldId}-name`}>
                   {t('contact_name')}
@@ -312,9 +312,9 @@ export default function Contact() {
                   <span className={styles.successText}>{t('contact_success_detail')}</span>
                 )}
               </p>
-            </motion.form>
+            </m.form>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );
