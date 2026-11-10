@@ -91,6 +91,8 @@ how the site looks and behaves.
 - The hero opening waits for the intro (`useIntroDone`). The intro plays once per visitor, ever.
 - NEVER hold the scroll or hijack the wheel. The hero stays one screen tall.
 
+- Video (reel openings, overlays, moving stories) is the motion engine, `social/motion`: same curve, same tokens, pure functions of the frame. Read `social/motion/README.md` before adding a template; review its sheet of stills as you would a screenshot.
+
 ## Mobile data
 
 - Nothing loads from a third party at runtime: no CDN fonts, images or scripts. Fonts come from `next/font`, media from `public/`.

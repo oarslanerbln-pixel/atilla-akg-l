@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "eslint",
     "social": "tsx social/render.tsx",
-    "brand": "tsx social/brand/export.ts"
+    "brand": "tsx social/brand/export.ts",
+    "motion": "npm --prefix social/motion run motion --"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",

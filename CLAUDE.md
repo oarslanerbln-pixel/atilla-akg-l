@@ -151,9 +151,25 @@ src/
 - `npm run lint` - Run ESLint checks
 - `npx tsc --noEmit` - Type check only
 - `npm run social -- social/briefs/<brief>.json` - Render reel covers / stories into `social/out/` (see `social/README.md`)
+- `npm run motion -- social/briefs/motion/<brief>.json` - Render brand films and alpha overlays into `social/out/motion/` (Remotion, its own package in `social/motion`; see its README)
 
 Run `tsc --noEmit`, `next build` and `eslint` before every push; all three are
 expected to pass with zero output.
+
+## 🎞 Motion engine (social/motion)
+Films for reels, stories and edits, rendered offline with Remotion: the brand sting (the mark
+drawn by a pen), title and location overlays with an alpha channel for DaVinci, the flights
+story moving. A separate package (`social/motion/package.json`), excluded from the site's
+`tsconfig`, so Vercel never installs a renderer; CI's `motion` job runs its type check and tests.
+
+- **Brief in, film out:** `npm run motion -- <brief>`; each film comes with a sheet of stills and
+  a report. Templates, fields and formats: `social/motion/README.md`.
+- **Nothing is duplicated:** mark geometry from `social/brand/mark.ts`, colours from
+  `social/palette.ts`, flights copy from `social/flights.ts`, bearings from `src/lib/partners.ts`.
+  Timing is `social/motion/src/lib/tokens.ts` (the site's curve); durations follow from the copy.
+- **The checks are the gate:** ad label on partner titles, flights keyword present in
+  `supabase/offers.sql`, safe areas, alpha channel, an empty last frame. Look at the sheet, then
+  the film. Don't hand over a render whose run ended in an error.
 
 ## 🪪 Digital business card (/card)
 `/card`, `/card/en`, `/card/tr`, and the same card (`BusinessCard`) as a

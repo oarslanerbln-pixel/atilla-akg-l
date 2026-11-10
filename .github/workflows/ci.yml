@@ -30,3 +30,27 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+  # The motion engine (social/motion) is its own package, so the site's install and Vercel's
+  # build never carry a video renderer. Its type check and tests run here; nothing is rendered.
+  motion:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: social/motion
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: social/motion/package-lock.json
+
+      - run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test

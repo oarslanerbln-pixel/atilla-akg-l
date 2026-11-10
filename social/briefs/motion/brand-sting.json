@@ -1,0 +1,9 @@
+{
+  "kind": "motion",
+  "name": "brand-sting",
+  "clips": [
+    { "template": "sting", "formats": ["reel", "square", "wide"], "props": { "tone": "ink", "line": "atillabarbarossa.com", "hold": 1.6, "out": "stay" } },
+    { "template": "sting", "formats": ["reel"], "props": { "tone": "paper", "hold": 1, "out": "fade" } },
+    { "template": "sting", "formats": ["reel", "wide"], "props": { "tone": "alpha", "hold": 1.2, "out": "fade" } }
+  ]
+}
