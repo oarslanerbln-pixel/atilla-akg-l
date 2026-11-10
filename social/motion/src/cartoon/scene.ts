@@ -21,6 +21,8 @@ const beatSchema = z.object({
   for: z.number().min(0.3).max(20).optional(),
   /** A line in a speech bubble. Keep it to one breath. */
   say: z.string().min(1).max(90).optional(),
+  /** Written by the sound step, not by hand: the line's loudness, one value a frame, which opens the mouth. */
+  lips: z.array(z.number()).optional(),
 });
 
 const castSchema = z.object({
@@ -30,6 +32,10 @@ const castSchema = z.object({
   x: z.number().min(0).max(WORLD),
   facing: z.enum(["left", "right"]).optional(),
   script: z.array(beatSchema).optional(),
+  /** A Piper voice for this character's lines ("de_DE-thorsten-high"); otherwise the language's default. */
+  voice: z.string().optional(),
+  /** Playback rate of the voice, 0.85 to 1.2: above 1 is higher and quicker. */
+  pitch: z.number().min(0.85).max(1.2).optional(),
   // Anything of the look can be overridden on top of the preset.
   skin: colour.optional(),
   hair: z.enum(HAIR).optional(),
@@ -73,11 +79,23 @@ export const cartoonSchema = z.object({
   /** Output file prefix. */
   name: z.string().regex(/^[a-z0-9-]+$/),
   formats: z.array(z.enum(["reel", "square", "wide"])).min(1),
+  /** The language the lines are spoken in. */
+  lang: z.enum(["de", "en", "tr"]).optional(),
+  /** Music and voices. Leave it out for a silent film. */
+  sound: z
+    .object({
+      music: z.enum(["warm", "calm", "bright", "night", "none"]),
+      /** Speak the captions and the lines; false keeps the music only. */
+      voices: z.boolean(),
+      /** A Piper voice for the captions; otherwise the language's default. */
+      narrator: z.string().optional(),
+    })
+    .optional(),
   scenes: z.array(sceneSchema).min(1).max(12),
 });
 export type CartoonBrief = z.infer<typeof cartoonSchema>;
-/** What the composition takes: the brief without the list of formats to render it in. */
-export const cartoonPropsSchema = cartoonSchema.omit({ formats: true });
+/** What the composition takes: the brief without what only the command line needs (formats, sound). */
+export const cartoonPropsSchema = cartoonSchema.omit({ formats: true, sound: true, lang: true });
 export type CartoonProps = z.infer<typeof cartoonPropsSchema>;
 
 /** Seconds two scenes share while one dissolves into the next. */

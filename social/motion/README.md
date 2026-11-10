@@ -63,6 +63,31 @@ example). Each scene is a place in a light, a cast with a script, and a camera:
 - **Camera:** `follow` a character, or pan `from`/`to`; `zoom` 1 to 2, or a pair to push in.
 - A scene lasts as long as its script and its reading time; scenes dissolve into each other.
 
+### Sound
+
+Add `"lang": "de"` and `"sound": { "music": "warm", "voices": true }` to a cartoon brief.
+
+- **Music** is composed in code (`audio/music.ts`): `warm`, `calm`, `bright`, `night`, or `none`.
+  No samples or loops from anywhere, so there is nothing to license.
+- **Voices:** every caption and every `say` is spoken. Your own take wins: record a line as
+  16-bit WAV to `social/assets/voice/<brief name>/s<scene>-<cast id>-<beat number>.wav` (captions:
+  `s<scene>-caption.wav`) and that line is yours. Everything else is spoken by
+  [Piper](https://github.com/OHF-Voice/piper1-gpl), a neural voice that runs on this machine, is
+  free and sends the script nowhere:
+
+  ```bash
+  pip install piper-tts                         # once; MOTION_PIPER names the Python that has it
+  npm --prefix social/motion run voices -- de tr   # downloads the default voices (60–110 MB each)
+  ```
+
+  A character takes the language's default voice, or `"voice": "tr_TR-dfki-medium"` and
+  `"pitch"` in the brief. Each voice has its own licence (its model card on Hugging Face): read
+  it before publishing with one.
+- **The voices set the timing.** A line lasts as long as it takes to say, its loudness opens the
+  speaker's mouth frame by frame, and the music steps back while anyone talks. The mix is brought
+  to -14 LUFS and laid onto the film without re-encoding the picture.
+- Without Piper or a voice, the film still renders: those lines stay silent, and the run says so.
+
 `npm --prefix social/motion run sheet` renders the model sheet (every preset in every action),
 `run places` a still of every set. Look at both after touching the rig, a look or a backdrop.
 
@@ -93,6 +118,7 @@ so the lower foot stands on the ground, the walk driven by distance so feet do n
   with the ad label (Anzeige, Ad, Reklam); a flights keyword is one `supabase/offers.sql` answers to.
 - A cartoon: unique cast ids, a camera that follows someone in the cast, walks with a target, and
   every speaker in the picture while speaking; two bubbles at once is a warning.
+- Sound: the film has an audio track, within 1.5 LU of -14 LUFS; silent lines are a warning.
 - After it: size, frame rate, duration, codec; an overlay has an alpha channel and ends empty;
   nothing opaque sits under the bands the platform covers.
 

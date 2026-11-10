@@ -1,4 +1,4 @@
-import { clamp, ease, easeInOut, lerp, readTime } from "../lib/tokens";
+import { FPS, clamp, ease, easeInOut, lerp, readTime } from "../lib/tokens";
 
 // The character rig: a puppet of two-bone limbs, posed by angles, and the script that moves it.
 // Pure functions of time, so a character is in the same place on every frame of every render,
@@ -176,6 +176,8 @@ export interface Beat {
   /** Seconds the action lasts; then the character idles. Walks and lines time themselves. */
   for?: number;
   say?: string;
+  /** The spoken line's loudness, one value a frame (written by the sound step): the mouth follows it. */
+  lips?: number[];
 }
 
 /** Seconds one pose takes to become the next: eased at both ends, as a limb has weight. */
@@ -241,7 +243,11 @@ export function momentAt(startX: number, startFacing: 1 | -1, script: Beat[], t:
   // The pose is whatever the current beat says, blended in from what came before it.
   const poseOf = (s: Span | undefined, at: number): Pose => {
     if (!s || at >= s.end) return actionPose("idle", at);
-    if (s.do !== "walk") return actionPose(s.do, at - s.at);
+    if (s.do !== "walk") {
+      const pose = actionPose(s.do, at - s.at);
+      // With a recorded or synthesised line, the mouth opens on its syllables instead of to a rhythm.
+      return s.lips ? { ...pose, mouth: s.lips[Math.floor((at - s.at) * FPS)] ?? 0 } : pose;
+    }
     const u = travel((at - s.at) / (s.end - s.at));
     return actionPose("walk", at - s.at, (Math.abs(s.toX - s.fromX) * u) / STRIDE);
   };

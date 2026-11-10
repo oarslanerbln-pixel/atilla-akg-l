@@ -11,7 +11,8 @@
     "test": "tsx --test test/*.test.ts",
     "motion": "tsx motion.ts",
     "sheet": "tsx sheet.ts",
-    "places": "tsx places.ts"
+    "places": "tsx places.ts",
+    "voices": "tsx voices.ts"
   },
   "dependencies": {
     "@fontsource/inter": "5.3.0",

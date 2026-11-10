@@ -1,13 +1,22 @@
 {
   "kind": "cartoon",
   "name": "berlin-istanbul",
-  "formats": ["reel"],
+  "formats": [
+    "reel"
+  ],
+  "lang": "de",
+  "sound": {
+    "music": "warm",
+    "voices": true
+  },
   "scenes": [
     {
       "place": "berlin",
       "time": "dawn",
       "caption": "Berlin, 6 Uhr morgens.",
-      "camera": { "follow": "host" },
+      "camera": {
+        "follow": "host"
+      },
       "cast": [
         {
           "id": "host",
@@ -15,8 +24,15 @@
           "carry": "suitcase",
           "x": 700,
           "script": [
-            { "at": 0.4, "do": "walk", "to": 1250 },
-            { "at": 4.2, "do": "wave" }
+            {
+              "at": 0.4,
+              "do": "walk",
+              "to": 1250
+            },
+            {
+              "at": 4.2,
+              "do": "wave"
+            }
           ]
         }
       ]
@@ -24,20 +40,96 @@
     {
       "place": "airport",
       "time": "day",
-      "camera": { "from": 900, "to": 960, "zoom": [1, 1.12] },
+      "camera": {
+        "from": 900,
+        "to": 960,
+        "zoom": [
+          1,
+          1.12
+        ]
+      },
       "cast": [
-        { "id": "host", "preset": "host", "carry": "suitcase", "x": 840, "script": [{ "at": 0.5, "do": "talk", "say": "Einmal Istanbul, bitte." }, { "at": 5.4, "do": "nod" }] },
-        { "id": "agent", "preset": "concierge", "x": 1040, "facing": "left", "script": [{ "at": 2.6, "do": "talk", "say": "Gate 12. Guten Flug!" }, { "at": 5.2, "do": "point", "for": 1.6 }] }
+        {
+          "id": "host",
+          "preset": "host",
+          "carry": "suitcase",
+          "x": 840,
+          "script": [
+            {
+              "at": 0.5,
+              "do": "talk",
+              "say": "Einmal Istanbul, bitte."
+            },
+            {
+              "at": 5.4,
+              "do": "nod"
+            }
+          ]
+        },
+        {
+          "id": "agent",
+          "preset": "concierge",
+          "x": 1040,
+          "facing": "left",
+          "script": [
+            {
+              "at": 2.6,
+              "do": "talk",
+              "say": "Gate 12. Guten Flug!"
+            },
+            {
+              "at": 5.2,
+              "do": "point",
+              "for": 1.6
+            }
+          ]
+        }
       ]
     },
     {
       "place": "istanbul",
       "time": "dusk",
       "caption": "Drei Stunden später: der Bosporus.",
-      "camera": { "follow": "host", "zoom": 1.05 },
+      "camera": {
+        "follow": "host",
+        "zoom": 1.05
+      },
       "cast": [
-        { "id": "host", "preset": "host", "x": 500, "script": [{ "at": 0.5, "do": "walk", "to": 980 }, { "at": 3.8, "do": "cheer" }] },
-        { "id": "guide", "preset": "guide", "x": 1130, "facing": "left", "script": [{ "at": 2.4, "do": "wave", "for": 1.6 }, { "at": 4.4, "do": "talk", "say": "Hoş geldin!" }] }
+        {
+          "id": "host",
+          "preset": "host",
+          "x": 500,
+          "script": [
+            {
+              "at": 0.5,
+              "do": "walk",
+              "to": 980
+            },
+            {
+              "at": 3.8,
+              "do": "cheer"
+            }
+          ]
+        },
+        {
+          "id": "guide",
+          "preset": "guide",
+          "x": 1130,
+          "facing": "left",
+          "script": [
+            {
+              "at": 2.4,
+              "do": "wave",
+              "for": 1.6
+            },
+            {
+              "at": 4.4,
+              "do": "talk",
+              "say": "Hoş geldin!"
+            }
+          ],
+          "voice": "tr_TR-dfki-medium"
+        }
       ]
     }
   ]

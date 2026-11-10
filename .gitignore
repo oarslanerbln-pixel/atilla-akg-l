@@ -55,6 +55,7 @@ next-env.d.ts
 /social/assets/
 /social/out/
 /social/motion/node_modules/
+/social/motion/.voices/
 .vercel
 
 # agent state: session worktrees, local launch config, browser test output

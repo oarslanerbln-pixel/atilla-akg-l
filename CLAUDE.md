@@ -172,6 +172,11 @@ story moving. A separate package (`social/motion/package.json`), excluded from t
   four lights, six character presets, all overridable from the brief. Rig and film-as-data are pure
   (`src/cartoon/rig.ts`, `scene.ts`) and tested; after touching them, read the model sheet
   (`npm --prefix social/motion run sheet`) and the sets (`run places`).
+- **Sound** (`social/motion/audio/`): music composed in code, every caption and line spoken by a
+  recorded take (`social/assets/voice/<brief>/`) or by Piper, a local neural voice (no API, the
+  script leaves the machine nowhere). The voices are made first because they set the timing and
+  move the mouths; the mix lands at -14 LUFS. Nobody can hear a render from a cloud session:
+  say so, and judge it by the report's loudness and the line timings.
 - **The checks are the gate:** ad label on partner titles, flights keyword present in
   `supabase/offers.sql`, safe areas, alpha channel, an empty last frame. Look at the sheet, then
   the film. Don't hand over a render whose run ended in an error.
