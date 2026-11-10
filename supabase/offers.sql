@@ -58,6 +58,8 @@ insert into public.affiliate_offers (id, network, name, pitch, tracking_url, key
   -- Deep link through Impact (u=): every destination from Germany, return, economy. No dates in the
   -- link, so it never goes stale: Skyscanner opens on the coming month. The bare rE1bJQ link was a
   -- saved search from BER, September to October 2026.
+  -- "flug" is the word the flights story asks for (social/briefs/flights-deutschland.json). It only
+  -- answers a request ("Flug", "Flug bitte"), never a passing mention such as "guter Flug!".
   ('skyscanner',
    'impact',
    '{"de": "Skyscanner", "en": "Skyscanner", "tr": "Skyscanner"}',
@@ -65,7 +67,7 @@ insert into public.affiliate_offers (id, network, name, pitch, tracking_url, key
      "en": "Cheap flights to every destination – Skyscanner shows the current prices for your travel dates.",
      "tr": "Tüm destinasyonlara uygun uçuşlar – Skyscanner''da seyahat tarihleriniz için güncel fiyatları görürsünüz."}',
    'https://skyscanner.pxf.io/rE1bJQ?subId1={click_id}&u=https%3A%2F%2Fwww.skyscanner.de%2Ftransport%2Ffluge-von%2Fde%2F%3Fadultsv2%3D1%26cabinclass%3Deconomy%26rtn%3D1',
-   '{skyscanner}',
+   '{skyscanner,flug}',
    true),
 
   -- Atilla's own e-book, not a partner's: network 'own' sends the "Werbung in eigener Sache" notice
