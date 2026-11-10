@@ -1,8 +1,9 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { TEMPLATES, briefSchema, flightsSeconds, type Clip } from "./src/briefs";
+import { timeline } from "./src/cartoon/scene";
 import type { FormatId } from "./src/lib/formats";
-import { checkCleanExit, checkClip, checkFile, checkFlights, checkSafeArea, type Finding } from "./check";
+import { checkCartoon, checkCleanExit, checkClip, checkFile, checkFlights, checkSafeArea, type Finding } from "./check";
 import { OUT, ROOT, render } from "./engine";
 
 // npm run motion -- social/briefs/motion/<brief>.json [--check]
@@ -16,6 +17,8 @@ interface Planned {
   alpha: boolean;
   /** Fades out at its end: an overlay, or a sting told to. */
   leaves: boolean;
+  /** A picture that fills the frame: there is no empty ground to measure the safe area against. */
+  full?: boolean;
   seconds: number;
   stem: string;
   before: Finding[];
@@ -31,6 +34,12 @@ function plan(path: string): { name: string; jobs: Planned[] } {
   if (brief.kind === "flights") {
     const stem = join(OUT, `${brief.name}-story`);
     return { name: brief.name, jobs: [{ comp: "FlightsStory-story", format: "story", props: brief, alpha: false, leaves: false, seconds: flightsSeconds(brief), stem, before: checkFlights(brief) }] };
+  }
+  if (brief.kind === "cartoon") {
+    const { formats, ...props } = brief;
+    const before = checkCartoon(brief);
+    const seconds = timeline(brief.scenes).total;
+    return { name: brief.name, jobs: formats.map((format) => ({ comp: `Cartoon-${format}`, format, props, alpha: false, leaves: false, full: true, seconds, stem: join(OUT, `${brief.name}-${format}`), before })) };
   }
   const jobs = brief.clips.flatMap((clip: Clip, i) => {
     const t = TEMPLATES[clip.template];
@@ -68,7 +77,8 @@ async function main() {
     const findings = [...job.before];
     if (!findings.some((f) => f.level === "error") && !args.includes("--check")) {
       const r = await render({ comp: job.comp, props: job.props, stem: job.stem, alpha: job.alpha }, console.log);
-      findings.push(...(await checkFile(r, job.alpha)), ...(await checkSafeArea(r.settled, job.format, job.alpha)));
+      findings.push(...(await checkFile(r, job.alpha)));
+      if (!job.full) findings.push(...(await checkSafeArea(r.settled, job.format, job.alpha)));
       if (job.alpha && job.leaves) findings.push(...(await checkCleanExit(r.last)));
       report.push({ comp: job.comp, file: r.file.replace(ROOT + "/", ""), sheet: r.sheet.replace(ROOT + "/", ""), seconds: r.frames / r.fps, findings });
     } else {

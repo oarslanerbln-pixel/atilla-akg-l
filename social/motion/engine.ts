@@ -97,3 +97,13 @@ export async function render(job: Job, log: (line: string) => void = () => {}): 
     .toFile(sheet);
   return { file, sheet, width: composition.width, height: composition.height, fps: composition.fps, frames: n, last: stills[5], settled: stills[3] };
 }
+
+/** One frame of a composition as a PNG: for sheets that are looked at, not played. */
+export async function still(comp: string, frame: number, file: string, props: Record<string, unknown> = {}) {
+  const url = await serveUrl();
+  const browser = browserExecutable();
+  const composition = await selectComposition({ serveUrl: url, id: comp, inputProps: props, browserExecutable: browser });
+  await mkdir(dirname(file), { recursive: true });
+  await renderStill({ composition, serveUrl: url, inputProps: props, frame, output: file, imageFormat: "png", browserExecutable: browser, overwrite: true });
+  return file;
+}

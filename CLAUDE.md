@@ -167,6 +167,11 @@ story moving. A separate package (`social/motion/package.json`), excluded from t
 - **Nothing is duplicated:** mark geometry from `social/brand/mark.ts`, colours from
   `social/palette.ts`, flights copy from `social/flights.ts`, bearings from `src/lib/partners.ts`.
   Timing is `social/motion/src/lib/tokens.ts` (the site's curve); durations follow from the copy.
+- **Cartoons** (`kind: "cartoon"`, `social/briefs/cartoon/`): scenes of rigged characters acting on
+  layered sets, from a script of beats (`walk`, `talk` with a speech bubble, `wave`…). Six places in
+  four lights, six character presets, all overridable from the brief. Rig and film-as-data are pure
+  (`src/cartoon/rig.ts`, `scene.ts`) and tested; after touching them, read the model sheet
+  (`npm --prefix social/motion run sheet`) and the sets (`run places`).
 - **The checks are the gate:** ad label on partner titles, flights keyword present in
   `supabase/offers.sql`, safe areas, alpha channel, an empty last frame. Look at the sheet, then
   the film. Don't hand over a render whose run ended in an error.
