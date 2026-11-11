@@ -15,7 +15,10 @@ import { HTML_LANG, pagePath } from "@/lib/locales";
 import { BASE, formatCoords } from "@/lib/partners";
 import { audience, businessCard, contact, socialProfiles, totalFollowers } from "@/lib/site";
 import { MODE_TARGETS, PAGE_QR_COLORS, prettyUrl, qrSvg, type CardCodes, type CardMode, type QrTarget } from "./qr";
+import { inBrowser, noSubscribe, readInApp, readPlatform, type Platform, type WalletOptions } from "./device";
 import styles from "./BusinessCard.module.css";
+
+export type { WalletOptions };
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -27,6 +30,7 @@ const TARGETS: Record<QrTarget, { label: TranslationKeys; Icon: ComponentType<{ 
   mediaKit: { label: "card_qr_mediakit", Icon: BookOpen },
   businessCard: { label: "card_qr_card", Icon: IdCard },
   contact: { label: "card_qr_contact", Icon: Contact },
+  contactPage: { label: "card_qr_contactpage", Icon: UserPlus },
 };
 
 const MODES: CardMode[] = ["personal", "business"];
@@ -41,41 +45,6 @@ const GYRO_RANGE = 18;
 const GYRO_DRIFT = 0.015;
 
 type Lean = { x: number; y: number; at: number; source: "mouse" | "gyro" };
-
-/** Which Wallet passes the server can sign (lib/wallet/ready.ts). */
-export type WalletOptions = { apple: boolean; google: boolean };
-
-type Platform = "apple" | "android" | "other";
-
-/** Where a pass can go: Apple Wallet on iPhone, iPad and Mac, Google Wallet on Android and elsewhere. */
-function readPlatform(): Platform {
-  const ua = navigator.userAgent;
-  if (/Android/i.test(ua)) return "android";
-  if (/iPhone|iPad|iPod|Macintosh/.test(ua)) return "apple";
-  return "other";
-}
-const noSubscribe = () => () => {};
-
-/**
- * Instagram's (and Facebook's) in-app browser. It opens the card from a bio or
- * story link, but it cannot save a contact file or add a Wallet pass, so there
- * those actions, and a quiet note, hand the page to the phone's own browser.
- */
-const readInApp = () => /Instagram|FBAN|FBAV|FB_IAB/.test(navigator.userAgent);
-
-/**
- * An address the in-app browser hands to the phone's own browser: Safari by
- * its x-safari-https scheme (iOS 17 and later), the default browser by an
- * Android intent that falls back to the address itself.
- */
-function inBrowser(url: string, platform: Platform | null): string {
-  const rest = url.replace(/^https?:\/\//, "");
-  if (platform === "apple") return `x-safari-https://${rest}`;
-  if (platform === "android") {
-    return `intent://${rest}#Intent;scheme=https;S.browser_fallback_url=${encodeURIComponent(url)};end`;
-  }
-  return url;
-}
 
 type DeviceOrientationWithPermission = typeof DeviceOrientationEvent & {
   requestPermission?: () => Promise<"granted" | "denied">;

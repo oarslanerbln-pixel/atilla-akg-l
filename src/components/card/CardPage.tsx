@@ -58,6 +58,7 @@ export default function CardPage({
   };
 
   const nfcChoices = [
+    { label: t("card_qr_contactpage"), url: codes[activeLang].contactPage.url },
     { label: t("card_mode_personal"), url: codes[activeLang].card.url },
     { label: t("card_mode_business"), url: codes[activeLang].businessCard.url },
     { label: t("card_qr_web"), url: codes[activeLang].web.url },
@@ -95,7 +96,7 @@ export default function CardPage({
           initialMode={initialMode}
           onModeChange={chooseMode}
         />
-        {showNfc && <NfcWriter choices={nfcChoices} initialChoice={mode === "business" ? 1 : 0} />}
+        {showNfc && <NfcWriter choices={nfcChoices} />}
       </main>
 
       <footer className={styles.footer}>
