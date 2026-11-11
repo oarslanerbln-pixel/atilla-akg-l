@@ -87,7 +87,8 @@ Tur dışında tanıtılan ürünler `affiliate_offers` tablosunda durur ve `sup
 2. **`keywords`** (küçük harf), **`pitch`** (programın onayladığı kısa metin, DE/EN/TR) ve **`active`**. Anahtar kelimeler tur kelimelerinden önce gelir ve yorumda tek başına yazılınca tetikler. Bu yüzden tek kelimelik bir iltifat ya da tepki olabilecek kelimeler seçmeyin: "Gold ✨" bir iltifattır, "GOLDCARD" ise bir istek. Kelime boşluksuz olmalı; "Gold Card" iki ayrı kelimedir ve tetiklemez.
 3. **Reel:** *"Yorumlara GOLDCARD yaz"*. Yorum yapana tanıtım metni ve **"Linki gönder"** butonu gider. Butona basınca kişiye özel bir link (`SITE/go/…`) ve reklam uyarısı gelir.
 4. **Story:** *"Bu story'ye GOLDCARD diye cevap ver"*. Story'ye kelimeyle cevap veren kişiye ("GOLDCARD", "Goldcard bitte"; cümle içindeki kelime sayılmaz) tanıtım metni ve link hemen DM'den gider, story de kaynak olarak kaydedilir. Aynı mesaj DM'den veya WhatsApp'tan gelirse de aynısı olur. Instagram API ile story'ye link sticker'ı eklenemediği için story'de linki bu yolla dağıtıyoruz.
-5. Concierge'e sohbet içinde soran müşteriye de aynı link gönderilir. Her tıklama sayılır.
+5. **Reklam:** Instagram'da hedefi mesaj olan bir reklamda ("Nachricht senden" / "Send message"), reklamın mesaj şablonundaki hazır soruya anahtar kelimeyi yazın, ör. "EBOOK bitte". Reklama dokunup bunu gönderen kişiye tanıtım metni ve link hemen gider. Reklam da kaynak olarak kaydedilir: Instagram reklamın kimliğini ilk mesajla birlikte iletir (`referral`, `source: ADS`). O hazır sorunun Meta'daki otomatik cevabını boş bırakın, yoksa kişiye iki cevap gider. Kelimesiz mesajlar ("Merhaba", bir soru) yine Atilla'ya kalır ve kaydedilmez. Uygulama *Live* moda geçene kadar bu da yalnızca test hesaplarıyla çalışır.
+6. Concierge'e sohbet içinde soran müşteriye de aynı link gönderilir. Her tıklama sayılır.
 
 **Atilla'nın kendi ürünü: e-kitap (`roadmap`).** Aynı sistemle çalışır: *"Yorumlara ROADMAP yaz"* ya da story'ye "EBOOK" cevabı. Link `/go/…` üzerinden sitedeki `/roadmap` sayfasına gider (fiyat ve Tentary ödeme linkleri orada, `src/lib/roadmap.ts`). Teklifin `network` değeri `own` olduğu için mesajın altında komisyon uyarısı değil, "Werbung in eigener Sache / Ad / Reklam: Atilla'nın kendi ürünü" yazar. "E-Book" yazımı "e" ve "book" diye iki kelimeye bölünür; "book" turlar için de kullanılabildiğinden anahtar kelimeler bilerek **ROADMAP** ve **EBOOK** (tiresiz). Reel ve story'de bu ikisinden biri söylenmeli.
 
@@ -97,7 +98,9 @@ Tur dışında tanıtılan ürünler `affiliate_offers` tablosunda durur ve `sup
 - Programın koşullarını kontrol edin: bazı kart programları DM, yorum veya teşvikli trafik üzerinden tanıtımı kısıtlar. Tanıtım metni programın izin verdiği ifadelerden oluşmalı.
 
 ### Hangi reel ne kazandırdı?
-Supabase'deki `source_performance` görünümünde her post/reel/story için şunlar listelenir: link, açılan sohbet sayısı, ödenmiş rezervasyonlar, tur cirosu, gönderilen ve açılan partner linkleri.
+Supabase'deki `source_performance` görünümünde her post/reel/story ve reklam için şunlar listelenir: link, açılan sohbet sayısı, ödenmiş rezervasyonlar, tur cirosu, gönderilen ve açılan partner linkleri. Reklamlar `ad:<reklam kimliği>` satırı olarak görünür; `caption` sütununda reklamın başlığı yazar.
+
+Aynı rakamların özeti her pazartesi mail olarak gelir (bkz. *7. Vercel → Haftalık rapor*).
 
 ## 5. Stripe
 1. Stripe hesabı → para birimi EUR. Settings → Payment methods'ta kart, Apple Pay, Google Pay ve PayPal'ı açın. SEPA Direct Debit'i (ve onayı günler sonra gelen diğer yöntemleri) açmayın. Rezervasyon koltuğu yalnızca ödeme linkinin süresi boyunca tutar; süre dolunca koltuk başkasına satılabilir. Geç gelen onay ise rezervasyonu yer kontrolü yapmadan geri getirir (`confirmDeposit`).
@@ -131,7 +134,13 @@ select cron.schedule('concierge-purge', '30 3 * * *', 'select public.purge_stale
 ## 7. Vercel
 Bütün değişkenleri girin (`SITE_URL` dahil) ve yeniden deploy edin. Webhook'lar birkaç dakika sürebilen işleri cevap döndükten sonra çalıştırdığı için Fluid Compute açık kalmalı (varsayılan olarak açık).
 
-**Zamanlanmış işler (Vercel Cron):** `vercel.json` içinde tanımlıdır ve yalnızca production deploy'larında çalışır. Şu an tek iş var: pazartesi 04:00 UTC'de Instagram token yenileme (Hobby planında o saat içinde herhangi bir anda). Aynı iş Instagram hesabını webhook'lara (`messages`, `messaging_postbacks`, `comments`) abone eder: Meta'daki uygulama düzeyindeki callback tek başına hiçbir şey iletmez, hesabın kendisi de abone olmalı ve panodaki *Webhook-Abonnement* düğmesi bazen hata verir.
+**Zamanlanmış işler (Vercel Cron):** `vercel.json` içinde tanımlıdır ve yalnızca production deploy'larında çalışır. Dört iş var; Hobby planında her biri belirtilen saat içinde herhangi bir anda çalışır:
+- Instagram token yenileme (`/api/cron/instagram-token`): pazartesi 04:00 UTC
+- Instagram filmlerinin sitedeki kopyası (`/api/cron/instagram-reels`): her üç günde bir, 04:30 UTC
+- Durum kontrolü (`/api/cron/status`): her gün 05:15 UTC
+- Haftalık rapor (`/api/cron/weekly-report`): pazartesi 06:00 UTC
+
+Token işi Instagram hesabını webhook'lara (`messages`, `messaging_postbacks`, `comments`) abone eder: Meta'daki uygulama düzeyindeki callback tek başına hiçbir şey iletmez, hesabın kendisi de abone olmalı ve panodaki *Webhook-Abonnement* düğmesi bazen hata verir.
 1. Rastgele bir metin üretin:
    ```bash
    node -e "console.log(require('crypto').randomBytes(24).toString('base64url'))"
@@ -144,6 +153,13 @@ Bütün değişkenleri girin (`SITE_URL` dahil) ve yeniden deploy edin. Webhook'
 - Sonuç: *View Logs* veya `vercel logs --environment production --since 15m --query "[status]"`. Her sorun bir `error` satırıdır (ör. `[status] whatsapp: failed: …`); son satır `[status] all good` ya da `[status] needs attention`.
 - Stripe (`deposits`) ve yapay zekâ (`aiReplies`) kapalıyken eksik değişkenleri sorun sayılmaz, `(feature off)` notuyla bilgi satırı olarak geçer.
 - Vercel logları yaklaşık bir saat yaşadığı için bir sorun bulunduğunda aynı satırlar `CONTACT_TO_EMAIL` adresine, iletişim formunun Resend ayarlarıyla mail olarak da gider (konu: `⚠️ atillabarbarossa.com: N sorun`). Sorun giderilene kadar her sabah tekrar gelir. Mail ayarlarının kendisi bozuksa mail gidemez; o zaman yalnızca log kalır (`[status] alert not sent: …`).
+
+**Haftalık rapor (`/api/cron/weekly-report`):** her pazartesi `CONTACT_TO_EMAIL` adresine, aynı Resend ayarlarıyla bir mail gider (konu: `📊 Haftalık rapor: …`). Son 7 günün rakamlarını önceki 7 günle yan yana koyar:
+- Her teklif için (e-kitap dahil) istenen ve açılan link sayısı. "İstenen", istek üzerine gönderilen kişiye özel linktir. "Açılan", o hafta ilk kez tıklanan linktir; daha önce gönderilmiş olabilir.
+- En çok link getiren 8 kaynak: reel ve post (adresiyle), story, reklam (başlığıyla) ve kaynaksız DM'ler.
+- Yeni kişi sayısı. Ödenmiş bir tur kaporası varsa onların sayısı.
+
+Mailde kişi, mesaj ya da tıklama kimliği yoktur. Komisyonlar ve e-kitap satışları partner ağlarının ve Tentary'nin panelinde kalır. Hiç link istenmeyen haftada kısa bir mail gelir. Elle çalıştırmak: Cron Jobs → `/api/cron/weekly-report` → *Run* ya da `vercel crons run /api/cron/weekly-report`. Mail gidemezse uç nokta 502 döner, log satırı `[report] weekly report not sent: …` olur.
 
 ---
 
