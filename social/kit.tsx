@@ -21,7 +21,7 @@ export type Lang = "de" | "en" | "tr";
 const ROOT = join(__dirname, "..");
 const read = (path: string) => readFileSync(join(ROOT, path));
 
-function fontFiles(pkg: string, file: string, weight: 300 | 400 | 500 | 600, style: "normal" | "italic") {
+function fontFiles(pkg: string, file: string, weight: 200 | 300 | 400 | 500 | 600, style: "normal" | "italic") {
   // latin carries German, latin-ext the Turkish letters (ğ, ş, ı, İ).
   return ["latin", "latin-ext"].map((subset) => ({
     name: pkg,
@@ -38,6 +38,7 @@ const FONTS = [
   ...fontFiles("inter", "inter", 400, "normal"),
   ...fontFiles("inter", "inter", 500, "normal"),
   ...fontFiles("inter", "inter", 600, "normal"),
+  ...fontFiles("inter-tight", "inter-tight", 200, "normal"),
   ...fontFiles("inter-tight", "inter-tight", 300, "normal"),
   ...fontFiles("inter-tight", "inter-tight", 500, "normal"),
 ];
@@ -67,11 +68,34 @@ export interface PhotoSpec {
   blur?: [number, number, number, number][];
 }
 
+/** How a template treats the photo's colour: as shot, or "mono", a warm duotone from ink to paper. */
+export type PhotoTone = "colour" | "mono";
+
+/** Ink in the shadows, warm paper in the highlights, and a gentle S-curve between them. */
+async function duotone(jpeg: Buffer): Promise<Buffer> {
+  const { data, info } = await sharp(jpeg).greyscale().raw().toBuffer({ resolveWithObject: true });
+  const dark = [0x14, 0x0f, 0x0a];
+  const light = [0xf4, 0xec, 0xdc];
+  const out = Buffer.alloc(info.width * info.height * 3);
+  for (let i = 0; i < info.width * info.height; i++) {
+    const v = data[i * info.channels] / 255;
+    const t = v * v * (3 - 2 * v) * 0.6 + v * 0.4;
+    for (let c = 0; c < 3; c++) out[i * 3 + c] = Math.round(dark[c] + (light[c] - dark[c]) * t);
+  }
+  return sharp(out, { raw: { width: info.width, height: info.height, channels: 3 } }).jpeg({ quality: 92 }).toBuffer();
+}
+
 /**
  * The photo cut to a box: filled, zoomed, with the focus point placed at `anchorY` of the box
  * height where the photo allows. Returned as a data URI for <img>.
  */
-export async function framePhoto(spec: PhotoSpec, width: number, height: number, anchorY = 0.3): Promise<string> {
+export async function framePhoto(
+  spec: PhotoSpec,
+  width: number,
+  height: number,
+  anchorY = 0.3,
+  tone: PhotoTone = "colour",
+): Promise<string> {
   let source = await sharp(read(spec.src)).rotate().toBuffer();
   const { width: W, height: H } = await sharp(source).metadata();
 
@@ -100,7 +124,8 @@ export async function framePhoto(spec: PhotoSpec, width: number, height: number,
     .extract({ left, top, width, height })
     .jpeg({ quality: 92 })
     .toBuffer();
-  return `data:image/jpeg;base64,${out.toString("base64")}`;
+  const toned = tone === "mono" ? await duotone(out) : out;
+  return `data:image/jpeg;base64,${toned.toString("base64")}`;
 }
 
 /** Renders a template to a PNG file. */
