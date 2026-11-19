@@ -1,7 +1,7 @@
 import { staff } from '@/lib/concierge/copy';
 import { safeEqual } from '@/lib/concierge/crypto';
 import { runStatusCheck } from '@/lib/concierge/status';
-import { sendMail } from '@/lib/mail';
+import { mailFailure, mailOperator } from '@/lib/mail';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -48,22 +48,12 @@ export async function GET(request: Request) {
 
 /** Problems carry names, counts and provider messages only, so they can go by mail as logged. */
 async function mailAlert(problems: string[]): Promise<'mailed' | 'failed'> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL;
-  const from = process.env.CONTACT_FROM_EMAIL;
-  if (!apiKey || !to || !from) {
-    // The mail settings are themselves among the problems; the log above is all there is.
-    console.error('[status] alert not sent: mail settings missing or empty');
+  // Without mail settings they are themselves among the problems; the log above is all there is.
+  const failure = mailFailure(await mailOperator(staff.statusAlert(problems)));
+  if (failure) {
+    console.error(`[status] alert not sent: ${failure}`);
     return 'failed';
   }
-  const { subject, text } = staff.statusAlert(problems);
-  const sent = await sendMail(apiKey, { from, to, subject, text });
-  if (sent.ok) {
-    console.info('[status] alert mailed');
-    return 'mailed';
-  }
-  console.error(
-    `[status] alert not sent: ${sent.kind === 'rejected' ? sent.detail : 'could not reach the mail provider'}`,
-  );
-  return 'failed';
+  console.info('[status] alert mailed');
+  return 'mailed';
 }
