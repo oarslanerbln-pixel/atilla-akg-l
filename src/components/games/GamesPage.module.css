@@ -1,0 +1,325 @@
+/* /games — see GamesPage.tsx. Porcelain page, the name set large, one card
+   per game: cover on the left, text on the right, stacked on phones. Gold
+   stays in the eyebrows and the card's bottom rule; corners are sharp. */
+
+/* ---------- Top bar (as on /media-kit, in the page's flow) ---------- */
+.topbar {
+  position: relative;
+  z-index: var(--z-nav);
+  padding: 1.4rem 0;
+  background: var(--bg-primary);
+}
+
+.topbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.wordmark {
+  height: 0.66rem;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.brandMark {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.topbarEnd {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.homeLink {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.homeLink:hover {
+  color: var(--accent-gold-readable);
+}
+
+.langs {
+  display: flex;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 22%, transparent);
+}
+
+.lang {
+  min-width: 2.5rem;
+  padding: 0.45rem 0.6rem;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.lang + .lang {
+  border-left: 1px solid color-mix(in srgb, var(--text-primary) 22%, transparent);
+}
+
+.lang:hover {
+  background: var(--bg-secondary);
+}
+
+.lang[aria-pressed="true"] {
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+}
+
+.brand:focus-visible,
+.homeLink:focus-visible,
+.lang:focus-visible,
+.play:focus-visible,
+.legal a:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Page ---------- */
+.page {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+.head {
+  padding-top: clamp(3rem, 7vw, 6rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  max-width: var(--max-width);
+}
+
+.eyebrow {
+  margin: 0 0 1.25rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.6rem, 6vw, 4.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.intro {
+  margin: 1.5rem 0 0;
+  max-width: 40rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+/* ---------- Game card ---------- */
+.list {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-bottom: 2px solid var(--accent-gold);
+  box-shadow: 0 12px 30px rgba(24, 21, 18, 0.05);
+}
+
+.cover {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+.coverImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+}
+
+.badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.35rem 0.7rem;
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(1.75rem, 3.5vw, 2.75rem);
+}
+
+.place {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-gold-readable);
+}
+
+.name {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2rem, 3.2vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.text {
+  margin: 0 0 1.25rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.facts {
+  margin: 0 0 1.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-light);
+  align-self: stretch;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0.9rem 2.2rem;
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    transform var(--transition-smooth);
+}
+
+.play:hover {
+  background: var(--accent-gold-readable);
+  transform: translateY(-2px);
+}
+
+.size {
+  margin: 0.85rem 0 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-primary);
+  padding: 1.75rem 0;
+}
+
+.footerInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+}
+
+.legal {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.legal a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.legal a:hover {
+  color: var(--accent-gold-readable);
+}
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 900px) {
+  .card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .wordmark {
+    display: none;
+  }
+
+  .topbarEnd {
+    gap: 1rem;
+  }
+
+  .intro {
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .play {
+    align-self: stretch;
+  }
+}
