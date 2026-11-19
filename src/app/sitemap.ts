@@ -31,6 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...localized("home", 1),
     ...localized("socialMedia", 0.8),
     ...localized("mediaKit", 0.8),
+    ...localized("games", 0.6),
     {
       url: absolute("/roadmap"),
       lastModified,

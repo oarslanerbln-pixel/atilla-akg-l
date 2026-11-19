@@ -45,6 +45,10 @@ export function GET() {
       (lang) =>
         `- [Media kit for hotels, restaurants and brands (${LANGUAGE_NAMES[lang]})](${absolute(pagePath("mediaKit", lang))})`,
     ),
+    ...LANGUAGES.map(
+      (lang) =>
+        `- [Barbarossa Games: browser games by Barbarossa Films (${LANGUAGE_NAMES[lang]})](${absolute(pagePath("games", lang))})`,
+    ),
     `- [The Travel Creator Roadmap, e-book (Deutsch)](${absolute("/roadmap")})`,
     "",
     "## Audience",

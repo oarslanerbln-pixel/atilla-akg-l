@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1f1412">
+  <title>Sıla Defteri · Gül Baba</title>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #1f1412; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; }
+    #unity-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; display: block; background: #1f1412; outline: none; }
+    #yukleme { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fbf3e4; font-family: Georgia, "Times New Roman", serif; background: radial-gradient(circle at 50% 40%, #3a2420, #1f1412 70%); }
+    #yukleme h1 { margin: 0 0 6px; font-size: clamp(30px, 6vw, 64px); color: #f3c9cf; letter-spacing: 1px; }
+    #yukleme p { margin: 0 0 28px; font-size: clamp(14px, 2.4vw, 22px); opacity: .85; }
+    #cubuk { width: min(60vw, 520px); height: 14px; border-radius: 7px; background: rgba(255,255,255,.15); overflow: hidden; }
+    #dolu { width: 0; height: 100%; background: linear-gradient(90deg, #c92a4a, #e8a33d); transition: width .2s; }
+    #cevir { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: #1f1412; color: #fbf3e4; font-family: Georgia, serif; text-align: center; font-size: 22px; padding: 24px; box-sizing: border-box; z-index: 10; }
+    #cevir .tel { width: 70px; height: 120px; border: 5px solid #f3c9cf; border-radius: 14px; animation: don 2s ease-in-out infinite; }
+    @keyframes don { 0%, 30% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
+    @media (orientation: portrait) and (max-width: 900px) { #cevir { display: flex; } }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <div id="yukleme">
+    <h1>Sıla Defteri</h1>
+    <p>Gül Baba · Budin</p>
+    <div id="cubuk"><div id="dolu"></div></div>
+  </div>
+  <div id="cevir">
+    <div class="tel"></div>
+    <div>Telefonunu yan çevir<br><small style="opacity:.75">Dreh dein Handy quer</small></div>
+  </div>
+  <script>
+    var canvas = document.querySelector("#unity-canvas");
+    var config = {
+      arguments: [],
+      dataUrl: "Build/Web.data.unityweb",
+      frameworkUrl: "Build/Web.framework.js.unityweb",
+      codeUrl: "Build/Web.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Barbarossa Films",
+      productName: "Sıla Defteri",
+      productVersion: "1.0",
+      matchWebGLToCanvasSize: true,
+      devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+    };
+    var script = document.createElement("script");
+    script.src = "Build/Web.loader.js";
+    script.onload = function () {
+      createUnityInstance(canvas, config, function (p) {
+        document.querySelector("#dolu").style.width = (100 * p) + "%";
+      }).then(function () {
+        document.querySelector("#yukleme").style.display = "none";
+      }).catch(function (m) { alert(m); });
+    };
+    document.body.appendChild(script);
+    // telefonda ilk dokunuşta tam ekran (tarayıcı izin verirse)
+    document.addEventListener("pointerdown", function ilk() {
+      var el = document.documentElement;
+      if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) && el.requestFullscreen) { el.requestFullscreen().catch(function () {}); }
+      document.removeEventListener("pointerdown", ilk);
+    });
+  </script>
+</body>
+</html>

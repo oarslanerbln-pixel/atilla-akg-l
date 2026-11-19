@@ -5,6 +5,7 @@ import { partners } from "@/lib/partners";
 import { brands } from "@/lib/brands";
 import { packages } from "@/lib/packages";
 import { roadmap } from "@/lib/roadmap";
+import { games } from "@/lib/games";
 import { faq, plainAnswer, siteFacts } from "@/lib/faq";
 import { HTML_LANG, LANGUAGES, pagePath } from "@/lib/locales";
 
@@ -361,6 +362,57 @@ export function roadmapGraph(description: string) {
           name: t[`rm_faq_${n}_q`],
           acceptedAnswer: { "@type": "Answer", text: t[`rm_faq_${n}_a`] },
         })),
+      },
+    ],
+  };
+}
+
+/**
+ * /games: Barbarossa Games, a page listing the browser games. Each game is a
+ * VideoGame stated with what the card says: its name, its description, the
+ * languages it is playable in, where it is played and that it is free.
+ */
+export function gamesGraph(lang: Language) {
+  const t = translations[lang];
+  const url = absolute(pagePath("games", lang));
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${url}#page`,
+        url,
+        name: t.games_title,
+        description: t.games_meta_description,
+        inLanguage: HTML_LANG[lang],
+        isPartOf: ref(ids.website),
+        mainEntity: {
+          "@type": "ItemList",
+          itemListElement: games.map((game, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: {
+              "@type": "VideoGame",
+              name: game.title,
+              alternativeHeadline: t.games_sila_place,
+              description: t.games_sila_text,
+              url: absolute(game.href),
+              image: absolute(game.cover.src),
+              inLanguage: [...game.inLanguage],
+              gamePlatform: "Web browser",
+              playMode: "SinglePlayer",
+              isAccessibleForFree: true,
+              publisher: { "@type": "Organization", name: "Barbarossa Films" },
+            },
+          })),
+        },
+        breadcrumb: {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Atilla Barbarossa", item: absolute(pagePath("home", lang)) },
+            { "@type": "ListItem", position: 2, name: t.games_title, item: url },
+          ],
+        },
       },
     ],
   };

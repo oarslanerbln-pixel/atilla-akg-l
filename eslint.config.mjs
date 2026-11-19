@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Browser games: exported builds (Unity WebGL), copied in as built.
+    "public/games/**",
   ]),
 ]);
 
