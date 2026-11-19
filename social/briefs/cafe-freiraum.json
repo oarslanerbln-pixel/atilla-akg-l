@@ -1,0 +1,14 @@
+{
+  "kind": "cover",
+  "name": "cafe-freiraum",
+  "lang": "de",
+  "templates": ["lounge", "atlas", "galerie", "noir", "ticket"],
+  "eyebrow": "Café Freiraum · Kreuzberg",
+  "title": "Café-Tipp",
+  "accent": "in Berlin",
+  "subtitle": "Hausgemachter Kuchen & Kaffee",
+  "place": "Kreuzberg",
+  "coords": [52.488, 13.379],
+  "route": [{ "code": "BER", "city": "Kreuzberg" }],
+  "photo": { "src": "social/assets/cafe-freiraum.png", "focus": [0.5, 0.33] }
+}

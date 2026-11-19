@@ -1,0 +1,18 @@
+{
+  "kind": "cover",
+  "name": "malaysia-elefanten",
+  "lang": "de",
+  "templates": ["lounge", "atlas", "galerie", "noir", "ticket"],
+  "eyebrow": "Malaysia-Roadtrip · Tag 1",
+  "title": "Elefanten",
+  "accent": "im Dschungel",
+  "subtitle": "Kuala Gandah Elephant Sanctuary",
+  "place": "Malaysia",
+  "coords": [3.5923, 102.1428],
+  "route": [
+    { "code": "BER", "city": "Berlin" },
+    { "code": "IST", "city": "Istanbul" },
+    { "code": "KUL", "city": "Kuala Lumpur" }
+  ],
+  "photo": { "src": "social/assets/malaysia-elefanten.png", "focus": [0.62, 0.44], "zoom": 1.12 }
+}

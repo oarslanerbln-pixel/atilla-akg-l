@@ -19,7 +19,9 @@ a film) come from the motion engine: `social/motion/README.md`.
 
 Put the photo in `social/assets/` (gitignored: it holds people's faces). Use a
 full-resolution frame exported from the video, not a screenshot: a cover is
-1080×1920 and a small source turns soft when it is scaled up.
+1080×1920 and a small source turns soft when it is scaled up. A frame with a
+caption burned in (the reel's own text) needs the clean frame from the edit:
+the cover would carry the caption twice.
 
 - `focus`: the point to keep in view (Atilla's face), as fractions of the
   photo's width and height. Each template places it where its layout wants it.
@@ -33,7 +35,20 @@ full-resolution frame exported from the video, not a screenshot: a cover is
 
 `kind: "cover"` (`templates/covers.tsx`): `eyebrow`, `title`, `accent` (the
 second title line in gold), `subtitle`, `tags`, `photo`, optionally
-`templates` to render only some of `lounge`, `editorial`, `passepartout`, `split`, `card`.
+`templates` to render only some of `lounge`, `editorial`, `passepartout`, `split`, `card`,
+`atlas`, `galerie`, `noir`, `ticket`.
+
+`lounge` is the look of the profile grid today. `atlas`, `galerie`, `noir` and `ticket`
+are the candidates for a new grid look; each reads one optional field and does without it:
+
+- `atlas`: `coords` (`[lat, lon]`). A compass turned to the bearing from Berlin, the
+  coordinates and the distance, from the site's `bearing()` and `formatCoords()`.
+- `galerie`: `index`. The photo as a print on gallery white with a museum label, the
+  heading in plain ink as on the website; `index` prints "N° 07".
+- `noir`: `place` (falls back to `title`). The photo in a warm duotone, the place very
+  large and tracked, the title in one italic line under it.
+- `ticket`: `route`, one to three `{ "code", "city" }` stops (BER → IST → KUL). A
+  porcelain boarding pass headed by the wordmark.
 
 `kind: "flights"` (`templates/flights.tsx`): a story with up to four
 destinations and prices, cheapest first. The prices are typed in from the
