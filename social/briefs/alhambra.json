@@ -1,0 +1,11 @@
+{
+  "kind": "cover",
+  "name": "alhambra",
+  "lang": "de",
+  "templates": ["lounge"],
+  "eyebrow": "Alhambra · Granada",
+  "title": "1492 änderte",
+  "accent": "sich alles",
+  "subtitle": "Das Erbe der Nasriden",
+  "photo": { "src": "social/assets/alhambra.jpg", "focus": [0.62, 0.36], "zoom": 1 }
+}
