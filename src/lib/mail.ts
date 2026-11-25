@@ -53,3 +53,22 @@ export async function sendMail(apiKey: string, mail: Mail): Promise<MailResult> 
     return { ok: false, kind: "unreachable" };
   }
 }
+
+/**
+ * Mail to the site's own inbox (CONTACT_TO_EMAIL), from the contact form's sender: the daily
+ * status alert and the weekly report. Null when one of the mail settings is missing or empty.
+ */
+export async function mailOperator(mail: Pick<Mail, "subject" | "text">): Promise<MailResult | null> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const to = process.env.CONTACT_TO_EMAIL;
+  const from = process.env.CONTACT_FROM_EMAIL;
+  if (!apiKey || !to || !from) return null;
+  return sendMail(apiKey, { from, to, ...mail });
+}
+
+/** Why mailOperator did not deliver, as an operator reads it in the log; null once it did. */
+export function mailFailure(result: MailResult | null): string | null {
+  if (!result) return "mail settings missing or empty";
+  if (result.ok) return null;
+  return result.kind === "rejected" ? result.detail : "could not reach the mail provider";
+}

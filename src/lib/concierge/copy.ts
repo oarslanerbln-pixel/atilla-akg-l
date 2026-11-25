@@ -1,6 +1,7 @@
 // Fixed server-side messages. The concierge writes everything else itself, in the customer's language.
 // Customer copy exists in DE / EN / TR like the site; staff and guide copy is Turkish.
 import type { Lang } from './config';
+import type { ReportSource, Tally, WeeklyReport } from './report';
 
 export interface ConfirmedBooking {
   ref: string;
@@ -116,6 +117,39 @@ export function guessLang(text: string): Lang {
   return 'en';
 }
 
+const sourceName = (s: ReportSource): string => {
+  if (s.kind === 'none') return 'Kaynaksız (doğrudan DM)';
+  if (s.kind === 'ad') return s.title ? `Reklam “${s.title}”` : `Reklam ${s.id.replace(/^ad:/, '')}`;
+  if (s.permalink) return s.permalink;
+  return s.caption ? `“${s.caption.slice(0, 50).trim()}…”` : `Paylaşım ${s.id}`;
+};
+
+/** Mailed every Monday by /api/cron/weekly-report; `period` is the seven days, already formatted. */
+function weeklyReportMail(period: string, r: WeeklyReport): { subject: string; text: string } {
+  const pair = (t: Tally) => `${t.sent} / ${t.opened}`;
+  if (!r.week.sent && !r.week.opened) {
+    return {
+      subject: '📊 Haftalık rapor: bu hafta link istenmedi',
+      text: `${period}\n\nBu hafta partner linki istenmedi ve açılmadı (önceki hafta: ${pair(r.previous)} istenen / açılan).`,
+    };
+  }
+  return {
+    subject: `📊 Haftalık rapor: ${r.week.sent} link istendi, ${r.week.opened} açıldı`,
+    text: [
+      period,
+      `Partner linkleri: ${r.week.sent} istendi, ${r.week.opened} açıldı (önceki hafta: ${pair(r.previous)}).`,
+      'Teklifler (istenen / açılan, parantezde önceki hafta):\n' +
+        r.offers.map((o) => `• ${o.name}: ${pair(o.week)} (${pair(o.previous)})`).join('\n'),
+      'En çok getiren kaynaklar (istenen / açılan):\n' +
+        r.sources.map((s) => `• ${sourceName(s.source)}: ${pair(s.week)}`).join('\n'),
+      [`Yeni kişi: ${r.newContacts}`, r.paidBookings ? `Ödenen tur kaporası: ${r.paidBookings}` : ''].filter(Boolean).join('\n'),
+      '“İstenen”: istek üzerine gönderilen kişiye özel link. “Açılan”: bu hafta ilk kez tıklanan link (daha önce ' +
+        "gönderilmiş olabilir). Komisyonlar ve e-kitap satışları partner ağlarının ve Tentary'nin panelinde; " +
+        'bütün kaynaklar Supabase → source_performance görünümünde.',
+    ].join('\n\n'),
+  };
+}
+
 export const staff = {
   handoff: (who: string, channel: string, reason: string, summary: string) =>
     `🔔 *Devir* – ${who} (${channel})\nSebep: ${reason}\n\n${summary}\n\n↩️ Bu mesajı *yanıtlayarak* müşteriye doğrudan yazabilirsin. Botu tekrar açmak için yanıtına sadece *bot* yaz.`,
@@ -143,6 +177,7 @@ export const staff = {
       'Ayrıntı: Vercel logları ("[status]") ve docs/concierge-setup.md, 7. Vercel → Durum kontrolü.\n' +
       'Sorun giderilene kadar bu mail her sabah tekrar gelir.',
   }),
+  weeklyReport: weeklyReportMail,
   instagramTokenFailed: (expiresOn: string | null, error: string) =>
     `⚠️ *Instagram token yenilenemedi.* ${expiresOn ? `Mevcut token ${expiresOn} tarihinde sona eriyor` : 'Mevcut token en geç 60 gün içinde sona eriyor'}; sonra bot Instagram'da cevap veremez.\nMeta'da yeni token üretip Vercel'de INSTAGRAM_ACCESS_TOKEN'a yapıştır ve yeniden deploy et (docs/concierge-setup.md, 4. Instagram).\nHata: ${error}`,
 };
