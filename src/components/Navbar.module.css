@@ -445,24 +445,33 @@
 /* Below this the anchors, the status group and the e-book no longer share one
    row. The clock is atmosphere; the e-book sells, so the clock gives way.
    At 1440 it still broke the clock and the badge onto two and three lines on
-   1470 and 1536 px laptops. */
-@media (max-width: 1600px) {
-  .liveClock {
+   1470 and 1536 px laptops. With seven links (Games, Punkte) the status
+   badge has to give way too: it pushed the e-book off the right edge even
+   in the 1600 px container. Both return on screens wide enough for them,
+   where the header is given the room. */
+@media (max-width: 1920px) {
+  .liveClock,
+  .statusBadge {
     display: none;
   }
 }
 
-@media (max-width: 1280px) {
-  .statusBadge {
-    display: none;
+@media (min-width: 1921px) {
+  .navContainer {
+    max-width: 1880px;
   }
+}
 
+@media (max-width: 1440px) {
   .navLinks {
     gap: 1.5rem;
   }
 }
 
-@media (max-width: 1024px) {
+/* Seven links (Games, Punkte) no longer fit beside the brand and the e-book
+   below about 1240 px (Turkish runs longest): the e-book ran off the right
+   edge on a landscape tablet. The menu takes over there. */
+@media (max-width: 1240px) {
   .navLinks {
     display: none;
   }
