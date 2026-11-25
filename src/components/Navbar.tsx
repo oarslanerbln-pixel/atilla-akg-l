@@ -44,7 +44,7 @@ export default function Navbar() {
   // desktop range, and lock page scroll while it's open.
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 1024) setMenuOpen(false);
+      if (window.innerWidth > 1240) setMenuOpen(false);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -119,6 +119,10 @@ export default function Navbar() {
             {/* Barbarossa Games is a page of its own; it follows the anchors. */}
             <li className={styles.navItem}>
               <Link href={pagePath("games", activeLang)} onClick={handleLinkClick}>{t("nav_games")}</Link>
+            </li>
+            {/* Das Punkte-System: German, like the product (src/lib/punkte.ts). */}
+            <li className={styles.navItem}>
+              <Link href="/punkte" onClick={handleLinkClick}>{t("nav_punkte")}</Link>
             </li>
           </ul>
         </nav>
@@ -249,12 +253,22 @@ export default function Navbar() {
                 {t("nav_games")}
               </m.a>
               <m.a
+                href="/punkte"
+                className={styles.mobileMenuLink}
+                onClick={handleLinkClick}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.08 * (NAV_ITEMS.length + 1), ease: [0.16, 1, 0.3, 1] }}
+              >
+                {t("nav_punkte")}
+              </m.a>
+              <m.a
                 href={roadmapPath(activeLang)}
                 className={`${styles.mobileMenuLink} ${styles.mobileMenuEbook}`}
                 onClick={handleLinkClick}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.08 * (NAV_ITEMS.length + 1), ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.5, delay: 0.08 * (NAV_ITEMS.length + 2), ease: [0.16, 1, 0.3, 1] }}
               >
                 <span className={styles.mobileMenuEbookLabel}>{t("footer_roadmap")}</span>
                 {t("faq_9_link")}
@@ -265,7 +279,7 @@ export default function Navbar() {
               className={styles.mobileMenuFooter}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.08 * (NAV_ITEMS.length + 2), ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, delay: 0.08 * (NAV_ITEMS.length + 3), ease: [0.16, 1, 0.3, 1] }}
             >
               <div className={styles.mobileLangRow} role="group" aria-label={t("pkg_lang_label")}>
                 {languages.map((lang) => (
