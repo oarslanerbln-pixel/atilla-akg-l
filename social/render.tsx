@@ -15,8 +15,8 @@ async function renderCovers(brief: CoverBrief) {
   const files: string[] = [];
   for (const name of names) {
     const template = COVER_TEMPLATES[name];
-    const { width, height, anchorY } = template.photo;
-    const photo = await framePhoto(brief.photo, width, height, anchorY);
+    const { width, height, anchorY, tone } = template.photo;
+    const photo = await framePhoto(brief.photo, width, height, anchorY, tone);
     const file = join(OUT, `${brief.name}-${name}.png`);
     await renderPng(template.render(brief, photo), file);
     files.push(file);
